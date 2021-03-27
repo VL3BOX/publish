@@ -27,17 +27,23 @@
         }
     }
 }
-.m-nav {
-    // padding:0 10px;
-    .u-title {
-        padding: 10px 20px;
-        border-bottom: 1px solid #eee;
-        margin:10px 0;
-    }
-}
+// .m-nav {
+//     // padding:0 10px;
+//     .u-title {
+//         padding: 10px 20px;
+//         border-bottom: 1px solid #eee;
+//         margin:10px 0;
+//     }
+// }
 .m-nav-group {
-    margin-top:5px;
-    margin-bottom:10px;
+    // margin-top:5px;
+    // margin-bottom:10px;
+
+    .u-title{
+        padding-left:25px;
+        .bold;
+    }
+
     a {
         .db;
         // border-bottom: 1px solid #eee;
@@ -84,6 +90,15 @@
         }
     }
 
+    .router-link-exact-active{
+        color:@color-link;
+        .bold;
+
+        .u-count{
+            color:@pink;
+        }
+    }
+
     .u-count{
         // .fr;
         color:@color-link;
@@ -97,7 +112,8 @@
         }
 
         &.isNull{
-            color:#bbb;
+            color:#bbb !important;
         }
+        font-weight: normal;
     }
 }
