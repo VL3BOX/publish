@@ -34,9 +34,6 @@ export default {
     },
 };
 </script>
-
 <style lang="less">
-    .c-breadcrumb .u-channel-logo{
-        padding:3px;
-    }
+    @import './assets/css/app.less';
 </style>

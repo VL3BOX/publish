@@ -1,6 +1,6 @@
 <template>
-    <div class="m-publish-index">
-        <h1 class="u-title">创作<span class="u-desc">丹青著华年，墨香漫天下</span></h1>
+    <div class="m-publish m-index">
+        <h1 class="m-title"><i class="el-icon-edit-outline"></i> 创作台<span class="u-desc">丹青著华年，墨香漫天下</span></h1>
         <div class="u-nav">
             <el-divider content-position="left">PVE / PVP</el-divider>
             <el-row :gutter="20">

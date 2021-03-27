@@ -5,13 +5,17 @@
     margin:10px 20px !important;
     .db;
     box-sizing: border-box;
+    i{
+        .fz(16px);
+        .y(-1px);
+    }
 }
 .m-nav-bucket{
-    .u-bucket{
-        fill:@color-link;
-        .y(-3px);
-        .mr(5px);
-    }
+    // .u-bucket{
+    //     fill:@color-link;
+    //     .y(-3px);
+    //     .mr(5px);
+    // }
     background-color: #fff !important;
     border-color:@color-link !important;
     color:@color-link;
@@ -77,6 +81,23 @@
             .bold;
             border-top:1px solid #eee;
             border-bottom:1px solid #eee;
+        }
+    }
+
+    .u-count{
+        // .fr;
+        color:@color-link;
+        .fz(12px);
+        .ml(10px);
+        &:before{
+            content:"("
+        }
+        &:after{
+            content:")"
+        }
+
+        &.isNull{
+            color:#bbb;
         }
     }
 }

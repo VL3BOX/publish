@@ -1,37 +1,41 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-const index = () => import("../views/index.vue");
+const index = () => import("../post/index.vue");
 
 // CMS
-// const macro = () => import("../views/macro.vue");
-// const jx3dat = () => import("../views/jx3dat.vue");
-// const fb = () => import("../views/fb.vue");
-// const bps = () => import("../views/bps.vue");
-// const tool = () => import("../views/tool.vue");
-// const house = () => import("../views/house.vue");
-// const share = () => import("../views/share.vue");
-// const bbs = () => import("../views/bbs.vue");
+// const macro = () => import("../post/macro.vue");
+// const jx3dat = () => import("../post/jx3dat.vue");
+// const fb = () => import("../post/fb.vue");
+// const bps = () => import("../post/bps.vue");
+// const tool = () => import("../post/tool.vue");
+// const house = () => import("../post/house.vue");
+// const share = () => import("../post/share.vue");
+// const bbs = () => import("../post/bbs.vue");
 
 // WIKI
-// const achievement = () => import("../views/achievement.vue");
-// const item = () => import("../views/item.vue");
-// const item_plan = () => import("../views/item_plan.vue");
-// const knowledge = () => import("../views/knowledge.vue");
-// const collection = () => import("../views/collection.vue");
+// const achievement = () => import("../post/achievement.vue");
+// const item = () => import("../post/item.vue");
+// const item_plan = () => import("../post/item_plan.vue");
+// const knowledge = () => import("../post/knowledge.vue");
+// const collection = () => import("../post/collection.vue");
 
 // APP
-// const exam = () => import("../views/exam.vue");
-// const exam_question = () => import("../views/exam_question.vue");
-// const exam_paper = () => import("../views/exam_paper.vue");
+// const exam = () => import("../post/exam.vue");
+// const exam_question = () => import("../post/exam_question.vue");
+// const exam_paper = () => import("../post/exam_paper.vue");
 
-// const namespace = () => import("../views/namespace.vue");
+// const namespace = () => import("../post/namespace.vue");
+
+const bucket = () => import("../views/bucket.vue");
 
 Vue.use(VueRouter);
 
 const routes = [
     // 发布索引
     { path: "/", component: index },
+    // 草稿索引
+    { path: "/bucket", component: bucket },
 
     // // 成就攻略发布
     // {
