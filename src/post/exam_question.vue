@@ -1,9 +1,9 @@
 <template>
     <div class="m-publish-box">
         <!-- 头部 -->
-        <pubheader name="趣味题库·题目" :localDraft="false"
+        <publish-header name="趣味题库·题目" :localDraft="false"
             ><slot name="header"></slot
-        ></pubheader>
+        ></publish-header>
 
         <!-- <h1 class="m-publish-exam-header">贡献题目</h1> -->
         <el-form
@@ -91,7 +91,7 @@
 </template>
 
 <script>
-import pubheader from "@/components/publish/pubheader.vue";
+import header from "@/components/publish_header.vue";
 import exam_tags from "@/components/publish/exam_tags.vue";
 import Tinymce from '@jx3box/jx3box-editor/src/Tinymce'
 import User from "@jx3box/jx3box-common/js/user";
@@ -177,7 +177,7 @@ export default {
         }
     },
     components: {
-        pubheader,
+        'publish-header':header,
         Tinymce,
         exam_tags,
     },

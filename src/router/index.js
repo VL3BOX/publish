@@ -1,10 +1,14 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
+// COMMON
+const demo = () => import("../post/demo.vue");
 const index = () => import("../post/index.vue");
+const draft = () => import("../views/draft.vue");
+const cms = () => import("../views/cms.vue");
 
 // CMS
-// const macro = () => import("../post/macro.vue");
+const macro = () => import("../post/macro.vue");
 // const jx3dat = () => import("../post/jx3dat.vue");
 // const fb = () => import("../post/fb.vue");
 // const bps = () => import("../post/bps.vue");
@@ -27,15 +31,17 @@ const index = () => import("../post/index.vue");
 
 // const namespace = () => import("../post/namespace.vue");
 
-const bucket = () => import("../views/bucket.vue");
-
 Vue.use(VueRouter);
 
 const routes = [
     // 发布索引
     { path: "/", component: index },
     // 草稿索引
-    { path: "/bucket", component: bucket },
+    { path: "/draft", component: draft },
+    // 发布DEMO
+    { path: "/demo", component: demo },
+    // 查看
+    { path: "/bucket/:type", component: cms },
 
     // // 成就攻略发布
     // {
@@ -73,6 +79,12 @@ const routes = [
     //     component: collection,
     // },
 
+    // CMS=====================
+    // 宏发布
+    {
+        path: "/macro/:id?",
+        component: macro,
+    },
 
     // // 副本发布
     // {
@@ -90,12 +102,6 @@ const routes = [
     // {
     //     path: "/house/:id?",
     //     component: house,
-    // },
-
-    // // 宏发布
-    // {
-    //     path: "/macro/:id?",
-    //     component: macro,
     // },
 
     // // 职业发布
@@ -125,7 +131,6 @@ const routes = [
     //     path: "/share/:id?",
     //     component: share,
     // },
-
 
     // // 趣味题库
     // {

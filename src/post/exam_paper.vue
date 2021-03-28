@@ -1,9 +1,9 @@
 <template>
     <div class="m-publish-box">
         <!-- 头部 -->
-        <pubheader name="趣味题库·试卷" :localDraft="false"
+        <publish-header name="趣味题库·试卷" :localDraft="false"
             ><slot name="header"></slot
-        ></pubheader>
+        ></publish-header>
 
         <!-- <h1 class="m-publish-exam-header">制作试卷</h1> -->
         <el-form
@@ -116,7 +116,7 @@
 </template>
 
 <script>
-import pubheader from "@/components/publish/pubheader.vue";
+import header from "@/components/publish_header.vue";
 // import upload from "@/components/publish/upload.vue";
 // import tinymce from "@/components/publish/tinymce.vue";
 import exam_tags from "@/components/publish/exam_tags.vue";
@@ -213,7 +213,7 @@ export default {
         }
     },
     components: {
-        pubheader,
+        'publish-header':header,
         // upload,
         // tinymce,
         exam_tags,

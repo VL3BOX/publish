@@ -69,7 +69,7 @@
                         <img
                             class="u-fileplaceholder"
                             svg-inline
-                            src="../../assets/img/publish/file.svg"
+                            src="../assets/img/publish/file.svg"
                         />
                         <span class="u-filename">{{ file.name }}</span>
                     </div>
@@ -233,7 +233,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "../../assets/css/components/large-dialog.less";
+@import "../assets/css/large-dialog.less";
 
 .c-upload {
     .u-upload-clear {

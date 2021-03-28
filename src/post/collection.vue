@@ -1,9 +1,9 @@
 <template>
     <div class="m-publish-box">
         <!-- 头部 -->
-        <pubheader name="文集小册" :localDraft="false">
+        <publish-header name="文集小册" :localDraft="false">
             <slot name="header"></slot>
-        </pubheader>
+        </publish-header>
 
         <el-form label-position="left" class="m-publish-collection">
             <!-- 💛 栏目字段 -->
@@ -220,7 +220,7 @@ import {
 } from "@jx3box/jx3box-common/data/jx3box.json";
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 import CollectionPublic from "@jx3box/jx3box-editor/service/enum/CollectionPublic";
-import pubheader from "@/components/publish/pubheader.vue";
+import header from "@/components/publish_header.vue";
 import post_banner from "@/components/publish/post_banner.vue";
 import draggable from "vuedraggable";
 
@@ -377,7 +377,7 @@ export default {
     components: {
         Tinymce,
         draggable,
-        pubheader,
+        'publish-header':header,
         post_banner,
     },
 };

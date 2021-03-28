@@ -8,7 +8,7 @@
             <Nav />
         </LeftSidebar>
         <Main :withoutRight="true" class="m-publish-container">
-            <router-view />
+            <router-view class="m-publish" />
         </Main>
     </div>
 </template>

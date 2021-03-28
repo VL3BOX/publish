@@ -79,7 +79,7 @@
 const DRAFT_PREFIX = "tinymce-autosave-";
 
 export default {
-    name: "bucket",
+    name: "draft",
     props: [],
     components: {},
     data: function () {

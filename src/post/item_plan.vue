@@ -1,9 +1,9 @@
 <template>
     <div class="m-publish-box">
         <!-- 头部 -->
-        <pubheader name="物品百科" :localDraft="false">
+        <publish-header name="物品百科" :localDraft="false">
             <slot name="header"></slot>
-        </pubheader>
+        </publish-header>
 
         <h1 class="m-publish-item-header">物品清单</h1>
 
@@ -258,7 +258,7 @@
 </template>
 
 <script>
-import pubheader from "@/components/publish/pubheader.vue";
+import header from "@/components/publish_header.vue";
 import ItemSimple from "@jx3box/jx3box-editor/src/ItemSimple";
 import draggable from "vuedraggable";
 
@@ -440,7 +440,7 @@ export default {
     },
     components: {
         draggable,
-        pubheader,
+        'publish-header':header,
         "jx3-item-simple": ItemSimple,
     },
 };

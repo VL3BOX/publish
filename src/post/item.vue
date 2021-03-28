@@ -1,9 +1,9 @@
 <template>
     <div class="m-publish-box">
         <!-- 头部 -->
-        <pubheader name="物品百科">
+        <publish-header name="物品百科">
             <slot name="header"></slot>
-        </pubheader>
+        </publish-header>
 
         <el-form class="m-publish-post">
             <div class="m-publish-source">
@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import pubheader from "@/components/publish/pubheader.vue";
+import header from "@/components/publish_header.vue";
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 
 // 本地依赖
@@ -238,7 +238,7 @@ export default {
         },
     },
     components: {
-        pubheader,
+        'publish-header':header,
         Tinymce,
     },
 };

@@ -1,6 +1,6 @@
 <template>
   <div class="m-dashboard-publish-namespace m-publish-box">
-    <pubheader :name="name" :localDraft="false"><slot name="header"></slot></pubheader>
+    <publish-header :name="name" :localDraft="false"><slot name="header"></slot></publish-header>
     <div class="m-publish-namespace-box">
       <header class="m-publish-namespace-header">
         <div class="u-tip">
@@ -40,7 +40,7 @@
 
 <script>
 import { sterilizer } from 'sterilizer/index.js'
-import pubheader from '@/components/publish/pubheader'
+import publish-header from '@/components/publish/publish-header'
 import { getNamespaceByKey, getNamespaceById, createNamespace, updateNamespace } from '@/service/namespace'
 import User from '@jx3box/jx3box-common/js/user'
 import lodash from 'lodash'
@@ -186,7 +186,7 @@ export default {
   },
 
   components: {
-    pubheader,
+    'publish-header':header,
   },
 }
 </script>

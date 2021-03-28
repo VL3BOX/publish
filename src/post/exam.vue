@@ -1,9 +1,9 @@
 <template>
     <div class="m-publish-box m-publish-exam">
         <!-- 头部 -->
-        <pubheader name="趣味题库" :localDraft="false"
+        <publish-header name="趣味题库" :localDraft="false"
             ><slot name="header"></slot
-        ></pubheader>
+        ></publish-header>
 
         <div class="m-publish-exam-index">
             <el-card class="box-card">
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import pubheader from "@/components/publish/pubheader.vue";
+import header from "@/components/publish_header.vue";
 export default {
     name: "exam",
     props: [],
@@ -36,7 +36,7 @@ export default {
     methods: {},
     mounted: function() {},
     components: {
-        pubheader,
+        'publish-header':header,
     },
 };
 </script>

@@ -4,7 +4,7 @@
             <i class="el-icon-edit-outline"></i>
             <span>创作台</span>
         </router-link>
-        <router-link class="m-nav-bucket el-button el-button--primary is-plain" to="/bucket">
+        <router-link class="m-nav-bucket el-button el-button--primary is-plain" to="/draft">
             <!-- <img class="u-bucket" svg-inline src="../assets/img/bucket.svg" /> -->
             <i class="el-icon-receiving"></i>
             <span>草稿箱</span>
