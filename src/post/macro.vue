@@ -42,9 +42,14 @@
                 <publish-collection v-model="post.post_collection"></publish-collection>
             </div>
 
-            <!-- 扩展功能 -->
+            <!-- 扩展 -->
             <div class="m-publish-extend">
                 <el-divider content-position="left">扩展</el-divider>
+            </div>
+
+            <!-- 其它 -->
+            <div class="m-publish-other">
+                <publish-banner v-model="post.post_banner"></publish-banner>
             </div>
 
             <!-- 按钮 -->
@@ -65,6 +70,7 @@ import publish_zlp from "@/components/publish_zlp";
 import publish_xf from "@/components/publish_xf";
 import publish_macro from "@/components/publish_macro";
 import publish_collection from "@/components/publish_collection";
+import publish_banner from "@/components/publish_banner";
 
 // 数据逻辑
 import { syncRedis } from "@/service/macro.js";
@@ -82,6 +88,7 @@ export default {
         "publish-xf": publish_xf,
         "publish-macro": publish_macro,
         "publish-collection": publish_collection,
+        "publish-banner": publish_banner,
     },
     props: [],
     data: function () {

@@ -1,6 +1,7 @@
 <template>
     <div class="m-publish-banner">
-        <el-alert class="u-tip" title="首页海报尺寸1100*300，非必选，部分栏目不会展示海报，分享功能将使用该图作为预览图" type="info" show-icon> </el-alert>
+        <el-divider content-position="left">海报</el-divider>
+        <el-alert class="u-tip" title="首页海报尺寸1100*300，非必选，部分栏目不会展示海报，分享功能将使用该图作为预览图" type="info" show-icon></el-alert>
         <el-upload
             class="avatar-uploader"
             :action="url"
@@ -10,7 +11,7 @@
             with-credentials
             accept="image/jpg,image/jpeg,image/gif,image/png,image/bmp"
         >
-            <img v-if="post_banner" :src="post_banner | showBanner" />
+            <img v-if="banner" :src="banner | showBanner" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
         <el-button class="u-remove" type="info" size="mini" icon="el-icon-circle-close" @click="clearBanner">移除海报</el-button>
@@ -19,35 +20,34 @@
 
 <script>
 import { __server } from "@jx3box/jx3box-common/data/jx3box.json";
-import { showMinibanner } from "@jx3box/jx3box-common/js/utils";
+import { showBanner } from "@jx3box/jx3box-common/js/utils";
 const API = __server + "upload";
 // const API = "http://localhost:5160/" + "upload";
 
 export default {
     name: "post_banner",
-    props: ["banner"],
+    props: ["data"],
     data() {
         return {
-            post_banner: this.banner,
+            banner: this.data,
             url: API,
         };
     },
     model: {
-        prop: "banner",
+        prop: "data",
         event: "update",
     },
     watch: {
-        post_banner: function(newval) {
+        data : function (newval){
+            this.banner = newval
+        },
+        banner: function(newval) {
             this.$emit("update", newval);
         },
-        banner : function (newval){
-            this.post_banner = newval
-        }
     },
     methods: {
         done(res, file) {
-            this.post_banner = res.data.list[0];
-            this.$store.commit("editBanner", this.post_banner);
+            this.banner = res.data.list[0];
         },
         fail(err, file, fileList) {
             try {
@@ -58,14 +58,11 @@ export default {
             }
         },
         clearBanner : function (){
-            this.post_banner = ''
-            this.$store.commit("editBanner", this.post_banner);
+            this.banner = ''
         }
     },
     filters : {
-        showBanner : function (val){
-            return showMinibanner(val)
-        }
+        showBanner
     }
 };
 </script>
