@@ -44,7 +44,9 @@
 
             <!-- 扩展 -->
             <div class="m-publish-extend">
-                <el-divider content-position="left">扩展</el-divider>
+                <el-divider content-position="left">设置</el-divider>
+                <publish-comment v-model="post.comment"></publish-comment>
+                <publish-visible v-model="post.visible"></publish-visible>
             </div>
 
             <!-- 其它 -->
@@ -53,7 +55,9 @@
             </div>
 
             <!-- 按钮 -->
-            <div class="m-publish-buttons"></div>
+            <div class="m-publish-buttons">
+                
+            </div>
         </el-form>
     </div>
 </template>
@@ -71,6 +75,8 @@ import publish_xf from "@/components/publish_xf";
 import publish_macro from "@/components/publish_macro";
 import publish_collection from "@/components/publish_collection";
 import publish_banner from "@/components/publish_banner";
+import publish_comment from "@/components/publish_comment";
+import publish_visible from "@/components/publish_visible";
 
 // 数据逻辑
 import { syncRedis } from "@/service/macro.js";
@@ -89,6 +95,8 @@ export default {
         "publish-macro": publish_macro,
         "publish-collection": publish_collection,
         "publish-banner": publish_banner,
+        "publish-comment": publish_comment,
+        "publish-visible": publish_visible,
     },
     props: [],
     data: function () {
@@ -127,6 +135,13 @@ export default {
                 post_banner: "",
                 // 小册
                 post_collection: "",
+
+                // 评论开关（0开启|默认，1关闭）
+                comment : 0,
+
+                // 可见性（0公开，1仅自己，2亲友，3密码，4付费，5粉丝）
+                visible : 0
+
             },
         };
     },
