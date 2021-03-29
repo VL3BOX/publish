@@ -39,6 +39,7 @@
             <!-- 附加 -->
             <div class="m-publish-append">
                 <el-divider content-position="left">附加</el-divider>
+                <publish-collection v-model="post.post_collection"></publish-collection>
             </div>
 
             <!-- 扩展功能 -->
@@ -63,6 +64,7 @@ import publish_lang from "@/components/publish_lang";
 import publish_zlp from "@/components/publish_zlp";
 import publish_xf from "@/components/publish_xf";
 import publish_macro from "@/components/publish_macro";
+import publish_collection from "@/components/publish_collection";
 
 // 数据逻辑
 import { syncRedis } from "@/service/macro.js";
@@ -79,6 +81,7 @@ export default {
         "publish-zlp": publish_zlp,
         "publish-xf": publish_xf,
         "publish-macro": publish_macro,
+        "publish-collection": publish_collection,
     },
     props: [],
     data: function () {

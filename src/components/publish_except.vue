@@ -1,51 +1,42 @@
 <template>
     <div class="m-publish-excerpt">
         <el-input
+            v-model="excerpt"
+            :maxlength="200"
+            show-word-limit
             type="textarea"
-            :rows="2"
             placeholder="摘要信息"
-            v-model="post_excerpt"
-            @change="done"
-        >
-        </el-input>
+        ></el-input>
+        <slot></slot>
     </div>
 </template>
-
 <script>
 export default {
-    name: "post_excerpt",
-    props: ["excerpt"],
-    data: function() {
+    name: "publish_excerpt",
+    props: ["data"],
+    data: function () {
         return {
-            post_excerpt: this.excerpt,
+            excerpt: this.data,
         };
     },
-    computed: {
-        store: function() {
-            return this.$store.state.post.post_excerpt;
-        },
+    model: {
+        prop: "data",   //向上同步数据
+        event: "update",
     },
     watch: {
-        store: function(val) {
-            this.post_excerpt = val;
+        data: function(newval) {
+            this.excerpt = newval;
+        },
+        excerpt: {
+            deep: true,
+            handler: function(newval) {
+                this.$emit("update", newval);
+            },
         },
     },
-    methods: {
-        done: function() {
-            this.$store.commit("editExcerpt", this.post_excerpt);
-        },
-    },
-    mounted: function() {},
+    computed: {},
+    methods: {},
+    mounted: function () {},
     components: {},
 };
 </script>
-
-<style lang="less">
-.m-publish-excerpt {
-    .mt(10px);
-
-    textarea {
-        font-family: inherit;
-    }
-}
-</style>
