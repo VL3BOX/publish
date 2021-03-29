@@ -56,7 +56,8 @@
 
             <!-- 按钮 -->
             <div class="m-publish-buttons">
-                
+                <el-button type="primary" @click="publish" :disabled="processing">发 &nbsp;&nbsp; 布</el-button>
+                <el-button type="plain" @click="draft" :disabled="processing">保存为自用宏</el-button>
             </div>
         </el-form>
     </div>
@@ -79,7 +80,7 @@ import publish_comment from "@/components/publish_comment";
 import publish_visible from "@/components/publish_visible";
 
 // 数据逻辑
-import { syncRedis } from "@/service/macro.js";
+import { publish,load } from "@/service/macro.js";
 
 export default {
     name: "macro",
@@ -101,6 +102,7 @@ export default {
     props: [],
     data: function () {
         return {
+            processing : false,
             post: {
                 // 文章ID
                 ID: "", 
@@ -139,7 +141,7 @@ export default {
                 // 评论开关（0开启|默认，1关闭）
                 comment : 0,
 
-                // 可见性（0公开，1仅自己，2亲友，3密码，4付费，5粉丝）
+                // 阅读权限（0公开，1仅自己，2亲友，3密码，4付费，5粉丝）
                 visible : 0
 
             },
@@ -149,54 +151,34 @@ export default {
     methods: {
         // 加载
         init: function () {
-            return this.doLoad(this).then(() => {
-                
-                console.log("Init Post:", this.post);
-            });
         },
         // 发布
-        toPublish: function () {
-            this.postData();
+        publish: function () {
         },
         // 草稿
-        toDraft: function () {
-            this.postData();
-        },
-        // 提交
-        postData: function () {
-            this.check();
-            this.doPublish(this.build(), this, false).then((res) => {
-                syncRedis(res.data.data, this).then((redis_result) => {
-                    this.finish(res.data.msg, res.data.data.ID);
-                });
-            });
+        draft: function () {
         },
         // 跳转
-        finish: function (msg, id) {
+        done: function (msg, id) {
             this.$message({
-                message: msg,
+                message: '发布成功',
                 type: "success",
             });
             setTimeout(() => {
-                location.href = "/" + this.type + "/" + id;
+                location.href = "/" + this.post.post_type + "/" + id;
             }, 500);
-        },
-
-        // 设置检索meta
-        build: function () {
-            let data = this.$store.state;
-            // data.post.meta_1 = data.post.post_meta.zlp; //资料片
-            // data.post.meta_2 = ~~lodash.get(
-            //     xfmap[data.post.post_subtype],
-            //     "id"
-            // ); //心法id
-            // data.post.meta_4 = data.post.post_meta.lang; //语言
-            return data;
         },
     },
     mounted: function () {
-        // 初始化默认文章数据
-        this.init();
+        this.init().then((data) => {
+            // 迁移兼容
+            if(!this.post.zlp){
+                this.post.zlp = data.post.meta_1
+            }
+            if(!this.post.lang){
+                this.post.lang = data.post.meta_4
+            }
+        })
     },
 };
 </script>

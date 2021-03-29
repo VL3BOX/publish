@@ -2,6 +2,7 @@ import { $next } from "@jx3box/jx3box-common/js/https";
 import { __Root } from "@jx3box/jx3box-common/data/jx3box.json";
 import dateFormat from "../utils/dateFormat";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
+import { loadPost, publishPost } from "./cms";
 
 function syncRedis(data, vm) {
     let redisData = transferForRedis(data);
@@ -65,4 +66,12 @@ function transferForRedis(data) {
     return _;
 }
 
-export { syncRedis };
+function publish(){
+    // syncRedis
+}
+
+function load(){
+    
+}
+
+export { publish, load };
