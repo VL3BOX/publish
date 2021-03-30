@@ -267,7 +267,7 @@ export default {
     },
     watch: {
         "$route.params.id": function (val) {
-            this.init();
+            val && this.init();
         },
     },
 };
