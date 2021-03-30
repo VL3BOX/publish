@@ -34,6 +34,7 @@ export default {
             },
         },
         client : function (val){
+            val = val || 'std'
             this.zlps = zlps[val]
         }
     },

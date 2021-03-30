@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-xf">
         <el-form-item label="心法">
-            <el-radio v-for="(item, i) in xfmap" v-model="xf" :label="item.name" :key="i" v-show="item.client.includes(client)">
+            <el-radio v-for="(item, i) in xfmap" v-model="xf" :label="item.name" :key="i" v-show="item.client.includes(exact_client)">
                 <img class="u-pic" :src="item.id | xficon" :alt="item.name" />
                 <span class="u-txt">{{ item.name }}</span>
             </el-radio>
@@ -19,6 +19,7 @@ export default {
         return {
             xf: this.data,
             xfmap,
+            exact_client : this.client || 'std'
         };
     },
     model: {
@@ -35,6 +36,9 @@ export default {
                 this.$emit("update", newval);
             },
         },
+        client : function (val){
+            this.exact_client = val || 'std'
+        }
     },
     computed: {},
     methods: {},

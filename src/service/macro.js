@@ -2,9 +2,8 @@ import { $next } from "@jx3box/jx3box-common/js/https";
 import { __Root } from "@jx3box/jx3box-common/data/jx3box.json";
 import dateFormat from "../utils/dateFormat";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
-import { loadPost, publishPost } from "./cms";
 
-function syncRedis(data, vm) {
+function syncRedis(data) {
     let redisData = transferForRedis(data);
     console.log("正在执行redis同步作业:", redisData);
     return $next().post("/api/macro/publish", redisData);
@@ -20,7 +19,7 @@ function transferForRedis(data) {
         post_id: pid,
         post_status: data.post_status,
         data: {},
-        lang: data.post_meta.lang,
+        lang: data.lang || 'cn',
         original: data.original,
     };
 
@@ -47,6 +46,7 @@ function transferForRedis(data) {
         // 来源
         desc += "\n【来源】JX3BOX";
 
+        // 名字
         if (!item.name) item.name = Date.now();
 
         _.data[item.name] = {
@@ -66,12 +66,4 @@ function transferForRedis(data) {
     return _;
 }
 
-function push(){
-    // syncRedis
-}
-
-function pull(){
-    
-}
-
-export { push, pull };
+export { syncRedis };

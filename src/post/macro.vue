@@ -56,8 +56,8 @@
 
             <!-- 按钮 -->
             <div class="m-publish-buttons">
-                <el-button type="primary" @click="publish" :disabled="processing">发 &nbsp;&nbsp; 布</el-button>
-                <el-button type="plain" @click="draft" :disabled="processing">保存为草稿</el-button>
+                <el-button type="primary" @click="publish('publish',true)" :disabled="processing">发 &nbsp;&nbsp; 布</el-button>
+                <el-button type="plain" @click="publish('draft',false)" :disabled="processing">保存为草稿</el-button>
             </div>
         </el-form>
     </div>
@@ -80,7 +80,8 @@ import publish_comment from "@/components/publish_comment";
 import publish_visible from "@/components/publish_visible";
 
 // 数据逻辑
-import { push, pull } from "@/service/macro.js";
+import { push, pull } from "@/service/cms.js";
+import { syncRedis } from "@/service/macro.js";
 
 export default {
     name: "macro",
@@ -101,9 +102,12 @@ export default {
     },
     data: function () {
         return {
-            loading:false,
+            // 加载状态
+            loading: false,
+            // 发布状态
             processing: false,
 
+            // 内容
             post: {
                 // 文章ID
                 ID: "",
@@ -160,39 +164,95 @@ export default {
             },
         };
     },
-    computed: {},
+    computed: {
+        id : function (){
+            return ~~this.post.ID
+        },
+        data: function () {
+            if (this.id) {
+                return [this.id, this.post];
+            } else {
+                return [this.post];
+            }
+        },
+    },
     methods: {
         // 加载
         init: function () {
+            // 客户端模式
+            this.post.client = this.$store.state.client;
+            // 加载文章
+            if(this.$route.params.id){
+                return pull(this.$route.params.id).then((res) => {
+                    this.post = res.data.data
+                    return res.data.data
+                })
+            }else{
+                return new Promise((resolve,reject)=>{
+                    resolve()
+                })
+            }
         },
         // 发布
-        publish: function () {},
-        // 草稿
-        draft: function () {},
-        // 跳转
-        done: function (msg, id) {
-            this.$message({
-                message: "发布成功",
-                type: "success",
-            });
-            setTimeout(() => {
-                location.href = "/" + this.post.post_type + "/" + id;
-            }, 500);
+        publish: function (status,skip) {
+            this.post.post_status = status;
+            this.processing = true;
+            push(...this.data).then((res) => {
+                let result = res.data.data
+                syncRedis(result).then((res) => {
+                    this.done(skip,result)
+                })
+            }).finally(() => {
+                this.processing = false
+            })
+        },
+        // 完成
+        done: function (skip,result) {
+            if(skip){
+                // 提醒
+                this.$message({
+                    message: "发布成功",
+                    type: "success",
+                });
+                // 跳转
+                setTimeout(() => {
+                    location.href = "/" + result.post_type + "/" + result.ID;
+                }, 500);
+            }else{
+                // 提醒
+                this.$notify({
+                    title: '保存成功',
+                    message: '云端草稿保存成功',
+                    type: 'success'
+                });
+                // 路由
+                this.post = result
+                if(!this.$route.params.id){
+                    this.$router.push({
+                        params : {
+                            id : result.ID
+                        }
+                    })
+                }
+            }
         },
     },
-    mounted: function () {
-        // this.init().then((data) => {
-        //     // 迁移兼容
-        //     if (!this.post.zlp) {
-        //         this.post.zlp = data.post.meta_1;
-        //     }
-        //     if (!this.post.lang) {
-        //         this.post.lang = data.post.meta_4;
-        //     }
-        // });
+    created: function () {
+        // 加载
+        this.init().then((data) => {
+            // 迁移兼容
+            if (!this.post.zlp && data.meta_1) {
+                this.post.zlp = data.meta_1;
+            }
+            if (!this.post.lang && data.meta_4) {
+                this.post.lang = data.meta_4;
+            }
+        });
     },
-    created : function (){
-        this.post.client = this.$store.state.client
+    watch : {
+        '$route.params.id' : function (val){
+            this.init()
+        }
     }
 };
 </script>
