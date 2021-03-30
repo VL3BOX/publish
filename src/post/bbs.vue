@@ -1,162 +1,246 @@
 <template>
-    <div class="m-dashboard-publish-bbs">
-        <!-- 💛 预设选项 -->
-        <!-- 
-            localDraft : 是否显示本地草稿按钮
-            infoEnable : 是否包含自定义字段
-            markdownEnable : 是否开启markdown编辑器
-            excerptEnable : 是否开启摘要
-            tagEnable : 是否开启标签
-            notifyEnable : 是否开启通知等扩展功能
-            bannerEnable : 是否开启头条图功能,开启后仍旧需要签约作者及管理员才可见
-         -->
-        <boilerplate
-            v-if="loaded"
-            :name="name"
-            :type="type"
-            :post="post"
-            :meta="meta"
-            :extend="extend"
-            :infoEnable="true"
-            :contentEnable="true"
-            :markdownEnable="false"
-            :excerptEnable="true"
-            :tagEnable="false"
-            :notifyEnable="true"
-            :bannerEnable="true"
-            :collectionEnable="true"
-            @publish="toPublish"
-            @draft="toDraft"
-        >
-            <template>
-                <el-form-item label="原创">
-                    <el-switch v-model="post.original" active-color="#13ce66">
-                    </el-switch>
-                </el-form-item>
+    <div class="m-publish-box" v-loading="loading">
+        <!-- 头部 -->
+        <publish-header name="茶馆交流"></publish-header>
 
-                <el-form-item label="版本">
-                    <el-radio-group v-model="post.client">
-                        <el-radio label="std">正式服</el-radio>
-                        <el-radio label="origin">怀旧服</el-radio>
-                        <el-radio label="all">全部</el-radio>
-                    </el-radio-group>
-                </el-form-item>
+        <el-form label-position="left" label-width="80px">
+            <!-- 标题 -->
+            <publish-title v-model="post.post_title"></publish-title>
 
-                <el-form-item label="类型">
-                    <el-radio-group v-model="post.post_subtype">
-                        <el-radio
-                            :label="key"
-                            border
-                            v-for="(type, key) in options.types"
-                            :key="key"
-                            v-show="canSee(key)"
-                            >{{ type }}</el-radio
-                        >
-                    </el-radio-group>
-                </el-form-item>
-            </template>
-        </boilerplate>
+            <!-- 信息 -->
+            <div class="m-publish-info">
+                <el-divider content-position="left">信息</el-divider>
+                <!-- 原创 -->
+                <publish-original v-model="post.original"></publish-original>
+                <!-- 客户端 -->
+                <publish-client v-model="post.client"></publish-client>
+                <!-- 类型 -->
+                <publish-subtype v-model="post.post_subtype" :options="bbs_types"></publish-subtype>
+            </div>
+
+            <!-- 正文 -->
+            <div class="m-publish-content">
+                <el-divider content-position="left">正文</el-divider>
+                <Tinymce
+                    v-model="post.post_content"
+                    :attachmentEnable="true"
+                    :resourceEnable="true"
+                    v-show="!post.post_mode || post.post_mode == 'tinymce'"
+                />
+            </div>
+
+            <!-- 附加 -->
+            <div class="m-publish-append">
+                <el-divider content-position="left">附加</el-divider>
+                <publish-excerpt v-model="post.post_excerpt"></publish-excerpt>
+                <publish-collection v-model="post.post_collection"></publish-collection>
+            </div>
+
+            <!-- 扩展 -->
+            <div class="m-publish-extend">
+                <el-divider content-position="left">设置</el-divider>
+                <publish-comment v-model="post.comment"></publish-comment>
+                <publish-visible v-model="post.visible"></publish-visible>
+            </div>
+
+            <!-- 其它 -->
+            <div class="m-publish-other">
+                <publish-banner v-model="post.post_banner"></publish-banner>
+            </div>
+
+            <!-- 按钮 -->
+            <div class="m-publish-buttons">
+                <el-button
+                    type="primary"
+                    @click="publish('publish',true)"
+                    :disabled="processing"
+                >发 &nbsp;&nbsp; 布</el-button>
+                <el-button type="plain" @click="publish('draft',false)" :disabled="processing">保存为草稿</el-button>
+            </div>
+        </el-form>
     </div>
 </template>
 
 <script>
-import boilerplate from "@/components/publish/boilerplate";
-import { __ossMirror } from "@jx3box/jx3box-common/data/jx3box.json";
-import types from "../assets/data/bbs.json";
-import User from "@jx3box/jx3box-common/js/user";
+// 公共模块
+import { getLink } from "@jx3box/jx3box-common/js/utils";
+import bbs_types from "@/assets/data/bbs.json";
+
+// 本地模块
+import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
+import publish_header from "@/components/publish_header.vue";
+import publish_title from "@/components/publish_title.vue";
+import publish_original from "@/components/publish_original.vue";
+import publish_client from "@/components/publish_client.vue";
+import publish_collection from "@/components/publish_collection";
+import publish_excerpt from "@/components/publish_excerpt";
+import publish_banner from "@/components/publish_banner";
+import publish_comment from "@/components/publish_comment";
+import publish_visible from "@/components/publish_visible";
+import publish_subtype from "@/components/publish_subtype";
+
+// 数据逻辑
+import { push, pull } from "@/service/cms.js";
 
 export default {
     name: "bbs",
-    props: [],
-    data: function() {
+    components: {
+        Tinymce,
+        "publish-header": publish_header,
+        "publish-title": publish_title,
+        "publish-original": publish_original,
+        "publish-client": publish_client,
+        "publish-excerpt": publish_excerpt,
+        "publish-collection": publish_collection,
+        "publish-banner": publish_banner,
+        "publish-comment": publish_comment,
+        "publish-visible": publish_visible,
+        "publish-subtype": publish_subtype,
+    },
+    data: function () {
         return {
-            //基本 - 类型设置
-            type: "bbs",
-            name: "茶馆",
-            loaded: false,
+            // 加载状态
+            loading: false,
+            // 发布状态
+            processing: false,
 
-            //选项
-            options: {
-                types: types,
-            },
-
-            //字段
-            meta: {},
-
-            //文章 - 主表数据
+            // 内容
             post: {
-                ID: "", //文章ID
-                // post_author               //无需设置,由token自动获取
-                // post_type:"",             //类型(默认由boilerplate托管)
-                post_subtype: "1", //子类型(过滤查询用)
-                post_title: "", //标题
-                post_content: "", //主表内容字段,由后端接口配置是否双存储至meta表
+                // 文章ID
+                ID: "",
+                // 状态：publish公开、private私有、draft草稿、dustbin删除
+                post_status: "publish",
+                // 类型
+                post_type: "bbs",
+
+                // 标题
+                post_title: "",
+                // 子类型：心法、副本名等
+                post_subtype: "1",
+                // 自定义字段
                 post_meta: {},
-                post_excerpt: "", //主表摘要
-                post_mode: "tinymce", //编辑模式(会影响文章详情页渲染规则)
-                post_banner: "", //头条图,管理员可见
-                post_status: "", //由发布按钮、草稿按钮决定
-                // post_tags: [],            //标签列表
-                post_collection: "", //文集
-                original: 0, //是否原创
-                client: "std", //空为正式服,origin为怀旧服
+                // 内容
+                post_content: "",
+                // 编辑模式(会影响文章详情页渲染规则)
+                post_mode: "tinymce",
+
+                // 是否原创
+                original: 0,
+                // 客户端：std正式服、origin怀旧服
+                client: "std",
+                // 语言：cn简体、tr繁体
+                lang: "cn",
+                // 资料片
+                zlp: "",
+
+                // 摘要
+                post_excerpt: "",
+                // 海报
+                post_banner: "",
+                // 小册
+                post_collection: "",
+
+                // 评论开关（0开启|默认，1关闭）
+                comment: 0,
+
+                // 阅读权限（0公开，1仅自己，2亲友，3密码，4付费，5粉丝）
+                visible: 0,
             },
 
-            //扩展 - 部分栏目文章不应启用该功能
-            extend: {
-                feedEnable: false, //是否通知订阅用户
-                followEnable: false, //是否通知粉丝
-                tencentEnable: false, //是否同步至腾讯文档
-                weiboEnable: false, //是否同步至微博头条文章
-                tuilanEnable: false, //是否同步至推栏
-            },
-
-            // 杂项
-            isAdmin: User.isAdmin(),
+            // 选项
+            bbs_types,
         };
     },
-    computed: {},
+    computed: {
+        id: function () {
+            return ~~this.post.ID;
+        },
+        data: function () {
+            if (this.id) {
+                return [this.id, this.post];
+            } else {
+                return [this.post];
+            }
+        },
+    },
     methods: {
         // 加载
-        init: function() {
-            return this.doLoad(this).then((data) => {});
+        init: function () {
+            this.loading = true;
+            // 加载文章
+            if (this.$route.params.id) {
+                return pull(this.$route.params.id)
+                    .then((res) => {
+                        this.post = res.data.data;
+                        return res.data.data;
+                    })
+                    .finally(() => {
+                        this.loading = false;
+                    });
+            } else {
+                return new Promise((resolve, reject) => {
+                    resolve();
+                }).finally(() => {
+                    this.loading = false;
+                });
+            }
         },
         // 发布
-        toPublish: function() {
-            // console.log(this.build());
-            this.doPublish(this.build(), this);
+        publish: function (status, skip) {
+            this.post.post_status = status;
+            this.processing = true;
+            push(...this.data)
+                .then((res) => {
+                    let result = res.data.data;
+                    this.done(skip, result);
+                })
+                .finally(() => {
+                    this.processing = false;
+                });
         },
-        // 草稿
-        toDraft: function() {
-            this.doDraft(this.build(), this);
-        },
-        // 设置检索meta
-        build: function() {
-            let data = this.$store.state;
-            return data;
-        },
-
-        // 公告分类
-        canSee(key) {
-            if (key == "6") {
-                return this.isAdmin;
+        // 完成
+        done: function (skip, result) {
+            if (skip) {
+                // 提醒
+                this.$message({
+                    message: "发布成功",
+                    type: "success",
+                });
+                // 跳转
+                setTimeout(() => {
+                    location.href = getLink(result.post_type, result.ID);
+                }, 500);
+            } else {
+                // 提醒
+                this.$notify({
+                    title: "保存成功",
+                    message: "云端草稿保存成功",
+                    type: "success",
+                });
+                // 路由
+                this.post = result;
+                if (!this.$route.params.id) {
+                    this.$router.push({
+                        params: {
+                            id: result.ID,
+                        },
+                    });
+                }
             }
-            return true;
         },
     },
-    filters: {},
-    mounted: function() {
-        // 初始化默认文章数据
-        this.init().then(() => {
-            console.log("Init Post:", this.post);
-        });
+    created: function () {
+        this.post.client = this.$store.state.client;
+        this.init()
     },
-    components: {
-        boilerplate,
+    watch: {
+        "$route.params.id": function (val) {
+            val && this.init();
+        },
     },
 };
 </script>
 
 <style lang="less">
-@import "../assets/css/tool.less";
+@import "../assets/css/bbs.less";
 </style>

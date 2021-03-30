@@ -13,9 +13,10 @@ const jx3dat = () => import("../post/jx3dat.vue");
 const fb = () => import("../post/fb.vue");
 const bps = () => import("../post/bps.vue");
 const tool = () => import("../post/tool.vue");
+const bbs = () => import("../post/bbs.vue");
 // const house = () => import("../post/house.vue");
 // const share = () => import("../post/share.vue");
-// const bbs = () => import("../post/bbs.vue");
+
 
 // WIKI
 // const achievement = () => import("../post/achievement.vue");
@@ -105,34 +106,27 @@ const routes = [
         path: "/tool/:id?",
         component: tool,
     },
-    
-
+    // 茶馆闲聊
+    {
+        path: "/bbs/:id?",
+        component: bbs,
+    },
+    {
+        path: "/post/:id?",
+        component: bbs,
+    },
     // // 家园发布
     // {
     //     path: "/house/:id?",
     //     component: house,
     // },
-
-    
-
-    
-
-    // // 茶馆闲聊
-    // {
-    //     path: "/bbs/:id?",
-    //     component: bbs,
-    // },
-    // {
-    //     path: "/post/:id?",
-    //     component: bbs,
-    // },
-
     // // 捏脸分享
     // {
     //     path: "/share/:id?",
     //     component: share,
     // },
 
+    // 应用=====================
     // // 趣味题库
     // {
     //     path: "/exam/",
