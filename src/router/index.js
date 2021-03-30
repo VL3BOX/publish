@@ -15,7 +15,7 @@ const bps = () => import("../post/bps.vue");
 const tool = () => import("../post/tool.vue");
 const bbs = () => import("../post/bbs.vue");
 // const house = () => import("../post/house.vue");
-// const share = () => import("../post/share.vue");
+const share = () => import("../post/share.vue");
 
 
 // WIKI
@@ -120,11 +120,11 @@ const routes = [
     //     path: "/house/:id?",
     //     component: house,
     // },
-    // // 捏脸分享
-    // {
-    //     path: "/share/:id?",
-    //     component: share,
-    // },
+    // 捏脸分享
+    {
+        path: "/share/:id?",
+        component: share,
+    },
 
     // 应用=====================
     // // 趣味题库

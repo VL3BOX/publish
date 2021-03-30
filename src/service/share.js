@@ -1,8 +1,8 @@
-import { $_server } from "./axios";
+import { $_https } from "@jx3box/jx3box-common/js/https";
 
-function uploadData(formdata, vm) {
-    return $_server.post("/upload/data", formdata);
+// 上传
+function uploadData(formdata) {
+    return $_https("server").post("/upload/data", formdata);
 }
-
 
 export { uploadData };
