@@ -40,3 +40,9 @@ export default {
     components: {},
 };
 </script>
+
+<style scoped lang="less">
+    .m-publish-excerpt{
+        .mb(10px);
+    }
+</style>

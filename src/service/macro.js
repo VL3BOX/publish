@@ -20,7 +20,7 @@ function transferForRedis(data) {
         post_status: data.post_status,
         data: {},
         lang: data.lang || 'cn',
-        original: data.original,
+        original: !!data.original,
     };
 
     let xf = xfmap[data.post_subtype]["id"] + "";

@@ -56,7 +56,11 @@
 
             <!-- 按钮 -->
             <div class="m-publish-buttons">
-                <el-button type="primary" @click="publish('publish',true)" :disabled="processing">发 &nbsp;&nbsp; 布</el-button>
+                <el-button
+                    type="primary"
+                    @click="publish('publish',true)"
+                    :disabled="processing"
+                >发 &nbsp;&nbsp; 布</el-button>
                 <el-button type="plain" @click="publish('draft',false)" :disabled="processing">保存为草稿</el-button>
             </div>
         </el-form>
@@ -65,7 +69,7 @@
 
 <script>
 // 公共模块
-import {getLink} from '@jx3box/jx3box-common/js/utils'
+import { getLink } from "@jx3box/jx3box-common/js/utils";
 
 // 本地模块
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
@@ -115,7 +119,7 @@ export default {
                 // 文章ID
                 ID: "",
                 // 状态：publish公开、private私有、draft草稿、dustbin删除
-                post_status: "",
+                post_status: "publish",
                 // 类型
                 post_type: "macro",
 
@@ -168,8 +172,8 @@ export default {
         };
     },
     computed: {
-        id : function (){
-            return ~~this.post.ID
+        id: function () {
+            return ~~this.post.ID;
         },
         data: function () {
             if (this.id) {
@@ -182,36 +186,43 @@ export default {
     methods: {
         // 加载
         init: function () {
-            // 客户端模式
-            this.post.client = this.$store.state.client;
+            this.loading = true;
             // 加载文章
-            if(this.$route.params.id){
-                return pull(this.$route.params.id).then((res) => {
-                    this.post = res.data.data
-                    return res.data.data
-                })
-            }else{
-                return new Promise((resolve,reject)=>{
-                    resolve()
-                })
+            if (this.$route.params.id) {
+                return pull(this.$route.params.id)
+                    .then((res) => {
+                        this.post = res.data.data;
+                        return res.data.data;
+                    })
+                    .finally(() => {
+                        this.loading = false;
+                    });
+            } else {
+                return new Promise((resolve, reject) => {
+                    resolve();
+                }).finally(() => {
+                    this.loading = false;
+                });
             }
         },
         // 发布
-        publish: function (status,skip) {
+        publish: function (status, skip) {
             this.post.post_status = status;
             this.processing = true;
-            push(...this.data).then((res) => {
-                let result = res.data.data
-                syncRedis(result).then((res) => {
-                    this.done(skip,result)
+            push(...this.data)
+                .then((res) => {
+                    let result = res.data.data;
+                    syncRedis(result).then((res) => {
+                        this.done(skip, result);
+                    });
                 })
-            }).finally(() => {
-                this.processing = false
-            })
+                .finally(() => {
+                    this.processing = false;
+                });
         },
         // 完成
-        done: function (skip,result) {
-            if(skip){
+        done: function (skip, result) {
+            if (skip) {
                 // 提醒
                 this.$message({
                     message: "发布成功",
@@ -219,30 +230,32 @@ export default {
                 });
                 // 跳转
                 setTimeout(() => {
-                    location.href = getLink(result.post_type,result.ID);
+                    location.href = getLink(result.post_type, result.ID);
                 }, 500);
-            }else{
+            } else {
                 // 提醒
                 this.$notify({
-                    title: '保存成功',
-                    message: '云端草稿保存成功',
-                    type: 'success'
+                    title: "保存成功",
+                    message: "云端草稿保存成功",
+                    type: "success",
                 });
                 // 路由
-                this.post = result
-                if(!this.$route.params.id){
+                this.post = result;
+                if (!this.$route.params.id) {
                     this.$router.push({
-                        params : {
-                            id : result.ID
-                        }
-                    })
+                        params: {
+                            id: result.ID,
+                        },
+                    });
                 }
             }
         },
     },
     created: function () {
-        // 加载
+        this.post.client = this.$store.state.client;
         this.init().then((data) => {
+            if (!data) return;
+
             // 迁移兼容
             if (!this.post.zlp && data.meta_1) {
                 this.post.zlp = data.meta_1;
@@ -252,11 +265,11 @@ export default {
             }
         });
     },
-    watch : {
-        '$route.params.id' : function (val){
-            this.init()
-        }
-    }
+    watch: {
+        "$route.params.id": function (val) {
+            this.init();
+        },
+    },
 };
 </script>
 

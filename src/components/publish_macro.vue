@@ -185,9 +185,10 @@ export default {
     components: {},
     data: function () {
         return {
+            macros: this.data,
+            
             activeIndex: "1",
             nickname: User.getInfo().name,
-            macros: this.data,
             equip_types: {
                 jx3box: "魔盒清单",
                 // tuilan: "推栏",
@@ -301,11 +302,6 @@ export default {
             id = Math.max(0, Math.min(id, 30000));
             this.$set(item, "icon", id);
             return __iconPath + "icon/" + id + ".png";
-        },
-
-        // 配装
-        equipUpdate: function (schema) {
-            console.log(schema);
         },
     },
     filters: {},

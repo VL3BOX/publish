@@ -9,7 +9,7 @@ const cms = () => import("../views/cms.vue");
 
 // CMS
 const macro = () => import("../post/macro.vue");
-// const jx3dat = () => import("../post/jx3dat.vue");
+const jx3dat = () => import("../post/jx3dat.vue");
 // const fb = () => import("../post/fb.vue");
 // const bps = () => import("../post/bps.vue");
 // const tool = () => import("../post/tool.vue");
@@ -85,6 +85,11 @@ const routes = [
         path: "/macro/:id?",
         component: macro,
     },
+    // 插件数据发布
+    {
+        path: "/jx3dat/:id?",
+        component: jx3dat,
+    },
 
     // // 副本发布
     // {
@@ -92,11 +97,7 @@ const routes = [
     //     component: fb,
     // },
 
-    // // 插件数据发布
-    // {
-    //     path: "/jx3dat/:id?",
-    //     component: jx3dat,
-    // },
+    
 
     // // 家园发布
     // {

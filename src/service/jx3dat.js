@@ -1,21 +1,9 @@
-import { $_server } from "./axios";
-import { $next } from "@jx3box/jx3box-common/js/https";
+import { $next, $_https } from "@jx3box/jx3box-common/js/https";
 import { __Root } from "@jx3box/jx3box-common/data/jx3box.json";
 
-// 文章
-function createPost(data) {
-    return $_server.post("/server/jx3dat/", data);
-}
-function updatePost(id, data) {
-    return $_server.put(`/server/jx3dat/${id}`, data);
-}
-function hasFeed() {
-    return $_server.get(`/server/jx3dat/feed/has`);
-}
-
 // 上传
-function uploadData(formdata, vm) {
-    return $_server.post("/upload/data", formdata);
+function uploadData(formdata) {
+    return $_https("server").post("/upload/data", formdata);
 }
 function uploadHub(formdata) {
     return $next().post("/api/plugins/my-team-mon/v2", formdata);
@@ -38,11 +26,13 @@ function transferForRedis(data) {
         post_id: pid,
         post_status: data.post_status,
         data: {},
-        lang: data.post_meta.lang,
+        lang: data.lang || "cn",
         original: !!data.original,
     };
 
     data.post_meta.data.forEach((item, i) => {
+        item.name = item.name || Date.now();
+
         _.data[item.name] = {
             author: author,
             key: item.name,
@@ -57,4 +47,4 @@ function transferForRedis(data) {
     return _;
 }
 
-export { uploadHub, uploadData, syncRedis, updatePost, createPost, hasFeed };
+export { uploadHub, uploadData, syncRedis };
