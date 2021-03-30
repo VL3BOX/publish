@@ -66,12 +66,12 @@ function transferForRedis(data) {
     return _;
 }
 
-function publish(){
+function push(){
     // syncRedis
 }
 
-function load(){
+function pull(){
     
 }
 
-export { publish, load };
+export { push, pull };

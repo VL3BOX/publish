@@ -1,5 +1,5 @@
 <template>
-    <div class="m-publish-box">
+    <div class="m-publish-box" v-loading="loading">
         <!-- 头部 -->
         <publish-header name="云端宏"></publish-header>
 
@@ -57,7 +57,7 @@
             <!-- 按钮 -->
             <div class="m-publish-buttons">
                 <el-button type="primary" @click="publish" :disabled="processing">发 &nbsp;&nbsp; 布</el-button>
-                <el-button type="plain" @click="draft" :disabled="processing">保存为自用宏</el-button>
+                <el-button type="plain" @click="draft" :disabled="processing">保存为草稿</el-button>
             </div>
         </el-form>
     </div>
@@ -80,7 +80,7 @@ import publish_comment from "@/components/publish_comment";
 import publish_visible from "@/components/publish_visible";
 
 // 数据逻辑
-import { publish,load } from "@/service/macro.js";
+import { push, pull } from "@/service/macro.js";
 
 export default {
     name: "macro",
@@ -99,13 +99,14 @@ export default {
         "publish-comment": publish_comment,
         "publish-visible": publish_visible,
     },
-    props: [],
     data: function () {
         return {
-            processing : false,
+            loading:false,
+            processing: false,
+
             post: {
                 // 文章ID
-                ID: "", 
+                ID: "",
                 // 状态：publish公开、private私有、draft草稿、dustbin删除
                 post_status: "",
                 // 类型
@@ -116,16 +117,29 @@ export default {
                 // 子类型：心法、副本名等
                 post_subtype: "通用",
                 // 自定义字段
-                post_meta: '',
+                post_meta: {
+                    data: [
+                        {
+                            name: "",
+                            icon: 13,
+                            talent: "",
+                            macro: "",
+                            speed: "",
+                            equip: "",
+                            equip_type: "jx3box",
+                            desc: "",
+                        },
+                    ],
+                },
                 // 内容
                 post_content: "",
                 // 编辑模式(会影响文章详情页渲染规则)
-                post_mode: "tinymce", 
+                post_mode: "tinymce",
 
                 // 是否原创
-                original: 0, 
+                original: 0,
                 // 客户端：std正式服、origin怀旧服
-                client: "std", 
+                client: "std",
                 // 语言：cn简体、tr繁体
                 lang: "cn",
                 // 资料片
@@ -139,11 +153,10 @@ export default {
                 post_collection: "",
 
                 // 评论开关（0开启|默认，1关闭）
-                comment : 0,
+                comment: 0,
 
                 // 阅读权限（0公开，1仅自己，2亲友，3密码，4付费，5粉丝）
-                visible : 0
-
+                visible: 0,
             },
         };
     },
@@ -153,15 +166,13 @@ export default {
         init: function () {
         },
         // 发布
-        publish: function () {
-        },
+        publish: function () {},
         // 草稿
-        draft: function () {
-        },
+        draft: function () {},
         // 跳转
         done: function (msg, id) {
             this.$message({
-                message: '发布成功',
+                message: "发布成功",
                 type: "success",
             });
             setTimeout(() => {
@@ -170,16 +181,19 @@ export default {
         },
     },
     mounted: function () {
-        this.init().then((data) => {
-            // 迁移兼容
-            if(!this.post.zlp){
-                this.post.zlp = data.post.meta_1
-            }
-            if(!this.post.lang){
-                this.post.lang = data.post.meta_4
-            }
-        })
+        // this.init().then((data) => {
+        //     // 迁移兼容
+        //     if (!this.post.zlp) {
+        //         this.post.zlp = data.post.meta_1;
+        //     }
+        //     if (!this.post.lang) {
+        //         this.post.lang = data.post.meta_4;
+        //     }
+        // });
     },
+    created : function (){
+        this.post.client = this.$store.state.client
+    }
 };
 </script>
 
