@@ -64,6 +64,9 @@
 </template>
 
 <script>
+// 公共模块
+import {getLink} from '@jx3box/jx3box-common/js/utils'
+
 // 本地模块
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 import publish_header from "@/components/publish_header.vue";
@@ -216,7 +219,7 @@ export default {
                 });
                 // 跳转
                 setTimeout(() => {
-                    location.href = "/" + result.post_type + "/" + result.ID;
+                    location.href = getLink(result.post_type,result.ID);
                 }, 500);
             }else{
                 // 提醒
