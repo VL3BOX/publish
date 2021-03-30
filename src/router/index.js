@@ -11,7 +11,7 @@ const cms = () => import("../views/cms.vue");
 const macro = () => import("../post/macro.vue");
 const jx3dat = () => import("../post/jx3dat.vue");
 const fb = () => import("../post/fb.vue");
-// const bps = () => import("../post/bps.vue");
+const bps = () => import("../post/bps.vue");
 // const tool = () => import("../post/tool.vue");
 // const house = () => import("../post/house.vue");
 // const share = () => import("../post/share.vue");
@@ -95,6 +95,11 @@ const routes = [
         path: "/fb/:id?",
         component: fb,
     },
+    // 职业发布
+    {
+        path: "/bps/:id?",
+        component: bps,
+    },
     
 
     // // 家园发布
@@ -103,11 +108,7 @@ const routes = [
     //     component: house,
     // },
 
-    // // 职业发布
-    // {
-    //     path: "/bps/:id?",
-    //     component: bps,
-    // },
+    
 
     // // 工具发布
     // {
