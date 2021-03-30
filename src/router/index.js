@@ -10,7 +10,7 @@ const cms = () => import("../views/cms.vue");
 // CMS
 const macro = () => import("../post/macro.vue");
 const jx3dat = () => import("../post/jx3dat.vue");
-// const fb = () => import("../post/fb.vue");
+const fb = () => import("../post/fb.vue");
 // const bps = () => import("../post/bps.vue");
 // const tool = () => import("../post/tool.vue");
 // const house = () => import("../post/house.vue");
@@ -90,13 +90,11 @@ const routes = [
         path: "/jx3dat/:id?",
         component: jx3dat,
     },
-
-    // // 副本发布
-    // {
-    //     path: "/fb/:id?",
-    //     component: fb,
-    // },
-
+    // 副本发布
+    {
+        path: "/fb/:id?",
+        component: fb,
+    },
     
 
     // // 家园发布

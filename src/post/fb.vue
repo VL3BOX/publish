@@ -1,257 +1,251 @@
 <template>
-    <div class="m-publish-fb">
-        <!-- 💛 预设选项 -->
-        <!-- 
-            localDraft : 是否显示本地草稿按钮
-            infoEnable : 是否包含自定义字段
-            markdownEnable : 是否开启markdown编辑器
-            excerptEnable : 是否开启摘要
-            tagEnable : 是否开启标签
-            notifyEnable : 是否开启通知等扩展功能
-            bannerEnable : 是否开启头条图功能,开启后仍旧需要签约作者及管理员才可见
-         -->
-        <boilerplate
-            v-if="loaded"
-            :name="name"
-            :type="type"
-            :post="post"
-            :meta="meta"
-            :extend="extend"
-            :infoEnable="true"
-            :contentEnable="true"
-            :markdownEnable="false"
-            :excerptEnable="false"
-            :tagEnable="false"
-            :notifyEnable="true"
-            :bannerEnable="true"
-            :collectionEnable="true"
-            @publish="toPublish"
-            @draft="toDraft"
-        >
-            <!-- 💛 栏目字段 -->
-            <template v-if="ready && !loading" v-loading="loading">
-                <el-form-item label="原创">
-                    <el-switch
-                        v-model="post.original"
-                        active-color="#13ce66"
-                    ></el-switch>
-                </el-form-item>
+    <div class="m-publish-box" v-loading="loading">
+        <!-- 头部 -->
+        <publish-header name="副本攻略"></publish-header>
 
-                <el-form-item label="版本">
-                    <el-radio-group v-model="post.client">
-                        <el-radio label="std">正式服</el-radio>
-                        <el-radio label="origin">怀旧服</el-radio>
-                        <el-radio label="all">全部</el-radio>
-                    </el-radio-group>
-                </el-form-item>
+        <el-form label-position="left" label-width="80px">
+            <!-- 标题 -->
+            <publish-title v-model="post.post_title"></publish-title>
 
-                <!-- 1.选择资料片 -->
-                <el-form-item label="资料片" v-if="zlp_list">
-                    <el-radio
-                        v-for="(zlp, i) in zlp_list"
-                        :label="zlp"
-                        border
-                        :key="i"
-                        v-model="post.post_meta.fb_zlp"
-                        @change="optionChange(zlp)"
-                        >{{ zlp
-                        }}<span class="u-level">{{
-                            options.map[zlp]["level"]
-                        }}</span></el-radio
-                    >
-                </el-form-item>
+            <!-- 信息 -->
+            <div class="m-publish-info">
+                <el-divider content-position="left">信息</el-divider>
+                <!-- 原创 -->
+                <publish-original v-model="post.original"></publish-original>
+                <!-- 客户端 -->
+                <publish-client v-model="post.client"></publish-client>
+                <!-- 副本选项 -->
+                <publish-fb v-model="post.post_meta" :client="post.client" @updateMeta="updateMeta"></publish-fb>
+            </div>
 
-                <!-- 2.选择副本名称 -->
-                <el-form-item label="副本名称" v-if="fb_list">
-                    <el-radio
-                        class="u-fb-thumbnail"
-                        v-for="(fb, key) in fb_list"
-                        :label="key"
-                        :key="key"
-                        v-model="post.post_meta.fb_name"
-                        @change="changeSubtype(key)"
-                    >
-                        <img :src="fb.icon | thumbnail(fb.icon)" :alt="key" />
-                        <span>{{ key }}</span>
-                    </el-radio>
-                </el-form-item>
+            <!-- 正文 -->
+            <div class="m-publish-content">
+                <el-divider content-position="left">正文</el-divider>
+                <Tinymce
+                    v-model="post.post_content"
+                    :attachmentEnable="true"
+                    :resourceEnable="true"
+                    v-show="!post.post_mode || post.post_mode == 'tinymce'"
+                />
+            </div>
 
-                <!-- 选择BOSS -->
-                <el-form-item label="首领名称" v-if="boss_list">
-                    <el-checkbox-group v-model="post.post_meta.fb_boss">
-                        <el-checkbox-button
-                            v-for="(boss, i) in boss_list"
-                            :label="boss"
-                            :key="i"
-                            >{{ boss }}</el-checkbox-button
-                        >
-                    </el-checkbox-group>
-                </el-form-item>
+            <!-- 附加 -->
+            <div class="m-publish-append">
+                <el-divider content-position="left">附加</el-divider>
+                <publish-collection v-model="post.post_collection"></publish-collection>
+            </div>
 
-                <!-- 选择难度模式 -->
-                <el-form-item label="难度模式" v-if="level_list">
-                    <el-checkbox-group v-model="post.post_meta.fb_level">
-                        <el-checkbox
-                            v-for="level in level_list"
-                            :label="level.mode"
-                            :key="level.mode + level.map_id"
-                        ></el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
-            </template>
-        </boilerplate>
+            <!-- 扩展 -->
+            <div class="m-publish-extend">
+                <el-divider content-position="left">设置</el-divider>
+                <publish-comment v-model="post.comment"></publish-comment>
+                <publish-visible v-model="post.visible"></publish-visible>
+            </div>
+
+            <!-- 其它 -->
+            <div class="m-publish-other">
+                <publish-banner v-model="post.post_banner"></publish-banner>
+            </div>
+
+            <!-- 按钮 -->
+            <div class="m-publish-buttons">
+                <el-button
+                    type="primary"
+                    @click="publish('publish',true)"
+                    :disabled="processing"
+                >发 &nbsp;&nbsp; 布</el-button>
+                <el-button type="plain" @click="publish('draft',false)" :disabled="processing">保存为草稿</el-button>
+            </div>
+        </el-form>
     </div>
 </template>
 
 <script>
-// 依赖工具包
-import _ from "lodash";
-import isEmptyMeta from "@/utils/isEmptyMeta.js";
-import { __ossMirror, __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
-// 静态数据
-import fbmap from "@jx3box/jx3box-data/data/fb/fb_map.json";
+// 公共模块
+import { getLink } from "@jx3box/jx3box-common/js/utils";
+
 // 本地模块
-import boilerplate from "@/components/publish/boilerplate";
+import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
+import publish_header from "@/components/publish_header.vue";
+import publish_title from "@/components/publish_title.vue";
+import publish_original from "@/components/publish_original.vue";
+import publish_client from "@/components/publish_client.vue";
+import publish_fb from "@/components/publish_fb";
+import publish_collection from "@/components/publish_collection";
+import publish_banner from "@/components/publish_banner";
+import publish_comment from "@/components/publish_comment";
+import publish_visible from "@/components/publish_visible";
+
 // 数据逻辑
-import { getFbMap } from "@/service/fb.js";
-// META空模板
-const default_meta = {
-    fb_zlp: '',
-    fb_name: '',
-    fb_boss: [],
-    fb_level: [],
-};
+import { push, pull } from "@/service/cms.js";
 
 export default {
     name: "fb",
-    props: [],
-    data: function() {
+    components: {
+        Tinymce,
+        "publish-header": publish_header,
+        "publish-title": publish_title,
+        "publish-original": publish_original,
+        "publish-client": publish_client,
+        "publish-fb": publish_fb,
+        "publish-collection": publish_collection,
+        "publish-banner": publish_banner,
+        "publish-comment": publish_comment,
+        "publish-visible": publish_visible,
+    },
+    data: function () {
         return {
-            //基本 - 类型设置
-            type: "fb",
-            name: "副本攻略",
-            loading: true,
-            loaded: false,
+            // 加载状态
+            loading: false,
+            // 发布状态
+            processing: false,
 
-            //选项 - 加载可选项
-            options: {
-                map: fbmap,
-            },
-
-            //字段 - meta表数据,可设置默认值
-            meta: {},
-
-            //文章 - 主表数据
+            // 内容
             post: {
-                ID: "", //文章ID
-                // post_author               //无需设置,由token自动获取
-                // post_type:"",             //类型(默认由boilerplate托管)
-                post_subtype: '', //子类型(过滤查询用)
-                post_title: "", //标题
-                post_content: "", //主表内容字段,由后端接口配置是否双存储至meta表
-                post_meta: default_meta,
-                post_excerpt: "", //摘要
-                post_mode: "tinymce", //编辑模式(会影响文章详情页渲染规则)
-                post_banner: "", //头条图,管理员可见
-                post_status: "", //由发布按钮、草稿按钮决定
-                // post_tags: [],            //标签列表
-                post_collection: "", //文集
-                original: 0, //是否原创
-                client: "std", //空为正式服,origin为怀旧服
-            },
+                // 文章ID
+                ID: "",
+                // 状态：publish公开、private私有、draft草稿、dustbin删除
+                post_status: "publish",
+                // 类型
+                post_type: "fb",
 
-            //扩展 - 部分栏目文章不应启用该功能
-            extend: {
-                feedEnable: false, //是否通知订阅用户
-                followEnable: false, //是否通知粉丝
-                tencentEnable: false, //是否同步至腾讯文档
-                weiboEnable: false, //是否同步至微博头条文章
-                tuilanEnable: false, //是否同步至推栏
+                // 标题
+                post_title: "",
+                // 子类型：心法、副本名等
+                post_subtype: "",
+                // 自定义字段
+                post_meta: {
+                    fb_zlp: "",
+                    fb_name: "",
+                    fb_boss: [],
+                    fb_level: [],
+                },
+                // 内容
+                post_content: "",
+                // 编辑模式(会影响文章详情页渲染规则)
+                post_mode: "tinymce",
+
+                // 是否原创
+                original: 0,
+                // 客户端：std正式服、origin怀旧服
+                client: "std",
+                // 语言：cn简体、tr繁体
+                lang: "cn",
+                // 资料片
+                zlp: "",
+
+                // 摘要
+                post_excerpt: "",
+                // 海报
+                post_banner: "",
+                // 小册
+                post_collection: "",
+
+                // 评论开关（0开启|默认，1关闭）
+                comment: 0,
+
+                // 阅读权限（0公开，1仅自己，2亲友，3密码，4付费，5粉丝）
+                visible: 0,
             },
         };
     },
     computed: {
-        // 是否选项加载就绪
-        ready: function() {
-            return Object.keys(this.options.map).length;
+        id: function () {
+            return ~~this.post.ID;
         },
-        zlp_list: function() {
-            return Object.keys(this.options.map);
+        data: function () {
+            if (this.id) {
+                return [this.id, this.post];
+            } else {
+                return [this.post];
+            }
         },
-        fb_list: function() {
-            let zlp = this.options.map[this.post.post_meta.fb_zlp]
-            return _.get(zlp, "dungeon");
-        },
-        boss_list: function() {
-            return _.get(this.fb_list[this.post.post_meta.fb_name], "boss");
-        },
-        level_list: function() {
-            return _.get(this.fb_list[this.post.post_meta.fb_name], "maps");
-        },
-        default_zlp : function (){
-            return _.get(this.zlp_list,0)
-        },
-        default_fb : function (){
-            return Object.keys(this.options.map[this.default_zlp]['dungeon'])[0]
-        }
     },
     methods: {
         // 加载
-        init: function() {
-            return this.doLoad(this).then(() => {
-                if (isEmptyMeta(this.post.post_meta))
-                    this.post.post_meta = default_meta;
-                this.loading = false;
-                console.log("Init Post:", this.post);
-            });
+        init: function () {
+            this.loading = true;
+            // 加载文章
+            if (this.$route.params.id) {
+                return pull(this.$route.params.id)
+                    .then((res) => {
+                        this.post = res.data.data;
+                        return res.data.data;
+                    })
+                    .finally(() => {
+                        this.loading = false;
+                    });
+            } else {
+                return new Promise((resolve, reject) => {
+                    resolve();
+                }).finally(() => {
+                    this.loading = false;
+                });
+            }
         },
         // 发布
-        toPublish: function() {
-            this.doPublish(this.$store.state, this);
+        publish: function (status, skip) {
+            this.post.post_status = status;
+            this.processing = true;
+            push(...this.data)
+                .then((res) => {
+                    let result = res.data.data;
+                    this.done(skip, result);
+                })
+                .finally(() => {
+                    this.processing = false;
+                });
         },
-        // 草稿
-        toDraft: function() {
-            this.doDraft(this.$store.state, this);
+        // 完成
+        done: function (skip, result) {
+            if (skip) {
+                // 提醒
+                this.$message({
+                    message: "发布成功",
+                    type: "success",
+                });
+                // 跳转
+                setTimeout(() => {
+                    location.href = getLink(result.post_type, result.ID);
+                }, 500);
+            } else {
+                // 提醒
+                this.$notify({
+                    title: "保存成功",
+                    message: "云端草稿保存成功",
+                    type: "success",
+                });
+                // 路由
+                this.post = result;
+                if (!this.$route.params.id) {
+                    this.$router.push({
+                        params: {
+                            id: result.ID,
+                        },
+                    });
+                }
+            }
         },
+        // 更新meta
+        updateMeta: function (meta) {
+            this.post[meta.key] = meta.val;
+        },
+    },
+    created: function () {
+        this.post.client = this.$store.state.client;
+        this.init().then((data) => {
+            if (!data) return;
 
-        // 设置默认资料片和副本
-        setDefaultOption : function (){
-            this.post.post_subtype = this.default_fb
-            this.post.post_meta.fb_name = this.default_fb
-            this.post.post_meta.fb_zlp = this.default_zlp
-        },
-        // 当切换资料片时
-        optionChange: function(zlp) {
-            let first = Object.keys(this.options.map[zlp]["dungeon"])[0];
-            this.post.post_subtype = first
-            this.post.post_meta.fb_name = first;
-            this.post.post_meta.fb_boss = [];
-            this.post.post_meta.fb_level = [];
-        },
-        // 当副本切换时
-        changeSubtype: function(subtype) {
-            this.$store.commit("changeSubtype", subtype);
-            this.post.post_meta.fb_boss = [];
-            this.post.post_meta.fb_level = [];
-        },
-    },
-    filters: {
-        thumbnail: function(url) {
-            return __imgPath + url + "?v=" + Date.now();
-        },
-    },
-    mounted: function() {
-        // 初始化默认文章数据
-        this.setDefaultOption()
-        this.init()
-        // 加载最新副本map
-        getFbMap().then((res) => {
-            this.options.map = res.data;
-            this.setDefaultOption()
+            // 迁移兼容
+            if (!this.post.zlp && data.post_meta.fb_zlp) {
+                this.post.zlp = data.post_meta.fb_zlp;
+            }
         });
     },
-    components: {
-        boilerplate,
+    watch: {
+        "$route.params.id": function (val) {
+            this.init();
+        },
     },
 };
 </script>

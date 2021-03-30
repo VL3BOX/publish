@@ -32,7 +32,7 @@
                     v-model="post.post_content"
                     :attachmentEnable="true"
                     :resourceEnable="true"
-                    v-show="post.post_mode == 'tinymce'"
+                    v-show="!post.post_mode || post.post_mode == 'tinymce'"
                 />
             </div>
 
