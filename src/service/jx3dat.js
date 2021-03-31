@@ -1,9 +1,9 @@
-import { $next, $_https } from "@jx3box/jx3box-common/js/https";
+import { $next, $cms } from "@jx3box/jx3box-common/js/https";
 import { __Root } from "@jx3box/jx3box-common/data/jx3box.json";
 
 // 上传
 function uploadData(formdata) {
-    return $_https("server").post("/upload/data", formdata);
+    return $cms({proxy:true}).post("/api/cms/upload/jx3dat", formdata);
 }
 function uploadHub(formdata) {
     return $next().post("/api/plugins/my-team-mon/v2", formdata);

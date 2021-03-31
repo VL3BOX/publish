@@ -394,12 +394,12 @@ export default {
             this.jx3dats.origin_name = file.name;
 
             let formdata = new FormData();
-            formdata.append("file", file);
+            formdata.append("jx3dat", file);
             uploadData(formdata, this).then((res) => {
-                this.jx3dats.down = res.data.data.list[0];
+                this.jx3dats.down = res.data.data[0];
 
                 this.$message({
-                    message: res.data.msg,
+                    message: '上传成功',
                     type: "success",
                 });
 

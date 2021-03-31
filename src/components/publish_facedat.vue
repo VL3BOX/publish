@@ -5,7 +5,7 @@
         </el-form-item>
 
         <el-form-item label="图册">
-            <!-- <UploadAlbum v-model="facedat.pics"></UploadAlbum> -->
+            <UploadAlbum v-model="facedat.pics"></UploadAlbum>
         </el-form-item>
 
         <el-form-item label="数据">
@@ -27,9 +27,10 @@
 <script>
 import lodash from "lodash";
 import isEmptyMeta from "@/utils/isEmptyMeta.js";
-// import UploadAlbum from "@jx3box/jx3box-editor/src/UploadAlbum.vue";
-import { uploadData, parseData } from "../service/share.js";
+import UploadAlbum from "@jx3box/jx3box-editor/src/UploadAlbum.vue";
 import { parse } from "lua-json";
+import { uploadFacedata } from "@/service/share.js";
+
 // META空模板
 const default_meta = {
     author: "", //原作者
@@ -40,7 +41,7 @@ const default_meta = {
 export default {
     name: "publishFacedat",
     props: ["data", "client"],
-    // components: { UploadAlbum },
+    components: { UploadAlbum },
     data: function () {
         return {
             facedat: this.data,
@@ -82,9 +83,9 @@ export default {
         uploadData: function (e) {
             let formdata = new FormData();
             let file = e.target.files[0];
-            formdata.append("file", file);
-            uploadData(formdata).then((res) => {
-                this.facedat.file = res.data.data.list[0];
+            formdata.append("facedata", file);
+            uploadFacedata(formdata).then((res) => {
+                this.facedat.file = res.data.data[0];
                 this.$message({
                     message: "上传成功",
                     type: "success",
