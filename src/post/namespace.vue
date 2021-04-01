@@ -72,7 +72,7 @@
 
 <script>
 import { sterilizer } from "sterilizer/index.js";
-import pubheader from "@/components/publish/pubheader";
+import pubheader from "@/components/publish_header.vue";
 import {
     getNamespaceByKey,
     getNamespaceById,

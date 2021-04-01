@@ -1,16 +1,12 @@
 <template>
     <div class="m-publish-box">
         <!-- 头部 -->
-        <publish-header name="趣味题库·题目" :localDraft="false"
-            ><slot name="header"></slot
-        ></publish-header>
+        <publish-header name="趣味题库·题目" :localDraft="false">
+            <slot name="header"></slot>
+        </publish-header>
 
         <!-- <h1 class="m-publish-exam-header">贡献题目</h1> -->
-        <el-form
-            label-position="left"
-            label-width="80px"
-            class="m-publish-exam"
-        >
+        <el-form label-position="left" label-width="80px" class="m-publish-exam">
             <el-form-item label="题目" class="m-publish-exam-title">
                 <el-input
                     v-model="primary.title"
@@ -30,26 +26,18 @@
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="选项" class="m-publish-exam-options">
-                <el-input
-                    placeholder="选项1 (支持html)"
-                    v-model="primary.options[0]"
-                    ><template slot="prepend">A</template></el-input
-                >
-                <el-input
-                    placeholder="选项2 (支持html)"
-                    v-model="primary.options[1]"
-                    ><template slot="prepend">B</template></el-input
-                >
-                <el-input
-                    placeholder="选项3 (支持html)"
-                    v-model="primary.options[2]"
-                    ><template slot="prepend">C</template></el-input
-                >
-                <el-input
-                    placeholder="选项4 (支持html)"
-                    v-model="primary.options[3]"
-                    ><template slot="prepend">D</template></el-input
-                >
+                <el-input placeholder="选项1 (支持html)" v-model="primary.options[0]">
+                    <template slot="prepend">A</template>
+                </el-input>
+                <el-input placeholder="选项2 (支持html)" v-model="primary.options[1]">
+                    <template slot="prepend">B</template>
+                </el-input>
+                <el-input placeholder="选项3 (支持html)" v-model="primary.options[2]">
+                    <template slot="prepend">C</template>
+                </el-input>
+                <el-input placeholder="选项4 (支持html)" v-model="primary.options[3]">
+                    <template slot="prepend">D</template>
+                </el-input>
             </el-form-item>
             <el-form-item label="答案" class="m-publish-exam-answer">
                 <el-checkbox-group v-model="primary.answer">
@@ -83,8 +71,7 @@
                     type="primary"
                     @click="publish"
                     :disabled="processing"
-                    >提交题目</el-button
-                >
+                >提交题目</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -93,13 +80,14 @@
 <script>
 import header from "@/components/publish_header.vue";
 import exam_tags from "@/components/exam_tags.vue";
-import Tinymce from '@jx3box/jx3box-editor/src/Tinymce'
+import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 import User from "@jx3box/jx3box-common/js/user";
 import { getQuestion, createQuestion, updateQuestion } from "../service/exam";
+import {getLink} from '@jx3box/jx3box-common/js/utils'
 export default {
     name: "exam_question",
     props: [],
-    data: function() {
+    data: function () {
         return {
             primary: {
                 title: "",
@@ -111,47 +99,48 @@ export default {
                 whyami: "",
                 pool: "common",
             },
+            processing: false,
         };
     },
     computed: {
-        id: function() {
+        id: function () {
             return this.$route.params.id;
         },
-        isNew : function (){
-            return !this.id
+        isNew: function () {
+            return !this.id;
         },
-        processing:function (){
-            return this.$store.state.processing
-        }
     },
     watch: {},
     methods: {
-        publish: function() {
-            this.$store.commit('startProcess')
+        publish: function () {
+            this.processing = true;
             if (this.id) {
-                updateQuestion(this.id, this.primary, this).then((res) => {
-                    this.success(res);
-                    location.href = '/exam/#/question/' + this.id
-                }).catch(err => {
-                    this.$store.commit('endProcess')
-                });
+                updateQuestion(this.id, this.primary, this)
+                    .then((res) => {
+                        this.success(res);
+                        getLink('question',this.id)
+                    })
+                    .finally(() => {
+                        this.processing = false;
+                    });
             } else {
-                createQuestion(this.primary, this).then((res) => {
-                    this.success(res);
-                    location.href = '/exam/#/question/' + res.data.data.id
-                }).catch(err => {
-                    this.$store.commit('endProcess')
-                });
+                createQuestion(this.primary, this)
+                    .then((res) => {
+                        this.success(res);
+                        getLink('question',res.data.data.id)
+                    })
+                    .finally(() => {
+                        this.processing = false;
+                    });
             }
         },
-        success: function(res) {
+        success: function (res) {
             this.$message({
                 message: res.data.msg || "提交成功",
                 type: "success",
             });
-            // this.$router.push({ path: "/exam" });
         },
-        loadData: function() {
+        loadData: function () {
             getQuestion(this.id, this).then((res) => {
                 let data = res.data;
                 this.primary.title = data.title;
@@ -166,18 +155,17 @@ export default {
                 this.primary.whyami = data.whyami;
             });
         },
-        updateTags : function (val){
-            console.log(val)
-            this.tags = val
-        }
+        updateTags: function (val) {
+            this.tags = val;
+        },
     },
-    created: function() {
+    created: function () {
         if (this.id) {
             this.loadData();
         }
     },
     components: {
-        'publish-header':header,
+        "publish-header": header,
         Tinymce,
         exam_tags,
     },

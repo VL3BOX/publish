@@ -29,9 +29,9 @@ const knowledge = () => import("../post/knowledge.vue");
 const bucket = () => import("../views/bucket.vue");
 const collection = () => import("../post/collection.vue");
 const item_plan = () => import("../post/item_plan.vue");
-// const exam_question = () => import("../post/exam_question.vue");
-// const exam_paper = () => import("../post/exam_paper.vue");
-// const namespace = () => import("../post/namespace.vue");
+const exam_question = () => import("../post/exam_question.vue");
+const exam_paper = () => import("../post/exam_paper.vue");
+const namespace = () => import("../post/namespace.vue");
 const bucket_namespace = () => import("../bucket/namespace.vue");
 
 Vue.use(VueRouter);
@@ -129,13 +129,24 @@ const routes = [
         path: "/item_plan/:plan_id(\\d+)?",
         component: item_plan,
     },
-    // // 剑三铭牌发布
-    // {
-    //     name: "namespace",
-    //     path: "/namespace/:id?",
-    //     component: namespace,
-    // },
-    
+    // 剑三铭牌发布
+    {
+        name: "namespace",
+        path: "/namespace/:id?",
+        component: namespace,
+    },
+    // 题目发布
+    {
+        name: "question",
+        path: "/exam/question/:id?",
+        component: exam_question,
+    },
+    // 试卷
+    {
+        name: "paper",
+        path: "/exam/paper/:id?",
+        component: exam_paper,
+    },
 ];
 
 const router = new VueRouter({

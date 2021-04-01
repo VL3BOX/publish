@@ -1,16 +1,12 @@
 <template>
     <div class="m-publish-box">
         <!-- 头部 -->
-        <publish-header name="趣味题库·试卷" :localDraft="false"
-            ><slot name="header"></slot
-        ></publish-header>
+        <publish-header name="趣味题库·试卷" :localDraft="false">
+            <slot name="header"></slot>
+        </publish-header>
 
         <!-- <h1 class="m-publish-exam-header">制作试卷</h1> -->
-        <el-form
-            label-position="left"
-            label-width="80px"
-            class="m-publish-exam"
-        >
+        <el-form label-position="left" label-width="80px" class="m-publish-exam">
             <el-form-item label="标题" class="m-publish-exam-title">
                 <el-input
                     v-model="primary.title"
@@ -34,15 +30,8 @@
                 ></el-input>
             </el-form-item>
             <el-form-item label="题目" class="m-publish-exam-common">
-                <div>
-                    请设置10道题（每道题10分，满分100分），用半角逗号隔开，例如1,2,3
-                </div>
-                <el-input
-                    v-model="list"
-                    show-word-limit
-                    required
-                    placeholder="请填写题目ID序列"
-                ></el-input>
+                <div>请设置10道题（每道题10分，满分100分），用半角逗号隔开，例如1,2,3</div>
+                <el-input v-model="list" show-word-limit required placeholder="请填写题目ID序列"></el-input>
             </el-form-item>
             <el-form-item label="难度" class="m-publish-exam-level">
                 <el-rate
@@ -59,57 +48,42 @@
                         :key="item.value"
                         :label="item.label"
                         :value="item.value"
-                    >
-                    </el-option>
+                    ></el-option>
                 </el-select>
             </el-form-item>
             <exam_tags class="m-publish-exam-tags" v-model="primary.tags" />
-            <el-form-item
-                label="称谓"
-                class="m-publish-exam-common"
-                v-if="isSuper"
-            >
-                <el-select
-                    v-model="primary.medalAward"
-                    placeholder="试卷称谓奖励"
-                >
-                    <el-option label="无" value=""></el-option>
+            <el-form-item label="称谓" class="m-publish-exam-common" v-if="isSuper">
+                <el-select v-model="primary.medalAward" placeholder="试卷称谓奖励">
+                    <el-option label="无" value></el-option>
                     <el-option
                         v-for="item in awards"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value"
-                    >
-                    </el-option>
+                    ></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item
-                label="角标"
-                class="m-publish-exam-common"
-                v-if="isSuper"
-            >
+            <el-form-item label="角标" class="m-publish-exam-common" v-if="isSuper">
                 <el-select v-model="primary.corner" placeholder="试卷角标">
-                    <el-option label="无" value=""></el-option>
+                    <el-option label="无" value></el-option>
                     <el-option
                         v-for="item in marks"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value"
-                    >
-                    </el-option>
+                    ></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="" class="m-publish-exam-content">
+            <el-form-item label class="m-publish-exam-content">
                 <!-- <tinymce :content="primary.whyami" :height="400" />
-                <upload class="u-editor-upload" /> -->
+                <upload class="u-editor-upload" />-->
                 <el-button
                     class="u-publish"
                     icon="el-icon-s-promotion"
                     type="primary"
                     @click="publish"
                     :disabled="processing"
-                    >发布试卷</el-button
-                >
+                >发布试卷</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -117,18 +91,16 @@
 
 <script>
 import header from "@/components/publish_header.vue";
-// import upload from "@/components/publish/upload.vue";
-// import tinymce from "@/components/publish/tinymce.vue";
 import exam_tags from "@/components/exam_tags.vue";
 import User from "@jx3box/jx3box-common/js/user";
 import { getPaper, createPaper, updatePaper } from "../service/exam";
 import { awards, marks, styles } from "@/assets/data/exam.json";
+import { getLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "exam_paper",
     props: [],
-    data: function() {
+    data: function () {
         return {
-            processing: false,
             primary: {
                 title: "",
                 desc: "",
@@ -140,44 +112,52 @@ export default {
                 style: "default",
             },
             list: "",
-            isSuper: false,
+            isSuper: User.isEditor(),
             awards,
             marks,
-            styles
+            styles,
+            processing: false,
         };
     },
     computed: {
-        id: function() {
+        id: function () {
             return this.$route.params.id;
         },
     },
     watch: {},
     methods: {
-        publish: function() {
+        publish: function () {
             this.processing = true;
             this.primary.questionList = this.checkList();
             if (!this.primary.questionList) return;
-            console.log(this.primary);
             if (this.id) {
-                updatePaper(this.id, this.primary, this).then((res) => {
-                    this.success(res);
-                    location.href = '/exam/#/paper/' + this.id
-                });
+                updatePaper(this.id, this.primary, this)
+                    .then((res) => {
+                        this.success(res);
+                        getLink("paper", this.id);
+                    })
+                    .finally(() => {
+                        this.processing = false;
+                    });
             } else {
-                createPaper(this.primary, this).then((res) => {
-                    this.success(res);
-                    location.href = '/exam/#/paper/' + res.data.data.id
-                });
+                createPaper(this.primary, this)
+                    .then((res) => {
+                        this.success(res);
+                        getLink("paper", res.data.data.id);
+                    })
+                    .finally(() => {
+                        this.processing = false;
+                    });
             }
         },
-        success: function(res) {
+        success: function (res) {
             this.$message({
                 message: res.data.msg || "提交成功",
                 type: "success",
             });
             // this.$router.push({ path: "/exam" });
         },
-        loadData: function() {
+        loadData: function () {
             getPaper(this.id, this).then((res) => {
                 let data = res.data;
                 this.primary.title = data.title;
@@ -186,13 +166,13 @@ export default {
                 this.primary.corner = data.corner;
                 this.primary.tags = JSON.parse(data.tags);
                 this.primary.style = data.style;
-                this.primary.hardStar = data.hardStar
+                this.primary.hardStar = data.hardStar;
 
                 this.primary.questionList = JSON.parse(data.questionList);
                 this.list = this.primary.questionList.toString();
             });
         },
-        checkList: function() {
+        checkList: function () {
             let list = this.list.split(",");
             if (list.length > 10 || !list.length) {
                 this.$alert("请设置10道题，每道题10分，满分100分", "提醒", {
@@ -206,14 +186,13 @@ export default {
             }
         },
     },
-    created: function() {
-        this.isSuper = User.getInfo().group > 60;
+    created: function () {
         if (this.id) {
             this.loadData();
         }
     },
     components: {
-        'publish-header':header,
+        "publish-header": header,
         // upload,
         // tinymce,
         exam_tags,
