@@ -39,9 +39,6 @@ module.exports = {
                     request.setHeader("origin", "");
                 }
             },
-            "/upload":{
-                "target": "https://server.jx3box.com",
-            }
         },
         disableHostCheck: true
     },

@@ -1,5 +1,6 @@
 <template>
     <div class="m-dashboard-work m-dashboard-cms" v-loading="loading">
+        
         <div class="m-dashboard-work-header">
             <h2 class="u-title">{{typeLable}}</h2>
             <a :href="publishLink" class="u-publish el-button el-button--primary el-button--small"><i class="el-icon-document"></i> 发布作品</a>

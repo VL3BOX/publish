@@ -92,7 +92,7 @@ export default {
                     count: 0,
                 },
                 colletion: {
-                    path: "/bucket/colletion",
+                    path: "/bucket/collection",
                     name: "文集小册",
                     count: 0,
                 },
@@ -102,12 +102,12 @@ export default {
                     count: 0,
                 },
                 exam_question: {
-                    path: "/bucket/exam_question",
+                    path: "/bucket/question",
                     name: "剑三题目",
                     count: 0,
                 },
                 exam_paper: {
-                    path: "/bucket/exam_paper",
+                    path: "/bucket/paper",
                     name: "剑三试卷",
                     count: 0,
                 },

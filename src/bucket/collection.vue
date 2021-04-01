@@ -13,21 +13,16 @@
                 item.title || "无标题"
             }}</a>
             <div class="u-desc">
-                <!-- <div class="m-tags">
-                    <div
-                        class="m-tag"
-                        v-for="(tag, key) in item.tags"
-                        :key="key"
-                        v-text="tag"
-                    ></div>
-                </div> -->
-                <span class="u-collection-id">
-                    编号 : <b>{{item.id}}</b>
-                </span>
-                <span v-if="item.updated">
-                    最后更新:
-                    {{ (item.updated * 1000) | dateFormat }}</span
-                >
+                <time class="u-desc-subitem">
+                    <i class="el-icon-finished"></i>
+                    发布 :
+                    {{ item.created | dateFormat }}
+                </time>
+                <time class="u-desc-subitem">
+                    <i class="el-icon-refresh"></i>
+                    更新 :
+                    {{ item.updated | dateFormat }}
+                </time>
             </div>
             <el-button-group class="u-action">
                 <el-button
@@ -61,7 +56,7 @@ export default {
     computed: {},
     methods: {
         post_edit(id) {
-            location.href = "./publish/#/collection/" + id;
+            location.href = "./#/collection/" + id;
         },
         post_del(id) {
             this.$alert("确定要删除这篇小册吗？", "确认信息", {
@@ -84,12 +79,10 @@ export default {
                 },
             });
         },
-        // getLink,
-        getTypeLabel,
     },
     filters: {
         dateFormat: function(val) {
-            return dateFormat(new Date(val));
+            return dateFormat(new Date(val*1000));
         },
         getCollectionLink: function(val) {
             return getLink('collection',val);

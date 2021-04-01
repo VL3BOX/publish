@@ -2,44 +2,28 @@
     <ul>
         <li v-for="(plan, key) in data" :key="key" class="m-plan">
             <i class="u-icon">
-                <img
-                    v-if="plan.public"
-                    svg-inline
-                    src="../assets/img/works/repo.svg"
-                />
+                <img v-if="plan.public" svg-inline src="../assets/img/works/repo.svg" />
                 <img v-else svg-inline src="../assets/img/works/draft.svg" />
             </i>
             <a
                 class="u-title"
                 target="_blank"
                 :href="`/item/#/plan_view/${plan.id}`"
-                >{{ plan.title || "无标题" }}</a
-            >
+            >{{ plan.title || "无标题" }}</a>
             <div class="u-desc">
-                <!-- <div class="m-tags">
-                                <div
-                                    class="m-tag"
-                                    v-for="(tag, key) in item.tags"
-                                    :key="key"
-                                    v-text="tag"
-                                ></div>
-                            </div> -->
-                <span v-if="plan.updated">
-                    最后更新:
-                    {{
-                        $options.filters.dateFormat(
-                            new Date(plan.updated * 1000)
-                        )
-                    }}</span
-                >
+                <time class="u-desc-subitem">
+                    <i class="el-icon-finished"></i>
+                    发布 :
+                    {{ plan.created * 1000 | dateFormat }}
+                </time>
+                <time class="u-desc-subitem">
+                    <i class="el-icon-refresh"></i>
+                    更新 :
+                    {{ plan.updated * 1000 | dateFormat }}
+                </time>
             </div>
             <el-button-group class="u-action">
-                <el-button
-                    size="mini"
-                    icon="el-icon-edit"
-                    title="编辑"
-                    @click="plan_edit(plan.id)"
-                ></el-button>
+                <el-button size="mini" icon="el-icon-edit" title="编辑" @click="plan_edit(plan.id)"></el-button>
                 <el-button
                     size="mini"
                     icon="el-icon-delete"
@@ -54,16 +38,15 @@
 <script>
 import { delete_item_plan } from "../service/item_plan";
 import dateFormat from "../utils/dateFormat";
-import {authorLink} from "@jx3box/jx3box-common/js/utils";
-
+import { authorLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "item_plan",
     props: ["data"],
     methods: {
-        plan_edit: function(id) {
-            location.href = "./publish/#/item/plan/" + id;
+        plan_edit: function (id) {
+            location.href = "./#/item/plan/" + id;
         },
-        plan_delete: function(id) {
+        plan_delete: function (id) {
             this.$confirm("确认是否删除该物品清单？", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
@@ -82,7 +65,9 @@ export default {
         },
     },
     filters: {
-        dateFormat,
+        dateFormat : function (val){
+            return dateFormat(new Date(val*1000))  
+        },
         authorLink,
     },
 };

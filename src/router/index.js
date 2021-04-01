@@ -32,6 +32,7 @@ const bucket = () => import("../views/bucket.vue");
 // const exam_question = () => import("../post/exam_question.vue");
 // const exam_paper = () => import("../post/exam_paper.vue");
 // const namespace = () => import("../post/namespace.vue");
+const bucket_namespace = () => import("../bucket/namespace.vue");
 
 Vue.use(VueRouter);
 
@@ -100,26 +101,21 @@ const routes = [
     //     path: "/achievement/:achievement_id(\\d+)?",
     //     component: achievement,
     // },
-    // // todo:准备弃用路由
-    // {
-    //     path: "/cj/:achievement_id(\\d+)?",
-    //     component: achievement,
-    // },
     // // 物品攻略发布
     // {
     //     path: "/item/:source_id([_\\d]+)?",
     //     component: item,
     // },
-    // // 物品清单发布
-    // {
-    //     name: "item_plan",
-    //     path: "/item/plan/:plan_id(\\d+)?",
-    //     component: item_plan,
-    // },
     // // 通识百科发布
     // {
     //     path: "/knowledge/:source_id?",
     //     component: knowledge,
+    // },
+    // // 物品清单发布
+    // {
+    //     name: "item_plan",
+    //     path: "/item_plan/:plan_id(\\d+)?",
+    //     component: item_plan,
     // },
     // // 剑三小册发布
     // {
@@ -130,6 +126,7 @@ const routes = [
 
     // 应用=====================
     // 查看
+    { path: "/bucket/namespace", component: bucket_namespace },
     { path: "/bucket/:type", component: bucket },
 ];
 

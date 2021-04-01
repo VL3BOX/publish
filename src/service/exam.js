@@ -1,30 +1,30 @@
-import {$next} from '@jx3box/jx3box-common/js/https'
+import { $next } from "@jx3box/jx3box-common/js/https";
 
-function getQuestion(id, vm) {
+function getQuestion(id) {
     return $next().get("/api/question/" + id);
 }
 
-function createQuestion(data, vm) {
+function createQuestion(data) {
     return $next().post("/api/question/create", data);
 }
 
-function updateQuestion(id, data, vm) {
+function updateQuestion(id, data) {
     return $next().put("/api/question/" + id + "/update", data);
 }
 
-function createPaper(data, vm) {
+function createPaper(data) {
     return $next().post("/api/question/" + "exam-paper", data);
 }
 
-function updatePaper(id, data, vm) {
+function updatePaper(id, data) {
     return $next().put("/api/question/" + "exam-paper/" + id, data);
 }
 
-function getPaper(id, vm) {
+function getPaper(id) {
     return $next().get("/api/question/" + "exam-paper/" + id);
 }
 
-function getQuestions(query, vm) {
+function getQuestions(query) {
     return $next().get("/api/question/" + "my-list", {
         params: query,
     });
