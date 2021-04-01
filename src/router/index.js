@@ -5,10 +5,10 @@ import VueRouter from "vue-router";
 const demo = () => import("../post/demo.vue");
 const index = () => import("../post/index.vue");
 const draft = () => import("../views/draft.vue");
-const cms = () => import("../views/cms.vue");
-const wiki = () => import("../views/wiki.vue");
 
 // CMS
+const cms = () => import("../views/cms.vue");
+// const cms_comment = () => import("../views/cms_comment.vue");
 const macro = () => import("../post/macro.vue");
 const jx3dat = () => import("../post/jx3dat.vue");
 const fb = () => import("../post/fb.vue");
@@ -18,15 +18,17 @@ const bbs = () => import("../post/bbs.vue");
 // const house = () => import("../post/house.vue");
 const share = () => import("../post/share.vue");
 
-
 // WIKI
+const wiki = () => import("../views/wiki.vue");
+const wiki_comment = () => import("../views/wiki_comment.vue");
 // const achievement = () => import("../post/achievement.vue");
 // const item = () => import("../post/item.vue");
-// const item_plan = () => import("../post/item_plan.vue");
 // const knowledge = () => import("../post/knowledge.vue");
-// const collection = () => import("../post/collection.vue");
 
 // APP
+const bucket = () => import("../views/bucket.vue");
+// const item_plan = () => import("../post/item_plan.vue");
+// const collection = () => import("../post/collection.vue");
 // const exam_question = () => import("../post/exam_question.vue");
 // const exam_paper = () => import("../post/exam_paper.vue");
 // const namespace = () => import("../post/namespace.vue");
@@ -40,7 +42,6 @@ const routes = [
     { path: "/draft", component: draft },
     // 发布DEMO
     { path: "/demo", component: demo },
-
 
     // CMS=====================
     // 查看
@@ -90,10 +91,10 @@ const routes = [
         component: share,
     },
 
-
     // WIKI=====================
     // 查看
     { path: "/wiki/:type", component: wiki },
+    { path: "/comment/wiki", component: wiki_comment },
     // 成就攻略发布
     // {
     //     path: "/achievement/:achievement_id(\\d+)?",
@@ -128,24 +129,8 @@ const routes = [
     // },
 
     // 应用=====================
-    // // 趣味题库
-    // {
-    //     path: "/exam/",
-    //     component: exam,
-    // },
-    // {
-    //     path: "/exam/question/:id?",
-    //     component: exam_question,
-    // },
-    // {
-    //     path: "/exam/paper/:id?",
-    //     component: exam_paper,
-    // },
-    // // 铭牌
-    // {
-    //     path: "/namespace/:id?",
-    //     component: namespace,
-    // },
+    // 查看
+    { path: "/bucket/:type", component: bucket },
 ];
 
 const router = new VueRouter({

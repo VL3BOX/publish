@@ -1,0 +1,139 @@
+<template>
+    <ul>
+        <li v-for="(plan, key) in data" :key="key" class="m-plan">
+            <i class="u-icon">
+                <img
+                    v-if="plan.public"
+                    svg-inline
+                    src="../assets/img/works/repo.svg"
+                />
+                <img v-else svg-inline src="../assets/img/works/draft.svg" />
+            </i>
+            <a
+                class="u-title"
+                target="_blank"
+                :href="`/item/#/plan_view/${plan.id}`"
+                >{{ plan.title || "无标题" }}</a
+            >
+            <div class="u-desc">
+                <!-- <div class="m-tags">
+                                <div
+                                    class="m-tag"
+                                    v-for="(tag, key) in item.tags"
+                                    :key="key"
+                                    v-text="tag"
+                                ></div>
+                            </div> -->
+                <span v-if="plan.updated">
+                    最后更新:
+                    {{
+                        $options.filters.dateFormat(
+                            new Date(plan.updated * 1000)
+                        )
+                    }}</span
+                >
+            </div>
+            <el-button-group class="u-action">
+                <el-button
+                    size="mini"
+                    icon="el-icon-edit"
+                    title="编辑"
+                    @click="plan_edit(plan.id)"
+                ></el-button>
+                <el-button
+                    size="mini"
+                    icon="el-icon-delete"
+                    title="删除"
+                    @click="plan_delete(plan.id)"
+                ></el-button>
+            </el-button-group>
+        </li>
+    </ul>
+</template>
+
+<script>
+import { delete_item_plan } from "../service/item_plan";
+import dateFormat from "../utils/dateFormat";
+import {authorLink} from "@jx3box/jx3box-common/js/utils";
+
+export default {
+    name: "item_plan",
+    props: ["data"],
+    methods: {
+        plan_edit: function(id) {
+            location.href = "./publish/#/item/plan/" + id;
+        },
+        plan_delete: function(id) {
+            this.$confirm("确认是否删除该物品清单？", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+            }).then(() => {
+                delete_item_plan(id).then((data) => {
+                    data = data.data;
+                    if (data.code === 200) {
+                        this.$message.success(data.message);
+                        this.$emit("refresh");
+                    } else {
+                        this.$message.error(data.message);
+                    }
+                });
+            });
+        },
+    },
+    filters: {
+        dateFormat,
+        authorLink,
+    },
+};
+</script>
+
+<style scoped lang="less">
+@import "../assets/css/work.less";
+
+// .m-dashboard-box-list {
+//     .u-action {
+//         top: 50%;
+//         bottom: auto;
+//         transform: translateY(-50%);
+//     }
+// }
+
+// .m-plan {
+//     padding: 10px 15px;
+//     font-size: 13px;
+
+//     .u-updated {
+//         .mt(5px);
+//         // opacity: 0.4;
+//         font-size: 12px;
+//         color: #999;
+//     }
+
+//     .u-title,
+//     .u-type,
+//     .u-name {
+//         .dbi;
+//         vertical-align: middle;
+//     }
+
+//     .u-type {
+//         padding: 4px;
+//         color: white;
+//         border-radius: 2px;
+//         .fz(12px);
+//     }
+
+//     .u-name {
+//         .ml(8px);
+//     }
+
+//     .u-description {
+//         .db;
+//         .mt(5px);
+//         color: #3d454d;
+//         font-size: 12px;
+//         opacity: 0.7;
+//     }
+// }
+</style>

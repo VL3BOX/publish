@@ -86,15 +86,31 @@ export default {
                 quest: { path: "/wiki/quest", name: "任务百科", count: 0 },
             },
             app: {
-                colletion: { path: "/colletion", name: "文集小册", count: 0 },
-                item_plan: { path: "/item/plan", name: "物品清单", count: 0 },
-                namespace: { path: "/namespace", name: "剑三铭牌", count: 0 },
+                namespace: {
+                    path: "/bucket/namespace",
+                    name: "剑三铭牌",
+                    count: 0,
+                },
+                colletion: {
+                    path: "/bucket/colletion",
+                    name: "文集小册",
+                    count: 0,
+                },
+                item_plan: {
+                    path: "/bucket/item_plan",
+                    name: "物品清单",
+                    count: 0,
+                },
                 exam_question: {
-                    path: "/exam/question",
+                    path: "/bucket/exam_question",
                     name: "剑三题目",
                     count: 0,
                 },
-                exam_paper: { path: "/exam/paper", name: "剑三试卷", count: 0 },
+                exam_paper: {
+                    path: "/bucket/exam_paper",
+                    name: "剑三试卷",
+                    count: 0,
+                },
             },
             comment: {
                 comment_cms: {

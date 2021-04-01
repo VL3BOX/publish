@@ -1,5 +1,6 @@
 <template>
     <div class="m-dashboard m-dashboard-work m-dashboard-wiki" v-loading="loading">
+        
         <div class="m-dashboard-work-header">
             <h2 class="u-title">{{typeLable}}百科</h2>
             <a :href="publishLink" class="u-publish el-button el-button--primary el-button--small"><i class="el-icon-document"></i> 发布作品</a>
@@ -106,8 +107,6 @@ import dateFormat from "@/utils/dateFormat";
 import {
     get_posts,
     remove_post,
-    get_comments,
-    remove_comment,
 } from "@/service/wiki";
 export default {
     name: "wiki",
@@ -124,13 +123,7 @@ export default {
                 total: 0,
                 keyword: null,
             },
-            achievement_comment: {
-                data: null,
-                total: 0,
-                keyword: null,
-            },
             post_page: 1,
-            comment_page: 1,
             length: 10,
         };
     },
@@ -151,6 +144,7 @@ export default {
         },
         post_page_change(i = 1) {
             this.post_page = i;
+            this.loading = true
             get_posts(this.achievement_post.keyword, i, this.length).then(
                 (data) => {
                     data = data.data;
@@ -162,28 +156,12 @@ export default {
                 () => {
                     this.achievement_post.data = false;
                 }
-            );
+            ).finally(() => {
+                this.loading = false
+            })
         },
         search_post() {
             this.post_page_change(1);
-        },
-        comment_page_change(i = 1) {
-            this.comment_page = i;
-            get_comments(this.achievement_comment.keyword, i, this.length).then(
-                (data) => {
-                    data = data.data;
-                    this.achievement_comment.data =
-                        data.code === 200 ? data.data.data : false;
-                    this.achievement_comment.total =
-                        data.code === 200 ? data.data.total : 0;
-                },
-                () => {
-                    this.achievement_comment.data = false;
-                }
-            );
-        },
-        search_comment() {
-            this.comment_page_change(1);
         },
         post_edit(type, post) {
             switch (type) {
@@ -224,33 +202,6 @@ export default {
                 },
             });
         },
-        comment_del(comment) {
-            this.$alert("确定要删除吗？", "确认信息", {
-                confirmButtonText: "确定",
-                callback: (action) => {
-                    remove_comment(comment.id).then(
-                        (data) => {
-                            data = data.data;
-                            if (data.code === 200) {
-                                this.$notify({
-                                    title: "删除成功",
-                                    type: "success",
-                                });
-                                this.comment_page_change(this.post_page);
-                            } else {
-                                this.$notify({
-                                    title: "删除失败",
-                                    type: "error",
-                                });
-                            }
-                        },
-                        () => {
-                            this.$notify({ title: "删除失败", type: "error" });
-                        }
-                    );
-                },
-            });
-        },
     },
     filters: {
         dateFormat: function (val) {
@@ -261,13 +212,13 @@ export default {
         $route: {
             immediate: true,
             handler() {
-                if (this.$route.query.type && this.$route.query.keyword) {
+                if (this.$route.params.type) {
                     switch (this.$route.query.type) {
                         case "wiki_post":
-                            this.achievement_post.keyword = this.$route.query.keyword;
+                            this.achievement_post.keyword = this.$route.params.type;
                             break;
                         case "wiki_comment":
-                            this.achievement_comment.keyword = this.$route.query.keyword;
+                            this.achievement_comment.keyword = this.$route.params.type;
                             break;
                     }
 
@@ -286,7 +237,6 @@ export default {
 
                 // 列表获取
                 this.post_page_change();
-                this.comment_page_change();
             },
         },
     },
