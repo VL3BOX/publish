@@ -21,7 +21,7 @@
                     <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span>
                 </router-link>
             </el-collapse-item>
-            <el-collapse-item title="多人百科" name="wiki">
+            <el-collapse-item title="多人创作" name="wiki">
                 <template slot="title">
                     <span class="u-title">多人百科</span>
                 </template>
@@ -33,7 +33,7 @@
             </el-collapse-item>
             <el-collapse-item title="应用功能" name="app">
                 <template slot="title">
-                    <span class="u-title">应用功能</span>
+                    <span class="u-title">应用扩展</span>
                 </template>
                 <router-link :to="item.path" v-for="(item,key) in app" :key="key">
                     <i class="el-icon-collection"></i>

@@ -117,7 +117,7 @@ const routes = [
     { path: "/bucket/namespace", component: bucket_namespace },
     { path: "/bucket/:type", component: bucket },
 
-    // 剑三小册发布
+    // 小册发布
     {
         name: "collection",
         path: "/collection/:collection_id(\\d+)?",
@@ -129,7 +129,7 @@ const routes = [
         path: "/item_plan/:plan_id(\\d+)?",
         component: item_plan,
     },
-    // 剑三铭牌发布
+    // 铭牌发布
     {
         name: "namespace",
         path: "/namespace/:id?",
@@ -141,7 +141,7 @@ const routes = [
         path: "/exam/question/:id?",
         component: exam_question,
     },
-    // 试卷
+    // 试卷发布
     {
         name: "paper",
         path: "/exam/paper/:id?",
