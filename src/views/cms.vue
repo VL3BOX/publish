@@ -2,7 +2,7 @@
     <div class="m-dashboard-work m-dashboard-cms" v-loading="loading">
         <div class="m-dashboard-work-header">
             <h2 class="u-title">{{typeLable}}</h2>
-            <a :href="type | publishLink" class="u-publish el-button el-button--primary el-button--small"><i class="el-icon-document"></i> 发布作品</a>
+            <a :href="publishLink" class="u-publish el-button el-button--primary el-button--small"><i class="el-icon-document"></i> 发布作品</a>
         </div>
 
         <el-input class="m-dashboard-work-search" placeholder="请输入搜索内容" v-model="search">
@@ -104,7 +104,6 @@ import { getMyPosts, push, del } from "@/service/cms.js";
 import {
     editLink,
     getLink,
-    publishLink,
 } from "@jx3box/jx3box-common/js/utils.js";
 import {
     __postType,
@@ -145,6 +144,9 @@ export default {
                 client: this.client,
             };
         },
+        publishLink : function (){
+            return './#/' + this.type
+        }
     },
     watch: {
         params: {
@@ -216,7 +218,6 @@ export default {
         },
     },
     filters: {
-        publishLink,
         dateFormat: function (val) {
             return dateFormat(new Date(val));
         },

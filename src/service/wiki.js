@@ -1,4 +1,4 @@
-import { $http } from "./axios";
+import { $helper } from "@jx3box/jx3box-common/js/https.js";
 
 function get_posts(keyword, page, limit) {
     let data = {};
@@ -6,7 +6,7 @@ function get_posts(keyword, page, limit) {
     if (page) data.page = page;
     if (limit) data.limit = limit;
 
-    return $http({
+    return $helper()({
         method: "GET",
         url: `/api/my/wiki/posts`,
         params: data,
@@ -15,7 +15,7 @@ function get_posts(keyword, page, limit) {
 
 function remove_post(post_id) {
     if (!post_id) return null;
-    return $http({
+    return $helper()({
         method: "PUT",
         url: `/api/my/wiki/post/${post_id}/remove`,
     });
@@ -27,7 +27,7 @@ function get_comments(keyword, page, limit) {
     if (page) data.page = page;
     if (limit) data.limit = limit;
 
-    return $http({
+    return $helper()({
         method: "GET",
         url: `/api/my/wiki/comments`,
         params: data,
@@ -36,7 +36,7 @@ function get_comments(keyword, page, limit) {
 
 function remove_comment(comment_id) {
     if (!comment_id) return null;
-    return $http({
+    return $helper()({
         method: "PUT",
         url: `/api/my/wiki/comment/${comment_id}/remove`,
     });

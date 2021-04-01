@@ -1,15 +1,15 @@
-import { $http } from "./axios";
+import { $helper } from "@jx3box/jx3box-common/js/https.js";
 import qs from "qs";
 
 function get_menus() {
-    return $http({
+    return $helper()({
         method: "GET",
         url: `/api/knowledge/menus`,
     });
 }
 
 function get_list(params) {
-    return $http({
+    return $helper()({
         method: "GET",
         url: `/api/knowledges`,
         params: params,
@@ -17,7 +17,7 @@ function get_list(params) {
 }
 
 function create_knowledge(params) {
-    return $http({
+    return $helper()({
         method: "POST",
         url: `/api/knowledge`,
         data: qs.stringify({ knowledge: params }),

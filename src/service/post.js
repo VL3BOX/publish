@@ -1,4 +1,4 @@
-import { $http } from "./axios";
+import { $helper } from "@jx3box/jx3box-common/js/https.js";
 
 /**
  * 根据文章类型获取文章列表
@@ -7,7 +7,7 @@ import { $http } from "./axios";
  * @returns {AxiosPromise}
  */
 function get_posts_by_type(type, params) {
-    return $http({
+    return $helper()({
         method: "GET",
         url: `/api/posts/type/${type}`,
         params: params,

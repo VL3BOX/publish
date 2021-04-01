@@ -73,13 +73,17 @@ export default {
             },
             wiki: {
                 achievement: {
-                    path: "/achievement",
+                    path: "/wiki/achievement",
                     name: "成就百科",
                     count: 0,
                 },
-                item: { path: "/item", name: "物品百科", count: 0 },
-                knowledge: { path: "/knowledge", name: "通识百科", count: 0 },
-                quest: { path: "/quest", name: "任务百科", count: 0 },
+                item: { path: "/wiki/item", name: "物品百科", count: 0 },
+                knowledge: {
+                    path: "/wiki/knowledge",
+                    name: "通识百科",
+                    count: 0,
+                },
+                quest: { path: "/wiki/quest", name: "任务百科", count: 0 },
             },
             app: {
                 colletion: { path: "/colletion", name: "文集小册", count: 0 },
@@ -112,8 +116,8 @@ export default {
             getMyPostsCount().then((res) => {
                 let count = res.data.data;
                 for (let key in count) {
-                    if(this.cms[key]){
-                        this.cms[key]['count'] = count[key]
+                    if (this.cms[key]) {
+                        this.cms[key]["count"] = count[key];
                     }
                 }
             });
