@@ -1,5 +1,5 @@
 import { $http } from "./axios";
-import qs from 'qs'
+import qs from "qs";
 
 function getMyFavs(query) {
     return $http.get(`/api/my/post/favorites`, {

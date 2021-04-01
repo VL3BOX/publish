@@ -6,6 +6,7 @@ const demo = () => import("../post/demo.vue");
 const index = () => import("../post/index.vue");
 const draft = () => import("../views/draft.vue");
 const cms = () => import("../views/cms.vue");
+const wiki = () => import("../views/wiki.vue");
 
 // CMS
 const macro = () => import("../post/macro.vue");
@@ -40,44 +41,6 @@ const routes = [
     // 发布DEMO
     { path: "/demo", component: demo },
 
-
-    
-
-    // // 成就攻略发布
-    // {
-    //     path: "/achievement/:achievement_id(\\d+)?",
-    //     component: achievement,
-    // },
-    // // todo:准备弃用路由
-    // {
-    //     path: "/cj/:achievement_id(\\d+)?",
-    //     component: achievement,
-    // },
-
-    // // 物品攻略发布
-    // {
-    //     path: "/item/:source_id([_\\d]+)?",
-    //     component: item,
-    // },
-    // // 物品清单发布
-    // {
-    //     name: "item_plan",
-    //     path: "/item/plan/:plan_id(\\d+)?",
-    //     component: item_plan,
-    // },
-
-    // // 通识百科发布
-    // {
-    //     path: "/knowledge/:source_id?",
-    //     component: knowledge,
-    // },
-
-    // // 剑三小册发布
-    // {
-    //     name: "collection",
-    //     path: "/collection/:collection_id(\\d+)?",
-    //     component: collection,
-    // },
 
     // CMS=====================
     // 查看
@@ -126,6 +89,43 @@ const routes = [
         path: "/share/:id?",
         component: share,
     },
+
+
+    // WIKI=====================
+    // 查看
+    { path: "/wiki/:type", component: wiki },
+    // 成就攻略发布
+    // {
+    //     path: "/achievement/:achievement_id(\\d+)?",
+    //     component: achievement,
+    // },
+    // // todo:准备弃用路由
+    // {
+    //     path: "/cj/:achievement_id(\\d+)?",
+    //     component: achievement,
+    // },
+    // // 物品攻略发布
+    // {
+    //     path: "/item/:source_id([_\\d]+)?",
+    //     component: item,
+    // },
+    // // 物品清单发布
+    // {
+    //     name: "item_plan",
+    //     path: "/item/plan/:plan_id(\\d+)?",
+    //     component: item_plan,
+    // },
+    // // 通识百科发布
+    // {
+    //     path: "/knowledge/:source_id?",
+    //     component: knowledge,
+    // },
+    // // 剑三小册发布
+    // {
+    //     name: "collection",
+    //     path: "/collection/:collection_id(\\d+)?",
+    //     component: collection,
+    // },
 
     // 应用=====================
     // // 趣味题库

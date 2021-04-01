@@ -15,7 +15,7 @@ function push(kw1, kw2) {
 }
 
 // 删除
-function del(id){
+function del(id) {
     return $cms({ proxy: true }).delete(`/api/cms/post/${id}`);
 }
 
@@ -25,10 +25,10 @@ function getMyPostsCount() {
 }
 
 // 列表
-function getMyPosts(params){
-    return $cms({ proxy: true }).get(`/api/cms/posts/my`,{
-        params
+function getMyPosts(params) {
+    return $cms({ proxy: true }).get(`/api/cms/posts/my`, {
+        params,
     });
 }
 
-export { pull, push, del,getMyPostsCount ,getMyPosts};
+export { pull, push, del, getMyPostsCount, getMyPosts };

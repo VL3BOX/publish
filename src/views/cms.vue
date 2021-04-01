@@ -100,7 +100,6 @@
 </template>
 
 <script>
-import { getWorks, delPost, checkPost } from "../service/work";
 import { getMyPosts, push, del } from "@/service/cms.js";
 import {
     editLink,

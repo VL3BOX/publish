@@ -20,10 +20,10 @@ function getNamespaceById(id) {
     return $cms().get(`/api/cms/namespace/${id}`);
 }
 function getNamespaceByKey(key) {
-    return $cms().get(`/api/cms/namespace-key`,{
-        params:{
-            key
-        }
+    return $cms().get(`/api/cms/namespace-key`, {
+        params: {
+            key,
+        },
     });
 }
 

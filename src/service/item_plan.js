@@ -1,5 +1,5 @@
 import { $http } from "./axios";
-import qs from 'qs'
+import qs from "qs";
 
 function get_item_plan(plan_id) {
     return $http({

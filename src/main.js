@@ -14,12 +14,6 @@ import "@jx3box/jx3box-common/css/element.css";
 import "@jx3box/jx3box-common/css/normalize.css";
 Vue.use(JX3BOX_UI);
 
-// CMS数据发布
-import { doPublish, doDraft, doLoad } from "@/service/publish";
-Vue.prototype.doPublish = doPublish;
-Vue.prototype.doDraft = doDraft;
-Vue.prototype.doLoad = doLoad;
-
 // 数据与路由
 import router from "./router";
 import store from "./store";
