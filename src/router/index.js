@@ -26,10 +26,8 @@ const share = () => import("../post/share.vue");
 // const collection = () => import("../post/collection.vue");
 
 // APP
-// const exam = () => import("../post/exam.vue");
 // const exam_question = () => import("../post/exam_question.vue");
 // const exam_paper = () => import("../post/exam_paper.vue");
-
 // const namespace = () => import("../post/namespace.vue");
 
 Vue.use(VueRouter);
@@ -37,12 +35,13 @@ Vue.use(VueRouter);
 const routes = [
     // 发布索引
     { path: "/", component: index },
-    // 草稿索引
+    // 草稿
     { path: "/draft", component: draft },
     // 发布DEMO
     { path: "/demo", component: demo },
-    // 查看
-    { path: "/bucket/:type", component: cms },
+
+
+    
 
     // // 成就攻略发布
     // {
@@ -81,6 +80,8 @@ const routes = [
     // },
 
     // CMS=====================
+    // 查看
+    { path: "/cms/:type", component: cms },
     // 宏发布
     {
         path: "/macro/:id?",

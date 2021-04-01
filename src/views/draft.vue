@@ -1,6 +1,6 @@
 <template>
-    <div class="m-publish m-bucket">
-        <div class="m-bucket-header">
+    <div class="m-publish m-draft">
+        <div class="m-draft-header">
             <h1 class="m-title">
                 <i class="el-icon-receiving"></i> 草稿箱
                 <a class="u-help" href="/tool/21933" target="_blank">
@@ -19,14 +19,14 @@
             </div>
         </div>
         <template v-if="isSupported">
-            <div class="m-bucket-warning">
+            <div class="m-draft-warning">
                 <el-alert
                     title="以下草稿为编辑器为该浏览器产生的临时本地草稿HTML源码，并不存在于服务器中，仅用于断网或窗口异常关闭时恢复。"
                     type="warning"
                     show-icon
                 ></el-alert>
             </div>
-            <div class="m-bucket-list" v-if="isNotNull">
+            <div class="m-draft-list" v-if="isNotNull">
                 <ul class="u-list">
                     <li class="u-item" v-for="(item,i) in data" :key="i" @click="preview(item)">
                         <div class="u-label" :class="{on:!!item.active}">
@@ -64,7 +64,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="m-bucket-null" v-else>
+            <div class="m-draft-null" v-else>
                 <i class="el-icon-warning-outline"></i> 暂无任何内容
             </div>
         </template>
@@ -163,5 +163,5 @@ export default {
 </script>
 
 <style lang="less">
-@import "../assets/css/bucket.less";
+@import "../assets/css/draft.less";
 </style>

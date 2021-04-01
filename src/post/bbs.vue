@@ -241,6 +241,3 @@ export default {
 };
 </script>
 
-<style lang="less">
-@import "../assets/css/bbs.less";
-</style>

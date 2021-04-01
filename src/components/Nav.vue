@@ -15,7 +15,7 @@
                 <template slot="title">
                     <span class="u-title">独立创作</span>
                 </template>
-                <router-link :to="item.path" v-for="item in cms" :key="item.name">
+                <router-link :to="item.path" v-for="(item,key) in cms" :key="key">
                     <i class="el-icon-collection"></i>
                     <span>{{item.name}}</span>
                     <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span>
@@ -25,7 +25,7 @@
                 <template slot="title">
                     <span class="u-title">多人百科</span>
                 </template>
-                <router-link :to="item.path" v-for="item in wiki" :key="item.name">
+                <router-link :to="item.path" v-for="(item,key) in wiki" :key="key">
                     <i class="el-icon-collection"></i>
                     <span>{{item.name}}</span>
                     <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span>
@@ -35,7 +35,7 @@
                 <template slot="title">
                     <span class="u-title">应用功能</span>
                 </template>
-                <router-link :to="item.path" v-for="item in app" :key="item.name">
+                <router-link :to="item.path" v-for="(item,key) in app" :key="key">
                     <i class="el-icon-collection"></i>
                     <span>{{item.name}}</span>
                     <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span>
@@ -45,7 +45,7 @@
                 <template slot="title">
                     <span class="u-title">评论留言</span>
                 </template>
-                <router-link :to="item.path" v-for="item in comment" :key="item.name">
+                <router-link :to="item.path" v-for="(item,key) in comment" :key="key">
                     <i class="el-icon-collection"></i>
                     <span>{{item.name}}</span>
                     <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span>
@@ -56,42 +56,75 @@
 </template>
 
 <script>
-// TODO:count
+import { getMyPostsCount } from "@/service/cms.js";
 export default {
     name: "Nav",
     data: function () {
         return {
             group: [],
-            cms: [
-                { path: "/macro", name: "剑三宏", count: 10 },
-                { path: "/jx3dat", name: "插件数据", count: 0 },
-                { path: "/fb", name: "副本攻略", count: 0 },
-                { path: "/bps", name: "职业攻略", count: 0 },
-                { path: "/tool", name: "教程工具", count: 0 },
-                { path: "/bbs", name: "茶馆交流", count: 0 },
-                { path: "/share", name: "捏脸分享", count: 0 },
-            ],
-            wiki: [
-                { path: "/achievement", name: "成就百科", count: 0 },
-                { path: "/item", name: "物品百科", count: 0 },
-                { path: "/knowledge", name: "通识百科", count: 0 },
-                { path: "/quest", name: "任务百科", count: 0 },
-            ],
-            app: [
-                { path: "/colletion", name: "文集小册", count: 0 },
-                { path: "/item/plan", name: "物品清单", count: 0 },
-                { path: "/namespace", name: "剑三铭牌", count: 0 },
-                { path: "/exam/question", name: "剑三题目", count: 0 },
-                { path: "/exam/paper", name: "剑三试卷", count: 0 },
-            ],
-            comment: [
-                { path: "/comment/cms", name: "通用评论", count: 0 },
-                { path: "/comment/wiki", name: "百科评论", count: 0 },
-            ],
+            cms: {
+                macro: { path: "/cms/macro", name: "剑三宏", count: 0 },
+                jx3dat: { path: "/cms/jx3dat", name: "插件数据", count: 0 },
+                fb: { path: "/cms/fb", name: "副本攻略", count: 0 },
+                bps: { path: "/cms/bps", name: "职业攻略", count: 0 },
+                tool: { path: "/cms/tool", name: "教程工具", count: 0 },
+                bbs: { path: "/cms/bbs", name: "茶馆交流", count: 0 },
+                share: { path: "/cms/share", name: "捏脸分享", count: 0 },
+            },
+            wiki: {
+                achievement: {
+                    path: "/achievement",
+                    name: "成就百科",
+                    count: 0,
+                },
+                item: { path: "/item", name: "物品百科", count: 0 },
+                knowledge: { path: "/knowledge", name: "通识百科", count: 0 },
+                quest: { path: "/quest", name: "任务百科", count: 0 },
+            },
+            app: {
+                colletion: { path: "/colletion", name: "文集小册", count: 0 },
+                item_plan: { path: "/item/plan", name: "物品清单", count: 0 },
+                namespace: { path: "/namespace", name: "剑三铭牌", count: 0 },
+                exam_question: {
+                    path: "/exam/question",
+                    name: "剑三题目",
+                    count: 0,
+                },
+                exam_paper: { path: "/exam/paper", name: "剑三试卷", count: 0 },
+            },
+            comment: {
+                comment_cms: {
+                    path: "/comment/cms",
+                    name: "通用评论",
+                    count: 0,
+                },
+                comment_wiki: {
+                    path: "/comment/wiki",
+                    name: "百科评论",
+                    count: 0,
+                },
+            },
         };
     },
     computed: {},
-    methods: {},
+    methods: {
+        loadCmsCount: function () {
+            getMyPostsCount().then((res) => {
+                let count = res.data.data;
+                for (let key in count) {
+                    if(this.cms[key]){
+                        this.cms[key]['count'] = count[key]
+                    }
+                }
+            });
+        },
+        init: function () {
+            this.loadCmsCount();
+        },
+    },
+    created: function () {
+        this.init();
+    },
     mounted: function () {},
 };
 </script>
