@@ -104,7 +104,7 @@
                     </router-link>
                 </el-col>
                 <el-col :span="4">
-                    <router-link to="/item/plan">
+                    <router-link to="/item_plan">
                         <i class="el-icon-folder"></i>
                         <span>物品清单</span>
                     </router-link>

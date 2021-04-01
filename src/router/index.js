@@ -21,14 +21,14 @@ const share = () => import("../post/share.vue");
 // WIKI
 const wiki = () => import("../views/wiki.vue");
 const wiki_comment = () => import("../views/wiki_comment.vue");
-// const achievement = () => import("../post/achievement.vue");
-// const item = () => import("../post/item.vue");
-// const knowledge = () => import("../post/knowledge.vue");
+const achievement = () => import("../post/achievement.vue");
+const item = () => import("../post/item.vue");
+const knowledge = () => import("../post/knowledge.vue");
 
 // APP
 const bucket = () => import("../views/bucket.vue");
-// const item_plan = () => import("../post/item_plan.vue");
-// const collection = () => import("../post/collection.vue");
+const collection = () => import("../post/collection.vue");
+const item_plan = () => import("../post/item_plan.vue");
 // const exam_question = () => import("../post/exam_question.vue");
 // const exam_paper = () => import("../post/exam_paper.vue");
 // const namespace = () => import("../post/namespace.vue");
@@ -81,7 +81,7 @@ const routes = [
         path: "/post/:id?",
         component: bbs,
     },
-    // // 家园发布
+    // 家园发布
     // {
     //     path: "/house/:id?",
     //     component: house,
@@ -97,37 +97,45 @@ const routes = [
     { path: "/wiki/:type", component: wiki },
     { path: "/comment/wiki", component: wiki_comment },
     // 成就攻略发布
-    // {
-    //     path: "/achievement/:achievement_id(\\d+)?",
-    //     component: achievement,
-    // },
-    // // 物品攻略发布
-    // {
-    //     path: "/item/:source_id([_\\d]+)?",
-    //     component: item,
-    // },
-    // // 通识百科发布
-    // {
-    //     path: "/knowledge/:source_id?",
-    //     component: knowledge,
-    // },
-    // // 物品清单发布
-    // {
-    //     name: "item_plan",
-    //     path: "/item_plan/:plan_id(\\d+)?",
-    //     component: item_plan,
-    // },
-    // // 剑三小册发布
-    // {
-    //     name: "collection",
-    //     path: "/collection/:collection_id(\\d+)?",
-    //     component: collection,
-    // },
+    {
+        path: "/achievement/:achievement_id(\\d+)?",
+        component: achievement,
+    },
+    // 物品攻略发布
+    {
+        path: "/item/:source_id([_\\d]+)?",
+        component: item,
+    },
+    // 通识百科发布
+    {
+        path: "/knowledge/:source_id?",
+        component: knowledge,
+    },
 
     // 应用=====================
     // 查看
     { path: "/bucket/namespace", component: bucket_namespace },
     { path: "/bucket/:type", component: bucket },
+
+    // 剑三小册发布
+    {
+        name: "collection",
+        path: "/collection/:collection_id(\\d+)?",
+        component: collection,
+    },
+    // 物品清单发布
+    {
+        name: "item_plan",
+        path: "/item_plan/:plan_id(\\d+)?",
+        component: item_plan,
+    },
+    // // 剑三铭牌发布
+    // {
+    //     name: "namespace",
+    //     path: "/namespace/:id?",
+    //     component: namespace,
+    // },
+    
 ];
 
 const router = new VueRouter({

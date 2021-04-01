@@ -184,16 +184,13 @@ export default {
             },
             inputVisible: false,
             inputValue: "",
+
+            processing : false
         };
-    },
-    computed: {
-        processing() {
-            return this.$store.state.processing;
-        },
     },
     methods: {
         create_knowledge() {
-            this.$store.commit("startProcess");
+            this.processing = true
             create_knowledge({
                 type: this.knowledge.type,
                 name: this.knowledge.name,
@@ -211,7 +208,7 @@ export default {
                     });
                 }
             }).finally(()=>{
-                this.$store.commit('endProcess');
+                this.processing = false
             });
         },
         // 通识搜索
@@ -237,7 +234,7 @@ export default {
         publish: function() {
             // 表单校验
             if (!this.validate()) return;
-            this.$store.commit("startProcess");
+            this.processing = true
             WikiPost.save({
                 type: "knowledge",
                 source_id: this.post.source_id,
@@ -254,10 +251,9 @@ export default {
                     }, 500);
                 } else {
                     this.$message({message: `${res.message}`, type: "warning"});
-                    this.$store.commit('endProcess');
                 }
-            }).catch(()=>{
-                this.$store.commit('endProcess');
+            }).finally(()=>{
+                this.processing = false
             });
         },
         showInput() {

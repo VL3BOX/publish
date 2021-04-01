@@ -20,20 +20,12 @@
             <div class="m-publish-primary">
                 <div class="m-publish-primary-block">
                     <el-divider content-position="left">可见性</el-divider>
-                    <el-radio
-                        v-model.number="collection.public"
-                        :label="this.public.PUBLIC"
-                        >公开</el-radio
-                    >
-                    <el-radio
-                        v-model.number="collection.public"
-                        :label="this.public.PRIVATE"
-                        >私有</el-radio
-                    >
+                    <el-radio v-model.number="collection.public" :label="this.public.PUBLIC">公开</el-radio>
+                    <el-radio v-model.number="collection.public" :label="this.public.PRIVATE">私有</el-radio>
                 </div>
                 <div class="m-publish-primary-block">
                     <el-divider content-position="left">封面图</el-divider>
-                    <post_banner v-model="collection.image" />
+                    <publish-banner v-model="collection.image"></publish-banner>
                 </div>
                 <div class="m-publish-primary-block m-publish-collection-posts">
                     <el-divider content-position="left">内容</el-divider>
@@ -44,11 +36,7 @@
                         :list="collection.posts"
                         handle=".u-move"
                     >
-                        <li
-                            v-for="(item, key) in collection.posts"
-                            :key="key"
-                            class="c-posts-item"
-                        >
+                        <li v-for="(item, key) in collection.posts" :key="key" class="c-posts-item">
                             <i class="u-move el-icon-more"></i>
                             <i
                                 class="u-delete el-icon-close"
@@ -110,25 +98,16 @@
                                         v-model="item.url"
                                     ></el-input>
                                 </el-col>
-                                <el-col
-                                    :span="12"
-                                    class="u-collection-url"
-                                    v-if="item.url"
-                                >
-                                    <el-input
-                                        v-model="item.title"
-                                        placeholder="请输入自定义标题"
-                                    ></el-input>
+                                <el-col :span="12" class="u-collection-url" v-if="item.url">
+                                    <el-input v-model="item.title" placeholder="请输入自定义标题"></el-input>
                                 </el-col>
                             </el-row>
                         </li>
                     </draggable>
-                    <div v-else class="u-posts-items-empty">
-                        暂无文章信息，请进行文章添加
-                    </div>
+                    <div v-else class="u-posts-items-empty">暂无文章信息，请进行文章添加</div>
                     <div class="u-posts-add" @click="add_posts_item">
                         <i class="el-icon-plus"></i>
-                        <span> 添加文章</span>
+                        <span>添加文章</span>
                     </div>
                 </div>
 
@@ -136,20 +115,17 @@
                     <el-divider
                         content-position="left"
                         @click="show_description = !show_description"
-                        >描述（选填）</el-divider
-                    >
+                    >描述（选填）</el-divider>
                     <span
                         v-if="!show_description"
                         @click="show_description = true"
                         class="u-show"
-                        >▼ 展开</span
-                    >
+                    >▼ 展开</span>
                     <span
                         v-if="show_description"
                         @click="show_description = false"
                         class="u-hide"
-                        >▲ 收起</span
-                    >
+                    >▲ 收起</span>
                     <Tinymce
                         v-show="show_description"
                         v-model="collection.description"
@@ -160,20 +136,11 @@
                 </div>
 
                 <div class="m-publish-primary-block m-publish-tags">
-                    <el-divider content-position="left"
-                        >标签（选填）</el-divider
-                    >
+                    <el-divider content-position="left">标签（选填）</el-divider>
                     <ul class="m-list-style">
-                        <li
-                            v-for="(t, key) in collection.tags"
-                            :key="key"
-                            class="m-tag"
-                        >
+                        <li v-for="(t, key) in collection.tags" :key="key" class="m-tag">
                             <span v-text="t"></span>
-                            <i
-                                class="el-icon-close"
-                                @click="collection.tags.splice(key, 1)"
-                            ></i>
+                            <i class="el-icon-close" @click="collection.tags.splice(key, 1)"></i>
                         </li>
                     </ul>
                     <div class="m-tag-add" v-if="collection.tags.length < 5">
@@ -204,9 +171,8 @@
                     icon="el-icon-s-promotion"
                     type="primary"
                     @click="submit"
-                    :loading="$store.state.processing"
-                    >提交剑三小册
-                </el-button>
+                    :loading="processing"
+                >提交剑三小册</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -221,7 +187,7 @@ import {
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 import CollectionPublic from "@jx3box/jx3box-editor/service/enum/CollectionPublic";
 import header from "@/components/publish_header.vue";
-import post_banner from "@/components/publish/post_banner.vue";
+import publish_banner from "@/components/publish_banner.vue";
 import draggable from "vuedraggable";
 
 // 本地依赖
@@ -260,6 +226,7 @@ export default {
             tag: "",
             legal_tags: null,
             show_description: false,
+            processing: false,
         };
     },
     mounted() {
@@ -333,7 +300,7 @@ export default {
                 }
             });
         },
-        submit: function() {
+        submit: function () {
             this.$confirm("确定提交剑三小册信息？", "提示", {
                 type: "info",
             }).then(() => {
@@ -355,30 +322,34 @@ export default {
                     delete collection.posts[i].posts;
                 collection.posts = JSON.stringify(collection.posts);
 
-                this.$store.commit("startProcess");
-                submit_collection(collection).then((data) => {
-                    data = data.data;
-                    if (data.code === 200) {
-                        this.$message({
-                            message: data.message,
-                            type: "success",
-                        });
-                        location.href = `${__Root}collection/#/view/${data.data.collection.id}`;
-                    } else {
-                        this.$message({
-                            message: `${data.message}`,
-                            type: "warning",
-                        });
-                    }
-                });
+                this.processing = true;
+                submit_collection(collection)
+                    .then((data) => {
+                        data = data.data;
+                        if (data.code === 200) {
+                            this.$message({
+                                message: data.message,
+                                type: "success",
+                            });
+                            location.href = `${__Root}collection/#/view/${data.data.collection.id}`;
+                        } else {
+                            this.$message({
+                                message: `${data.message}`,
+                                type: "warning",
+                            });
+                        }
+                    })
+                    .finally(() => {
+                        this.processing = false;
+                    });
             });
         },
     },
     components: {
         Tinymce,
         draggable,
-        'publish-header':header,
-        post_banner,
+        "publish-header": header,
+        "publish-banner": publish_banner,
     },
 };
 </script>

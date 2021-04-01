@@ -47,6 +47,7 @@ export default {
     props: ["data"],
     data: function () {
         return {
+            loading: false,
             list: [],
             statusmap,
         };
@@ -66,9 +67,14 @@ export default {
         },
     },
     mounted: function () {
-        getNamespace().then((res) => {
-            this.list = res.data.data.data;
-        });
+        this.loading = true;
+        getNamespace()
+            .then((res) => {
+                this.list = res.data.data.data;
+            })
+            .finally(() => {
+                this.loading = false;
+            });
     },
     filters: {
         dateFormat: function (val) {
@@ -93,10 +99,6 @@ export default {
         .status2 {
             color: #fc3c3c;
         }
-    }
-
-    li {
-        .fl;
     }
 }
 </style>

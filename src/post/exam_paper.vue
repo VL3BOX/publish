@@ -119,7 +119,7 @@
 import header from "@/components/publish_header.vue";
 // import upload from "@/components/publish/upload.vue";
 // import tinymce from "@/components/publish/tinymce.vue";
-import exam_tags from "@/components/publish/exam_tags.vue";
+import exam_tags from "@/components/exam_tags.vue";
 import User from "@jx3box/jx3box-common/js/user";
 import { getPaper, createPaper, updatePaper } from "../service/exam";
 import { awards, marks, styles } from "@/assets/data/exam.json";

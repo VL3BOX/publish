@@ -43,10 +43,7 @@
 
             <div class="m-publish-remark">
                 <el-divider content-position="left">修订说明 *</el-divider>
-                <el-input
-                    v-model="post.remark"
-                    placeholder="请简单描述一下本次修订的说明"
-                ></el-input>
+                <el-input v-model="post.remark" placeholder="请简单描述一下本次修订的说明"></el-input>
             </div>
 
             <div class="m-publish-content">
@@ -67,8 +64,7 @@
                     type="primary"
                     @click="toPublish"
                     :disabled="processing"
-                    >提交攻略
-                </el-button>
+                >提交攻略</el-button>
             </div>
         </el-form>
     </div>
@@ -91,7 +87,6 @@ export default {
             //选项 - 加载可选项
             options: {
                 sources: null,
-                loading: false,
             },
 
             //文章 - 主表数据
@@ -102,15 +97,14 @@ export default {
                 level: 0,
                 remark: "",
             },
+
+            // 状态控制
+            loading: false,
+            processing: false,
         };
     },
-    computed: {
-        processing: function() {
-            return this.$store.state.processing;
-        },
-    },
     methods: {
-        toPublish: function() {
+        toPublish: function () {
             if (!this.post.source_id) {
                 this.$message({
                     message: "请选择要修订攻略的物品",
@@ -140,7 +134,7 @@ export default {
                 return;
             }
 
-            this.$store.commit("startProcess");
+            this.processing = true;
             WikiPost.save({
                 type: "item",
                 source_id: this.post.source_id,
@@ -164,11 +158,10 @@ export default {
                             message: `${data.message}`,
                             type: "warning",
                         });
-                        this.$store.commit("endProcess");
                     }
                 })
-                .catch(() => {
-                    this.$store.commit("endProcess");
+                .finally(() => {
+                    this.processing = false;
                 });
         },
         icon_url_filter(icon_id) {
@@ -180,11 +173,11 @@ export default {
         },
         // 物品搜索
         search_handle(keyword = "") {
-            this.options.loading = true;
+            this.loading = true;
             search_items(keyword, 10).then((res) => {
                 res = res.data;
                 if (res.code === 200) this.options.sources = res.data.data;
-                this.options.loading = false;
+                this.loading = false;
             });
         },
     },
@@ -199,46 +192,55 @@ export default {
         "post.source_id": {
             handler() {
                 if (!this.post.source_id) return;
-                WikiPost.newest("item", this.post.source_id, 0).then((res) => {
-                    let data = res.data;
-                    if (data.code === 200) {
-                        // 数据填充
-                        let post = data.data.post;
-                        let item = data.data.source;
+                this.loading = true;
+                WikiPost.newest("item", this.post.source_id, 0)
+                    .then((res) => {
+                        let data = res.data;
+                        if (data.code === 200) {
+                            // 数据填充
+                            let post = data.data.post;
+                            let item = data.data.source;
 
-                        if (post) {
-                            this.post.source_id = post.source_id;
-                            this.post.level = post.level || 1;
-                            this.post.remark = "";
-                            this.post.content = post.content;
-                        } else {
-                            this.post.source_id = this.post.source_id
-                                ? this.post.source_id
-                                : "";
-                            this.post.level = 0;
-                            this.post.remark = "";
-                            this.post.content = "";
-                        }
-
-                        if (item) {
-                            // 将选择项恢复至下拉框
-                            let exist = false;
-                            this.options.sources = this.options.sources || [];
-                            for (let index in this.options.sources) {
-                                if (this.options.sources[index].id == item.id) {
-                                    exist = true;
-                                    break;
-                                }
+                            if (post) {
+                                this.post.source_id = post.source_id;
+                                this.post.level = post.level || 1;
+                                this.post.remark = "";
+                                this.post.content = post.content;
+                            } else {
+                                this.post.source_id = this.post.source_id
+                                    ? this.post.source_id
+                                    : "";
+                                this.post.level = 0;
+                                this.post.remark = "";
+                                this.post.content = "";
                             }
-                            if (!exist) this.options.sources.push(item);
+
+                            if (item) {
+                                // 将选择项恢复至下拉框
+                                let exist = false;
+                                this.options.sources =
+                                    this.options.sources || [];
+                                for (let index in this.options.sources) {
+                                    if (
+                                        this.options.sources[index].id ==
+                                        item.id
+                                    ) {
+                                        exist = true;
+                                        break;
+                                    }
+                                }
+                                if (!exist) this.options.sources.push(item);
+                            }
                         }
-                    }
-                });
+                    })
+                    .finally(() => {
+                        this.loading = false;
+                    });
             },
         },
     },
     components: {
-        'publish-header':header,
+        "publish-header": header,
         Tinymce,
     },
 };

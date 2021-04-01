@@ -92,7 +92,7 @@
 
 <script>
 import header from "@/components/publish_header.vue";
-import exam_tags from "@/components/publish/exam_tags.vue";
+import exam_tags from "@/components/exam_tags.vue";
 import Tinymce from '@jx3box/jx3box-editor/src/Tinymce'
 import User from "@jx3box/jx3box-common/js/user";
 import { getQuestion, createQuestion, updateQuestion } from "../service/exam";

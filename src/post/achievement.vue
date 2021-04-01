@@ -95,7 +95,6 @@ export default {
             //选项 - 加载可选项
             options: {
                 sources: null,
-                loading: false,
             },
 
             //文章 - 主表数据
@@ -106,13 +105,13 @@ export default {
                 level: 0,
                 remark: "",
             },
+
+            // 状态控制
+            loading: false,
+            processing : false
         };
     },
-    computed: {
-        processing: function() {
-            return this.$store.state.processing;
-        },
-    },
+    computed: {},
     methods: {
         toPublish: function() {
             if (!this.post.source_id) {
@@ -144,7 +143,7 @@ export default {
                 return;
             }
 
-            this.$store.commit("startProcess");
+            this.processing = true
             WikiPost.save({
                 type: "achievement",
                 source_id: this.post.source_id,
@@ -168,11 +167,10 @@ export default {
                             message: `${data.message}`,
                             type: "warning",
                         });
-                        this.$store.commit("endProcess");
                     }
                 })
-                .catch(() => {
-                    this.$store.commit("endProcess");
+                .finally(() => {
+                    this.processing = false
                 });
         },
         icon_url_filter(icon_id) {
@@ -184,7 +182,7 @@ export default {
         },
         // 成就搜索
         search_handle(keyword = "") {
-            this.options.loading = true;
+            this.loading = true;
             search_achievements({
                 keyword: keyword,
                 limit: 10,
@@ -192,7 +190,7 @@ export default {
                 res = res.data;
                 if (res.code === 200)
                     this.options.sources = res.data.achievements;
-                this.options.loading = false;
+                this.loading = false;
             });
         },
     },
@@ -207,6 +205,7 @@ export default {
         "post.source_id": {
             handler() {
                 if (!this.post.source_id) return;
+                this.loading = true
                 WikiPost.newest("achievement", this.post.source_id, 0).then(
                     (res) => {
                         let data = res.data;
@@ -261,7 +260,9 @@ export default {
                             }
                         }
                     }
-                );
+                ).finally(() => {
+                    this.loading = false
+                })
             },
         },
     },

@@ -107,5 +107,10 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "../../assets/css/components/exam_tags.less";
+.u-group-label {
+    .bold;
+    background-color: #ebeef5;
+    padding: 2px 10px;
+    .r(2px);
+}
 </style>

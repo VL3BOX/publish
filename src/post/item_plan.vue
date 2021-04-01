@@ -1,16 +1,16 @@
 <template>
     <div class="m-publish-box">
         <!-- 头部 -->
-        <publish-header name="物品百科" :localDraft="false">
+        <publish-header name="物品清单" :localDraft="false">
             <slot name="header"></slot>
         </publish-header>
 
-        <h1 class="m-publish-item-header">物品清单</h1>
+        <!-- <h1 class="m-publish-item-header">物品清单</h1> -->
 
         <el-form
             label-position="left"
             label-width="80px"
-            class="m-publish-item"
+            class="m-publish-item-plan"
         >
             <!-- 清单名称 -->
             <el-form-item label="标题">
@@ -249,7 +249,7 @@
                     icon="el-icon-s-promotion"
                     type="primary"
                     @click="submit"
-                    :loading="$store.state.processing"
+                    :loading="processing"
                     >提交物品清单
                 </el-button>
             </el-form-item>
@@ -318,6 +318,7 @@ export default {
                 description: "",
             },
             positions: positions,
+            processing : false
         };
     },
     mounted() {
@@ -409,7 +410,7 @@ export default {
                 return;
             }
 
-            this.$store.commit("startProcess");
+            this.processing = true
             save_item_plan(this.plan).then((data) => {
                 data = data.data;
                 if (data.code === 200) {
@@ -424,7 +425,9 @@ export default {
                         type: "warning",
                     });
                 }
-            });
+            }).finally(() => {
+                this.processing = false
+            })
         },
     },
     watch: {
