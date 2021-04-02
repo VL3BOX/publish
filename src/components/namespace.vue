@@ -21,7 +21,7 @@
                         <b>{{ count }}</b> 个
                     </span>
                     <a
-                        href="/vip/namespace?from=dashboard_namespace_create"
+                        href="/vip/namespace/?from=dashboard_namespace_create"
                         target="_blank"
                         class="u-btn-buy el-button el-button--primary el-button--mini"
                     >
@@ -72,7 +72,7 @@
 
 <script>
 import { sterilizer } from 'sterilizer/index.js'
-import publish-header from '@/components/publish/publish-header'
+import header from '@/components/publish/publish-header'
 import { getNamespaceByKey, getNamespaceById, createNamespace, updateNamespace } from '@/service/namespace'
 import User from '@jx3box/jx3box-common/js/user'
 import lodash from 'lodash'

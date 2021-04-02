@@ -138,13 +138,13 @@ const routes = [
     // 题目发布
     {
         name: "question",
-        path: "/exam/question/:id?",
+        path: "/question/:id?",
         component: exam_question,
     },
     // 试卷发布
     {
         name: "paper",
-        path: "/exam/paper/:id?",
+        path: "/paper/:id?",
         component: exam_paper,
     },
 ];
