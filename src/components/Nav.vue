@@ -113,11 +113,11 @@ export default {
                 },
             },
             comment: {
-                comment_cms: {
-                    path: "/comment/cms",
-                    name: "通用评论",
-                    count: 0,
-                },
+                // comment_cms: {
+                //     path: "/comment/cms",
+                //     name: "通用评论",
+                //     count: 0,
+                // },
                 comment_wiki: {
                     path: "/comment/wiki",
                     name: "百科评论",
