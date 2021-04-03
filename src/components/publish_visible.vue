@@ -46,3 +46,10 @@ export default {
 };
 </script>
 
+<style scoped lang="less">
+    .m-publish-visible{
+        .el-radio{
+            .mb(0);
+        }
+    }
+</style>
