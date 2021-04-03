@@ -18,10 +18,20 @@
         color: #888;
         font-weight: 300;
     }
+    .el-radio{
+        .mb(10px);
+        .ml(0) !important;
+    }
 }
 @media screen and (max-width: @ipad) {
     .m-publish-box {
         padding: 10px;
+
+        .el-radio-group{
+            .db;.w(100%);
+            white-space: nowrap;
+            overflow-x: auto;
+        }
     }
 }
 

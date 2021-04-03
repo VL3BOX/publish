@@ -300,6 +300,6 @@ export default {
 };
 </script>
 
-<style scoped lang="less">
+<style lang="less">
 @import "../assets/css/jx3dat.less";
 </style>
