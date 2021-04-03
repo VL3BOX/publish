@@ -15,6 +15,7 @@
 
 <script>
 import Nav from "@/components/Nav.vue";
+import User from '@jx3box/jx3box-common/js/user'
 export default {
     name: "publish",
     props: [],
