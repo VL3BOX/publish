@@ -94,7 +94,7 @@ const routes = [
 
     // WIKI=====================
     // 查看
-    { path: "/wiki/:type", component: wiki },
+    { path: "/wiki/:type", name: 'wiki_post', component: wiki },
     { path: "/comment/wiki", component: wiki_comment },
     // 成就攻略发布
     {
@@ -114,8 +114,8 @@ const routes = [
 
     // 应用=====================
     // 查看
-    { path: "/bucket/namespace", component: bucket_namespace },
-    { path: "/bucket/:type", component: bucket },
+    { path: "/bucket/namespace", name: 'bucket_namespace', component: bucket_namespace },
+    { path: "/bucket/:type", name: 'bucket', component: bucket },
 
     // 小册发布
     {

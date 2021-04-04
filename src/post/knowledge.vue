@@ -247,7 +247,7 @@ export default {
                 if (res.code === 200) {
                     this.$message({message: "提交成功，请等待审核", type: "success"});
                     setTimeout(() => {
-                        location.href = JX3BOX.__Root + '/dashboard/#/wiki';
+                        this.$router.push({name: 'wiki_post', params: {type: 'knowledge'}})
                     }, 500);
                 } else {
                     this.$message({message: `${res.message}`, type: "warning"});

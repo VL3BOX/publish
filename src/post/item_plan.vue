@@ -414,11 +414,10 @@ export default {
             save_item_plan(this.plan).then((data) => {
                 data = data.data;
                 if (data.code === 200) {
-                    this.$message({
-                        message: "物品清单提交成功",
-                        type: "success",
-                    });
-                    location.href = `${__Root}item/#/plan_view/${data.data.id}`;
+                    this.$message({message: "物品清单提交成功", type: "success"});
+                    setTimeout(() => {
+                        this.$router.push({name: 'bucket', params: {type: 'item_plan'}})
+                    }, 500);
                 } else {
                     this.$message({
                         message: `${data.message}`,
