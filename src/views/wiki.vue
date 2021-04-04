@@ -145,7 +145,12 @@ export default {
         post_page_change(i = 1) {
             this.post_page = i;
             this.loading = true
-            get_posts(this.achievement_post.keyword, i, this.length).then(
+            get_posts({
+                type: this.type,
+                keyword: this.achievement_post.keyword,
+                page: i,
+                limit: this.length,
+            }).then(
                 (data) => {
                     data = data.data;
                     this.achievement_post.data =

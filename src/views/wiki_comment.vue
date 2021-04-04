@@ -144,7 +144,11 @@ export default {
         comment_page_change(i = 1) {
             this.comment_page = i;
             this.loading = true
-            get_comments(this.achievement_comment.keyword, i, this.length).then(
+            get_comments({
+                keyword: this.achievement_comment.keyword,
+                page: i,
+                limit: this.length,
+            }).then(
                 (data) => {
                     data = data.data;
                     this.achievement_comment.data =
@@ -206,15 +210,8 @@ export default {
         $route: {
             immediate: true,
             handler() {
-                if (this.$route.query.type && this.$route.query.keyword) {
-                    switch (this.$route.query.type) {
-                        case "wiki_post":
-                            this.achievement_post.keyword = this.$route.query.keyword;
-                            break;
-                        case "wiki_comment":
-                            this.achievement_comment.keyword = this.$route.query.keyword;
-                            break;
-                    }
+                if (this.$route.query.keyword) {
+                    this.achievement_comment.keyword = this.$route.query.keyword;
 
                     // 置空输入框ID
                     this.$nextTick(() => {
@@ -225,7 +222,6 @@ export default {
                             input_doms[i].value = "";
                     });
                 } else {
-                    this.achievement_post.keyword = "";
                     this.achievement_comment.keyword = "";
                 }
 

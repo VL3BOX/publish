@@ -57,6 +57,7 @@
 
 <script>
 import { getMyPostsCount } from "@/service/cms.js";
+import { get_my_post_total } from "@/service/post.js";
 export default {
     name: "Nav",
     data: function () {
@@ -91,7 +92,7 @@ export default {
                     name: "剑三铭牌",
                     count: 0,
                 },
-                colletion: {
+                collection: {
                     path: "/bucket/collection",
                     name: "文集小册",
                     count: 0,
@@ -138,8 +139,34 @@ export default {
                 }
             });
         },
+        loadHelperCount() {
+            get_my_post_total().then((res) => {
+                res = res.data;
+                if (res.code === 200) {
+                    let count = res.data;
+
+                    for (let key in this.wiki) {
+                        let tmp = count[`${key}_post`];
+                        if (tmp) this.wiki[key]["count"] = tmp;
+                    }
+
+                    for (let key in this.app) {
+                        let tmp = count[key];
+                        if (tmp) this.app[key]["count"] = tmp;
+                    }
+
+                    for (let key in this.comment) {
+                        let k = key;
+                        if (k === 'comment_wiki') k = 'wiki_comment';
+                        let tmp = count[k];
+                        if (tmp) this.comment[key]["count"] = tmp;
+                    }
+                }
+            });
+        },
         init: function () {
             this.loadCmsCount();
+            this.loadHelperCount();
         },
     },
     created: function () {

@@ -1,15 +1,10 @@
 import { $helper } from "@jx3box/jx3box-common/js/https.js";
 
-function get_posts(keyword, page, limit) {
-    let data = {};
-    if (keyword) data.keyword = keyword;
-    if (page) data.page = page;
-    if (limit) data.limit = limit;
-
+function get_posts(params) {
     return $helper()({
         method: "GET",
         url: `/api/my/wiki/posts`,
-        params: data,
+        params: params,
     });
 }
 
@@ -21,16 +16,11 @@ function remove_post(post_id) {
     });
 }
 
-function get_comments(keyword, page, limit) {
-    let data = {};
-    if (keyword) data.keyword = keyword;
-    if (page) data.page = page;
-    if (limit) data.limit = limit;
-
+function get_comments(params) {
     return $helper()({
         method: "GET",
         url: `/api/my/wiki/comments`,
-        params: data,
+        params: params,
     });
 }
 
