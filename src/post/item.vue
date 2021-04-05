@@ -151,7 +151,7 @@ export default {
                             type: "success",
                         });
                         setTimeout(() => {
-                            location.href = JX3BOX.__Root + "/dashboard/#/wiki";
+                            this.$router.push({name: 'wiki_post', params: {type: 'item'}})
                         }, 500);
                     } else {
                         this.$message({

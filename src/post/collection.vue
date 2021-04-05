@@ -327,11 +327,10 @@ export default {
                     .then((data) => {
                         data = data.data;
                         if (data.code === 200) {
-                            this.$message({
-                                message: data.message,
-                                type: "success",
-                            });
-                            location.href = `${__Root}collection/#/view/${data.data.collection.id}`;
+                            this.$message({message: data.message, type: "success"});
+                            setTimeout(() => {
+                                this.$router.push({name: 'bucket', params: {type: 'collection'}})
+                            }, 500);
                         } else {
                             this.$message({
                                 message: `${data.message}`,

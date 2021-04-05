@@ -196,11 +196,10 @@ export default {
         },
         onSuccess() {
             this.success = true;
-            this.$notify.success({
-                title: "成功",
-                message: "提交成功",
-                showClose: false,
-            });
+            this.$notify.success({title: "成功", message: "提交成功", showClose: false});
+            setTimeout(() => {
+                this.$router.push({name: 'bucket_namespace'})
+            }, 500);
         },
     },
     watch: {
