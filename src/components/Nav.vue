@@ -10,7 +10,7 @@
             <span>草稿箱</span>
         </router-link>
 
-        <el-collapse v-model="group" class="m-nav-group">
+        <el-collapse v-model="group" class="m-nav-group" @click.native.stop>
             <el-collapse-item title="独立创作" name="cms">
                 <template slot="title">
                     <span class="u-title">独立创作</span>
