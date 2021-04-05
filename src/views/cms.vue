@@ -57,20 +57,6 @@
                             @click="edit(item.post_type, item.ID)"
                         ></el-button>
                         <el-button
-                            v-if="item.post_status == 'publish'"
-                            size="mini"
-                            icon="el-icon-lock"
-                            title="设为私有"
-                            @click="draft(item.ID, i)"
-                        ></el-button>
-                        <el-button
-                            v-else
-                            size="mini"
-                            icon="el-icon-check"
-                            title="设为公开"
-                            @click="publish(item.ID, i)"
-                        ></el-button>
-                        <el-button
                             size="mini"
                             icon="el-icon-delete"
                             title="删除"
