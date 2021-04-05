@@ -77,7 +77,6 @@
 
                     <el-button-group class="u-action">
                         <el-button
-                            type="primary"
                             size="mini"
                             icon="el-icon-delete"
                             title="删除"
