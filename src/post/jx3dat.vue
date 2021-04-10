@@ -20,7 +20,7 @@
 
             <!-- 数据区域 -->
             <publish-jx3dat v-model="post.post_meta" :type="post.post_subtype">
-                <publish-subtype v-model="post.post_subtype" :options="jx3dat_types" :lock="true"></publish-subtype>
+                <publish-subtype v-model="post.post_subtype" :options="jx3dat_types" :lock="isLock"></publish-subtype>
                 <publish-tags
                     v-model="post.tags"
                     :options="jx3dat_tags"
@@ -73,6 +73,7 @@
 
 <script>
 // 公共模块
+import User from "@jx3box/jx3box-common/js/user";
 import { getLink } from "@jx3box/jx3box-common/js/utils";
 import { jx3dat_types, jx3dat_tags } from "@/assets/data/jx3dat.json";
 
@@ -202,6 +203,9 @@ export default {
                 return [this.post];
             }
         },
+        isLock : function (){
+            return User.isEditor() ? false : true
+        }
     },
     methods: {
         // 加载
