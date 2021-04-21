@@ -24,6 +24,7 @@ const wiki_comment = () => import("../views/wiki_comment.vue");
 const achievement = () => import("../post/achievement.vue");
 const item = () => import("../post/item.vue");
 const knowledge = () => import("../post/knowledge.vue");
+const quest = () => import("../post/quest.vue");
 
 // APP
 const bucket = () => import("../views/bucket.vue");
@@ -110,6 +111,11 @@ const routes = [
     {
         path: "/knowledge/:source_id?",
         component: knowledge,
+    },
+    // 任务攻略发布
+    {
+        path: "/quest/:source_id([_\\d]+)?",
+        component: quest,
     },
 
     // 应用=====================
