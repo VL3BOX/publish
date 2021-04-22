@@ -44,7 +44,7 @@ export default {
     props: ["data"],
     methods: {
         plan_edit: function (id) {
-            location.href = "./#/item/plan/" + id;
+            location.href = "./#/item_plan/" + id;
         },
         plan_delete: function (id) {
             this.$confirm("确认是否删除该物品清单？", "提示", {
