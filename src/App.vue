@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <Header></Header>
-        <Breadcrumb name="发布中心" slug="publish" root="/publish" :crumbEnable="true">
+        <Breadcrumb name="创作中心" slug="publish" root="/publish" :crumbEnable="true">
             <img slot="logo" svg-inline src="./assets/img/publish.svg" />
         </Breadcrumb>
         <LeftSidebar>
