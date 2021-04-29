@@ -50,16 +50,12 @@
                         <span>通识百科</span>
                     </router-link>
                 </el-col>
-                <!-- <el-col :span="4"
-                    ><el-card
-                        ><router-link to="/house"
-                            ><img
-                                svg-inline
-                                src="../assets/img/channel/house.svg"
-                            /><span>家园分享</span></router-link
-                        ></el-card
-                    ></el-col
-                >-->
+                <el-col :span="4">
+                    <router-link to="/quest">
+                        <img svg-inline src="../assets/img/channel/quest.svg" />
+                        <span>任务百科</span>
+                    </router-link>
+                </el-col>
             </el-row>
 
             <el-divider content-position="left">PVX</el-divider>
@@ -91,6 +87,16 @@
                         <span>捏脸分享</span>
                     </router-link>
                 </el-col>
+                <!-- <el-col :span="4"
+                    ><el-card
+                        ><router-link to="/house"
+                            ><img
+                                svg-inline
+                                src="../assets/img/channel/house.svg"
+                            /><span>家园分享</span></router-link
+                        ></el-card
+                    ></el-col
+                >-->
 
                 
             </el-row>
