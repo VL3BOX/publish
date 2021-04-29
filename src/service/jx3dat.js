@@ -46,7 +46,7 @@ function transferForRedis(data) {
             data_url: item.file,
             about: __Root + "jx3dat/" + pid,
             name: item.desc,
-            version: version,
+            version: version + '',
             status: !!item.status,
         };
     });
