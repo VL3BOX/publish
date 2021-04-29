@@ -144,9 +144,11 @@ export default {
                             status: true,
                             file: "",
                             version: "",
+                            _version:'',
                             // 源文件名
                             origin_name: "",
                             upload_status: false,
+                            pop : false
                         },
                     ],
                     github: "",

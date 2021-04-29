@@ -33,13 +33,20 @@ function transferForRedis(data) {
     data.post_meta.data.forEach((item, i) => {
         item.name = item.name || Date.now();
 
+        let version = item._version || Date.now()
+        if(item.pop){
+            version = Date.now()    //如果提醒，直接使用新版本号
+        }else{
+            version = ~~version + 0.1   //如果不提醒，对旧版本+补丁
+        }
+
         _.data[item.name] = {
             author: author,
             key: item.name,
             data_url: item.file,
             about: __Root + "jx3dat/" + pid,
             name: item.desc,
-            version: item.version || Date.now(),
+            version: version,
             status: !!item.status,
         };
     });

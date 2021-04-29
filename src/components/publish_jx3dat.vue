@@ -128,6 +128,11 @@
                                 </template>
                             </el-input>
                         </div>
+                        <div class="m-jx3dat-item">
+                            <h5 class="u-title">弹窗提醒</h5>
+                            <el-switch v-model="item.pop" active-color="#49C10F"></el-switch>
+                            <span class="u-poptip">（默认不弹窗，小版本可由用户在下载面板自行选择是否更新）</span>
+                        </div>
                         <!-- <div class="m-jx3data-item">
                             <h5 class="u-title">云数据ID</h5>
                             <el-input
@@ -224,10 +229,12 @@ const default_meta = {
             desc: "",
             status: true,
             file: "",
-            version: "",
+            version: "", //已失效，由redis托管 -- 20210430小版本patch
+            _version: "", //真实文件版本号
             // 源文件名
             origin_name: "",
             upload_status: false,
+            pop: false,
         },
     ],
     github: "",
@@ -261,12 +268,18 @@ export default {
     watch: {
         data: {
             immediate: true,
-            deep: true,
+            // deep: true,
             handler: function (newval) {
                 if (!newval || isEmptyMeta(newval)) {
                     this.jx3dats = lodash.cloneDeep(default_meta);
                 } else {
                     this.jx3dats = newval;
+                    this.jx3dats.data.forEach((item) => {
+                        item.pop = false;
+                        if(item._version === undefined){
+                            item._version = item.version
+                        }
+                    });
                 }
             },
         },
@@ -282,7 +295,11 @@ export default {
             return this.type;
         },
         totalVersions: function () {
-            return this.jx3dats && this.jx3dats.data && this.jx3dats.data.length + 1;
+            return (
+                this.jx3dats &&
+                this.jx3dats.data &&
+                this.jx3dats.data.length + 1
+            );
         },
     },
     methods: {
@@ -316,7 +333,7 @@ export default {
                         message: "数据上传成功",
                         type: "success",
                     });
-                    item.version = Date.now();
+                    item._version = Date.now();
                     item.upload_status = true;
                 }
             });
@@ -399,7 +416,7 @@ export default {
                 this.jx3dats.down = res.data.data[0];
 
                 this.$message({
-                    message: '上传成功',
+                    message: "上传成功",
                     type: "success",
                 });
 
@@ -432,9 +449,18 @@ export default {
     filters: {},
     created: function () {
         User.isVIP().then((data) => {
-            this.isVIP = data
-        })
+            this.isVIP = data;
+        });
     },
-    mounted: function () {},
+    // mounted: function () {
+    //     if (!this.data || isEmptyMeta(this.data)) {
+    //         this.jx3dats = lodash.cloneDeep(default_meta);
+    //     } else {
+    //         this.jx3dats = this.data;
+    //         this.jx3dats.data.forEach((item) => {
+    //             item.pop = false;
+    //         });
+    //     }
+    // },
 };
 </script>
