@@ -47,7 +47,7 @@ function transferForRedis(data) {
             about: __Root + "jx3dat/" + pid,
             name: item.desc,
             version: version + '',
-            _version : version,
+            _version : Date.now(),
             status: !!item.status,
         };
     });
