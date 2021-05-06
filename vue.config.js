@@ -24,6 +24,12 @@ module.exports = {
     //❤️ Porxy ~
     devServer: {
         proxy: {
+            "/api/plugins/my-team-mon":{
+                "target": "https://pull.jx3box.com",
+                "onProxyReq": function (request) {
+                    request.setHeader("origin", "");
+                }
+            },
             "/api/vip": {
                 "target": "https://pay.jx3box.com",
                 "onProxyReq": function (request) {
