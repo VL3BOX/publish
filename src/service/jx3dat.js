@@ -9,7 +9,9 @@ function uploadData(formdata) {
 // const pull = process.env.NODE_ENV === "production" ? 'https://pull.jx3box.com/' : "/"   //西山居服务器
 const pull = 'https://pull.jx3box.com/'
 function uploadHub(formdata) {
-    return axios.post(pull + "api/plugins/my-team-mon/v2", formdata);
+    return axios.post(pull + "api/plugins/my-team-mon/v2", formdata,{
+        withCredentials : true
+    });
 }
 
 // 云端
