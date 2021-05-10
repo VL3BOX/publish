@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-box">
         <!-- 头部 -->
-        <publish-header name="趣味题库·试卷" :localDraft="false">
+        <publish-header name="剑三试卷" :localDraft="false">
             <slot name="header"></slot>
         </publish-header>
 
@@ -134,7 +134,6 @@ export default {
                 updatePaper(this.id, this.primary, this)
                     .then((res) => {
                         this.success(res);
-                        getLink("paper", this.id);
                     })
                     .finally(() => {
                         this.processing = false;
@@ -143,7 +142,6 @@ export default {
                 createPaper(this.primary, this)
                     .then((res) => {
                         this.success(res);
-                        getLink("paper", res.data.data.id);
                     })
                     .finally(() => {
                         this.processing = false;
@@ -155,7 +153,12 @@ export default {
                 message: res.data.msg || "提交成功",
                 type: "success",
             });
-            // this.$router.push({ path: "/exam" });
+            setTimeout(() => {
+                location.href = getLink(
+                    "paper",
+                    this.id || res.data.data.id
+                );
+            }, 500);
         },
         loadData: function () {
             getPaper(this.id, this).then((res) => {

@@ -36,6 +36,14 @@ function getPapers(query) {
     });
 }
 
+function deleteQuestion(id){
+    return $next().delete(`/api/question/my/${id}`)
+}
+
+function deletePaper(id){
+    return $next().delete(`/api/question/exam-paper/my/${id}`)
+}
+
 export {
     getQuestion,
     createQuestion,
@@ -45,4 +53,6 @@ export {
     updatePaper,
     getPaper,
     getPapers,
+    deleteQuestion,
+    deletePaper
 };

@@ -58,6 +58,7 @@
 <script>
 import { getMyPostsCount } from "@/service/cms.js";
 import { get_my_post_total } from "@/service/post.js";
+import { getNextStat } from "@/service/next.js";
 export default {
     name: "Nav",
     data: function () {
@@ -114,11 +115,11 @@ export default {
                 },
             },
             comment: {
-                // comment_cms: {
-                //     path: "/comment/cms",
-                //     name: "通用评论",
-                //     count: 0,
-                // },
+                comment_cms: {
+                    path: "/comment/cms",
+                    name: "通用评论",
+                    count: 0,
+                },
                 comment_wiki: {
                     path: "/comment/wiki",
                     name: "百科评论",
@@ -157,16 +158,25 @@ export default {
 
                     for (let key in this.comment) {
                         let k = key;
-                        if (k === 'comment_wiki') k = 'wiki_comment';
+                        if (k === "comment_wiki") k = "wiki_comment";
                         let tmp = count[k];
                         if (tmp) this.comment[key]["count"] = tmp;
                     }
                 }
             });
         },
+        loadNextCount(){
+            getNextStat().then((res) => {
+                let data = res.data.data
+                this.comment.comment_cms.count = data.comment
+                this.app.exam_question.count = data.question
+                this.app.exam_paper.count = data.paper
+            })
+        },
         init: function () {
             this.loadCmsCount();
             this.loadHelperCount();
+            this.loadNextCount()
         },
     },
     created: function () {

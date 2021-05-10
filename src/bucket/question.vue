@@ -29,6 +29,7 @@
             </div>
             <el-button-group class="u-action">
                 <el-button size="mini" icon="el-icon-edit" title="编辑" @click="edit(item.id)"></el-button>
+                <el-button size="mini" icon="el-icon-delete" title="删除" @click="del(item.id,i)"></el-button>
             </el-button-group>
         </li>
     </ul>
@@ -38,6 +39,7 @@
 import { types } from "../assets/data/exam.json";
 import dateFormat from "../utils/dateFormat";
 import { getLink } from "@jx3box/jx3box-common/js/utils";
+import { deleteQuestion } from "@/service/exam.js";
 const statusmap = {
     "-2": "已删除",
     "-1": "未通过审核",
@@ -45,17 +47,18 @@ const statusmap = {
     "1": "已入库",
 };
 export default {
-    name: "",
+    name: "question",
     props: ["data"],
     data: function () {
         return {
             statusmap,
+            list : this.data || []
         };
     },
-    computed: {
-        list: function () {
-            return this.data;
-        },
+    watch : {
+        data : function (val){
+            this.list = val || []
+        }
     },
     methods: {
         edit: function (id) {
@@ -63,6 +66,22 @@ export default {
         },
         postLink: function (id) {
             return getLink("question", id);
+        },
+        del: function (id,i) {
+            this.$alert("确定删除吗？", "消息", {
+                confirmButtonText: "确定",
+                callback: (action) => {
+                    if (action == "confirm") {
+                        deleteQuestion(id).then((res) => {
+                            this.$message({
+                                message: "删除成功",
+                                type: "success",
+                            });
+                            this.list.splice(i,1);
+                        });
+                    }
+                },
+            });
         },
     },
     filters: {

@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-box">
         <!-- 头部 -->
-        <publish-header name="趣味题库·题目" :localDraft="false">
+        <publish-header name="剑三题目" :localDraft="false">
             <slot name="header"></slot>
         </publish-header>
 
@@ -83,7 +83,7 @@ import exam_tags from "@/components/exam_tags.vue";
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 import User from "@jx3box/jx3box-common/js/user";
 import { getQuestion, createQuestion, updateQuestion } from "../service/exam";
-import {getLink} from '@jx3box/jx3box-common/js/utils'
+import { getLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "exam_question",
     props: [],
@@ -118,7 +118,6 @@ export default {
                 updateQuestion(this.id, this.primary, this)
                     .then((res) => {
                         this.success(res);
-                        getLink('question',this.id)
                     })
                     .finally(() => {
                         this.processing = false;
@@ -127,7 +126,6 @@ export default {
                 createQuestion(this.primary, this)
                     .then((res) => {
                         this.success(res);
-                        getLink('question',res.data.data.id)
                     })
                     .finally(() => {
                         this.processing = false;
@@ -139,6 +137,12 @@ export default {
                 message: res.data.msg || "提交成功",
                 type: "success",
             });
+            setTimeout(() => {
+                location.href = getLink(
+                    "question",
+                    this.id || res.data.data.id
+                );
+            }, 500);
         },
         loadData: function () {
             getQuestion(this.id, this).then((res) => {
