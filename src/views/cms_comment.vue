@@ -1,0 +1,151 @@
+<template>
+    <div class="m-dashboard m-dashboard-work m-dashboard-wiki" v-loading="loading">
+        <div class="m-dashboard-work-header">
+            <h2 class="u-title">通用评论</h2>
+        </div>
+
+        <el-input
+            class="m-dashboard-work-search u-source-search"
+            placeholder="请输入搜索内容"
+            v-model="search"
+        >
+            <template slot="prepend">关键词</template>
+            <el-button slot="append" icon="el-icon-search"></el-button>
+        </el-input>
+
+        <div class="m-dashboard-box">
+            <ul class="m-dashboard-box-list" v-if="data && data.length">
+                <li v-for="(item, i) in data" :key="i">
+                    <i class="u-icon">
+                        <img
+                            v-if="item.PostInfo.post_status == 'publish'"
+                            svg-inline
+                            src="../assets/img/works/repo.svg"
+                        />
+                        <img v-else svg-inline src="../assets/img/works/draft.svg" />
+                    </i>
+                    <a
+                        class="u-title"
+                        target="_blank"
+                        :href="postLink(item.PostInfo.post_type, item.postID)"
+                    >{{ item.PostInfo.post_title || "无标题" }}</a>
+                    <span class="u-desc">{{item.content || '未知'}}</span>
+                    <div class="u-desc">
+                        <time class="u-desc-subitem">
+                            <i class="el-icon-finished"></i>
+                            发布 :
+                            {{ item.commentDate | dateFormat }}
+                        </time>
+                    </div>
+
+                    <el-button-group class="u-action">
+                        <el-button
+                            size="mini"
+                            icon="el-icon-delete"
+                            title="删除"
+                            @click="del(item.id,i)"
+                        ></el-button>
+                    </el-button-group>
+                </li>
+            </ul>
+            <el-alert
+                v-else
+                class="m-dashboard-box-null"
+                title="没有找到相关条目"
+                type="info"
+                center
+                show-icon
+            ></el-alert>
+            <el-pagination
+                class="m-dashboard-box-pages"
+                background
+                :page-size="per"
+                :hide-on-single-page="true"
+                :current-page.sync="page"
+                layout="total, prev, pager, next, jumper"
+                :total="total"
+            ></el-pagination>
+        </div>
+    </div>
+</template>
+
+<script>
+import dateFormat from "@/utils/dateFormat";
+import { getMyComments, deleteComment } from "@/service/next";
+import { getLink } from "@jx3box/jx3box-common/js/utils.js";
+export default {
+    name: "comments",
+    props: [],
+    data: function () {
+        return {
+            loading: false,
+            data: [],
+            total: 1,
+            page: 1,
+            per: 10,
+            search: "",
+        };
+    },
+    computed: {
+        params: function () {
+            return {
+                per: this.per,
+                page: this.page,
+                search: this.search,
+            };
+        },
+    },
+    methods: {
+        loadData: function () {
+            this.loading = true;
+            getMyComments(this.params)
+                .then((res) => {
+                    this.data = res.data.data.list;
+                    this.total = res.data.data.page.total;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
+        postLink: function (type, id) {
+            return getLink(type, id);
+        },
+        del: function (id, i) {
+            this.$alert("确定删除吗？", "消息", {
+                confirmButtonText: "确定",
+                callback: (action) => {
+                    if (action == "confirm") {
+                        deleteComment(id).then((res) => {
+                            this.$message({
+                                message: "删除成功",
+                                type: "success",
+                            });
+                            this.data.splice(i, 1);
+                        });
+                    }
+                },
+            });
+        },
+    },
+    watch: {
+        params: {
+            deep: true,
+            handler: function () {
+                this.loadData();
+            },
+        },
+    },
+    filters: {
+        dateFormat: function (val) {
+            return dateFormat(new Date(val));
+        },
+    },
+    mounted: function () {
+        this.loadData();
+    },
+};
+</script>
+
+<style scoped lang="less">
+@import "../assets/css/work.less";
+</style>

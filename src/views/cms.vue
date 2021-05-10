@@ -17,7 +17,7 @@
         </div>
 
         <div class="m-dashboard-box">
-            <ul class="m-dashboard-box-list" v-if="data.length">
+            <ul class="m-dashboard-box-list" v-if="data && data.length">
                 <li v-for="(item, i) in data" :key="i">
                     <i class="u-icon">
                         <img

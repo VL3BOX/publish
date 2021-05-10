@@ -8,7 +8,7 @@ const draft = () => import("../views/draft.vue");
 
 // CMS
 const cms = () => import("../views/cms.vue");
-// const cms_comment = () => import("../views/cms_comment.vue");
+const cms_comment = () => import("../views/cms_comment.vue");
 const macro = () => import("../post/macro.vue");
 const jx3dat = () => import("../post/jx3dat.vue");
 const fb = () => import("../post/fb.vue");
@@ -48,6 +48,7 @@ const routes = [
     // CMS=====================
     // 查看
     { path: "/cms/:type", component: cms },
+    { path: "/comment/cms", component: cms_comment },
     // 宏发布
     {
         path: "/macro/:id?",
