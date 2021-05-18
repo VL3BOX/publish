@@ -17,6 +17,7 @@ const tool = () => import("../post/tool.vue");
 const bbs = () => import("../post/bbs.vue");
 // const house = () => import("../post/house.vue");
 const share = () => import("../post/share.vue");
+const joke = () => import("../post/joke.vue");
 
 // WIKI
 const wiki = () => import("../views/wiki.vue");
@@ -92,6 +93,10 @@ const routes = [
     {
         path: "/share/:id?",
         component: share,
+    },
+    {
+        path: "/joke/:id?",
+        component: joke,
     },
 
     // WIKI=====================

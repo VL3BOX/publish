@@ -97,6 +97,12 @@
                         ></el-card
                     ></el-col
                 >-->
+                <el-col :span=4>
+                    <router-link to="/joke">
+                        <i class="el-icon-chat-line-round"></i>
+                        <span>骚话</span>
+                    </router-link>
+                </el-col>
 
                 
             </el-row>
