@@ -72,6 +72,7 @@ export default {
                 tool: { path: "/cms/tool", name: "教程工具", count: 0 },
                 bbs: { path: "/cms/bbs", name: "茶馆交流", count: 0 },
                 share: { path: "/cms/share", name: "捏脸分享", count: 0 },
+                joke: { path: "/cms/joke", name: "剑三骚话", count: 0 }
             },
             wiki: {
                 achievement: {

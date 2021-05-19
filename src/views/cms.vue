@@ -111,7 +111,7 @@ export default {
             order: "update",
             client: "",
 
-            types: __postType,
+            types:  Object.assign(__postType, { "joke": "剑三骚话" })
         };
     },
     computed: {

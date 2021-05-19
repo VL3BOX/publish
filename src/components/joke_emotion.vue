@@ -52,13 +52,18 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.emotion-item {
-    display: inline-flex;
-    padding: 4px;
-    margin: 2px;
-    border: 1px solid #fff;
-    &:hover {
-        border-color: #ccc;
+.m-publish-joke-emotion {
+    margin: 16px 0;
+
+    .emotion-item {
+        display: inline-flex;
+        padding: 4px;
+        margin: 2px;
+        border: 1px solid #fff;
+
+        &:hover {
+            border-color: #ccc;
+        }
     }
 }
 </style>
