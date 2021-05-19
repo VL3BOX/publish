@@ -81,9 +81,16 @@ export default {
             }
         },
         publish() {
+            const { content } = this
+            if (!content) {
+                this.$message({
+                    message: '请输入骚话内容',
+                    type: 'error'
+                })
+                return false
+            }
             this.saveLoading = true
 
-            const { content } = this
             saveJoke({ content })
             .then(res => {
                 this.$message({

@@ -16,6 +16,19 @@ const saveJoke = (params) => {
     data: qs.stringify(data)
   })
 }
+/**
+ * 获取joke列表
+ * @param {*} params 
+ * @returns 
+ */
+const getJokes = (params) => {
+
+  return $helper()({
+    method: 'GET',
+    url: '',
+    params
+  })
+}
 
 export {
   saveJoke
