@@ -137,7 +137,7 @@ export default {
         loadPosts: function () {
             if(!this.type) return
 
-            this.loading = true;
+            // this.loading = true;
             fn[this.type](this.params)
                 .then((res) => {
                     if (helper_list.includes(this.type)) {

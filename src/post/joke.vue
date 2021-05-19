@@ -4,14 +4,22 @@
             <slot name="header"></slot>
         </publish-header>
 
-        <joke-emotion @select="handleEmotionSelect"></joke-emotion>
+        <div class="m-publish-joke-emotion">
+            <div>
+                <template v-for="emotion in sortedEmotions">
+                    <span :key="emotion.key" class="emotion-item" @click="handleEmotionClick(emotion.key)">
+                        <img :src="emotion.path" :alt="emotion.key" :title="emotion.key">
+                    </span>
+                </template>
+            </div>
+        </div>
 
-        <el-form :model="info" ref="jokeForm" label-position="left" :rules="rules" label-width="80px">
-            <el-form-item label="内容" prop="content">
+        <el-form label-position="left" label-width="80px">
+            <el-form-item label="内容">
                 <el-input
-                    v-model="info.content"
+                    v-model="content"
                     type="textarea"
-                    :rows="3"
+                    :rows="6"
                     placeholder="请输入内容" 
                     id="textarea">
                 </el-input>
@@ -32,24 +40,18 @@
 
 <script>
 import publish_header from "@/components/publish_header.vue";
-import joke_emotion from '@/components/joke_emotion.vue';
+import emotion from '@jx3box/jx3box-data/data/jokes/default.json'
+import { __imgPath } from '@jx3box/jx3box-common/data/jx3box.json'
 import { saveJoke } from '../service/joke'
 export default {
     name: 'joke',
     components: {
         'publish-header': publish_header,
-        'joke-emotion': joke_emotion
     },
     data: () => ({
-        info: {
-            content: ''
-        },
+        content: '',
+        sortedEmotions: [],
         saveLoading: false,
-        rules: {
-            content: [
-                { required: true, message: '请输入内容', trigger: 'blur' }
-            ]
-        }
     }),
     methods: {
         handleEmotionSelect(key) {
@@ -81,28 +83,61 @@ export default {
         publish() {
             this.saveLoading = true
 
-            this.$refs['jokeForm'].validate((valid) => {
-                if (valid) {
-                    const { content } = this.info
-                    saveJoke({ content })
-                    .then(res => {
-                        this.$message({
-                            type: res.data.message ||  'success',
-                            message: '提交成功'
-                        })
-                    }).finally(() => {
-                        this.saveLoading = false
-                    })
-                } else {
-                    this.saveLoading = false
-                    return false
-                }
+            const { content } = this
+            saveJoke({ content })
+            .then(res => {
+                this.$message({
+                    type: res.data.message ||  'success',
+                    message: '提交成功'
+                })
+            }).finally(() => {
+                this.saveLoading = false
             })
+        },
+        // 表情排序
+        emotionSort() {
+            const keys = Object.keys(emotion)
+            keys.sort((item1, item2) => {
+                return item1.localeCompare(item2)
+            })
+            keys.forEach(key => {
+                const pathKey = key.slice(1)
+                const obj = {
+                    key,
+                    value: emotion[key],
+                    path: __imgPath + `image/emotion/${pathKey}.gif`
+                }
+                // console.log(key)
+                this.sortedEmotions.push(obj)
+            })
+        },
+        /**
+         * 点击表情触发事件
+         * @param {string} key 表情key
+         */
+        handleEmotionClick(key) {
+            this.insertVariable(key)
         }
+    },
+    created() {
+        this.emotionSort()
     }
 }
 </script>
 
 <style lang="less" scoped>
+.m-publish-joke-emotion {
+    margin: 16px 0;
 
+    .emotion-item {
+        display: inline-flex;
+        padding: 4px;
+        margin: 2px;
+        border: 1px solid #fff;
+
+        &:hover {
+            border-color: #ccc;
+        }
+    }
+}
 </style>

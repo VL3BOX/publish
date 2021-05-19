@@ -17,7 +17,6 @@ const tool = () => import("../post/tool.vue");
 const bbs = () => import("../post/bbs.vue");
 // const house = () => import("../post/house.vue");
 const share = () => import("../post/share.vue");
-const joke = () => import("../post/joke.vue");
 
 // WIKI
 const wiki = () => import("../views/wiki.vue");
@@ -35,6 +34,7 @@ const exam_question = () => import("../post/exam_question.vue");
 const exam_paper = () => import("../post/exam_paper.vue");
 const namespace = () => import("../post/namespace.vue");
 const bucket_namespace = () => import("../bucket/namespace.vue");
+const joke = () => import("../post/joke.vue");
 
 Vue.use(VueRouter);
 

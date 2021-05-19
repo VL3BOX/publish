@@ -100,7 +100,7 @@
                 <el-col :span=4>
                     <router-link to="/joke">
                         <i class="el-icon-chat-line-round"></i>
-                        <span>骚话</span>
+                        <span>剑三骚话</span>
                     </router-link>
                 </el-col>
 
