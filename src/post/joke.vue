@@ -1,6 +1,6 @@
 <template>
     <div class="m-publish-box">
-        <publish-header name="骚话" :localDraft="false">
+        <publish-header name="剑三骚话" :localDraft="false">
             <slot name="header"></slot>
         </publish-header>
 
@@ -134,6 +134,7 @@ export default {
         padding: 4px;
         margin: 2px;
         border: 1px solid #fff;
+        .pointer;
 
         &:hover {
             border-color: #ccc;

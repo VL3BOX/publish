@@ -14,12 +14,12 @@
                 <time class="u-desc-subitem">
                     <i class="el-icon-finished"></i>
                     发布 :
-                    {{ plan.created * 1000 | dateFormat }}
+                    {{ plan.created | dateFormat }}
                 </time>
                 <time class="u-desc-subitem">
                     <i class="el-icon-refresh"></i>
                     更新 :
-                    {{ plan.updated * 1000 | dateFormat }}
+                    {{ plan.updated | dateFormat }}
                 </time>
             </div>
             <el-button-group class="u-action">
