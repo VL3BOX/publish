@@ -31,5 +31,6 @@ const getJokes = (params) => {
 }
 
 export {
-  saveJoke
+  saveJoke,
+  getJokes
 }
