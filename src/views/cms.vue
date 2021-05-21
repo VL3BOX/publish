@@ -1,9 +1,10 @@
 <template>
     <div class="m-dashboard-work m-dashboard-cms" v-loading="loading">
-        
         <div class="m-dashboard-work-header">
             <h2 class="u-title">{{typeLable}}</h2>
-            <a :href="publishLink" class="u-publish el-button el-button--primary el-button--small"><i class="el-icon-document"></i> 发布作品</a>
+            <a :href="publishLink" class="u-publish el-button el-button--primary el-button--small">
+                <i class="el-icon-document"></i> 发布作品
+            </a>
         </div>
 
         <el-input class="m-dashboard-work-search" placeholder="请输入搜索内容" v-model="search">
@@ -88,15 +89,13 @@
 
 <script>
 import { getMyPosts, push, del } from "@/service/cms.js";
-import {
-    editLink,
-    getLink,
-} from "@jx3box/jx3box-common/js/utils.js";
+import { editLink, getLink } from "@jx3box/jx3box-common/js/utils.js";
 import {
     __postType,
     __visibleMap,
 } from "@jx3box/jx3box-common/data/jx3box.json";
 import dateFormat from "../utils/dateFormat";
+const simpleTypes = ["joke"];
 export default {
     name: "work",
     props: [],
@@ -111,7 +110,7 @@ export default {
             order: "update",
             client: "",
 
-            types:  Object.assign(__postType, { "joke": "剑三骚话" })
+            types: Object.assign(__postType, { joke: "剑三骚话" }),
         };
     },
     computed: {
@@ -131,9 +130,9 @@ export default {
                 client: this.client,
             };
         },
-        publishLink : function (){
-            return './#/' + this.type
-        }
+        publishLink: function () {
+            return "./#/" + this.type;
+        },
     },
     watch: {
         params: {
@@ -202,6 +201,9 @@ export default {
         filter: function (o) {
             this.page = 1;
             this[o.type] = o.val;
+        },
+        isSimpleType: function (val) {
+            return simpleTypes.includes(val);
         },
     },
     filters: {
