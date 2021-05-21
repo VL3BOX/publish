@@ -25,7 +25,7 @@ const getJokes = (params) => {
 
   return $helper()({
     method: 'GET',
-    url: '',
+    url: 'http://localhost:3000/mock/38/jokes',
     params
   })
 }

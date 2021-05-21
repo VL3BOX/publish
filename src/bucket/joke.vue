@@ -11,7 +11,12 @@
             <el-button slot="append" icon="el-icon-search"></el-button>
         </el-input>
         <div class="m-joke-list">
-
+            <template v-if="jokes.length">
+                <div v-for="joke in jokes" :key="joke.id">
+                    {{ joke }}
+                </div>
+            </template>
+            <el-alert v-else type="info" center title="没有找到相关条目" show-icon></el-alert>
         </div>
         <div class="m-joke-pages">
             <el-pagination
@@ -41,10 +46,31 @@ export default {
     created() {
         this.loadData()
     },
+    computed: {
+        params({ keyword, page, uid, perPage }) {
+            return {
+                keyword,
+                user_id: uid,
+                page,
+                limit: perPage
+            }
+        },
+        uid: function () {
+            return this.$store.state.uid;
+        },
+    },
+    watch: {
+        params: {
+            handler() {
+                this.loadData
+            },
+            deep: true
+        }
+    },
     methods: {
         loadData() {
             this.loading = true
-            getJokes()
+            getJokes(this.params)
                 .then(res => {
                     this.jokes = res.data.data
                 })
