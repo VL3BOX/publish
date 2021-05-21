@@ -21,6 +21,7 @@ function transferForRedis(data) {
         data: {},
         lang: data.lang || 'cn',
         original: !!data.original,
+        client : data.client
     };
 
     let xf = xfmap[data.post_subtype]["id"] + "";
@@ -60,6 +61,7 @@ function transferForRedis(data) {
             desc: desc,
 
             about: __Root + "macro/" + pid,
+            client : data.client
         };
     });
 

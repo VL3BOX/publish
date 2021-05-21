@@ -33,6 +33,7 @@ function transferForRedis(data) {
         data: {},
         lang: data.lang || "cn",
         original: !!data.original,
+        client : data.client
     };
 
     data.post_meta.data.forEach((item, i) => {
@@ -55,6 +56,7 @@ function transferForRedis(data) {
             version: Date.now(),
             _version: Date.now(),
             status: !!item.status,
+            client : data.client
         };
     });
 
