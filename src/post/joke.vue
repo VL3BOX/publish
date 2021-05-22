@@ -36,6 +36,9 @@
                     :rows="6"
                     placeholder="请输入内容"
                     id="textarea"
+                    :maxlength="158"
+                    :minlength="1"
+                    show-word-limit
                 ></el-input>
             </el-form-item>
 
