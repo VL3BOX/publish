@@ -40,7 +40,7 @@
             </el-form-item>
 
             <el-form-item label="标签">
-                <div style="display: flex;">
+                <div style="display: flex;margin-top:5px;">
                     <el-tag 
                         v-for="tag in post.tags"
                         :key="tag" 
@@ -113,7 +113,7 @@ export default {
             // 标题
             post_title: "",
             // 子类型：心法、副本名等
-            post_subtype: "",
+            post_subtype: "0",
             // 自定义字段
             post_meta: {},
             // 内容

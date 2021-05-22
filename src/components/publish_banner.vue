@@ -19,10 +19,11 @@
 </template>
 
 <script>
-import { __server } from "@jx3box/jx3box-common/data/jx3box.json";
+import axios from "axios";
+import { __cms } from "@jx3box/jx3box-common/data/jx3box.json";
+const API_Root = process.env.NODE_ENV === "production" ? __cms : "/";
+const API = API_Root + "api/cms/upload";
 import { showBanner } from "@jx3box/jx3box-common/js/utils";
-const API = __server + "upload";
-// const API = "http://localhost:5160/" + "upload";
 
 export default {
     name: "post_banner",
@@ -47,7 +48,7 @@ export default {
     },
     methods: {
         done(res, file) {
-            this.banner = res.data.list[0];
+            this.banner = res.data[0];
         },
         fail(err, file, fileList) {
             try {
