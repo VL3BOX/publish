@@ -34,7 +34,6 @@ const exam_question = () => import("../post/exam_question.vue");
 const exam_paper = () => import("../post/exam_paper.vue");
 const namespace = () => import("../post/namespace.vue");
 const bucket_namespace = () => import("../bucket/namespace.vue");
-const bucket_joke = () => import("../bucket/joke.vue");
 const joke = () => import("../post/joke.vue");
 
 Vue.use(VueRouter);
@@ -128,7 +127,6 @@ const routes = [
     // 应用=====================
     // 查看
     { path: "/bucket/namespace", name: 'bucket_namespace', component: bucket_namespace },
-    { path: "/bucket/joke", name: 'bucket_joke', component: bucket_joke },
     { path: "/bucket/:type", name: 'bucket', component: bucket },
 
     // 小册发布

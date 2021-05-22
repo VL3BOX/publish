@@ -18,6 +18,17 @@
         </div>
 
         <el-form label-position="left" label-width="80px">
+            <el-form-item label="门派">
+                <el-select v-model="post.post_subtype" placeholder="请选择门派">
+                    <el-option v-for="s in schools" :key="s.value" :value="s.value" :label="s.key">
+                        <span style="float: left;">{{ s.key }}</span>
+                        <span style="float: right;">
+                            <img :src="s.path" width="32" :alt="s.key">
+                        </span>
+                    </el-option>
+                </el-select>
+            </el-form-item>
+
             <el-form-item label="内容">
                 <el-input
                     v-model="post.post_title"
@@ -26,6 +37,29 @@
                     placeholder="请输入内容"
                     id="textarea"
                 ></el-input>
+            </el-form-item>
+
+            <el-form-item label="标签">
+                <div style="display: flex;">
+                    <el-tag 
+                        v-for="tag in post.tags"
+                        :key="tag" 
+                        closable 
+                        :disable-transitions="false"
+                        @close="handleClose(tag)"
+                    >{{ tag }}</el-tag>
+                    <el-input
+                        class="input-new-tag"
+                        v-if="inputVisible"
+                        v-model="inputValue"
+                        ref="saveTagInput"
+                        size="small"
+                        @keyup.enter.native="handleInputConfirm"
+                        @blur="handleInputConfirm"
+                    >
+                    </el-input>
+                    <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 新标签</el-button>
+                </div>
             </el-form-item>
 
             <div class="m-publish-buttons">
@@ -45,6 +79,7 @@
 import { getLink } from "@jx3box/jx3box-common/js/utils";
 import emotion from "@jx3box/jx3box-data/data/jokes/default.json";
 import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
+import { school } from "@jx3box/jx3box-data/data/xf/school.json";
 
 // 本地模块
 import publish_header from "@/components/publish_header.vue";
@@ -62,6 +97,9 @@ export default {
         loading: false,
         // 发布状态
         processing: false,
+
+        inputVisible: false,
+        inputValue: '',
 
         // 内容
         post: {
@@ -104,10 +142,14 @@ export default {
 
             // 阅读权限（0公开，1仅自己，2亲友，3密码，4付费，5粉丝）
             visible: 0,
+            // 自定义标签 10上限
+            tags: []
         },
 
         // 表情
         sortedEmotions: [],
+        // 门派
+        schools: []
     }),
     computed: {
         id: function () {
@@ -124,6 +166,24 @@ export default {
     methods: {
         handleEmotionSelect(key) {
             this.insertVariable(key);
+        },
+        handleClose(tag) {
+            this.post.tags = this.post.tags.filter(t => t !== tag)
+        },
+        showInput() {
+            this.inputVisible = true;
+            this.$nextTick(_ => {
+                this.$refs.saveTagInput.$refs.input.focus();
+            });
+        },
+
+        handleInputConfirm() {
+            let inputValue = this.inputValue;
+            if (inputValue) {
+                this.post.tags.push(inputValue);
+            }
+            this.inputVisible = false;
+            this.inputValue = '';
         },
         /**
          * add emotion to textarea
@@ -167,6 +227,18 @@ export default {
                 // console.log(key)
                 this.sortedEmotions.push(obj);
             });
+        },
+        formatSchool() {
+            const arr = []
+            for (const [key, value] of Object.entries(school)) {
+                const obj = {
+                    key,
+                    value: String(value),
+                    path: __imgPath + `image/school/${value}.png`
+                }
+                arr.push(obj)
+            }
+            this.schools = arr
         },
         /**
          * 点击表情触发事件
@@ -242,8 +314,17 @@ export default {
             }
         },
         // 检查内容合法性
+        // 纯数字 纯英文 纯汉字 纯符号长度均为128 表情个数限制在10个
         check: function () {
+            // 表情 key
+            const emotionKeys = Object.keys(emotion);
+
             let str = this.post.post_title.trim();
+
+            const regex_1 = /(#[\u4e00-\u9fa5]{1})/g;
+            const regex_2 = /(#[\u4e00-\u9fa5]{2})/g;
+            const regex_3 = /(#[\u4e00-\u9fa5]{3})/g;
+
             if (!str.length) {
                 this.$alert("内容不能为空", "消息", {
                     confirmButtonText: "确定",
@@ -252,12 +333,46 @@ export default {
                 });
                 return false;
             }
+
+            /**
+             * 依次判定表情字符为1，2，3个的情况
+             */
+            const emtion_1 = str.match(regex_1) ? str.match(regex_1).filter(emtion => emotionKeys.includes(emtion)) : [];
+
+            emtion_1.forEach(emotion => str.replace(emotion, ''));
+
+            const emtion_2 = str.match(regex_2) ? str.match(regex_2).filter(emotion => emotionKeys.includes(emotion)) : [];
+
+            emtion_2.forEach(emotion => str.replace(emotion, ''));
+
+            const emtion_3 = str.match(regex_3) ? str.match(regex_3).filter(emotion => emotionKeys.includes(emotion)) : [];
+
+            emtion_3.forEach(emotion => str.replace(emotion, ''));
+
+            const emotionLength = emtion_1.length + emtion_2.length + emtion_3.length;
+
+            if (emotionLength > 10) {
+                this.$alert("表情个数不能超过10个", "消息", {
+                    confirmButtonText: "确定",
+                    callback: (action) => {}
+                })
+                return false
+            }
+
+            if (str.length > 128) {
+                this.$alert("内容长度不能超过128个字符", "消息", {
+                    confirmButtonText: "确定",
+                    callback: (action) => {}
+                })
+                return false
+            }
             return true;
         },
     },
     created() {
         this.emotionSort();
         this.init();
+        this.formatSchool();
     },
     watch: {
         "$route.params.id": function (val) {
@@ -282,5 +397,20 @@ export default {
             border-color: #ccc;
         }
     }
+}
+.el-tag {
+    margin-right: 10px;
+}
+.button-new-tag {
+    // margin-left: 10px;
+    height: 32px;
+    line-height: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.input-new-tag {
+    width: 90px;
+    margin-left: 10px;
+    vertical-align: bottom;
 }
 </style>
