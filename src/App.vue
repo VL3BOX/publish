@@ -26,7 +26,7 @@ export default {
     created: function () {
         if (location.hostname != "localhost") {
             if (!User.isLogin()) {
-                User.destroy() && User.toLogin();
+                User.toLogin();
             }
         }
     },
