@@ -103,6 +103,7 @@ export default {
 
         inputVisible: false,
         inputValue: '',
+        contentLength: 0,
 
         // 内容
         post: {
@@ -340,19 +341,21 @@ export default {
             /**
              * 依次判定表情字符为1，2，3个的情况
              */
-            const emtion_1 = str.match(regex_1) ? str.match(regex_1).filter(emtion => emotionKeys.includes(emtion)) : [];
+            const emotion_1 = str.match(regex_1) ? str.match(regex_1).filter(emotion => emotionKeys.includes(emotion)) : [];
 
-            emtion_1.forEach(emotion => str.replace(emotion, ''));
+            emotion_1.forEach(emotion => str.replace(emotion, ''));
 
-            const emtion_2 = str.match(regex_2) ? str.match(regex_2).filter(emotion => emotionKeys.includes(emotion)) : [];
+            const emotion_2 = str.match(regex_2) ? str.match(regex_2).filter(emotion => emotionKeys.includes(emotion)) : [];
 
-            emtion_2.forEach(emotion => str.replace(emotion, ''));
+            emotion_2.forEach(emotion => str.replace(emotion, ''));
 
-            const emtion_3 = str.match(regex_3) ? str.match(regex_3).filter(emotion => emotionKeys.includes(emotion)) : [];
+            const emotion_3 = str.match(regex_3) ? str.match(regex_3).filter(emotion => emotionKeys.includes(emotion)) : [];
 
-            emtion_3.forEach(emotion => str.replace(emotion, ''));
+            emotion_3.forEach(emotion => str.replace(emotion, ''));
 
-            const emotionLength = emtion_1.length + emtion_2.length + emtion_3.length;
+            const emotionLength = emotion_1.length + emotion_2.length + emotion_3.length;
+
+            this.contentLength = emotionLength;
 
             if (emotionLength > 10) {
                 this.$alert("表情个数不能超过10个", "消息", {
