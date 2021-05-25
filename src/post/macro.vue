@@ -69,7 +69,9 @@
 
 <script>
 // 公共模块
+import lodash from 'lodash';
 import { getLink } from "@jx3box/jx3box-common/js/utils";
+import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 
 // 本地模块
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
@@ -209,6 +211,10 @@ export default {
         publish: function (status, skip) {
             this.post.post_status = status;
             this.processing = true;
+
+            // 补充心法id
+            this.build();
+
             push(...this.data)
                 .then((res) => {
                     let result = res.data.data;
@@ -219,6 +225,12 @@ export default {
                 .finally(() => {
                     this.processing = false;
                 });
+        },
+        build: function () {
+            this.post.meta_2 = ~~lodash.get(
+                xfmap[this.post.post_subtype],
+                "id"
+            ) || 0;
         },
         // 完成
         done: function (skip, result) {
