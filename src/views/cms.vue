@@ -108,7 +108,7 @@ export default {
             per: 10,
             search: "",
             order: "update",
-            client: "",
+            client: "all",
 
             types: Object.assign(__postType, { joke: "剑三骚话" }),
         };
@@ -122,7 +122,7 @@ export default {
         },
         params: function () {
             return {
-                type: this.type,
+                type: this.$route.params.type,
                 page: this.page,
                 per: this.per,
                 title: this.search,
@@ -137,6 +137,7 @@ export default {
     watch: {
         params: {
             deep: true,
+            immediate : true,
             handler: function (newval) {
                 this.loadPosts();
             },
@@ -216,9 +217,6 @@ export default {
         visibleFormat: function (val) {
             return __visibleMap[~~val];
         },
-    },
-    mounted: function () {
-        this.loadPosts();
     },
 };
 </script>

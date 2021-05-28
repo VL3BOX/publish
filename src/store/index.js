@@ -5,9 +5,12 @@ Vue.use(Vuex);
 // 默认仓储
 let store = {
     state: {
-        client : location.hostname.includes('origin') ? 'origin' : 'std'
+        client : location.href.includes('origin') ? 'origin' : 'std'
     },
     mutations: {
+        switchClient : function (state,val){
+            state.client = val || 'std'
+        }
     },
     getters: {},
     actions: {},
