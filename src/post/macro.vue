@@ -69,7 +69,7 @@
 
 <script>
 // 公共模块
-import lodash from 'lodash';
+import lodash from "lodash";
 import { getLink } from "@jx3box/jx3box-common/js/utils";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 
@@ -227,10 +227,7 @@ export default {
                 });
         },
         build: function () {
-            this.post.meta_2 = ~~lodash.get(
-                xfmap[this.post.post_subtype],
-                "id"
-            ) || 0;
+            this.post.meta_2 = ~~lodash.get(xfmap[this.post.post_subtype], "id") || 0;
         },
         // 完成
         done: function (skip, result) {
