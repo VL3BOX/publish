@@ -1,62 +1,12 @@
 <template>
     <div class="m-jx3data-box">
-        <div class="m-lanren-header">
-            <el-button
-                class="m-jx3dat-addbutton"
-                icon="el-icon-circle-plus-outline"
-                type="primary"
-                @click="addLanren"
-            >添加数据</el-button>
-        </div>
 
-        <el-tabs v-model="activeTab" type="card" closable @tab-remove="delLanren">
-            <el-tab-pane v-for="(item, i) in lanrenDat.data" :key="item.name + i" :name="i + 1 + ''">
+        <el-tabs v-model="activeTab" type="card">
+            <el-tab-pane v-for="(item, i) in lanrenDat.data" :key="item.lanren_type + i" :name="i + 1 + ''">
                 <span slot="label" class="m-jx3dat-tab-label">
                     <i class="el-icon-box"></i>
-                    {{ item.name }}
+                    {{ item.lanren_type }}
                 </span>
-                <div class="m-jx3dat-item">
-                    <h5 class="u-title">订阅名</h5>
-                    <div class="u-group">
-                        <div class="u-subblock">
-                            <el-input
-                                v-model="item.name"
-                                :minlength="1"
-                                :maxlength="10"
-                                show-word-limit
-                                @change="checkDataName(item)"
-                                :disabled="i == 0"
-                                :placeholder="i == 0 ? '默认版': '版本名称'"
-                            >
-                                <template slot="prepend">
-                                    <b
-                                        class="u-feed"
-                                    >{{ user.name}}{{item.name =="默认版"? "": "#" +item.name}}</b>
-                                </template>
-                            </el-input>
-                        </div>
-                        <div class="u-subblock u-status-wrapper">
-                            <el-switch
-                                v-model="item.status"
-                                active-color="#49C10F"
-                                inactive-color="#ff4949"
-                            ></el-switch>
-
-                            <el-tooltip
-                                effect="dark"
-                                content="设置不公开后,仍然可以通过订阅名下载,仅不做展示"
-                                placement="top"
-                            >
-                                <span class="u-status">{{item.status? "公开": "私有"}}</span>
-                            </el-tooltip>
-                        </div>
-                        <div class="u-subblock u-type-wrapper">
-                            <el-select v-model="item.lanren_type" placeholder="选择数据类型">
-                                <el-option v-for="(item, i) in lanren_types" :key="item" :label="item" :value="i"></el-option>
-                            </el-select>
-                        </div>
-                    </div>
-                </div>
                 <!-- 数据标题 -->
                 <div class="m-jx3dat-item">
                     <h5 class="u-title">数据标题</h5>
@@ -78,7 +28,7 @@
                     <input
                         class="u-data-input"
                         type="file"
-                        :id="'jx3dat_' + i"
+                        :id="'lanren_' + i"
                         @change="uploadLaren(item, i)"
                     />
                     <el-button
@@ -129,28 +79,21 @@
 
 <script>
 import { uploadHub } from "@/service/jx3dat.js";
-import cloneDeep from 'lodash/cloneDeep';
-import { sterilizer } from "sterilizer/index.js";
 import { lanren_types } from "@/assets/data/jx3dat.json";
 export default {
     name: 'publish_lanren',
-    props: ['data', 'user', 'is-vip'],
+    props: ['data', 'user'],
     data: () => ({
         activeTab: '1',
-        lanrenDat: {},
-        tabs: [],
-        lanren_types
-    }),
-    watch: {
-        'data': {
-            handler(val) {
-                if (val) {
-                    this.lanrenDat = cloneDeep(val)
-                }
-            },
-            deep: true,
-            immediate: true
+        lanrenDat: {
+            data: []
         },
+        tabs: [],
+    }),
+    created() {
+        this.initData()
+    },
+    watch: {
         'lanrenDat': {
             deep: true,
             handler(val) {
@@ -168,66 +111,30 @@ export default {
         },
     },
     methods: {
-        addLanren() {
-            // 目前设置最多3个版本
-            if (this.lanrenDat.data.length >= 3 && !this.isVIP) {
-                this.$alert(
-                    '默认只能设置3个版本，<a href="/vip/premium?from=jx3dat_feed" target="_blank">开通高级版账号</a>无限制',
-                    "消息",
-                    {
-                        dangerouslyUseHTMLString: true,
-                    }
-                );
-                return;
-            }
+        initData() {
+            lanren_types.forEach((la) => {
+                const obj = {
+                    lanren_type: la,
+                    desc: "",
+                    status: true,
+                    file: "",
+                    version: "", //已失效，由redis托管 -- 20210430小版本patch
+                    _version: "", //真实文件版本号
+                    // 源文件名
+                    origin_name: "",
+                    upload_status: false,
+                    pop: false,
+                }
+                this.lanrenDat.data.push(obj)
 
-            this.lanrenDat.data.push({
-                name: "版本" + this.totalVersions,
-                desc: "",
-                status: true,
-                file: "",
-            });
-        },
-        delLanren(name) {
-            // this.lanrenDat.data.splice(i, 1);
-
-            if (name == 1) {
-                this.$alert("✘ 必须保留默认数据", "提醒", {
-                    confirmButtonText: "确定",
-                });
-                return;
-            }
-
-            if (this.lanrenDat.data.length < 2) {
-                this.$alert("✘ 必须保留默认数据", "提醒", {
-                    confirmButtonText: "确定",
-                });
-                return;
-            }
-
-            this.$alert("确定删除这个数据吗，删除后无法找回", "提醒", {
-                confirmButtonText: "确定",
-                callback: (action) => {
-                    if (action == "confirm") {
-                        // 删除
-                        let i = ~~name - 1;
-                        this.lanrenDat.data.splice(i, 1);
-                        // 调整focus位置
-                        this.activeTab = i + "";
-                    }
-                },
-            });
-        },
-        checkDataName: function (data) {
-            let name = sterilizer(data.name).removeSpace().kill().toString();
-            this.$set(data, "name", name);
+            })
         },
         selectLanren: function (i) {
-            let fileInput = document.getElementById("jx3dat_" + i);
+            let fileInput = document.getElementById("lanren_" + i);
             fileInput.dispatchEvent(new MouseEvent("click"));
         },
         uploadLaren: function (item, i) {
-            let fileInput = document.getElementById("jx3dat_" + i);
+            let fileInput = document.getElementById("lanren_" + i);
             let file = fileInput.files[0];
             if (!file) {
                 this.$alert("请先选择文件", "提醒", {

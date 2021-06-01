@@ -179,7 +179,7 @@
         </template>
 
         <template v-else-if="data_type == 'lanren'">
-            <publish-lanren :data="jx3dats" :user="user" :is-vip="isVIP" @update-lanren="updateLanren" />
+            <publish-lanren :user="user" @update-lanren="updateLanren" />
         </template>
 
         <!-- 其它类型上传字段 -->
@@ -242,8 +242,6 @@ const default_meta = {
             origin_name: "",
             upload_status: false,
             pop: false,
-
-            lanren_type: "", // 懒人数据类型 只有在选择懒人数据时才会有值
         },
     ],
     github: "",
@@ -270,6 +268,8 @@ export default {
 
             tempname: "",
             isVIP: false,
+            // 用于重置数据
+            reload: true
         };
     },
     model: {
@@ -300,6 +300,12 @@ export default {
                 this.$emit("update", newval);
             },
         },
+        // 重置tab面板
+        data_type(nVal) {
+            if (nVal == '1') {
+                this.jx3dats = lodash.cloneDeep(default_meta);
+            }
+        }
     },
     computed: {
         data_type: function () {
