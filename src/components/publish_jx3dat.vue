@@ -178,6 +178,10 @@
             </div>
         </template>
 
+        <template v-else-if="data_type == 'lanren'">
+            <publish-lanren :data="jx3dats" :user="user" :is-vip="isVIP" @update-lanren="updateLanren" />
+        </template>
+
         <!-- 其它类型上传字段 -->
         <el-form-item v-else label="数据" class="m-jx3dat-other">
             <input class="u-data-input" type="file" id="otherdata" @change="uploadDat" />
@@ -221,6 +225,9 @@ import User from "@jx3box/jx3box-common/js/user";
 import lodash from "lodash";
 import { sterilizer } from "sterilizer/index.js";
 import isEmptyMeta from "@/utils/isEmptyMeta.js";
+
+// 引入 lanren 组件
+import publish_lanren from './publish_laren';
 // META空模板
 const default_meta = {
     data: [
@@ -235,6 +242,8 @@ const default_meta = {
             origin_name: "",
             upload_status: false,
             pop: false,
+
+            lanren_type: "", // 懒人数据类型 只有在选择懒人数据时才会有值
         },
     ],
     github: "",
@@ -248,7 +257,9 @@ const default_meta = {
 export default {
     name: "publish_jx3dat",
     props: ["data", "type"],
-    components: {},
+    components: {
+        'publish-lanren': publish_lanren
+    },
     data: function () {
         return {
             jx3dats: this.data,
@@ -445,6 +456,9 @@ export default {
                 message: "复制失败",
             });
         },
+        updateLanren(val) {
+            this.jx3dats = lodash.cloneDeep(val)
+        }
     },
     filters: {},
     created: function () {
