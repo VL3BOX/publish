@@ -302,7 +302,7 @@ export default {
         },
         // 重置tab面板
         data_type(nVal) {
-            if (nVal == '1') {
+            if (nVal !== 'lanren') {
                 this.jx3dats = lodash.cloneDeep(default_meta);
             }
         }

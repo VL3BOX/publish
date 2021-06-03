@@ -24,7 +24,7 @@
                 <publish-tags
                     v-model="post.tags"
                     :options="jx3dat_tags"
-                    v-if="['1', 'lanren'].includes(post.post_subtype)"
+                    v-if="['1'].includes(post.post_subtype)"
                 ></publish-tags>
             </publish-jx3dat>
 
