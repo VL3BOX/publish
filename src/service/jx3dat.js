@@ -6,8 +6,8 @@ import axios from 'axios';
 function uploadData(formdata) {
     return $cms().post("/api/cms/upload/jx3dat", formdata);
 }
-// const pull = process.env.NODE_ENV === "production" ? 'https://pull.jx3box.com/' : "/"   //西山居服务器
-const pull = 'https://pull.jx3box.com/'
+const pull = process.env.NODE_ENV === "production" ? 'https://pull.jx3box.com/' : "/"   //西山居服务器
+// const pull = 'https://pull.jx3box.com/'
 function uploadHub(formdata) {
     return axios.post(pull + "api/plugins/my-team-mon/v2", formdata,{
         withCredentials : true
@@ -63,4 +63,10 @@ function transferForRedis(data) {
     return _;
 }
 
-export { uploadHub, uploadData, syncRedis };
+const uploadLanrenFile = (formData) => {
+    return axios.post(pull + 'api/plugins/lanren-file', formData, {
+        withCredentials: true
+    })
+}
+
+export { uploadHub, uploadData, syncRedis, uploadLanrenFile };

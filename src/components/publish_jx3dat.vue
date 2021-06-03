@@ -179,7 +179,7 @@
         </template>
 
         <template v-else-if="data_type == 'lanren'">
-            <publish-lanren :user="user" @update-lanren="updateLanren" />
+            <publish-lanren :user="user" v-model="jx3dats" />
         </template>
 
         <!-- 其它类型上传字段 -->
@@ -462,9 +462,6 @@ export default {
                 message: "复制失败",
             });
         },
-        updateLanren(val) {
-            this.jx3dats = lodash.cloneDeep(val)
-        }
     },
     filters: {},
     created: function () {

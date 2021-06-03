@@ -2,7 +2,7 @@
     <div class="m-jx3data-box">
 
         <el-tabs v-model="activeTab" type="card">
-            <el-tab-pane v-for="(item, i) in lanrenDat.data" :key="item.lanren_type + i" :name="i + 1 + ''">
+            <el-tab-pane v-for="(item, i) in lanrenDat.data" :key="item.lanren_type" :name="item.key">
                 <span slot="label" class="m-jx3dat-tab-label">
                     <i class="el-icon-box"></i>
                     {{ item.lanren_type }}
@@ -29,7 +29,7 @@
                         class="u-data-input"
                         type="file"
                         :id="'lanren_' + i"
-                        @change="uploadLaren(item, i)"
+                        @change="uploadLanren(item, i)"
                     />
                     <el-button
                         type="primary"
@@ -78,28 +78,70 @@
 </template>
 
 <script>
-import { uploadHub } from "@/service/jx3dat.js";
-import { lanren_types } from "@/assets/data/jx3dat.json";
+import { uploadLanrenFile } from "@/service/jx3dat.js";
+import { lanren_types } from "@jx3box/jx3box-common/data/lanren_types";
+import isEmptyMeta from "@/utils/isEmptyMeta.js";
+import cloneDeep from 'lodash/cloneDeep'
+
+const default_meta = {
+    data: []
+}
+
+for (const [key, value] of Object.entries(lanren_types)) {
+    const obj = {
+        lanren_type: value,
+        key,
+        desc: "",
+        status: true,
+        file: "",
+        version: "", //已失效，由redis托管 -- 20210430小版本patch
+        _version: "", //真实文件版本号
+        // 源文件名
+        origin_name: "",
+        upload_status: false,
+        pop: false,
+    }
+    default_meta.data.push(obj)
+}
+
 export default {
     name: 'publish_lanren',
     props: ['data', 'user'],
+    model: {
+        prop: 'data',
+        event: 'update-lanren'
+    },
     data: () => ({
-        activeTab: '1',
-        lanrenDat: {
-            data: []
-        },
-        tabs: [],
+        activeTab: 'dungeon',
+        lanrenDat: {},
+        tabs: []
     }),
     created() {
         this.initData()
     },
     watch: {
+        'data': {
+            immediate: true,
+            handler(newval) {
+                if (!newval || isEmptyMeta(newval)) {
+                    this.lanrenDat = cloneDeep(default_meta);
+                } else {
+                    this.lanrenDat = newval;
+                    this.lanrenDat.data.forEach((item) => {
+                        item.pop = false;
+                        if(item._version === undefined){
+                            item._version = item.version
+                        }
+                    });
+                }
+            }
+        },
         'lanrenDat': {
             deep: true,
             handler(val) {
                 this.$emit('update-lanren', val)
             }
-        }
+        },
     },
     computed: {
         totalVersions: function () {
@@ -112,28 +154,28 @@ export default {
     },
     methods: {
         initData() {
-            lanren_types.forEach((la) => {
-                const obj = {
-                    lanren_type: la,
-                    desc: "",
-                    status: true,
-                    file: "",
-                    version: "", //已失效，由redis托管 -- 20210430小版本patch
-                    _version: "", //真实文件版本号
-                    // 源文件名
-                    origin_name: "",
-                    upload_status: false,
-                    pop: false,
-                }
-                this.lanrenDat.data.push(obj)
-
-            })
+            // for (const [key, value] of Object.entries(lanren_types)) {
+            //     const obj = {
+            //         lanren_type: value,
+            //         key,
+            //         desc: "",
+            //         status: true,
+            //         file: "",
+            //         version: "", //已失效，由redis托管 -- 20210430小版本patch
+            //         _version: "", //真实文件版本号
+            //         // 源文件名
+            //         origin_name: "",
+            //         upload_status: false,
+            //         pop: false,
+            //     }
+            //     this.default_meta.data.push(obj)
+            // }
         },
         selectLanren: function (i) {
             let fileInput = document.getElementById("lanren_" + i);
             fileInput.dispatchEvent(new MouseEvent("click"));
         },
-        uploadLaren: function (item, i) {
+        uploadLanren: function (item, i) {
             let fileInput = document.getElementById("lanren_" + i);
             let file = fileInput.files[0];
             if (!file) {
@@ -145,9 +187,9 @@ export default {
             item.origin_name = file.name;
 
             let formdata = new FormData();
-            formdata.append("jx3dat", file);
-            formdata.append("version", item.name);
-            uploadHub(formdata).then((res) => {
+            formdata.append("jx3dat", file, "data.jx3dat");
+            formdata.append("subtype", this.activeTab)
+            uploadLanrenFile(formdata).then((res) => {
                 if (res) {
                     item.file = res.data.download_url;
                     this.$message({

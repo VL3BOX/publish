@@ -30,6 +30,12 @@ module.exports = {
                     request.setHeader("origin", "");
                 }
             },
+            "/api/plugins/lanren-file":{
+                "target": "https://pull.jx3box.com",
+                "onProxyReq": function (request) {
+                    request.setHeader("origin", "");
+                }
+            },
             "/api/vip": {
                 "target": "https://pay.jx3box.com",
                 "onProxyReq": function (request) {
