@@ -1,8 +1,11 @@
 <template>
     <div class="m-jx3data-box">
-
         <el-tabs v-model="activeTab" type="card">
-            <el-tab-pane v-for="(item, i) in lanrenDat.data" :key="item.lanren_type" :name="item.key">
+            <el-tab-pane
+                v-for="(item, i) in lanrenDat.data"
+                :key="item.lanren_type"
+                :name="item.key"
+            >
                 <span slot="label" class="m-jx3dat-tab-label">
                     <i class="el-icon-box"></i>
                     {{ item.lanren_type }}
@@ -81,11 +84,11 @@
 import { uploadLanrenFile } from "@/service/jx3dat.js";
 import { lanren_types } from "@jx3box/jx3box-common/data/lanren_types";
 import isEmptyMeta from "@/utils/isEmptyMeta.js";
-import cloneDeep from 'lodash/cloneDeep'
+import cloneDeep from "lodash/cloneDeep";
 
 const default_meta = {
-    data: []
-}
+    data: [],
+};
 
 for (const [key, value] of Object.entries(lanren_types)) {
     const obj = {
@@ -100,27 +103,27 @@ for (const [key, value] of Object.entries(lanren_types)) {
         origin_name: "",
         upload_status: false,
         pop: false,
-    }
-    default_meta.data.push(obj)
+    };
+    default_meta.data.push(obj);
 }
 
 export default {
-    name: 'publish_lanren',
-    props: ['data', 'user'],
+    name: "publish_lanren",
+    props: ["data", "user"],
     model: {
-        prop: 'data',
-        event: 'update-lanren'
+        prop: "data",
+        event: "update-lanren",
     },
     data: () => ({
-        activeTab: 'dungeon',
+        activeTab: "dungeon",
         lanrenDat: {},
-        tabs: []
+        tabs: [],
     }),
     created() {
-        this.initData()
+        this.initData();
     },
     watch: {
-        'data': {
+        data: {
             immediate: true,
             handler(newval) {
                 if (!newval || isEmptyMeta(newval)) {
@@ -129,18 +132,18 @@ export default {
                     this.lanrenDat = newval;
                     this.lanrenDat.data.forEach((item) => {
                         item.pop = false;
-                        if(item._version === undefined){
-                            item._version = item.version
+                        if (item._version === undefined) {
+                            item._version = item.version;
                         }
                     });
                 }
-            }
+            },
         },
-        'lanrenDat': {
+        lanrenDat: {
             deep: true,
             handler(val) {
-                this.$emit('update-lanren', val)
-            }
+                this.$emit("update-lanren", val);
+            },
         },
     },
     computed: {
@@ -188,7 +191,7 @@ export default {
 
             let formdata = new FormData();
             formdata.append("jx3dat", file, "data.jx3dat");
-            formdata.append("subtype", this.activeTab)
+            formdata.append("subtype", this.activeTab);
             uploadLanrenFile(formdata).then((res) => {
                 if (res) {
                     item.file = res.data.download_url;
@@ -221,7 +224,7 @@ export default {
             });
         },
     },
-}
+};
 </script>
 
 <style lang="less" scoped>
