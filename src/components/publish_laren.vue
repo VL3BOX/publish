@@ -104,6 +104,8 @@ for (const [key, value] of Object.entries(lanren_types)) {
     default_meta.data.push(obj)
 }
 
+console.log(default_meta)
+
 export default {
     name: 'publish_lanren',
     props: ['data', 'user'],
@@ -123,7 +125,8 @@ export default {
         'data': {
             immediate: true,
             handler(newval) {
-                if (!newval || isEmptyMeta(newval)) {
+                const len = Object.keys(lanren_types).length
+                if (!newval || newval.data.length !== len) {
                     this.lanrenDat = cloneDeep(default_meta);
                 } else {
                     this.lanrenDat = newval;
