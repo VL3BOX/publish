@@ -80,12 +80,13 @@
 <script>
 import { uploadLanrenFile } from "@/service/jx3dat.js";
 import { lanren_types } from "@jx3box/jx3box-common/data/lanren_types";
-import isEmptyMeta from "@/utils/isEmptyMeta.js";
 import cloneDeep from 'lodash/cloneDeep'
 
 const default_meta = {
     data: []
 }
+
+const now = Date.now()
 
 for (const [key, value] of Object.entries(lanren_types)) {
     const obj = {
@@ -95,7 +96,7 @@ for (const [key, value] of Object.entries(lanren_types)) {
         status: true,
         file: "",
         version: "", //已失效，由redis托管 -- 20210430小版本patch
-        _version: "", //真实文件版本号
+        _version: now, //真实文件版本号 必须保证 _vesion 不为空
         // 源文件名
         origin_name: "",
         upload_status: false,
@@ -122,17 +123,21 @@ export default {
             handler(newval) {
                 // 懒人的tabs数量是固定的，但是不排除之后会增加
                 const len = Object.keys(lanren_types).length
+
                 if (!newval || newval.data.length !== len) {
                     // 有内容时
                     if (newval.data.length) {
+
                         const keys = newval.data.map(val => val.key)
                         const appendArr = []
                         
                         for (const [key, value] of Object.entries(lanren_types)) {
-                            console.log(keys, key, value)
+                            
                             if (keys.includes(key)) {
+
                                 const [filterObj] = newval.data.filter(val => val.key === key)
                                 appendArr.push(filterObj)
+
                             } else {
                                 const newObj = {
                                     lanren_type: value,
@@ -150,7 +155,7 @@ export default {
                                 appendArr.push(newObj)
                             }
                         }
-                        console.log(appendArr)
+
                         this.lanrenDat.data = cloneDeep(appendArr)
                     } else {
                         // 新建时
