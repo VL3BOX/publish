@@ -156,7 +156,9 @@ export default {
                             }
                         }
 
-                        this.lanrenDat.data = cloneDeep(appendArr)
+                        this.$set(this.lanrenDat, 'data', appendArr)
+
+                        // this.lanrenDat.data = cloneDeep(appendArr)
                     } else {
                         // 新建时
                         this.lanrenDat = cloneDeep(default_meta);
@@ -175,6 +177,9 @@ export default {
         'lanrenDat': {
             deep: true,
             handler(val) {
+                val.data.forEach(v => {
+                    v._version = v._version || now
+                })
                 this.$emit('update-lanren', val)
             }
         },
