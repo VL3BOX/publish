@@ -104,8 +104,6 @@ for (const [key, value] of Object.entries(lanren_types)) {
     default_meta.data.push(obj)
 }
 
-console.log(default_meta)
-
 export default {
     name: 'publish_lanren',
     props: ['data', 'user'],
@@ -118,16 +116,46 @@ export default {
         lanrenDat: {},
         tabs: []
     }),
-    created() {
-        this.initData()
-    },
     watch: {
         'data': {
             immediate: true,
             handler(newval) {
+                // 懒人的tabs数量是固定的，但是不排除之后会增加
                 const len = Object.keys(lanren_types).length
                 if (!newval || newval.data.length !== len) {
-                    this.lanrenDat = cloneDeep(default_meta);
+                    // 有内容时
+                    if (newval.data.length) {
+                        const keys = newval.data.map(val => val.key)
+                        const appendArr = []
+                        
+                        for (const [key, value] of Object.entries(lanren_types)) {
+                            console.log(keys, key, value)
+                            if (keys.includes(key)) {
+                                const [filterObj] = newval.data.filter(val => val.key === key)
+                                appendArr.push(filterObj)
+                            } else {
+                                const newObj = {
+                                    lanren_type: value,
+                                    key,
+                                    desc: "",
+                                    status: true,
+                                    file: "",
+                                    version: "", 
+                                    _version: "", //真实文件版本号
+                                    // 源文件名
+                                    origin_name: "",
+                                    upload_status: false,
+                                    pop: false,
+                                }
+                                appendArr.push(newObj)
+                            }
+                        }
+                        console.log(appendArr)
+                        this.lanrenDat.data = cloneDeep(appendArr)
+                    } else {
+                        // 新建时
+                        this.lanrenDat = cloneDeep(default_meta);
+                    }
                 } else {
                     this.lanrenDat = newval;
                     this.lanrenDat.data.forEach((item) => {
@@ -156,24 +184,6 @@ export default {
         },
     },
     methods: {
-        initData() {
-            // for (const [key, value] of Object.entries(lanren_types)) {
-            //     const obj = {
-            //         lanren_type: value,
-            //         key,
-            //         desc: "",
-            //         status: true,
-            //         file: "",
-            //         version: "", //已失效，由redis托管 -- 20210430小版本patch
-            //         _version: "", //真实文件版本号
-            //         // 源文件名
-            //         origin_name: "",
-            //         upload_status: false,
-            //         pop: false,
-            //     }
-            //     this.default_meta.data.push(obj)
-            // }
-        },
         selectLanren: function (i) {
             let fileInput = document.getElementById("lanren_" + i);
             fileInput.dispatchEvent(new MouseEvent("click"));
