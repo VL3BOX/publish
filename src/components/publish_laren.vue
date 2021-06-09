@@ -83,12 +83,13 @@
 <script>
 import { uploadLanrenFile } from "@/service/jx3dat.js";
 import { lanren_types } from "@jx3box/jx3box-common/data/lanren_types";
-import isEmptyMeta from "@/utils/isEmptyMeta.js";
-import cloneDeep from "lodash/cloneDeep";
+import cloneDeep from 'lodash/cloneDeep'
 
 const default_meta = {
     data: [],
 };
+
+const now = Date.now()
 
 for (const [key, value] of Object.entries(lanren_types)) {
     const obj = {
@@ -98,7 +99,7 @@ for (const [key, value] of Object.entries(lanren_types)) {
         status: true,
         file: "",
         version: "", //已失效，由redis托管 -- 20210430小版本patch
-        _version: "", //真实文件版本号
+        _version: now, //真实文件版本号 必须保证 _vesion 不为空
         // 源文件名
         origin_name: "",
         upload_status: false,
@@ -106,8 +107,6 @@ for (const [key, value] of Object.entries(lanren_types)) {
     };
     default_meta.data.push(obj);
 }
-
-console.log(default_meta)
 
 export default {
     name: "publish_lanren",
@@ -121,16 +120,52 @@ export default {
         lanrenDat: {},
         tabs: [],
     }),
-    created() {
-        this.initData();
-    },
     watch: {
         data: {
             immediate: true,
             handler(newval) {
+                // 懒人的tabs数量是固定的，但是不排除之后会增加
                 const len = Object.keys(lanren_types).length
+
                 if (!newval || newval.data.length !== len) {
-                    this.lanrenDat = cloneDeep(default_meta);
+                    // 有内容时
+                    if (newval.data.length) {
+
+                        const keys = newval.data.map(val => val.key)
+                        const appendArr = []
+                        
+                        for (const [key, value] of Object.entries(lanren_types)) {
+                            
+                            if (keys.includes(key)) {
+
+                                const [filterObj] = newval.data.filter(val => val.key === key)
+                                appendArr.push(filterObj)
+
+                            } else {
+                                const newObj = {
+                                    lanren_type: value,
+                                    key,
+                                    desc: "",
+                                    status: true,
+                                    file: "",
+                                    version: "", 
+                                    _version: "", //真实文件版本号
+                                    // 源文件名
+                                    origin_name: "",
+                                    upload_status: false,
+                                    pop: false,
+                                }
+                                appendArr.push(newObj)
+                            }
+                        }
+
+                        this.$set(this.lanrenDat, 'data', appendArr)
+
+                        // this.lanrenDat.data = cloneDeep(appendArr)
+                    } else {
+                        // 新建时
+                        this.lanrenDat = cloneDeep(default_meta);
+                    }
                 } else {
                     this.lanrenDat = newval;
                     this.lanrenDat.data.forEach((item) => {
@@ -145,8 +180,11 @@ export default {
         lanrenDat: {
             deep: true,
             handler(val) {
-                this.$emit("update-lanren", val);
-            },
+                val.data.forEach(v => {
+                    v._version = v._version || now
+                })
+                this.$emit('update-lanren', val)
+            }
         },
     },
     computed: {
@@ -159,24 +197,6 @@ export default {
         },
     },
     methods: {
-        initData() {
-            // for (const [key, value] of Object.entries(lanren_types)) {
-            //     const obj = {
-            //         lanren_type: value,
-            //         key,
-            //         desc: "",
-            //         status: true,
-            //         file: "",
-            //         version: "", //已失效，由redis托管 -- 20210430小版本patch
-            //         _version: "", //真实文件版本号
-            //         // 源文件名
-            //         origin_name: "",
-            //         upload_status: false,
-            //         pop: false,
-            //     }
-            //     this.default_meta.data.push(obj)
-            // }
-        },
         selectLanren: function (i) {
             let fileInput = document.getElementById("lanren_" + i);
             fileInput.dispatchEvent(new MouseEvent("click"));
