@@ -4,17 +4,7 @@
         <publish-header name="剑三骚话"></publish-header>
 
         <div class="m-publish-joke-emotion">
-            <div>
-                <template v-for="emotion in sortedEmotions">
-                    <span
-                        :key="emotion.key"
-                        class="emotion-item"
-                        @click="handleEmotionClick(emotion.key)"
-                    >
-                        <img :src="emotion.path" :alt="emotion.key" :title="emotion.key" />
-                    </span>
-                </template>
-            </div>
+            <Emotion @selected="handleEmotionSelect"></Emotion>
         </div>
 
         <el-form label-position="left" label-width="80px">
@@ -80,7 +70,7 @@
 <script>
 // 公共模块
 import { getLink } from "@jx3box/jx3box-common/js/utils";
-import emotion from "@jx3box/jx3box-data/data/jokes/default.json";
+import Emotion from "@jx3box/jx3box-emotion/src/Emotion.vue"
 import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
 import { school } from "@jx3box/jx3box-data/data/xf/school.json";
 
@@ -94,6 +84,7 @@ export default {
     name: "joke",
     components: {
         "publish-header": publish_header,
+        Emotion
     },
     data: () => ({
         // 加载状态
@@ -150,8 +141,6 @@ export default {
             tags: []
         },
 
-        // 表情
-        sortedEmotions: [],
         // 门派
         schools: []
     }),
@@ -215,23 +204,6 @@ export default {
                 this.post.post_title = value;
             }
         },
-        // 表情排序
-        emotionSort() {
-            const keys = Object.keys(emotion);
-            keys.sort((item1, item2) => {
-                return item1.localeCompare(item2);
-            });
-            keys.forEach((key) => {
-                const pathKey = key.slice(1);
-                const obj = {
-                    key,
-                    value: emotion[key],
-                    path: __imgPath + `image/emotion/${pathKey}.gif`,
-                };
-                // console.log(key)
-                this.sortedEmotions.push(obj);
-            });
-        },
         formatSchool() {
             const arr = []
             for (const [key, value] of Object.entries(school)) {
@@ -243,13 +215,6 @@ export default {
                 arr.push(obj)
             }
             this.schools = arr
-        },
-        /**
-         * 点击表情触发事件
-         * @param {string} key 表情key
-         */
-        handleEmotionClick(key) {
-            this.insertVariable(key);
         },
         // 加载
         init: function () {
@@ -376,7 +341,6 @@ export default {
         },
     },
     created() {
-        this.emotionSort();
         this.init();
         this.formatSchool();
     },
