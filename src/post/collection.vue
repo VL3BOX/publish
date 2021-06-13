@@ -197,6 +197,7 @@ import {
     submit_collection,
 } from "../service/collection";
 import { get_posts_by_type } from "../service/post";
+import {getLink} from "@jx3box/jx3box-common/js/utils";
 
 const qs = require("qs");
 const lodash = require("lodash");
@@ -328,8 +329,13 @@ export default {
                         data = data.data;
                         if (data.code === 200) {
                             this.$message({message: data.message, type: "success"});
+                            let collection_id = lodash.get(data, 'data.collection.id');
                             setTimeout(() => {
-                                this.$router.push({name: 'bucket', params: {type: 'collection'}})
+                                if (collection_id) {
+                                    location.href = getLink('collection', collection_id);
+                                }else {
+                                    this.$router.push({name: 'bucket', params: {type: 'collection'}})
+                                }
                             }, 500);
                         } else {
                             this.$message({
