@@ -3,9 +3,7 @@
         <!-- 头部 -->
         <publish-header name="剑三骚话"></publish-header>
 
-        <div class="m-publish-joke-emotion">
-            <Emotion @selected="handleEmotionSelect"></Emotion>
-        </div>
+        <Emotion class="m-publish-joke-emotion" @selected="handleEmotionSelect"></Emotion>
 
         <el-form label-position="left" label-width="80px">
             <el-form-item label="门派">
@@ -354,19 +352,8 @@ export default {
 
 <style lang="less" scoped>
 .m-publish-joke-emotion {
-    margin: 16px 0;
-
-    .emotion-item {
-        display: inline-flex;
-        padding: 4px;
-        margin: 2px;
-        border: 1px solid #fff;
-        .pointer;
-
-        &:hover {
-            border-color: #ccc;
-        }
-    }
+    max-height: 168px;
+    overflow: auto;
 }
 .el-tag {
     margin-right: 10px;
