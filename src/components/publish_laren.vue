@@ -1,15 +1,28 @@
 <template>
     <div class="m-jx3data-box">
-        <el-tabs v-model="activeTab" type="card">
+        <el-button
+            class="m-jx3dat-addbutton"
+            icon="el-icon-circle-plus-outline"
+            type="primary"
+            @click="addLanren"
+        >添加数据</el-button>
+        <el-tabs v-model="activeTab" type="card" closable @tab-remove="delLanren">
             <el-tab-pane
                 v-for="(item, i) in lanrenDat.data"
-                :key="item.lanren_type"
-                :name="item.key"
+                :key="i"
+                :name="i + 1 + ''"
             >
                 <span slot="label" class="m-jx3dat-tab-label">
                     <i class="el-icon-box"></i>
                     {{ item.lanren_type }}
                 </span>
+                <!-- 数据类型 -->
+                <div class="m-jx3dat-item">
+                    <h5 class="u-title">数据类型</h5>
+                    <el-select v-model="item.key" @change="(val) => handleTypeChange(val, item)" i>
+                        <el-option v-for="(type, key) in lanren_types" :key="key" :value="key" :label="type" />
+                    </el-select>
+                </div>
                 <!-- 数据标题 -->
                 <div class="m-jx3dat-item">
                     <h5 class="u-title">数据标题</h5>
@@ -84,96 +97,62 @@
 import { uploadLanrenFile } from "@/service/jx3dat.js";
 import { lanren_types } from "@jx3box/jx3box-common/data/lanren_types";
 import cloneDeep from 'lodash/cloneDeep'
-
-const default_meta = {
-    data: [],
-};
-
 const now = Date.now()
 
-for (const [key, value] of Object.entries(lanren_types)) {
-    const obj = {
-        lanren_type: value,
-        key,
-        desc: "",
-        status: true,
-        file: "",
-        version: "", //已失效，由redis托管 -- 20210430小版本patch
-        _version: now, //真实文件版本号 必须保证 _vesion 不为空
-        // 源文件名
-        origin_name: "",
-        upload_status: false,
-        pop: false,
-    };
-    default_meta.data.push(obj);
-}
+const default_meta = {
+    data: [
+        {
+            lanren_type: '副本数据',
+            key: 'dungeon',
+            desc: "",
+            status: true,
+            file: "",
+            version: "", //已失效，由redis托管 -- 20210430小版本patch
+            _version: now, //真实文件版本号 必须保证 _vesion 不为空
+            // 源文件名
+            origin_name: "",
+            upload_status: false,
+            pop: false,
+        }
+    ],
+};
 
 export default {
     name: "publish_lanren",
-    props: ["data", "user"],
+    props: ["data", "user", "type"],
     model: {
         prop: "data",
         event: "update-lanren",
     },
     data: () => ({
-        activeTab: "dungeon",
+        activeTab: "1",
         lanrenDat: {},
         tabs: [],
+        lanren_types
     }),
     watch: {
         data: {
             immediate: true,
             handler(newval) {
-                // 懒人的tabs数量是固定的，但是不排除之后会增加
-                const len = Object.keys(lanren_types).length
-
-                if (!newval || newval.data.length !== len) {
-                    // 有内容时
-                    if (newval.data.length) {
-
-                        const keys = newval.data.map(val => val.key)
-                        const appendArr = []
-                        
-                        for (const [key, value] of Object.entries(lanren_types)) {
-                            
-                            if (keys.includes(key)) {
-
-                                const [filterObj] = newval.data.filter(val => val.key === key)
-                                appendArr.push(filterObj)
-
-                            } else {
-                                const newObj = {
-                                    lanren_type: value,
-                                    key,
-                                    desc: "",
-                                    status: true,
-                                    file: "",
-                                    version: "", 
-                                    _version: "", //真实文件版本号
-                                    // 源文件名
-                                    origin_name: "",
-                                    upload_status: false,
-                                    pop: false,
-                                }
-                                appendArr.push(newObj)
-                            }
-                        }
-
-                        this.$set(this.lanrenDat, 'data', appendArr)
-
-                        // this.lanrenDat.data = cloneDeep(appendArr)
-                    } else {
-                        // 新建时
+                if (!newval || newval.data.length === 1) {
+                    const [current] = newval.data
+                    if (current.name === '默认版') {
                         this.lanrenDat = cloneDeep(default_meta);
                     }
                 } else {
-                    this.lanrenDat = newval;
-                    this.lanrenDat.data.forEach((item) => {
-                        item.pop = false;
-                        if (item._version === undefined) {
-                            item._version = item.version;
-                        }
-                    });
+                    const [current] = newval.data
+                    // 判断传进来的数据是否为lanren数据，懒人数据是有key的
+                    if (current.key) {
+                        this.lanrenDat = newval;
+                        this.lanrenDat.data.forEach((item) => {
+                            item.pop = false;
+                            if(item._version === undefined){
+                                item._version = item.version
+                            }
+                        });
+                    } else {
+                        this.lanrenDat = cloneDeep(default_meta);
+                    }
                 }
             },
         },
@@ -185,15 +164,6 @@ export default {
                 })
                 this.$emit('update-lanren', val)
             }
-        },
-    },
-    computed: {
-        totalVersions: function () {
-            return (
-                this.lanrenDat &&
-                this.lanrenDat.data &&
-                this.lanrenDat.data.length + 1
-            );
         },
     },
     methods: {
@@ -226,6 +196,50 @@ export default {
                     item.upload_status = true;
                 }
             });
+        },
+        addLanren: function() {
+            this.lanrenDat.data.push({
+                lanren_type: "副本数据",
+                key: "dungeon",
+                desc: "",
+                status: true,
+                file: "",
+            })
+        },
+        delLanren: function(name) {
+            if (name === '1') {
+                this.$alert("✘ 必须有一个数据", "消息", {
+                    confirmButtonText: "确定",
+                });
+                return;
+            }
+            if (this.lanrenDat.data.length < 2) {
+                this.$alert("✘ 必须保留默认数据", "消息", {
+                    confirmButtonText: "确定",
+                });
+                return;
+            }
+
+            this.$alert("确定删除这个数据吗，删除后无法找回", "消息", {
+                confirmButtonText: "确定",
+                callback: (action) => {
+                    if (action == "confirm") {
+                        // 删除
+                        let i = ~~name - 1;
+                        this.lanrenDat.data.splice(i, 1);
+                        // 调整focus位置
+                        this.activeTab = i + "";
+                    }
+                },
+            });
+        },
+        /**
+         * 数据类型变化
+         * @param {string} val 数据类型
+         * @param {object} item 该条目
+         */
+        handleTypeChange: function(val, item) {
+            this.$set(item, 'lanren_type', lanren_types[val])
         },
         aniLanren: function (item) {
             item.isUploaded = true;
