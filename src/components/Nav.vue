@@ -15,7 +15,7 @@
                 <template slot="title">
                     <span class="u-title">独立创作</span>
                 </template>
-                <router-link :to="item.path" v-for="(item,key) in cms" :key="key">
+                <router-link :to="item.path" v-for="(item,key) in cms" :key="key" @click.native="closeSidebar">
                     <i class="el-icon-collection"></i>
                     <span>{{item.name}}</span>
                     <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span>
@@ -25,7 +25,7 @@
                 <template slot="title">
                     <span class="u-title">多人百科</span>
                 </template>
-                <router-link :to="item.path" v-for="(item,key) in wiki" :key="key">
+                <router-link :to="item.path" v-for="(item,key) in wiki" :key="key" @click.native="closeSidebar">
                     <i class="el-icon-collection"></i>
                     <span>{{item.name}}</span>
                     <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span>
@@ -35,7 +35,7 @@
                 <template slot="title">
                     <span class="u-title">应用扩展</span>
                 </template>
-                <router-link :to="item.path" v-for="(item,key) in app" :key="key">
+                <router-link :to="item.path" v-for="(item,key) in app" :key="key" @click.native="closeSidebar">
                     <i class="el-icon-collection"></i>
                     <span>{{item.name}}</span>
                     <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span>
@@ -45,7 +45,7 @@
                 <template slot="title">
                     <span class="u-title">评论留言</span>
                 </template>
-                <router-link :to="item.path" v-for="(item,key) in comment" :key="key">
+                <router-link :to="item.path" v-for="(item,key) in comment" :key="key" @click.native="closeSidebar">
                     <i class="el-icon-collection"></i>
                     <span>{{item.name}}</span>
                     <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span>
@@ -59,6 +59,7 @@
 import { getMyPostsCount } from "@/service/cms.js";
 import { get_my_post_total } from "@/service/post.js";
 import { getNextStat } from "@/service/next.js";
+import Bus from "@jx3box/jx3box-common-ui/service/bus";
 export default {
     name: "Nav",
     data: function () {
@@ -131,6 +132,9 @@ export default {
     },
     computed: {},
     methods: {
+        closeSidebar : function (){
+            Bus.$emit("toggleLeftSide", false);
+        },
         loadCmsCount: function () {
             getMyPostsCount().then((res) => {
                 let count = res.data.data;
