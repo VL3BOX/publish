@@ -71,6 +71,7 @@ import { getLink } from "@jx3box/jx3box-common/js/utils";
 import Emotion from "@jx3box/jx3box-emotion/src/Emotion.vue"
 import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
 import { school } from "@jx3box/jx3box-data/data/xf/school.json";
+import emotion from "@jx3box/jx3box-data/data/jokes/default.json";
 
 // 本地模块
 import publish_header from "@/components/publish_header.vue";
@@ -284,6 +285,7 @@ export default {
         // 纯数字 纯英文 纯汉字 纯符号长度均为128 表情个数限制在10个
         check: function () {
             // 表情 key
+            console.log(emotion)
             const emotionKeys = Object.keys(emotion);
 
             let str = this.post.post_title.trim();
