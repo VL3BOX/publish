@@ -28,6 +28,12 @@
                         <span>职业攻略</span>
                     </router-link>
                 </el-col>
+                <el-col :span="4">
+                    <router-link to="/tool">
+                        <img svg-inline src="../assets/img/channel/tool.svg" />
+                        <span>教程工具</span>
+                    </router-link>
+                </el-col>
             </el-row>
 
             <el-divider content-position="left">PVA</el-divider>
@@ -60,19 +66,6 @@
 
             <el-divider content-position="left">PVX</el-divider>
             <el-row :gutter="20">
-                <!-- <el-col :span="4">
-                    <router-link to="/tool?subtype=5">
-                        <i class="el-icon-attract"></i>
-                        <span>插件下载</span>
-                    </router-link>
-                </el-col> -->
-
-                <el-col :span="4">
-                    <router-link to="/tool">
-                        <img svg-inline src="../assets/img/channel/tool.svg" />
-                        <span>教程工具</span>
-                    </router-link>
-                </el-col>
 
                 <el-col :span="4">
                     <router-link to="/bbs">
@@ -80,27 +73,22 @@
                         <span>茶馆交流</span>
                     </router-link>
                 </el-col>
-
                 <el-col :span="4">
-                    <router-link to="/share">
-                        <img svg-inline src="../assets/img/channel/share.svg" />
-                        <span>捏脸分享</span>
+                    <router-link to="/namespace">
+                        <i class="el-icon-postcard"></i>
+                        <span>剑三铭牌</span>
                     </router-link>
                 </el-col>
-                <!-- <el-col :span="4"
-                    ><el-card
-                        ><router-link to="/house"
-                            ><img
-                                svg-inline
-                                src="../assets/img/channel/house.svg"
-                            /><span>家园分享</span></router-link
-                        ></el-card
-                    ></el-col
-                >-->
                 <el-col :span=4>
                     <router-link to="/joke">
                         <img svg-inline src="../assets/img/channel/joke.svg" />
                         <span>剑三骚话</span>
+                    </router-link>
+                </el-col>
+                <el-col :span="4">
+                    <router-link to="/share">
+                        <img svg-inline src="../assets/img/channel/share.svg" />
+                        <span>捏脸分享</span>
                     </router-link>
                 </el-col>
             </el-row>
@@ -117,12 +105,6 @@
                     <router-link to="/item_plan">
                         <i class="el-icon-folder"></i>
                         <span>物品清单</span>
-                    </router-link>
-                </el-col>
-                <el-col :span="4">
-                    <router-link to="/namespace">
-                        <i class="el-icon-postcard"></i>
-                        <span>剑三铭牌</span>
                     </router-link>
                 </el-col>
                 <el-col :span="4">
