@@ -1,5 +1,5 @@
 <template>
-    <div class="m-publish-box" v-loading="loading">
+    <div class="m-publish-box m-publish-box-facedata" v-loading="loading">
         <!-- 头部 -->
         <publish-header name="捏脸分享"></publish-header>
 
@@ -11,33 +11,37 @@
             <div class="m-publish-info">
                 <el-divider content-position="left">信息</el-divider>
                 <!-- 原创 -->
-                <publish-original v-model="post.original"></publish-original>
+                <!-- <publish-original v-model="post.original"></publish-original> -->
                 <!-- 客户端 -->
-                <publish-client v-model="post.client"></publish-client>
+                <!-- <publish-client v-model="post.client"></publish-client> -->
                 <!-- 类型 -->
-                <publish-subtype v-model="post.post_subtype" :options="share_types"></publish-subtype>
+                <!-- <publish-subtype v-model="post.post_subtype" :options="share_types"></publish-subtype> -->
                 <!-- 数据 -->
                 <publish-facedat v-model="post.post_meta" @updateMeta="updateMeta"></publish-facedat>
             </div>
 
             <!-- 附加 -->
-            <div class="m-publish-append">
+            <!-- <div class="m-publish-append">
                 <el-divider content-position="left">附加</el-divider>
                 <publish-excerpt v-model="post.post_excerpt"></publish-excerpt>
                 <publish-collection v-model="post.post_collection"></publish-collection>
-            </div>
+            </div>-->
 
             <!-- 扩展 -->
             <div class="m-publish-extend">
-                <el-divider content-position="left">设置</el-divider>
-                <publish-comment v-model="post.comment"></publish-comment>
-                <publish-visible v-model="post.visible"></publish-visible>
+                <el-divider content-position="left">
+                    <span class="u-toggle" @click="toggleSetting"><i :class="setting ? 'el-icon-caret-top' : 'el-icon-caret-right'"></i> 设置</span>
+                </el-divider>
+                <div v-show="setting">
+                    <publish-comment v-model="post.comment"></publish-comment>
+                    <publish-visible v-model="post.visible"></publish-visible>
+                </div>
             </div>
 
             <!-- 其它 -->
-            <div class="m-publish-other">
+            <!-- <div class="m-publish-other">
                 <publish-banner v-model="post.post_banner"></publish-banner>
-            </div>
+            </div>-->
 
             <!-- 按钮 -->
             <div class="m-publish-buttons">
@@ -78,14 +82,14 @@ export default {
     components: {
         "publish-header": publish_header,
         "publish-title": publish_title,
-        "publish-original": publish_original,
-        "publish-client": publish_client,
-        "publish-excerpt": publish_excerpt,
-        "publish-collection": publish_collection,
-        "publish-banner": publish_banner,
+        // "publish-original": publish_original,
+        // "publish-client": publish_client,
+        // "publish-excerpt": publish_excerpt,
+        // "publish-collection": publish_collection,
+        // "publish-banner": publish_banner,
         "publish-comment": publish_comment,
         "publish-visible": publish_visible,
-        "publish-subtype": publish_subtype,
+        // "publish-subtype": publish_subtype,
         "publish-facedat": publish_facedat,
     },
     data: function () {
@@ -146,6 +150,8 @@ export default {
 
             // 选项
             share_types,
+
+            setting : false,
         };
     },
     computed: {
@@ -229,6 +235,10 @@ export default {
         updateMeta: function (meta) {
             this.post[meta.key] = meta.val;
         },
+        // 设置
+        toggleSetting : function (){
+            this.setting = !this.setting
+        }
     },
     created: function () {
         this.post.client = this.$store.state.client;

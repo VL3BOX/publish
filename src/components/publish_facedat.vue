@@ -1,13 +1,5 @@
 <template>
     <div class="m-publish-facedat">
-        <el-form-item label="作者">
-            <el-input v-model="facedat.author" placeholder="请注明原作者"></el-input>
-        </el-form-item>
-
-        <el-form-item label="图册">
-            <UploadAlbum v-model="facedat.pics"></UploadAlbum>
-        </el-form-item>
-
         <el-form-item label="数据">
             <input class="u-data-input" type="file" id="face_file" @change="uploadData" />
             <el-button type="primary" @click="selectData" icon="el-icon-upload2">上传脸型数据</el-button>
@@ -18,8 +10,17 @@
         </el-form-item>
 
         <el-form-item label="分析结果">
-            <el-input v-model="facedat.data" type="textarea" :rows="6"></el-input>
+            <el-input v-model="facedat.data" type="textarea" :rows="6" disabled></el-input>
         </el-form-item>
+
+        <el-form-item label="图册">
+            <UploadAlbum v-model="facedat.pics"></UploadAlbum>
+        </el-form-item>
+
+        <el-form-item label="作者">
+            <el-input v-model="facedat.author" placeholder="请注明原作者"></el-input>
+        </el-form-item>
+
         <slot></slot>
     </div>
 </template>
@@ -45,6 +46,7 @@ export default {
     data: function () {
         return {
             facedat: this.data,
+            object : ''
         };
     },
     model: {
@@ -72,6 +74,10 @@ export default {
         "facedat.author": function (val) {
             this.$emit("updateMeta", { key: "meta_1", val: val });
         },
+        "facedat.data" : function (val){
+            let body_type = this.object.nRoleType
+            this.$emit("updateMeta", { key: "post_subtype", val: body_type });
+        }
     },
     computed: {},
     methods: {
@@ -109,6 +115,7 @@ export default {
                 data = "return" + data.slice(data.indexOf("{"));
 
                 try {
+                    vm.object = parse(data)
                     vm.facedat.data = JSON.stringify(parse(data));
                     vm.$notify({
                         title: "成功",
