@@ -133,7 +133,9 @@ export default {
     computed: {},
     methods: {
         closeSidebar : function (){
-            Bus.$emit("toggleLeftSide", false);
+            if(window.innerWidth < 1280){
+                Bus.$emit("toggleLeftSide", false);
+            }
         },
         loadCmsCount: function () {
             getMyPostsCount().then((res) => {
