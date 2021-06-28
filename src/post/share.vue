@@ -4,12 +4,9 @@
         <publish-header name="捏脸分享"></publish-header>
 
         <el-form label-position="left" label-width="80px">
-            <!-- 标题 -->
-            <publish-title v-model="post.post_title"></publish-title>
 
             <!-- 信息 -->
             <div class="m-publish-info">
-                <el-divider content-position="left">信息</el-divider>
                 <!-- 原创 -->
                 <!-- <publish-original v-model="post.original"></publish-original> -->
                 <!-- 客户端 -->
@@ -18,6 +15,10 @@
                 <!-- <publish-subtype v-model="post.post_subtype" :options="share_types"></publish-subtype> -->
                 <!-- 数据 -->
                 <publish-facedat v-model="post.post_meta" @updateMeta="updateMeta"></publish-facedat>
+
+                <el-form-item label="备注">
+                    <publish-title v-model="post.post_title" :hideDiv="true" placeholder="请填写描述"></publish-title>
+                </el-form-item>
             </div>
 
             <!-- 附加 -->
