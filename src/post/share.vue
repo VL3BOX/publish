@@ -29,7 +29,7 @@
             </div>-->
 
             <!-- 扩展 -->
-            <div class="m-publish-extend">
+            <!-- <div class="m-publish-extend">
                 <el-divider content-position="left">
                     <span class="u-toggle" @click="toggleSetting"><i :class="setting ? 'el-icon-caret-top' : 'el-icon-caret-right'"></i> 设置</span>
                 </el-divider>
@@ -37,7 +37,7 @@
                     <publish-comment v-model="post.comment"></publish-comment>
                     <publish-visible v-model="post.visible"></publish-visible>
                 </div>
-            </div>
+            </div> -->
 
             <!-- 其它 -->
             <!-- <div class="m-publish-other">
@@ -88,8 +88,8 @@ export default {
         // "publish-excerpt": publish_excerpt,
         // "publish-collection": publish_collection,
         // "publish-banner": publish_banner,
-        "publish-comment": publish_comment,
-        "publish-visible": publish_visible,
+        // "publish-comment": publish_comment,
+        // "publish-visible": publish_visible,
         // "publish-subtype": publish_subtype,
         "publish-facedat": publish_facedat,
     },
