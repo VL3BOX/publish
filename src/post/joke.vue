@@ -24,7 +24,7 @@
                     :rows="6"
                     placeholder="请输入内容"
                     id="textarea"
-                    :maxlength="158"
+                    :maxlength="128"
                     :minlength="1"
                     show-word-limit
                 ></el-input>
@@ -285,7 +285,6 @@ export default {
         // 纯数字 纯英文 纯汉字 纯符号长度均为128 表情个数限制在10个
         check: function () {
             // 表情 key
-            console.log(emotion)
             const emotionKeys = Object.keys(emotion);
 
             let str = this.post.post_title.trim();
@@ -295,10 +294,10 @@ export default {
             const regex_3 = /(#[\u4e00-\u9fa5]{3})/g;
 
             if (!str.length) {
-                this.$alert("内容不能为空", "消息", {
-                    confirmButtonText: "确定",
-                    callback: (action) => {
-                    },
+                this.$notify({
+                    title: "错误",
+                    message: "内容不能为空",
+                    type: "error"
                 });
                 return false;
             }
@@ -323,18 +322,23 @@ export default {
             this.contentLength = emotionLength;
 
             if (emotionLength > 10) {
-                this.$alert("表情个数不能超过10个", "消息", {
-                    confirmButtonText: "确定",
-                    callback: (action) => {}
-                })
+                this.$notify({
+                    title: "错误",
+                    message: "表情个数不能超过10个",
+                    type: "error"
+                });
                 return false
             }
 
-            if (str.length > 128) {
-                this.$alert("内容长度不能超过128个字符", "消息", {
-                    confirmButtonText: "确定",
-                    callback: (action) => {}
-                })
+            // 纯数字 128 纯文字 64 
+            const textLength = str.match(/[^\x00-\xff]/g)?.length || 0;
+
+            if (textLength * 2 + (str.length - textLength) > 128) {
+                this.$notify({
+                    title: "错误",
+                    message: "内容长度不能超过128个字符",
+                    type: "error"
+                });
                 return false
             }
             return true;
