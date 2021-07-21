@@ -89,6 +89,24 @@
                             </template>
                         </el-input>
                     </div>
+                    <div class="m-macro-talent m-macro-item" v-if="client === 'origin'">
+                        <h5 class="u-title">奇穴方案</h5>
+                        <div class="m-macro-talent-simulator">
+                            <div class="qx-container"></div>
+                        </div>
+                        <el-input
+                            v-model="item.talent"
+                            placeholder="奇穴方案编码"
+                            @change="checkTalent(item)"
+                        >
+                            <template slot="prepend">
+                                <a class="u-get" target="_blank" href="/app/talent2">
+                                    <i class="el-icon-warning"></i>
+                                    获取编码
+                                </a>
+                            </template>
+                        </el-input>
+                    </div>
                     <div class="m-macro-macro">
                         <h5 class="u-title">
                             宏内容
