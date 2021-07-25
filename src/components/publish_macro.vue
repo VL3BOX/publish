@@ -90,13 +90,13 @@
                         </el-input>
                     </div>
                     <div class="m-macro-talent m-macro-item" v-if="client === 'origin'">
-                        <h5 class="u-title">奇穴方案</h5>
+                        <h5 class="u-title">镇派方案</h5>
                         <div class="m-macro-talent-simulator">
                             <div class="qx-container"></div>
                         </div>
                         <el-input
                             v-model="item.talent"
-                            placeholder="奇穴方案编码"
+                            placeholder="镇派方案编码"
                             @change="checkTalent(item)"
                         >
                             <template slot="prepend">
