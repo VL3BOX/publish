@@ -4,7 +4,7 @@
             <el-radio-group v-model="client">
                 <el-radio label="std">正式服</el-radio>
                 <el-radio label="origin">怀旧服</el-radio>
-                <el-radio label="all">全部</el-radio>
+                <el-radio label="all" v-if="!forbidAll">全部</el-radio>
             </el-radio-group>
         </el-form-item>
         <slot></slot>
@@ -13,7 +13,7 @@
 <script>
 export default {
     name: "publish_client",
-    props: ["data"],
+    props: ["data",'forbidAll'],
     data: function () {
         return {
             client: this.data,

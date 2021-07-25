@@ -13,7 +13,7 @@
                 <!-- 原创 -->
                 <publish-original v-model="post.original"></publish-original>
                 <!-- 客户端 -->
-                <publish-client v-model="post.client"></publish-client>
+                <publish-client v-model="post.client" :forbidAll="true"></publish-client>
                 <!-- 语言：简体/繁体 -->
                 <publish-lang v-model="post.lang"></publish-lang>
                 <!-- 资料片 -->
