@@ -33,14 +33,19 @@ export default {
                 this.$emit("update", newval);
             },
         },
-        client : function (val){
-            val = val || 'std'
-            this.zlps = zlps[val]
+        client: {
+            handler(val){
+                val = val || 'std'
+                this.zlps = zlps[val]
+            },
+            immediate: true
         }
     },
     computed: {},
     methods: {},
-    mounted: function () {},
+    mounted: function () {
+        console.log('zlp', this.data)
+    },
     components: {},
 };
 </script>
