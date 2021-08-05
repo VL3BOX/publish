@@ -44,7 +44,6 @@ export default {
     computed: {},
     methods: {},
     mounted: function () {
-        console.log('zlp', this.data)
     },
     components: {},
 };
