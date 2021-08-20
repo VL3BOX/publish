@@ -7,7 +7,7 @@
 
         <el-form class="m-publish-post">
             <div class="m-publish-source">
-                <el-divider content-position="left">选择通识 *</el-divider>
+            <el-divider content-position="left">选择通识 *</el-divider>
                 <el-select
                     class="u-source-id"
                     v-model="post.source_id"
@@ -17,6 +17,10 @@
                     placeholder="通过输入通识名称进行搜索"
                     :remote-method="search_handle"
                     :loading="options.loading"
+                    allow-create
+                    clearable
+                    @clear="handleClear"
+                    @change="handleChange"
                 >
                     <el-option
                         v-for="item in options.sources"
@@ -30,14 +34,25 @@
                         </div>
                     </el-option>
                 </el-select>
+                <el-select v-if="types && isNew"
+                    class="u-source-type"
+                    placeholder="选择通识类型"
+                    v-model="knowledge.type"
+                >
+                        <el-option v-for="type in types"
+                            :key="type.name"
+                            :value="type.name"
+                            :label="type.label"
+                        ></el-option>
+                    </el-select>
                 <p class="m-knowledge-add">
-                    <span>如没有合适的通识选择，可点击此处</span>
-                    <el-button
+                    <span>如没有合适的通识选择，选择你输入的通识，会在你保存之后自动为你新建该通识。</span>
+                    <!-- <el-button
                         type="success"
                         @click="dialogVisible = true"
                         size="mini"
                         >添加通识</el-button
-                    >
+                    > -->
                     <span
                         >Note：添加完成后的通识需要经过管理员审核通过后才会在通识百科上展示哦</span
                     >
@@ -102,7 +117,7 @@
                     class="u-publish"
                     icon="el-icon-s-promotion"
                     type="primary"
-                    @click="publish"
+                    @click="handleSubmit"
                     :disabled="processing"
                     >提交通识
                 </el-button>
@@ -163,13 +178,17 @@ import {JX3BOX} from "@jx3box/jx3box-common";
 import {WikiPost} from "@jx3box/jx3box-common/js/helper";
 import User from "@jx3box/jx3box-common/js/user";
 import {get_menus, get_list, create_knowledge} from "../service/knowledge";
+import cloneDeep from "lodash/cloneDeep";
 
 export default {
     name: "knowledge",
     data() {
         return {
             dialogVisible: false,
-            knowledge: null,
+            knowledge: {
+                type: '',
+                name: ''
+            },
             post: {
                 id: "",
                 content: "",
@@ -185,13 +204,16 @@ export default {
             inputVisible: false,
             inputValue: "",
 
-            processing : false
+            processing : false,
+
+            isNew: false, // 是否为新建
+            copySource: []
         };
     },
     methods: {
         create_knowledge() {
             this.processing = true
-            create_knowledge({
+            return create_knowledge({
                 type: this.knowledge.type,
                 name: this.knowledge.name,
             }).then((res) => {
@@ -199,8 +221,8 @@ export default {
                 if (res.code === 200) {
                     // 自动选择已添加项
                     this.post.source_id = res.data.id;
-                    this.$message({ message: "通识添加成功", type: "success" });
-                    this.dialogVisible = false;
+                    // this.$message({ message: "通识添加成功", type: "success" });
+                    // this.dialogVisible = false;
                 } else {
                     this.$message({
                         message: `${res.message}`,
@@ -221,7 +243,23 @@ export default {
             }).then((res) => {
                 res = res.data;
                 if (res.code === 200) this.options.sources = res.data.data;
+
+                if (res.data.data.length) {
+                    this.copySource = cloneDeep(res.data.data);
+                }
                 this.options.loading = false;
+
+                // 未搜索到通识
+                if (!this.options.sources.length) {
+                    this.isNew = true
+                } else {
+                    this.isNew = false
+                }
+
+                // 重置待选表单
+                if (!keyword) {
+                    this.options.sources = this.copySource
+                }
             });
         },
         validate() {
@@ -231,7 +269,16 @@ export default {
             if (!result) this.$message.error("请完成必填项");
             return result;
         },
-        publish: function() {
+        handleSubmit: function (){
+            if (this.isNew) {
+                this.create_knowledge().then(() => {
+                    this.publish()
+                })
+            } else {
+                this.publish()
+            }
+        },
+        publish: function() {            
             // 表单校验
             if (!this.validate()) return;
             this.processing = true
@@ -270,13 +317,21 @@ export default {
             this.inputVisible = false;
             this.inputValue = "";
         },
+        handleChange: function (val) {
+            this.knowledge.name = val
+            this.post.source_id = val
+        },
+        handleClear: function (){
+            console.log(1)
+            this.options.sources = this.copySource;
+        }
     },
     created() {
         // 初始化搜索列表
         this.search_handle('');
         // 获取百科ID并通过watch获取攻略
         let id = this.$route.params.source_id;
-        this.post.source_id = id ? id : "";
+        this.post.source_id = id || "";
 
         get_menus().then((res) => {
             res = res.data;
@@ -286,45 +341,47 @@ export default {
     watch: {
         "post.source_id": {
             handler() {
-                if (!this.post.source_id) return;
-                WikiPost.newest("knowledge", this.post.source_id, 0).then(
-                    (res) => {
-                        let data = res.data;
-                        if (data.code === 200) {
-                            // 数据填充
-                            let post = data.data.post;
-                            let source = data.data.source;
-
-                            if (post) {
-                                this.post.source_id = parseInt(post.source_id);
-                                this.post.remark = "";
-                                this.post.content = post.content;
-                                this.post.tags = post.tags || [];
-                            } else {
-                                this.post.source_id = this.post.source_id
-                                    ? parseInt(this.post.source_id)
-                                    : "";
-                                this.post.remark = "";
-                                this.post.content = "";
-                                this.post.tags = [];
-                            }
-
-                            if (source) {
-                                // 将选择项恢复至下拉框
-                                let exist = false;
-                                this.options.sources =
-                                    this.options.sources || [];
-                                for (let index in this.options.sources) {
-                                    if (this.options.sources[index].id == source.id) {
-                                        exist = true;
-                                        break;
-                                    }
+                if (!this.post.source_id) {
+                    this.post = this.$options.data().post;
+                } else {
+                    
+                    WikiPost.newest("knowledge", this.post.source_id, 0).then(
+                        (res) => {
+                            let data = res.data;
+                            if (data.code === 200) {
+                                // 数据填充
+                                let post = data.data.post;
+                                let source = data.data.source;
+    
+                                if (post) {
+                                    this.post.source_id = parseInt(post.source_id);
+                                    this.post.remark = post.remark;
+                                    this.post.content = post.content;
+                                    this.post.tags = post.tags || [];
+                                } else {
+                                    this.post.source_id = this.post.source_id
+                                    this.post.remark = "";
+                                    this.post.content = "";
+                                    this.post.tags = [];
                                 }
-                                if (!exist) this.options.sources.push(source);
+    
+                                if (source) {
+                                    // 将选择项恢复至下拉框
+                                    let exist = false;
+                                    this.options.sources =
+                                        this.options.sources || [];
+                                    for (let index in this.options.sources) {
+                                        if (this.options.sources[index].id == source.id) {
+                                            exist = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!exist) this.options.sources.push(source);
+                                }
                             }
                         }
-                    }
-                );
+                    );
+                }
             },
         },
     },
