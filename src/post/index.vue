@@ -91,7 +91,7 @@
                         <span>捏脸分享</span>
                     </router-link>
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="4" v-if="isAdmin">
                     <router-link to="/notice">
                         <i class="el-icon-bell"></i>
                         <span>公告资讯</span>
@@ -131,11 +131,14 @@
 </template>
 
 <script>
+import User from '@jx3box/jx3box-common/js/user';
 export default {
     name: "index",
     props: [],
     data: function () {
-        return {};
+        return {
+            isAdmin: User.isAdmin()
+        };
     },
     computed: {},
     methods: {},
