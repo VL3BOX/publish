@@ -98,6 +98,10 @@ const routes = [
         path: "/joke/:id?",
         component: joke,
     },
+    {
+        path: "/ac/:id?",
+        component: ac,
+    },
 
     // WIKI=====================
     // 查看

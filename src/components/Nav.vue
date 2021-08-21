@@ -127,6 +127,11 @@ export default {
                     name: "百科评论",
                     count: 0,
                 },
+                comment_feedback : {
+                    path: "/comment/feedback",
+                    name: "反馈建议",
+                    count: 0,
+                }
             },
         };
     },
