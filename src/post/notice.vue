@@ -109,7 +109,7 @@ export default {
                 // 标题
                 post_title: "",
                 // 子类型：心法、副本名等
-                post_subtype: "",
+                post_subtype: "6",
                 // 自定义字段
                 post_meta: {},
                 // 内容
