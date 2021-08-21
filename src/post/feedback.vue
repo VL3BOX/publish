@@ -4,10 +4,10 @@
             <h2 class="u-title">反馈建议</h2>
         </div>
 
-        <el-input class="m-dashboard-work-search" placeholder="请输入搜索内容" v-model="search">
+        <!-- <el-input class="m-dashboard-work-search" placeholder="请输入搜索内容" v-model="search">
             <span slot="prepend">关键词</span>
             <el-button slot="append" icon="el-icon-search"></el-button>
-        </el-input>
+        </el-input> -->
 
         <div class="m-dashboard-work-filter">
             <clientBy class="u-client" @filter="filter" />
