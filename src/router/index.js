@@ -26,6 +26,7 @@ const achievement = () => import("../post/achievement.vue");
 const item = () => import("../post/item.vue");
 const knowledge = () => import("../post/knowledge.vue");
 const quest = () => import("../post/quest.vue");
+const feedback = () => import("../post/feedback.vue");
 
 // APP
 const bucket = () => import("../views/bucket.vue");
@@ -51,6 +52,10 @@ const routes = [
     // 查看
     { path: "/cms/:type", component: cms },
     { path: "/comment/cms", component: cms_comment },
+    {
+        path: "/comment/feedback",
+        component: feedback,
+    },
     // 宏发布
     {
         path: "/macro/:id?",
