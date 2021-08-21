@@ -28,11 +28,11 @@
             </div>
 
             <!-- 附加 -->
-            <!-- <div class="m-publish-append">
+            <div class="m-publish-append">
                 <el-divider content-position="left">附加</el-divider>
                 <publish-excerpt v-model="post.post_excerpt"></publish-excerpt>
-                <publish-collection v-model="post.post_collection"></publish-collection>
-            </div> -->
+                <!-- <publish-collection v-model="post.post_collection"></publish-collection> -->
+            </div>
 
             <!-- 扩展 -->
             <div class="m-publish-extend">
@@ -84,7 +84,7 @@ export default {
         "publish-header": publish_header,
         "publish-title": publish_title,
         "publish-client": publish_client,
-        // "publish-excerpt": publish_excerpt,
+        "publish-excerpt": publish_excerpt,
         // "publish-collection": publish_collection,
         "publish-banner": publish_banner,
         "publish-comment": publish_comment,
