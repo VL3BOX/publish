@@ -28,11 +28,11 @@
             </div>
 
             <!-- 附加 -->
-            <!-- <div class="m-publish-append">
+            <div class="m-publish-append">
                 <el-divider content-position="left">附加</el-divider>
                 <publish-excerpt v-model="post.post_excerpt"></publish-excerpt>
-                <publish-collection v-model="post.post_collection"></publish-collection>
-            </div> -->
+                <!-- <publish-collection v-model="post.post_collection"></publish-collection> -->
+            </div>
 
             <!-- 扩展 -->
             <div class="m-publish-extend">
@@ -84,7 +84,7 @@ export default {
         "publish-header": publish_header,
         "publish-title": publish_title,
         "publish-client": publish_client,
-        // "publish-excerpt": publish_excerpt,
+        "publish-excerpt": publish_excerpt,
         // "publish-collection": publish_collection,
         "publish-banner": publish_banner,
         "publish-comment": publish_comment,
@@ -109,7 +109,7 @@ export default {
                 // 标题
                 post_title: "",
                 // 子类型：心法、副本名等
-                post_subtype: "",
+                post_subtype: "6",
                 // 自定义字段
                 post_meta: {},
                 // 内容

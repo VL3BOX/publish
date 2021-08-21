@@ -20,6 +20,13 @@
                     <span>{{item.name}}</span>
                     <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span>
                 </router-link>
+                <template v-if="isAdmin">
+                <router-link :to="item.path" v-for="(item,key) in ads" :key="key" @click.native="closeSidebar">
+                    <i class="el-icon-collection"></i>
+                    <span>{{item.name}}</span>
+                    <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span>
+                </router-link>
+                </template>
             </el-collapse-item>
             <el-collapse-item title="多人创作" name="wiki">
                 <template slot="title">
@@ -60,13 +67,14 @@ import { getMyPostsCount } from "@/service/cms.js";
 import { get_my_post_total } from "@/service/post.js";
 import { getNextStat } from "@/service/next.js";
 import Bus from "@jx3box/jx3box-common-ui/service/bus";
+import User from '@jx3box/jx3box-common/js/user'
 export default {
     name: "Nav",
     data: function () {
         return {
             group: [],
             cms: {
-                macro: { path: "/cms/macro", name: "剑三宏", count: 0 },
+                macro: { path: "/cms/macro", name: "剑三宏库", count: 0 },
                 jx3dat: { path: "/cms/jx3dat", name: "插件数据", count: 0 },
                 fb: { path: "/cms/fb", name: "副本攻略", count: 0 },
                 bps: { path: "/cms/bps", name: "职业攻略", count: 0 },
@@ -74,6 +82,8 @@ export default {
                 bbs: { path: "/cms/bbs", name: "茶馆交流", count: 0 },
                 share: { path: "/cms/share", name: "捏脸分享", count: 0 },
                 joke: { path: "/cms/joke", name: "剑三骚话", count: 0 },
+            },
+            ads:{
                 notice: { path: "/cms/notice", name: "公告资讯", count: 0 },
             },
             wiki: {
@@ -134,6 +144,7 @@ export default {
                     count: 0,
                 }
             },
+            isAdmin : User.isAdmin()
         };
     },
     computed: {},
