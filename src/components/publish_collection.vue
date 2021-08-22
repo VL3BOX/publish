@@ -2,7 +2,7 @@
     <div class="m-publish-collection">
         <h5 class="u-schema">
             关联小册
-             <a class="u-icon-links" href="https://www.jx3box.com/tool/20891" target="_blank">
+             <a class="u-icon-links" href="/tool/20891" target="_blank">
                 <i class="el-icon-question"></i> 小册帮助指南
             </a>
         </h5>
@@ -50,7 +50,7 @@ export default {
     props: ["data"],
     data: function () {
         return {
-            collection: this.data,
+            collection: '',
             collections: [],
 
             copyCollections: [],
@@ -64,8 +64,11 @@ export default {
         event: "update",
     },
     watch: {
-        data: function (newval) {
-            this.collection = newval;
+        data: {
+            immediate: true,
+            handler (newval) {
+                this.collection = Number(newval);
+            }
         },
         collection: {
             deep: true,

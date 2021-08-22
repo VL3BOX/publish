@@ -19,17 +19,20 @@
                     class="m-dashboard-box-list"
                     :data="data"
                     v-if="type === 'collection'"
+                    key="collection"
                 />
                 <item_plan
                     class="m-dashboard-box-list"
                     :data="data"
                     v-if="type === 'item_plan'"
                     @refresh="loadPosts(type)"
+                    key="item_plan"
                 />
                 <question
                     class="m-dashboard-box-list"
                     :data="data"
                     v-if="type === 'question'"
+                    key="question"
                 />
                 <paper class="m-dashboard-box-list" :data="data" v-if="type === 'paper'" />
             </template>
