@@ -1,5 +1,5 @@
 <template>
-    <div class="m-dashboard m-dashboard-work m-dashboard-other" v-loading="loading">
+    <div class="m-dashboard m-dashboard-work m-dashboard-other">
 
         <div class="m-dashboard-work-header">
             <h2 class="u-title">{{typeLable}}</h2>
@@ -137,7 +137,7 @@ export default {
         loadPosts: function () {
             if(!this.type) return
 
-            // this.loading = true;
+            this.loading = true;
             fn[this.type](this.params)
                 .then((res) => {
                     if (helper_list.includes(this.type)) {

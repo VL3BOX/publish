@@ -1,12 +1,12 @@
 <template>
-    <div class="m-dashboard m-dashboard-work m-dashboard-other" v-loading="loading">
+    <div class="m-dashboard m-dashboard-work m-dashboard-other">
         <div class="m-dashboard-work-header">
             <h2 class="u-title">我的铭牌</h2>
             <a :href="publishLink" class="u-publish el-button el-button--primary el-button--small">
                 <i class="el-icon-document"></i> 创建铭牌
             </a>
         </div>
-        <div class="m-namespace-list">
+        <div class="m-namespace-list" v-loading="loading">
             <div class="u-namespace-item" v-for="(item, i) in list" :key="i">
                 <div class="u-item">
                     <div class="u-box">
