@@ -7,7 +7,7 @@
         <!-- <el-input class="m-dashboard-work-search" placeholder="请输入搜索内容" v-model="search">
             <span slot="prepend">关键词</span>
             <el-button slot="append" icon="el-icon-search"></el-button>
-        </el-input> -->
+        </el-input>-->
 
         <div class="m-dashboard-work-filter">
             <clientBy class="u-client" @filter="filter" />
@@ -31,20 +31,20 @@
                         :href="postLink(item.post_type, item.ID)"
                     >{{ item.post_excerpt || "无标题" }}</a>
                     <div class="u-desc">
-                        <span class="u-desc-subitem">
+                        <!-- <span class="u-desc-subitem">
                             <i class="el-icon-view"></i>
                             {{ item.visible | visibleFormat }}
-                        </span>
+                        </span>-->
                         <time class="u-desc-subitem">
                             <i class="el-icon-finished"></i>
-                            发布 :
+                            留言时间 :
                             {{ item.post_date | dateFormat }}
                         </time>
-                        <time class="u-desc-subitem">
+                        <!-- <time class="u-desc-subitem">
                             <i class="el-icon-refresh"></i>
                             更新 :
                             {{ item.post_modified | dateFormat }}
-                        </time>
+                        </time>-->
                     </div>
 
                     <el-button-group class="u-action">
@@ -52,7 +52,7 @@
                             size="mini"
                             icon="el-icon-delete"
                             title="删除"
-                            @click="del(item.ID)"
+                            @click="del(item.ID,i)"
                         ></el-button>
                     </el-button-group>
                 </li>
@@ -107,7 +107,7 @@ export default {
         },
         params: function () {
             return {
-                type: 'feedback',
+                type: "feedback",
                 page: this.page,
                 per: this.per,
                 title: this.search,
@@ -122,7 +122,7 @@ export default {
     watch: {
         params: {
             deep: true,
-            immediate : true,
+            immediate: true,
             handler: function (newval) {
                 this.loadPosts();
             },
@@ -143,17 +143,19 @@ export default {
         edit: function (type, id) {
             location.href = "./#/" + type + "/" + id;
         },
-        del: function (id) {
+        del: function (id,i) {
             this.$alert("确定要删除吗？", "确认信息", {
                 confirmButtonText: "确定",
                 callback: (action) => {
                     if (action == "confirm") {
                         del(id).then((res) => {
-                            this.$message({
+                            this.$notify({
+                                title: "成功",
+                                message: "删除成功",
                                 type: "success",
-                                message: `删除成功`,
                             });
-                            location.reload();
+                            this.data.splice(i,1)
+                            // location.reload();
                         });
                     }
                 },

@@ -18,6 +18,7 @@ const bbs = () => import("../post/bbs.vue");
 // const house = () => import("../post/house.vue");
 const share = () => import("../post/share.vue");
 const notice = () => import("../post/notice.vue");
+const feedback = () => import("../views/feedback.vue");
 
 // WIKI
 const wiki = () => import("../views/wiki.vue");
@@ -26,7 +27,6 @@ const achievement = () => import("../post/achievement.vue");
 const item = () => import("../post/item.vue");
 const knowledge = () => import("../post/knowledge.vue");
 const quest = () => import("../post/quest.vue");
-const feedback = () => import("../post/feedback.vue");
 
 // APP
 const bucket = () => import("../views/bucket.vue");

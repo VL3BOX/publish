@@ -138,7 +138,7 @@ export default {
                     name: "百科评论",
                     count: 0,
                 },
-                comment_feedback : {
+                feedback : {
                     path: "/comment/feedback",
                     name: "反馈建议",
                     count: 0,
@@ -160,6 +160,12 @@ export default {
                 for (let key in count) {
                     if (this.cms[key]) {
                         this.cms[key]["count"] = count[key];
+                    }
+                    if(this.ads[key]){
+                        this.ads[key]["count"] = count[key];
+                    }
+                    if(this.comment[key]){
+                        this.comment[key]["count"] = count[key];
                     }
                 }
             });
