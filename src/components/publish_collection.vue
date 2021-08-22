@@ -34,7 +34,7 @@
         >
             <span slot="prepend">关联小册</span>
             <span slot="append">
-                <a href="https://www.jx3box.com/tool/20891" target="_blank">
+                <a href="/tool/20891" target="_blank">
                     <i class="el-icon-question"></i> 小册帮助指南
                 </a>
             </span>
