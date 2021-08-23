@@ -69,7 +69,7 @@ import publish_header from "@/components/publish_header.vue";
 import publish_title from "@/components/publish_title.vue";
 import publish_client from "@/components/publish_client.vue";
 // import publish_collection from "@/components/publish_collection";
-// import publish_excerpt from "@/components/publish_excerpt";
+import publish_excerpt from "@/components/publish_excerpt";
 import publish_banner from "@/components/publish_banner";
 import publish_comment from "@/components/publish_comment";
 import publish_visible from "@/components/publish_visible";
