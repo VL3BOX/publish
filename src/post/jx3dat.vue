@@ -144,11 +144,11 @@ export default {
                             status: true,
                             file: "",
                             version: "",
-                            _version:'',
+                            _version: "",
                             // 源文件名
                             origin_name: "",
                             upload_status: false,
-                            pop : false
+                            pop: false,
                         },
                     ],
                     github: "",
@@ -205,9 +205,9 @@ export default {
                 return [this.post];
             }
         },
-        isLock : function (){
-            return User.isEditor() ? false : true
-        }
+        isLock: function () {
+            return User.isEditor() ? false : true;
+        },
     },
     methods: {
         // 加载
@@ -238,7 +238,8 @@ export default {
             push(...this.data)
                 .then((res) => {
                     let result = res.data.data;
-                    if (this.post.post_subtype == 1) {
+                    // 且存在有效数据
+                    if (this.post.post_subtype == 1 && this.post.post_meta?.data?.length) {
                         syncRedis(result).then((res) => {
                             this.done(skip, result);
                         });
