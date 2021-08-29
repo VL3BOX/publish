@@ -67,7 +67,7 @@ export default {
         data: {
             immediate: true,
             handler (newval) {
-                this.collection = Number(newval);
+                this.collection = Number(newval) || '';
             }
         },
         collection: {
