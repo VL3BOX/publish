@@ -330,7 +330,7 @@ export default {
         // 初始化搜索列表
         this.search_handle('');
         // 获取百科ID并通过watch获取攻略
-        let id = this.$route.params.source_id;
+        let id = parseInt(this.$route.params.source_id);
         this.post.source_id = id || "";
 
         get_menus().then((res) => {
@@ -344,7 +344,6 @@ export default {
                 if (!this.post.source_id) {
                     this.post = this.$options.data().post;
                 } else {
-                    
                     WikiPost.newest("knowledge", this.post.source_id, 0).then(
                         (res) => {
                             let data = res.data;
