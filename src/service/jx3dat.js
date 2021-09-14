@@ -18,7 +18,7 @@ function uploadHub(formdata) {
 function syncRedis(data) {
     let redisData = transferForRedis(data);
     console.log("正在执行redis同步作业:", redisData);
-    return $next().post("/api/plugins/jx3dat/publish", redisData);
+    return $next().post("/api/plugins/jx3dat/publish", redisData)
 }
 
 function transferForRedis(data) {
