@@ -1,20 +1,21 @@
 <template>
     <div class="m-publish-collection">
         <h5 class="u-schema">
-            关联小册
-             <a class="u-icon-links" href="/tool/20891" target="_blank">
+            <span class="u-label">关联小册</span>
+            <slot></slot>
+            <a class="u-help u-icon-links" href="/tool/20891" target="_blank">
                 <i class="el-icon-question"></i> 小册帮助指南
             </a>
         </h5>
         <el-select
-            v-model="collection"
+            class="u-collection"
+            v-model="post_collection"
             remote
             :remote-method="remoteMethod"
             :loading="loading"
             filterable
             clearable
-            placeholder="请输入小册ID（可选，非必填，可搜索）"
-            style="width: 100%;"
+            placeholder="请选择一个小册（可选，非必填，可搜索）"
             @blur="handleBlur"
         >
             <el-option
@@ -24,22 +25,6 @@
                 :value="item.id"
             ></el-option>
         </el-select>
-        <!-- <el-input
-            v-model="collection"
-            :maxlength="50"
-            :minlength="2"
-            show-word-limit
-            required
-            placeholder="请输入小册ID（可选，非必填）"
-        >
-            <span slot="prepend">关联小册</span>
-            <span slot="append">
-                <a href="/tool/20891" target="_blank">
-                    <i class="el-icon-question"></i> 小册帮助指南
-                </a>
-            </span>
-        </el-input> -->
-        <slot></slot>
     </div>
 </template>
 <script>
@@ -50,72 +35,70 @@ export default {
     props: ["data"],
     data: function () {
         return {
-            collection: '',
-            collections: [],
+            post_collection: "",
 
+            collections: [],
             copyCollections: [],
+
             isInit: true,
             loading: false,
-            search: ''
+            search: "",
         };
     },
     model: {
         prop: "data", //向上同步数据
         event: "update",
     },
+    computed: {
+    },
     watch: {
         data: {
             immediate: true,
-            handler (newval) {
-                this.collection = Number(newval) || '';
-            }
+            handler(newval) {
+                this.post_collection = Number(newval) || "";
+            },
         },
-        collection: {
-            deep: true,
+        post_collection: {
             handler: function (newval) {
                 this.$emit("update", newval);
             },
         },
     },
-    computed: {},
     methods: {
-        loadCollections: function (keyword = '') {
+        loadCollections: function (keyword = "") {
             const params = {
-                keyword
-            }
-            get_my_collections(params)
-                .then(res => {
-                    this.collections = res.data.data.data;
+                keyword,
+            };
+            get_my_collections(params).then((res) => {
+                this.collections = res.data.data.data;
 
-                    if (this.isInit) {
-                        this.copyCollections = cloneDeep(this.collections);
-                        this.isInit = false
-                    }
-                })
-        },
-        remoteMethod: function (keyword = '') {
-            this.search = keyword;
-            this.loading = true
-            if (keyword !== '') {
-                const params = {
-                    keyword
+                if (this.isInit) {
+                    this.copyCollections = cloneDeep(this.collections);
+                    this.isInit = false;
                 }
-                get_my_collections(params)
-                    .then(res => {
-                        this.collections = res.data.data.data;
-                        this.loading = false
-                    })
+            });
+        },
+        remoteMethod: function (keyword = "") {
+            this.search = keyword;
+            this.loading = true;
+            if (keyword !== "") {
+                const params = {
+                    keyword,
+                };
+                get_my_collections(params).then((res) => {
+                    this.collections = res.data.data.data;
+                    this.loading = false;
+                });
             } else {
                 this.collections = cloneDeep(this.copyCollections);
             }
-
         },
-        handleBlur: function (){
+        handleBlur: function () {
             this.collections = cloneDeep(this.copyCollections);
-        }
+        },
     },
     mounted: function () {
-        this.loadCollections()
+        this.loadCollections();
     },
     components: {},
 };
