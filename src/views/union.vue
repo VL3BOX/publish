@@ -1,0 +1,155 @@
+<template>
+    <div class="m-dashboard-work m-dashboard-cms m-dashboard-union" v-loading="loading">
+        <div class="m-dashboard-work-header">
+            <h2 class="u-title">联合创作</h2>
+        </div>
+
+        <div class="m-dashboard-box">
+            <ul class="m-dashboard-box-list" v-if="data && data.length">
+                <li v-for="(item, i) in data" :key="i">
+                    <template v-if="item.union_post_raw">
+                        <i class="u-icon">
+                            <img
+                                v-if="item.union_post_raw.post_status == 'publish'"
+                                svg-inline
+                                src="../assets/img/works/repo.svg"
+                            />
+                            <img v-else svg-inline src="../assets/img/works/draft.svg" />
+                        </i>
+                        <a
+                            class="u-title"
+                            target="_blank"
+                            :href="postLink(item.union_post_raw.post_type, item.union_post_raw.ID)"
+                        >{{ item.union_post_raw.post_title || "无标题" }}</a>
+                        <div class="u-desc">
+                            <span class="u-desc-subitem">
+                                <i class="el-icon-view"></i>
+                                {{ item.union_post_raw.visible | visibleFormat }}
+                            </span>
+                            <time class="u-desc-subitem">
+                                <i class="el-icon-finished"></i>
+                                发布 :
+                                {{ item.union_post_raw.post_date | dateFormat }}
+                            </time>
+                            <time class="u-desc-subitem">
+                                <i class="el-icon-refresh"></i>
+                                更新 :
+                                {{ item.union_post_raw.post_modified | dateFormat }}
+                            </time>
+                        </div>
+
+                        <el-button-group class="u-action">
+                            <el-button
+                                size="mini"
+                                icon="el-icon-edit"
+                                title="编辑"
+                                @click="edit(item.union_post_raw.post_type, item.union_post_raw.ID)"
+                            ></el-button>
+                            <el-button
+                                class="u-quit"
+                                size="mini"
+                                icon="el-icon-download"
+                                title="退出联合身份"
+                                @click="quit(item.union_post_raw.ID)"
+                            ></el-button>
+                        </el-button-group>
+                    </template>
+                </li>
+            </ul>
+            <el-alert
+                v-else
+                class="m-dashboard-box-null"
+                title="没有找到相关条目"
+                type="info"
+                center
+                show-icon
+            ></el-alert>
+            <el-pagination
+                class="m-dashboard-box-pages"
+                background
+                :page-size="per"
+                :hide-on-single-page="true"
+                :current-page.sync="page"
+                layout="total, prev, pager, next, jumper"
+                :total="total"
+            ></el-pagination>
+        </div>
+    </div>
+</template>
+
+<script>
+import { getUnionPosts } from "@/service/union.js";
+import { editLink, getLink } from "@jx3box/jx3box-common/js/utils.js";
+import {
+    __postType,
+    __visibleMap,
+} from "@jx3box/jx3box-common/data/jx3box.json";
+import dateFormat from "../utils/dateFormat";
+export default {
+    name: "work",
+    props: [],
+    data: function () {
+        return {
+            loading: false,
+            data: [],
+            total: 1,
+            page: 1,
+            per: 10,
+        };
+    },
+    computed: {
+        params: function () {
+            return {
+                page: this.page,
+                per: this.per,
+            };
+        },
+    },
+    watch: {
+        params: {
+            deep: true,
+            immediate: true,
+            handler: function (newval) {
+                this.loadPosts();
+            },
+        },
+    },
+    methods: {
+        loadPosts: function () {
+            this.loading = true;
+            getUnionPosts(this.params)
+                .then((res) => {
+                    this.data = res.data.data.list;
+                    this.total = res.data.data.total;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
+        edit: function (type, id) {
+            location.href = "./#/" + type + "/" + id;
+        },
+        postLink: function (type, id) {
+            return getLink(type, id);
+        },
+        quit: function (id) {},
+    },
+    filters: {
+        dateFormat: function (val) {
+            return dateFormat(new Date(val));
+        },
+        visibleFormat: function (val) {
+            return __visibleMap[~~val];
+        },
+    },
+};
+</script>
+
+<style lang="less">
+@import "../assets/css/work.less";
+.m-dashboard-union .u-quit {
+    i {
+        transform: rotate(-90deg);
+    }
+}
+</style>

@@ -5,6 +5,7 @@ import VueRouter from "vue-router";
 const demo = () => import("../post/demo.vue");
 const index = () => import("../post/index.vue");
 const draft = () => import("../views/draft.vue");
+const union = () => import("../views/union.vue");
 
 // CMS
 const cms = () => import("../views/cms.vue");
@@ -49,6 +50,8 @@ const routes = [
     { path: "/demo", component: demo },
 
     // CMS=====================
+    // 联合创作
+    { path: "/union", component: union },
     // 查看
     { path: "/cms/:type", component: cms },
     { path: "/comment/cms", component: cms_comment },

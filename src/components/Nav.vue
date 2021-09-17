@@ -5,7 +5,6 @@
             <span>创作台</span>
         </router-link>
         <router-link class="m-nav-bucket el-button el-button--primary is-plain" to="/draft">
-            <!-- <img class="u-bucket" svg-inline src="../assets/img/bucket.svg" /> -->
             <i class="el-icon-receiving"></i>
             <span>草稿箱</span>
         </router-link>
@@ -15,24 +14,51 @@
                 <template slot="title">
                     <span class="u-title">独立创作</span>
                 </template>
-                <router-link :to="item.path" v-for="(item,key) in cms" :key="key" @click.native="closeSidebar">
+                <router-link
+                    :to="item.path"
+                    v-for="(item,key) in cms"
+                    :key="key"
+                    @click.native="closeSidebar"
+                >
                     <i class="el-icon-collection"></i>
                     <span>{{item.name}}</span>
                     <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span>
                 </router-link>
                 <template v-if="isAdmin">
-                <router-link :to="item.path" v-for="(item,key) in ads" :key="key" @click.native="closeSidebar">
-                    <i class="el-icon-collection"></i>
-                    <span>{{item.name}}</span>
-                    <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span>
-                </router-link>
+                    <router-link
+                        :to="item.path"
+                        v-for="(item,key) in ads"
+                        :key="key"
+                        @click.native="closeSidebar"
+                    >
+                        <i class="el-icon-collection"></i>
+                        <span>{{item.name}}</span>
+                        <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span>
+                    </router-link>
                 </template>
+            </el-collapse-item>
+            <el-collapse-item title="联合创作" name="union">
+                <template slot="title">
+                    <span class="u-title">联合创作</span>
+                </template>
+                <router-link
+                    to="/union"
+                >
+                    <i class="el-icon-collection"></i>
+                    <span>全部</span>
+                    <!-- <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span> -->
+                </router-link>
             </el-collapse-item>
             <el-collapse-item title="多人创作" name="wiki">
                 <template slot="title">
                     <span class="u-title">多人百科</span>
                 </template>
-                <router-link :to="item.path" v-for="(item,key) in wiki" :key="key" @click.native="closeSidebar">
+                <router-link
+                    :to="item.path"
+                    v-for="(item,key) in wiki"
+                    :key="key"
+                    @click.native="closeSidebar"
+                >
                     <i class="el-icon-collection"></i>
                     <span>{{item.name}}</span>
                     <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span>
@@ -42,7 +68,12 @@
                 <template slot="title">
                     <span class="u-title">应用扩展</span>
                 </template>
-                <router-link :to="item.path" v-for="(item,key) in app" :key="key" @click.native="closeSidebar">
+                <router-link
+                    :to="item.path"
+                    v-for="(item,key) in app"
+                    :key="key"
+                    @click.native="closeSidebar"
+                >
                     <i class="el-icon-collection"></i>
                     <span>{{item.name}}</span>
                     <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span>
@@ -52,7 +83,12 @@
                 <template slot="title">
                     <span class="u-title">评论留言</span>
                 </template>
-                <router-link :to="item.path" v-for="(item,key) in comment" :key="key" @click.native="closeSidebar">
+                <router-link
+                    :to="item.path"
+                    v-for="(item,key) in comment"
+                    :key="key"
+                    @click.native="closeSidebar"
+                >
                     <i class="el-icon-collection"></i>
                     <span>{{item.name}}</span>
                     <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span>
@@ -67,7 +103,7 @@ import { getMyPostsCount } from "@/service/cms.js";
 import { get_my_post_total } from "@/service/post.js";
 import { getNextStat } from "@/service/next.js";
 import Bus from "@jx3box/jx3box-common-ui/service/bus";
-import User from '@jx3box/jx3box-common/js/user'
+import User from "@jx3box/jx3box-common/js/user";
 export default {
     name: "Nav",
     data: function () {
@@ -83,7 +119,7 @@ export default {
                 share: { path: "/cms/share", name: "捏脸分享", count: 0 },
                 joke: { path: "/cms/joke", name: "剑三骚话", count: 0 },
             },
-            ads:{
+            ads: {
                 notice: { path: "/cms/notice", name: "公告资讯", count: 0 },
             },
             wiki: {
@@ -138,19 +174,19 @@ export default {
                     name: "百科评论",
                     count: 0,
                 },
-                feedback : {
+                feedback: {
                     path: "/comment/feedback",
                     name: "反馈建议",
                     count: 0,
-                }
+                },
             },
-            isAdmin : User.isAdmin()
+            isAdmin: User.isAdmin(),
         };
     },
     computed: {},
     methods: {
-        closeSidebar : function (){
-            if(window.innerWidth < 1280){
+        closeSidebar: function () {
+            if (window.innerWidth < 1280) {
                 Bus.$emit("toggleLeftSide", false);
             }
         },
@@ -161,10 +197,10 @@ export default {
                     if (this.cms[key]) {
                         this.cms[key]["count"] = count[key];
                     }
-                    if(this.ads[key]){
+                    if (this.ads[key]) {
                         this.ads[key]["count"] = count[key];
                     }
-                    if(this.comment[key]){
+                    if (this.comment[key]) {
                         this.comment[key]["count"] = count[key];
                     }
                 }
@@ -195,18 +231,18 @@ export default {
                 }
             });
         },
-        loadNextCount(){
+        loadNextCount() {
             getNextStat().then((res) => {
-                let data = res.data.data
-                this.comment.comment_cms.count = data.comment
-                this.app.exam_question.count = data.question
-                this.app.exam_paper.count = data.paper
-            })
+                let data = res.data.data;
+                this.comment.comment_cms.count = data.comment;
+                this.app.exam_question.count = data.question;
+                this.app.exam_paper.count = data.paper;
+            });
         },
         init: function () {
             this.loadCmsCount();
             this.loadHelperCount();
-            this.loadNextCount()
+            this.loadNextCount();
         },
     },
     created: function () {
