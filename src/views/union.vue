@@ -45,13 +45,15 @@
                                 title="编辑"
                                 @click="edit(item.union_post_raw.post_type, item.union_post_raw.ID)"
                             ></el-button>
-                            <el-button
-                                class="u-quit"
-                                size="mini"
-                                icon="el-icon-download"
-                                title="退出联合身份"
-                                @click="quit(item.union_post_raw.ID)"
-                            ></el-button>
+                            <el-popconfirm title="确认退出该作品的联合创作者身份吗？" @confirm="quit(item.union_post_raw.ID,i)">
+                                <el-button
+                                    slot="reference"
+                                    class="u-quit"
+                                    size="mini"
+                                    icon="el-icon-download"
+                                    title="退出联合身份"
+                                ></el-button>
+                            </el-popconfirm>
                         </el-button-group>
                     </template>
                 </li>
@@ -78,7 +80,7 @@
 </template>
 
 <script>
-import { getUnionPosts } from "@/service/union.js";
+import { getUnionPosts, quitUnionPost } from "@/service/union.js";
 import { editLink, getLink } from "@jx3box/jx3box-common/js/utils.js";
 import {
     __postType,
@@ -132,7 +134,16 @@ export default {
         postLink: function (type, id) {
             return getLink(type, id);
         },
-        quit: function (id) {},
+        quit: function (id, i) {
+            quitUnionPost(id).then((res) => {
+                this.$notify({
+                    title: "退出成功",
+                    message: "成功退出该作品联合创作",
+                    type: "success",
+                });
+                this.data.splice(i, 1);
+            });
+        },
     },
     filters: {
         dateFormat: function (val) {
