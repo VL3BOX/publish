@@ -24,7 +24,6 @@
                     <el-radio v-model.number="collection.public" :label="this.public.PRIVATE">私有</el-radio>
                 </div>
                 <div class="m-publish-primary-block">
-                    <el-divider content-position="left">封面图</el-divider>
                     <publish-banner v-model="collection.image"></publish-banner>
                 </div>
                 <div class="m-publish-primary-block m-publish-collection-posts">

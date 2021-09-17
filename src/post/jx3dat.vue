@@ -41,9 +41,14 @@
 
             <!-- 附加 -->
             <div class="m-publish-append">
-                <el-divider content-position="left">附加</el-divider>
+                <el-divider content-position="left">摘要</el-divider>
                 <publish-excerpt v-model="post.post_excerpt"></publish-excerpt>
-                <publish-collection v-model="post.post_collection"></publish-collection>
+            </div>
+            <div class="m-publish-append">
+                <el-divider content-position="left">合集</el-divider>
+                <publish-collection v-model="post.post_collection" :defaultCollapse="post.collection_collapse">
+                    <publish-collection-collapse v-model="post.collection_collapse"></publish-collection-collapse>
+                </publish-collection>
             </div>
 
             <!-- 扩展 -->
@@ -86,6 +91,7 @@ import publish_client from "@/components/publish_client.vue";
 import publish_lang from "@/components/publish_lang";
 import publish_jx3dat from "@/components/publish_jx3dat";
 import publish_collection from "@/components/publish_collection";
+import publish_collection_collapse from "@/components/publish_collection_collapse";
 import publish_excerpt from "@/components/publish_excerpt";
 import publish_banner from "@/components/publish_banner";
 import publish_comment from "@/components/publish_comment";
@@ -108,6 +114,7 @@ export default {
         "publish-lang": publish_lang,
         "publish-jx3dat": publish_jx3dat,
         "publish-collection": publish_collection,
+        "publish-collection-collapse": publish_collection_collapse,
         "publish-excerpt": publish_excerpt,
         "publish-banner": publish_banner,
         "publish-comment": publish_comment,
@@ -181,6 +188,7 @@ export default {
                 post_banner: "",
                 // 小册
                 post_collection: "",
+                collection_collapse : 0,
 
                 // 评论开关（0开启|默认，1关闭）
                 comment: 0,

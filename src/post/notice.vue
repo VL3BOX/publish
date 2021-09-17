@@ -10,10 +10,9 @@
             <!-- 信息 -->
             <div class="m-publish-info">
                 <el-divider content-position="left">信息</el-divider>
-                <!-- 原创 -->
-                <!-- <publish-original v-model="post.original"></publish-original> -->
                 <!-- 客户端 -->
                 <publish-client v-model="post.client"></publish-client>
+                <publish-subtype v-model="post.post_subtype" :options="notice_types"></publish-subtype>
             </div>
 
             <!-- 正文 -->
@@ -62,6 +61,7 @@
 <script>
 // 公共模块
 import { getLink } from "@jx3box/jx3box-common/js/utils";
+import notice_types from '@/assets/data/notice.json'
 
 // 本地模块
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
@@ -73,6 +73,7 @@ import publish_excerpt from "@/components/publish_excerpt";
 import publish_banner from "@/components/publish_banner";
 import publish_comment from "@/components/publish_comment";
 import publish_visible from "@/components/publish_visible";
+import publish_subtype from "@/components/publish_subtype";
 
 // 数据逻辑
 import { push, pull } from "@/service/cms.js";
@@ -89,6 +90,7 @@ export default {
         "publish-banner": publish_banner,
         "publish-comment": publish_comment,
         "publish-visible": publish_visible,
+        "publish-subtype": publish_subtype,
     },
     data: function () {
         return {
@@ -108,8 +110,8 @@ export default {
 
                 // 标题
                 post_title: "",
-                // 子类型：心法、副本名等
-                post_subtype: "6",
+                // 子类型
+                post_subtype: "1",
                 // 自定义字段
                 post_meta: {},
                 // 内容
@@ -139,6 +141,9 @@ export default {
                 // 阅读权限（0公开，1仅自己，2亲友，3密码，4付费，5粉丝）
                 visible: 0,
             },
+
+            // 选项
+            notice_types,
         };
     },
     computed: {

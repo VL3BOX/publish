@@ -128,11 +128,11 @@
                                 </template>
                             </el-input>
                         </div>
-                        <div class="m-jx3dat-item">
+                        <!-- <div class="m-jx3dat-item">
                             <h5 class="u-title">弹窗提醒</h5>
                             <el-switch v-model="item.pop" active-color="#49C10F"></el-switch>
                             <span class="u-poptip">（默认不弹窗，小版本可由用户在下载面板自行选择是否更新）</span>
-                        </div>
+                        </div> -->
                         <!-- <div class="m-jx3data-item">
                             <h5 class="u-title">云数据ID</h5>
                             <el-input
