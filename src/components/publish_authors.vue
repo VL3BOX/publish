@@ -26,7 +26,7 @@
                         <i class="u-delete el-icon-delete" @click="remove(item,i)"></i>
                     </el-tooltip>
                 </div>
-                <el-button plain size="small" @click="openPop">+ 添加联合创作者</el-button>
+                <el-button plain size="small" @click="openPop" type="primary">+ 添加联合创作者</el-button>
             </div>
             <UserPop title="添加用户" v-model="visible" @confirm="addAuthor" />
         </el-form-item>
@@ -140,6 +140,9 @@ export default {
         padding: 6px 0;
         // display: flex;
         .clearfix;
+        .el-button,.u-item{
+            .fl;
+        }
         .u-item {
             border: 1px solid #dcdfe6;
             padding: 2px 8px;
@@ -147,7 +150,6 @@ export default {
             .r(3px);
             .mr(10px);
             // flex-shrink: 0;
-            .fl;
             .mb(10px);
             .h(32px);
             box-sizing: border-box;
@@ -179,6 +181,11 @@ export default {
         }
         .u-delete:hover {
             color: #f00;
+        }
+
+        .u-status{
+            .mr(5px);
+            color:@primary;
         }
     }
 }
