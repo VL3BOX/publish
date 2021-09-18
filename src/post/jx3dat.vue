@@ -46,7 +46,10 @@
             </div>
             <div class="m-publish-append">
                 <el-divider content-position="left">合集</el-divider>
-                <publish-collection v-model="post.post_collection" :defaultCollapse="post.collection_collapse">
+                <publish-collection
+                    v-model="post.post_collection"
+                    :defaultCollapse="post.collection_collapse"
+                >
                     <publish-collection-collapse v-model="post.collection_collapse"></publish-collection-collapse>
                 </publish-collection>
             </div>
@@ -56,6 +59,7 @@
                 <el-divider content-position="left">设置</el-divider>
                 <publish-comment v-model="post.comment"></publish-comment>
                 <publish-visible v-model="post.visible"></publish-visible>
+                <publish-authors :id="id" :uid="post.post_author"></publish-authors>
             </div>
 
             <!-- 其它 -->
@@ -98,6 +102,7 @@ import publish_comment from "@/components/publish_comment";
 import publish_visible from "@/components/publish_visible";
 import publish_subtype from "@/components/publish_subtype";
 import publish_tags from "@/components/publish_tags";
+import publish_authors from "@/components/publish_authors";
 
 // 数据逻辑
 import { push, pull } from "@/service/cms.js";
@@ -121,6 +126,7 @@ export default {
         "publish-visible": publish_visible,
         "publish-subtype": publish_subtype,
         "publish-tags": publish_tags,
+        "publish-authors": publish_authors,
     },
     data: function () {
         return {
@@ -188,7 +194,7 @@ export default {
                 post_banner: "",
                 // 小册
                 post_collection: "",
-                collection_collapse : 0,
+                collection_collapse: 0,
 
                 // 评论开关（0开启|默认，1关闭）
                 comment: 0,
@@ -247,10 +253,14 @@ export default {
                 .then((res) => {
                     let result = res.data.data;
                     // 且存在有效数据
-                    if (this.post.post_subtype == 1 && this.post.post_meta?.data?.length) {
-                        syncRedis(result).then((res) => {
-                            this.done(skip, result);
+                    if (
+                        this.post.post_subtype == 1 &&
+                        this.post.post_meta?.data?.length
+                    ) {
+                        syncRedis(result).catch((err) => {
+                            console.log("[Redis同步作业失败]", err);
                         });
+                        this.done(skip, result);
                     } else {
                         this.done(skip, result);
                     }

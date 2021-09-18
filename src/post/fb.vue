@@ -42,6 +42,7 @@
                 <el-divider content-position="left">设置</el-divider>
                 <publish-comment v-model="post.comment"></publish-comment>
                 <publish-visible v-model="post.visible"></publish-visible>
+                <publish-authors :id="id" :uid="post.post_author"></publish-authors>
             </div>
 
             <!-- 其它 -->
@@ -78,6 +79,7 @@ import publish_collection_collapse from "@/components/publish_collection_collaps
 import publish_banner from "@/components/publish_banner";
 import publish_comment from "@/components/publish_comment";
 import publish_visible from "@/components/publish_visible";
+import publish_authors from "@/components/publish_authors";
 
 // 数据逻辑
 import { push, pull } from "@/service/cms.js";
@@ -96,6 +98,7 @@ export default {
         "publish-banner": publish_banner,
         "publish-comment": publish_comment,
         "publish-visible": publish_visible,
+        "publish-authors": publish_authors,
     },
     data: function () {
         return {

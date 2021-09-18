@@ -6,7 +6,7 @@ import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 function syncRedis(data) {
     let redisData = transferForRedis(data);
     console.log("正在执行redis同步作业:", redisData);
-    return $next().post("/api/macro/publish", redisData);
+    return $next({mute:true}).post("/api/macro/publish", redisData);
 }
 
 function transferForRedis(data) {

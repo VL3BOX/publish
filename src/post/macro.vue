@@ -226,9 +226,10 @@ export default {
             push(...this.data)
                 .then((res) => {
                     let result = res.data.data;
-                    syncRedis(result).then((res) => {
-                        this.done(skip, result);
-                    });
+                    syncRedis(result).catch((err) => {
+                        console.log('[Redis同步作业失败]',err)
+                    })
+                    this.done(skip, result);
                 })
                 .finally(() => {
                     this.processing = false;
