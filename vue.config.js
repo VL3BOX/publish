@@ -46,7 +46,7 @@ module.exports = {
                 target: process.env["DEV_SERVER"] == "true" ? "http://localhost:5120" : "https://cms.jx3box.com"
             },
             "/api": {
-                "target": "https://next.jx3box.com",
+                "target": "https://next2.jx3box.com",
                 "onProxyReq": function (request) {
                     request.setHeader("origin", "");
                 }

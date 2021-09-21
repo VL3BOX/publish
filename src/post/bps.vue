@@ -90,6 +90,7 @@ import publish_authors from "@/components/publish_authors";
 
 // 数据逻辑
 import { push, pull } from "@/service/cms.js";
+import { appendToCollection } from "@/service/collection.js";
 
 export default {
     name: "bps",
@@ -205,7 +206,12 @@ export default {
             push(...this.data)
                 .then((res) => {
                     let result = res.data.data;
-                    this.done(skip, result);
+                    return result
+                })
+                .then((result) => {
+                    this.afterPublish(result).finally(() => {
+                        this.done(skip, result);
+                    })
                 })
                 .finally(() => {
                     this.processing = false;
@@ -240,6 +246,18 @@ export default {
                     });
                 }
             }
+        },
+        // 跳转前操作
+        afterPublish: function (result) {
+            if(!~~result.post_collection) return new Promise((resolve,reject)=>{
+                resolve(true)
+            })
+            return appendToCollection({
+                post_type: result.post_type,
+                post_id: result.ID,
+                post_collection: result.post_collection,
+                post_title: result.post_title,
+            })
         },
     },
     created: function () {
