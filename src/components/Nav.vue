@@ -41,11 +41,14 @@
                 <template slot="title">
                     <span class="u-title">联合创作</span>
                 </template>
-                <router-link
-                    to="/union"
-                >
+                <router-link to="/union/active">
                     <i class="el-icon-collection"></i>
-                    <span>全部</span>
+                    <span>邀请创作</span>
+                    <!-- <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span> -->
+                </router-link>
+                <router-link to="/union/passive">
+                    <i class="el-icon-collection"></i>
+                    <span>受邀创作</span>
                     <!-- <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span> -->
                 </router-link>
             </el-collapse-item>

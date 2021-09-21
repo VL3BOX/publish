@@ -8,8 +8,8 @@
         <el-form label-position="left" label-width="80px">
             <el-form-item label="门派">
                 <el-select v-model="post.post_subtype" placeholder="请选择门派">
-                    <el-option v-for="s in schools" :key="s.value" :value="s.value" :label="s.key">
-                        <span style="float: left;">{{ s.key }}</span>
+                    <el-option v-for="s in schools" :key="s.value" :value="s.key" :label="s.value">
+                        <span style="float: left;">{{ s.value }}</span>
                         <span style="float: right;">
                             <img :src="s.path" width="32" :alt="s.key">
                         </span>
@@ -70,7 +70,7 @@
 import { getLink } from "@jx3box/jx3box-common/js/utils";
 import Emotion from "@jx3box/jx3box-emotion/src/Emotion.vue"
 import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
-import { school } from "@jx3box/jx3box-data/data/xf/school.json";
+import schools from "@jx3box/jx3box-data/data/xf/schoolid.json";
 import emotion from "@jx3box/jx3box-data/data/jokes/default.json";
 
 // 本地模块
@@ -205,11 +205,11 @@ export default {
         },
         formatSchool() {
             const arr = []
-            for (const [key, value] of Object.entries(school)) {
+            for (const [key, value] of Object.entries(schools)) {
                 const obj = {
                     key,
                     value: String(value),
-                    path: __imgPath + `image/school/${value}.png`
+                    path: __imgPath + `image/school/${key}.png`
                 }
                 arr.push(obj)
             }

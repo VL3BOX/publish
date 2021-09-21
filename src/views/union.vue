@@ -1,7 +1,13 @@
 <template>
     <div class="m-dashboard-work m-dashboard-cms m-dashboard-union" v-loading="loading">
         <div class="m-dashboard-work-header">
-            <h2 class="u-title">联合创作</h2>
+            <h2 class="u-title">
+                联合创作
+                <span class="u-subtype">
+                    <i class="el-icon-arrow-right"></i>
+                    <span>{{subtype}}</span>
+                </span>
+            </h2>
         </div>
 
         <div class="m-dashboard-box">
@@ -45,7 +51,18 @@
                                 title="编辑"
                                 @click="edit(item.union_post_raw.post_type, item.union_post_raw.ID)"
                             ></el-button>
-                            <el-popconfirm title="确认退出该作品的联合创作者身份吗？" @confirm="quit(item.union_post_raw.ID,i)">
+                            <el-button
+                                v-if="isActive"
+                                size="mini"
+                                icon="el-icon-delete"
+                                title="删除"
+                                @click="del(item.union_post_raw.ID,i)"
+                            ></el-button>
+                            <el-popconfirm
+                                v-else
+                                title="确认退出该作品的联合创作者身份吗？"
+                                @confirm="quit(item.union_post_raw.ID,i)"
+                            >
                                 <el-button
                                     slot="reference"
                                     class="u-quit"
@@ -80,6 +97,7 @@
 </template>
 
 <script>
+import { del } from "@/service/cms.js";
 import { getUnionPosts, quitUnionPost } from "@/service/union.js";
 import { editLink, getLink } from "@jx3box/jx3box-common/js/utils.js";
 import {
@@ -104,7 +122,14 @@ export default {
             return {
                 page: this.page,
                 per: this.per,
+                is_active : ~~this.isActive,
             };
+        },
+        subtype: function () {
+            return this.$route.name == "union_active" ? "邀请创作" : "受邀创作";
+        },
+        isActive: function () {
+            return this.$route.name == "union_active";
         },
     },
     watch: {
@@ -121,7 +146,7 @@ export default {
             this.loading = true;
             getUnionPosts(this.params)
                 .then((res) => {
-                    this.data = res.data.data.list;
+                    this.data = res.data.data.list || [];
                     this.total = res.data.data.total;
                 })
                 .finally(() => {
@@ -144,6 +169,23 @@ export default {
                 this.data.splice(i, 1);
             });
         },
+        del: function (id, i) {
+            this.$alert("确定要删除吗？", "确认信息", {
+                confirmButtonText: "确定",
+                callback: (action) => {
+                    if (action == "confirm") {
+                        del(id).then((res) => {
+                            this.$notify({
+                                title: "删除成功",
+                                message: "成功删除作品",
+                                type: "success",
+                            });
+                            this.data.splice(i, 1);
+                        });
+                    }
+                },
+            });
+        },
     },
     filters: {
         dateFormat: function (val) {
@@ -158,9 +200,20 @@ export default {
 
 <style lang="less">
 @import "../assets/css/work.less";
-.m-dashboard-union .u-quit {
-    i {
-        transform: rotate(-90deg);
+.m-dashboard-union {
+    .u-quit {
+        i {
+            transform: rotate(-90deg);
+        }
+    }
+    .u-subtype {
+        .fz(12px);
+        color: #999;
+        .ml(10px);
+        font-weight: normal;
+        span {
+            color: #fba524;
+        }
     }
 }
 </style>
