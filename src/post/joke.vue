@@ -71,7 +71,7 @@ import { getLink } from "@jx3box/jx3box-common/js/utils";
 import Emotion from "@jx3box/jx3box-emotion/src/Emotion.vue"
 import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
 import schools from "@jx3box/jx3box-data/data/xf/schoolid.json";
-import emotion from "@jx3box/jx3box-data/data/jokes/default.json";
+import emotion from "@jx3box/jx3box-emotion/data/default.json";
 
 // 本地模块
 import publish_header from "@/components/publish_header.vue";

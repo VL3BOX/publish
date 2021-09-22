@@ -35,7 +35,7 @@ import isEmptyMeta from "@/utils/isEmptyMeta.js";
 import UploadAlbum from "@jx3box/jx3box-editor/src/UploadAlbum.vue";
 import { parse } from "lua-json";
 import { uploadFacedata } from "@/service/share.js";
-import bodymap from '@jx3box/jx3box-data/data/common/role_type.json'
+import {bodyMap} from '@jx3box/jx3box-facedat/assets/data/index.json'
 // META空模板
 const default_meta = {
     author: "", //原作者
@@ -80,7 +80,7 @@ export default {
         },
         "facedat.data" : function (val){
             let body_type = this.object.nRoleType
-            this.$emit("updateMeta", { key: "post_subtype", val: bodymap[body_type] });
+            this.$emit("updateMeta", { key: "post_subtype", val: bodyMap[body_type] });
         }
     },
     computed: {},
