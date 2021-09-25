@@ -95,7 +95,7 @@
 
 <script>
 import { uploadLanrenFile } from "@/service/jx3dat.js";
-import { lanren_types } from "@jx3box/jx3box-common/data/lanren_types";
+// import { lanren_types } from "@jx3box/jx3box-common/data/lanren_types";
 import cloneDeep from 'lodash/cloneDeep'
 const now = Date.now()
 
@@ -128,7 +128,7 @@ export default {
         activeTab: "1",
         lanrenDat: {},
         tabs: [],
-        lanren_types
+        lanren_types:[]
     }),
     watch: {
         data: {
