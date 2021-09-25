@@ -1,6 +1,6 @@
 <template>
     <div class="m-dashboard m-dashboard-work m-dashboard-wiki" v-loading="loading">
-        
+
         <div class="m-dashboard-work-header">
             <h2 class="u-title">{{typeLable}}百科</h2>
             <a :href="publishLink" class="u-publish el-button el-button--primary el-button--small"><i class="el-icon-document"></i> 发布作品</a>
@@ -180,7 +180,7 @@ export default {
                 confirmButtonText: "确定",
                 callback: (action) => {
                     if (action == "confirm") {
-                        remove_post(post.id).then(
+                        remove_post(post.type, post.id).then(
                             (data) => {
                                 data = data.data;
                                 if (data.code === 200) {

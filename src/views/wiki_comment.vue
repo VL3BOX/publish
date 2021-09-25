@@ -176,7 +176,7 @@ export default {
             this.$alert("确定要删除吗？", "确认信息", {
                 confirmButtonText: "确定",
                 callback: (action) => {
-                    remove_comment(comment.id).then(
+                    remove_comment(comment.type, comment.id).then(
                         (data) => {
                             data = data.data;
                             if (data.code === 200) {

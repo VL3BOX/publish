@@ -8,11 +8,11 @@ function get_posts(params) {
     });
 }
 
-function remove_post(post_id) {
-    if (!post_id) return null;
+function remove_post(source_type, post_id) {
+    if (!source_type || !post_id) return null;
     return $helper()({
         method: "PUT",
-        url: `/api/my/wiki/post/${post_id}/remove`,
+        url: `/api/my/wiki/post/${source_type}/${post_id}/remove`,
     });
 }
 
@@ -24,11 +24,11 @@ function get_comments(params) {
     });
 }
 
-function remove_comment(comment_id) {
-    if (!comment_id) return null;
+function remove_comment(source_type, comment_id) {
+    if (!source_type || !comment_id) return null;
     return $helper()({
         method: "PUT",
-        url: `/api/my/wiki/comment/${comment_id}/remove`,
+        url: `/api/my/wiki/comment/${source_type}/${comment_id}/remove`,
     });
 }
 
