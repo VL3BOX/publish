@@ -211,7 +211,7 @@ export default {
                 })
                 .then((result) => {
                     this.afterPublish(result).finally(() => {
-                        this.done(skip, result);
+                        // this.done(skip, result);
                     })
                 })
                 .finally(() => {
@@ -253,6 +253,7 @@ export default {
             if(!~~result.post_collection) return new Promise((resolve,reject)=>{
                 resolve(true)
             })
+            console.log(result)
             return appendToCollection({
                 post_type: result.post_type,
                 post_id: result.ID,

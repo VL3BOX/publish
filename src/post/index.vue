@@ -73,12 +73,6 @@
                         <span>茶馆交流</span>
                     </router-link>
                 </el-col>
-                <el-col :span="4">
-                    <router-link to="/namespace">
-                        <i class="el-icon-postcard"></i>
-                        <span>剑三铭牌</span>
-                    </router-link>
-                </el-col>
                 <el-col :span=4>
                     <router-link to="/joke">
                         <img svg-inline src="../assets/img/channel/joke.svg" />
@@ -89,6 +83,12 @@
                     <router-link to="/share">
                         <img svg-inline src="../assets/img/channel/share.svg" />
                         <span>捏脸分享</span>
+                    </router-link>
+                </el-col>
+                <el-col :span="4">
+                    <router-link to="/namespace">
+                        <i class="el-icon-postcard"></i>
+                        <span>剑三铭牌</span>
                     </router-link>
                 </el-col>
             </el-row>
