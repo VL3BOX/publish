@@ -36,7 +36,10 @@
             </div>
             <div class="m-publish-append">
                 <el-divider content-position="left">合集</el-divider>
-                <publish-collection v-model="post.post_collection" :defaultCollapse="post.collection_collapse">
+                <publish-collection
+                    v-model="post.post_collection"
+                    :defaultCollapse="post.collection_collapse"
+                >
                     <publish-collection-collapse v-model="post.collection_collapse"></publish-collection-collapse>
                 </publish-collection>
             </div>
@@ -89,6 +92,7 @@ import publish_authors from "@/components/publish_authors";
 
 // 数据逻辑
 import { push, pull } from "@/service/cms.js";
+import { appendToCollection } from "@/service/collection.js";
 
 export default {
     name: "bps",
@@ -149,7 +153,7 @@ export default {
                 post_banner: "",
                 // 小册
                 post_collection: "",
-                collection_collapse : 0,
+                collection_collapse: 0,
 
                 // 评论开关（0开启|默认，1关闭）
                 comment: 0,
@@ -203,12 +207,12 @@ export default {
             push(...this.data)
                 .then((res) => {
                     let result = res.data.data;
-                    this.done(skip, result);
+                    return result
                 })
                 .then((result) => {
                     this.afterPublish(result).finally(() => {
                         this.done(skip, result);
-                    })
+                    });
                 })
                 .finally(() => {
                     this.processing = false;
@@ -246,20 +250,21 @@ export default {
         },
         // 跳转前操作
         afterPublish: function (result) {
-            if(!~~result.post_collection) return new Promise((resolve,reject)=>{
-                resolve(true)
-            })
+            if (!~~result.post_collection)
+                return new Promise((resolve, reject) => {
+                    resolve(true);
+                });
             return appendToCollection({
                 post_type: result.post_type,
                 post_id: result.ID,
                 post_collection: result.post_collection,
                 post_title: result.post_title,
-            })
+            });
         },
     },
     created: function () {
         this.post.client = this.$store.state.client;
-        this.init()
+        this.init();
     },
     watch: {
         "$route.params.id": function (val) {
