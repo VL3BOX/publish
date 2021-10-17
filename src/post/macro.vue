@@ -1,5 +1,5 @@
 <template>
-    <div class="m-publish-box" v-loading="loading">
+    <div class="m-publish-box p-publish-macro" v-loading="loading">
         <!-- 头部 -->
         <publish-header name="云端宏"></publish-header>
 
@@ -23,7 +23,14 @@
             </div>
 
             <!-- 宏区域 -->
-            <publish-macro v-model="post.post_meta" :client="post.client"></publish-macro>
+            <publish-macro v-model="post.post_meta" :client="post.client">
+                <!-- 配装 -->
+                <publish-pz v-model="post.pz" :limit="8" :query="pz_query">
+                    <span class="u-pz-tip" slot="prepend">
+                        <i class="el-icon-warning-outline"></i> 展示你推荐的配装（不超过8个，非必选）
+                    </span>
+                </publish-pz>
+            </publish-macro>
 
             <!-- 正文 -->
             <div class="m-publish-content">
@@ -39,7 +46,10 @@
             <!-- 附加 -->
             <div class="m-publish-append">
                 <el-divider content-position="left">合集</el-divider>
-                <publish-collection v-model="post.post_collection" :defaultCollapse="post.collection_collapse">
+                <publish-collection
+                    v-model="post.post_collection"
+                    :defaultCollapse="post.collection_collapse"
+                >
                     <publish-collection-collapse v-model="post.collection_collapse"></publish-collection-collapse>
                 </publish-collection>
             </div>
@@ -92,6 +102,7 @@ import publish_banner from "@/components/publish_banner";
 import publish_comment from "@/components/publish_comment";
 import publish_visible from "@/components/publish_visible";
 import publish_authors from "@/components/publish_authors";
+import publish_pz from "@/components/publish_pz";
 
 // 数据逻辑
 import { push, pull } from "@/service/cms.js";
@@ -116,6 +127,7 @@ export default {
         "publish-comment": publish_comment,
         "publish-visible": publish_visible,
         "publish-authors": publish_authors,
+        "publish-pz": publish_pz,
     },
     data: function () {
         return {
@@ -152,6 +164,8 @@ export default {
                         },
                     ],
                 },
+                // 关联的配装
+                pz: [],
                 // 内容
                 post_content: "",
                 // 编辑模式(会影响文章详情页渲染规则)
@@ -172,7 +186,7 @@ export default {
                 post_banner: "",
                 // 小册
                 post_collection: "",
-                collection_collapse : 0,
+                collection_collapse: 0,
 
                 // 评论开关（0开启|默认，1关闭）
                 comment: 0,
@@ -192,6 +206,12 @@ export default {
             } else {
                 return [this.post];
             }
+        },
+        pz_query: function () {
+            let mount_id = xfmap[this.post.post_subtype]?.id;
+            let _query = {};
+            if (mount_id) _query = { mount: mount_id };
+            return _query;
         },
     },
     methods: {
@@ -227,22 +247,23 @@ export default {
             push(...this.data)
                 .then((res) => {
                     let result = res.data.data;
-                    return result
+                    return result;
                     syncRedis(result).catch((err) => {
-                        console.log('[Redis同步作业失败]',err)
-                    })
+                        console.log("[Redis同步作业失败]", err);
+                    });
                 })
                 .then((result) => {
                     this.afterPublish(result).finally(() => {
                         this.done(skip, result);
-                    })
+                    });
                 })
                 .finally(() => {
                     this.processing = false;
                 });
         },
         build: function () {
-            this.post.meta_2 = ~~lodash.get(xfmap[this.post.post_subtype], "id") || 0;
+            this.post.meta_2 =
+                ~~lodash.get(xfmap[this.post.post_subtype], "id") || 0;
         },
         // 完成
         done: function (skip, result) {
@@ -276,15 +297,16 @@ export default {
         },
         // 跳转前操作
         afterPublish: function (result) {
-            if(!~~result.post_collection) return new Promise((resolve,reject)=>{
-                resolve(true)
-            })
+            if (!~~result.post_collection)
+                return new Promise((resolve, reject) => {
+                    resolve(true);
+                });
             return appendToCollection({
                 post_type: result.post_type,
                 post_id: result.ID,
                 post_collection: result.post_collection,
                 post_title: result.post_title,
-            })
+            });
         },
     },
     created: function () {

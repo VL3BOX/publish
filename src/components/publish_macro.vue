@@ -125,7 +125,7 @@
                             :rows="12"
                         ></el-input>
                     </div>
-                    <div class="m-macro-equip">
+                    <!-- <div class="m-macro-equip">
                         <h5 class="u-schema">
                             配装方案
                             <a class="u-icon-links" href="/tool/19309" target="_blank">
@@ -145,7 +145,7 @@
                                 </el-select>
                             </template>
                         </el-input>
-                    </div>
+                    </div> -->
                     <el-form-item label="其它" class="m-macro-misc">
                         <el-row>
                             <el-col :span="8" class="u-speed">
