@@ -85,12 +85,6 @@
                         <span>捏脸分享</span>
                     </router-link>
                 </el-col>
-                <el-col :span="4">
-                    <router-link to="/namespace">
-                        <i class="el-icon-postcard"></i>
-                        <span>剑三铭牌</span>
-                    </router-link>
-                </el-col>
             </el-row>
 
             <el-divider content-position="left">应用</el-divider>
@@ -108,6 +102,12 @@
                     </router-link>
                 </el-col>
                 <el-col :span="4">
+                    <router-link to="/namespace">
+                        <i class="el-icon-postcard"></i>
+                        <span>剑三铭牌</span>
+                    </router-link>
+                </el-col>
+                <!-- <el-col :span="4">
                     <router-link to="/question">
                         <i class="el-icon-s-opportunity"></i>
                         <span>剑三题目</span>
@@ -118,7 +118,7 @@
                         <img svg-inline src="../assets/img/channel/100.svg" />
                         <span>剑三试卷</span>
                     </router-link>
-                </el-col>
+                </el-col> -->
             </el-row>
 
             <template v-if="isAdmin">

@@ -3,7 +3,7 @@
 
         <div class="m-dashboard-work-header">
             <h2 class="u-title">{{typeLable}}</h2>
-            <a :href="publishLink" class="u-publish el-button el-button--primary el-button--small">
+            <a :href="publishLink" class="u-publish el-button el-button--primary el-button--small" v-if="isNotExam">
                 <i class="el-icon-document"></i> 发布作品
             </a>
         </div>
@@ -123,6 +123,9 @@ export default {
         },
         publishLink : function (){
             return './#/' + this.type
+        },
+        isNotExam : function (){
+            return this.type != 'question' && this.type != 'paper'
         }
     },
     watch: {

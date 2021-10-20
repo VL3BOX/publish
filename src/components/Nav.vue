@@ -140,11 +140,6 @@ export default {
                 quest: { path: "/wiki/quest", name: "任务百科", count: 0 },
             },
             app: {
-                namespace: {
-                    path: "/bucket/namespace",
-                    name: "剑三铭牌",
-                    count: 0,
-                },
                 collection: {
                     path: "/bucket/collection",
                     name: "文集小册",
@@ -153,6 +148,11 @@ export default {
                 item_plan: {
                     path: "/bucket/item_plan",
                     name: "物品清单",
+                    count: 0,
+                },
+                namespace: {
+                    path: "/bucket/namespace",
+                    name: "剑三铭牌",
                     count: 0,
                 },
                 exam_question: {
@@ -177,11 +177,11 @@ export default {
                     name: "百科评论",
                     count: 0,
                 },
-                feedback: {
-                    path: "/comment/feedback",
-                    name: "反馈建议",
-                    count: 0,
-                },
+                // feedback: {
+                //     path: "/comment/feedback",
+                //     name: "反馈建议",
+                //     count: 0,
+                // },
             },
             isAdmin: User.isAdmin(),
         };

@@ -18,69 +18,67 @@
                 draggable=".u-item"
                 v-bind="{ animation: 150, scrollSensitivity: 200 }"
             >
-                <transition-group type="transition">
-                    <div class="u-item" v-for="(item,i) in list" :key="i">
-                        <span class="u-item-order">{{ i + 1}}.</span>
-                        <i class="u-item-drag el-icon-rank"></i>
-                        <div class="u-item-select">
-                            <el-select
-                                v-model="item.id"
-                                placeholder="请选择配装方案"
-                                clearable
-                                filterable
-                                remote
-                                :loading="search_loading"
-                                @visible-change="listOptions"
-                                :remote-method="searchOptions"
-                                size="small"
+                <div class="u-item" v-for="(item,i) in list" :key="i">
+                    <span class="u-item-order">{{ i + 1}}.</span>
+                    <i class="u-item-drag el-icon-rank"></i>
+                    <div class="u-item-select">
+                        <el-select
+                            v-model="item.id"
+                            placeholder="请选择配装方案"
+                            clearable
+                            filterable
+                            remote
+                            :loading="search_loading"
+                            @visible-change="listOptions"
+                            :remote-method="searchOptions"
+                            size="small"
+                        >
+                            <el-option
+                                v-for="option in options"
+                                :key="option.id"
+                                :label="option.title"
+                                :value="option.id"
+                                class="m-publish-pz-select-option"
                             >
-                                <el-option
-                                    v-for="option in options"
-                                    :key="option.id"
-                                    :label="option.title"
-                                    :value="option.id"
-                                    class="m-publish-pz-select-option"
-                                >
-                                    <i
-                                        class="u-client i-client"
-                                        :class="option.client || 'std'"
-                                    >{{option.client == 'origin' ? '怀旧服' : '正式服'}}</i>
-                                    <i
-                                        class="u-level i-client"
-                                        :class="option.client || 'std'"
-                                    >Lv.{{ option.global_level || '-' }}</i>
-                                    <span>{{ option.title }}</span>
-                                </el-option>
-                            </el-select>
-                        </div>
-                        <div class="u-item-name">
-                            <el-input
-                                v-model="item.name"
-                                placeholder="请输入配装简称"
-                                clearable
-                                :maxlength="12"
-                                :minlength="1"
-                                :show-word-limit="true"
-                                size="small"
-                            ></el-input>
-                        </div>
-                        <div class="u-item-op">
-                            <a
-                                class="preview el-button delete el-button--text"
-                                :href="item.id | getLink"
-                                v-if="item.id"
-                            >
-                                <i class="el-icon-view"></i>预览
-                            </a>
-                            <el-button
-                                class="delete"
-                                type="text"
-                                icon="el-icon-delete"
-                                @click="removeItem(i)"
-                            >删除</el-button>
-                        </div>
+                                <i
+                                    class="u-client i-client"
+                                    :class="option.client || 'std'"
+                                >{{option.client == 'origin' ? '怀旧服' : '正式服'}}</i>
+                                <i
+                                    class="u-level i-client"
+                                    :class="option.client || 'std'"
+                                >Lv.{{ option.global_level || '-' }}</i>
+                                <span>{{ option.title }}</span>
+                            </el-option>
+                        </el-select>
                     </div>
-                </transition-group>
+                    <div class="u-item-name">
+                        <el-input
+                            v-model="item.name"
+                            placeholder="请输入配装简称"
+                            clearable
+                            :maxlength="12"
+                            :minlength="1"
+                            :show-word-limit="true"
+                            size="small"
+                        ></el-input>
+                    </div>
+                    <div class="u-item-op">
+                        <a
+                            class="preview el-button delete el-button--text"
+                            :href="item.id | getLink"
+                            v-if="item.id"
+                        >
+                            <i class="el-icon-view"></i>预览
+                        </a>
+                        <el-button
+                            class="delete"
+                            type="text"
+                            icon="el-icon-delete"
+                            @click="removeItem(i)"
+                        >删除</el-button>
+                    </div>
+                </div>
             </draggable>
         </div>
         <slot name="append" class="m-publish-pz-append"></slot>
