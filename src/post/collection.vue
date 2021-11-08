@@ -309,12 +309,8 @@ export default {
 
                 let collection = JSON.parse(JSON.stringify(this.collection));
 
-                if (!collection.posts.length) {
-                    this.$message({
-                        message: "要添加剑三小册内文章哦",
-                        type: "warning",
-                    });
-                    return;
+                if(!collection.posts) {
+                    collection.posts = [];
                 }
 
                 // 去除多余字段
