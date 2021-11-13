@@ -230,8 +230,6 @@ export default {
         };
     },
     mounted() {
-        if (!this.collection.posts.length) this.add_posts_item();
-
         if (this.$route.params.collection_id) {
             get_collection(this.$route.params.collection_id).then((res) => {
                 res = res.data;
