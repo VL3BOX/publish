@@ -11,10 +11,10 @@
     },
     "dependencies": {
         "@jx3box/jx3box-common": "^6.7.2",
-        "@jx3box/jx3box-common-ui": "^5.3.3",
-        "@jx3box/jx3box-data": "^1.7.6",
+        "@jx3box/jx3box-common-ui": "^5.3.4",
+        "@jx3box/jx3box-data": "^1.7.7",
         "@jx3box/jx3box-editor": "^0.8.8",
-        "@jx3box/jx3box-emotion": "^1.0.9",
+        "@jx3box/jx3box-emotion": "^1.0.10",
         "@jx3box/jx3box-facedat": "^2.2.4",
         "axios": "^0.19.2",
         "core-js": "^3.16.2",
