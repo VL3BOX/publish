@@ -22,6 +22,7 @@
         "localforage": "^1.10.0",
         "lodash": "^4.17.15",
         "lua-json": "^1.0.0",
+        "sortablejs": "^1.14.0",
         "sterilizer": "^0.1.1",
         "vue": "^2.6.14",
         "vue-clipboard2": "^0.3.1",

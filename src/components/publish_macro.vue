@@ -26,7 +26,7 @@
                 </a>
             </div>
 
-            <el-tabs v-model="activeIndex" type="card" closable @tab-remove="removeMacro">
+            <el-tabs class="tabs-sort" v-model="activeIndex" type="card" closable @tab-remove="removeMacro">
                 <el-tab-pane v-for="(item, i) in macros.data" :key="i" :name="i + 1 + ''">
                     <span slot="label">
                         <img class="u-tabicon" :src="icon(item)" />
@@ -162,7 +162,7 @@
                     <div class="m-macro-op">
                         <el-button
                             class="u-macro-remove-fix"
-                            @click="removeMacro(i)"
+                            @click="removeMacro(i + 1)"
                             type="danger"
                             plain
                             icon="el-icon-delete"
@@ -182,6 +182,9 @@ import lodash from "lodash";
 import { sterilizer } from "sterilizer/index.js";
 import { __iconPath } from "@jx3box/jx3box-common/data/jx3box.json";
 import isEmptyMeta from "@/utils/isEmptyMeta.js";
+import cloneDeep from 'lodash/cloneDeep'
+
+import Sortable from 'sortablejs'
 // META空模板
 const default_meta = {
     data: [
@@ -263,6 +266,7 @@ export default {
         },
         // 删除宏
         removeMacro: function (name) {
+            console.log(name)
             if (this.macros.data.length < 2) {
                 this.$alert("必须保留1个宏", "消息", {
                     confirmButtonText: "确定",
@@ -278,7 +282,7 @@ export default {
                         let i = ~~name - 1;
                         this.macros.data.splice(i, 1);
                         // 调整focus位置
-                        this.activeIndex = i + "";
+                        this.activeIndex = "1";
                     }
                 },
             });
@@ -324,6 +328,21 @@ export default {
     },
     filters: {},
     created: function () {},
-    mounted: function () {},
+    mounted: function () {
+        let el = document.querySelector('.tabs-sort .el-tabs__nav');
+        const _this = this
+        let sortTabs = Sortable.create(el, {
+            animation: 200,
+            filter: ".el-icon-close",
+            onEnd({ newIndex, oldIndex }) {
+                const data = cloneDeep(_this.macros.data)
+                const currRow = cloneDeep(data.splice(oldIndex, 1)[0])
+                data.splice(newIndex, 0, currRow)
+                console.log(data)
+
+                _this.macros.data = data
+        　　}
+        })
+    },
 };
 </script>
