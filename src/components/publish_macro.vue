@@ -329,20 +329,20 @@ export default {
     filters: {},
     created: function () {},
     mounted: function () {
-        let el = document.querySelector('.tabs-sort .el-tabs__nav');
-        const _this = this
-        let sortTabs = Sortable.create(el, {
-            animation: 200,
-            filter: ".el-icon-close",
-            onEnd({ newIndex, oldIndex }) {
-                const data = cloneDeep(_this.macros.data)
-                const currRow = cloneDeep(data.splice(oldIndex, 1)[0])
-                data.splice(newIndex, 0, currRow)
-                console.log(data)
+        // let el = document.querySelector('.tabs-sort .el-tabs__nav');
+        // const _this = this
+        // let sortTabs = Sortable.create(el, {
+        //     animation: 200,
+        //     filter: ".el-icon-close",
+        //     onEnd({ newIndex, oldIndex }) {
+        //         const data = cloneDeep(_this.macros.data)
+        //         const currRow = cloneDeep(data.splice(oldIndex, 1)[0])
+        //         data.splice(newIndex, 0, currRow)
+        //         console.log(data)
 
-                _this.macros.data = data
-        　　}
-        })
+        //         _this.macros.data = data
+        // 　　}
+        // })
     },
 };
 </script>
