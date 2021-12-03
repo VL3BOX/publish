@@ -116,7 +116,7 @@ export default {
                 console.log("读取成功...开始执行分析...");
 
                 let data = e.target.result;
-                data = "return" + data.slice(data.indexOf("{"));
+                data = data.slice(data.indexOf("return {"));
 
                 try {
                     vm.object = parse(data)
