@@ -30,7 +30,7 @@
                 ></el-input>
             </el-form-item>
 
-            <el-form-item label="标签">
+            <!-- <el-form-item label="标签">
                 <div style="display: flex;margin-top:5px;">
                     <el-tag 
                         v-for="tag in post.tags"
@@ -51,7 +51,7 @@
                     </el-input>
                     <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 新标签</el-button>
                 </div>
-            </el-form-item>
+            </el-form-item> -->
 
             <div class="m-publish-buttons">
                 <el-button
@@ -59,7 +59,6 @@
                     @click="publish('publish',true)"
                     :disabled="processing"
                 >发 &nbsp;&nbsp; 布</el-button>
-                <el-button type="plain" @click="publish('draft',false)" :disabled="processing">保存为草稿</el-button>
             </div>
         </el-form>
     </div>

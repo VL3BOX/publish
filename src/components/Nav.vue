@@ -67,9 +67,9 @@
                     <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span>
                 </router-link>
             </el-collapse-item>
-            <el-collapse-item title="应用功能" name="app">
+            <el-collapse-item title="其它创作" name="app">
                 <template slot="title">
-                    <span class="u-title">应用扩展</span>
+                    <span class="u-title">其它创作</span>
                 </template>
                 <router-link
                     :to="item.path"
@@ -206,6 +206,9 @@ export default {
                     }
                     if (this.comment[key]) {
                         this.comment[key]["count"] = count[key];
+                    }
+                    if (this.app[key]) {
+                        this.app[key]["count"] = count[key];
                     }
                 }
             });
