@@ -145,30 +145,24 @@ export default {
 
             // 图片列表
             list: [
-                {
-                    desc: "test",
-                    url: "https://console.cnyixun.com/2019/09/logo.png",
-                    original: 0,
-                    author: "",
-                },
-                {
-                    desc: "test",
-                    url: "https://console.cnyixun.com/2019/09/logo.png",
-                    original: 0,
-                    author: "",
-                },
-                {
-                    desc: "test",
-                    url: "https://console.cnyixun.com/2019/09/logo.png",
-                    original: 0,
-                    author: "",
-                },
+                // {
+                //     desc: "test",
+                //     url: "https://console.cnyixun.com/2019/09/logo.png",
+                //     original: 0,
+                //     author: "",
+                // },
+                // {
+                //     desc: "test",
+                //     url: "https://console.cnyixun.com/2019/09/logo.png",
+                //     original: 0,
+                //     author: "",
+                // },
             ],
             data: {
-                desc: "test",
-                url: "https://console.cnyixun.com/2019/09/logo.png",
-                original: 0,
-                author: "111",
+                // desc: "test",
+                // url: "https://console.cnyixun.com/2019/09/logo.png",
+                // original: 0,
+                // author: "111",
             },
 
             // 预览
@@ -227,10 +221,12 @@ export default {
                     type: "success",
                 });
                 // 跳转
-                setTimeout(() => {
-                    location.href = getLink("emotion");
-                }, 500);
-            });
+                // setTimeout(() => {
+                //     location.href = getLink("emotion");
+                // }, 500);
+            }).finally(() => {
+                this.processing = false
+            })
         },
         // 更新
         update: function () {
