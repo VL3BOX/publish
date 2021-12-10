@@ -38,6 +38,7 @@ const exam_paper = () => import("../post/exam_paper.vue");
 const namespace = () => import("../post/namespace.vue");
 const bucket_namespace = () => import("../bucket/namespace.vue");
 const joke = () => import("../post/joke.vue");
+const emotion = () => import("../post/emotion.vue");
 
 Vue.use(VueRouter);
 
@@ -113,6 +114,11 @@ const routes = [
         path: "/notice/:id?",
         component: notice,
     },
+    {
+        path: "/emotion/:id?",
+        component: emotion,
+    },
+
 
     // WIKI=====================
     // 查看

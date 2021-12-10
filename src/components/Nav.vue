@@ -121,6 +121,7 @@ export default {
                 bbs: { path: "/cms/bbs", name: "茶馆交流", count: 0 },
                 share: { path: "/cms/share", name: "捏脸分享", count: 0 },
                 joke: { path: "/cms/joke", name: "剑三骚话", count: 0 },
+                emotion: { path: "/cms/emotion", name: "剑三表情", count: 0 },
             },
             ads: {
                 notice: { path: "/cms/notice", name: "公告资讯", count: 0 },

@@ -66,11 +66,16 @@
 
             <el-divider content-position="left">PVX</el-divider>
             <el-row :gutter="20">
-
                 <el-col :span="4">
                     <router-link to="/bbs">
                         <img svg-inline src="../assets/img/channel/post.svg" />
                         <span>茶馆交流</span>
+                    </router-link>
+                </el-col>
+                <el-col :span="4">
+                    <router-link to="/emotion">
+                        <img svg-inline src="../assets/img/channel/emotion.svg" />
+                        <span>剑三表情</span>
                     </router-link>
                 </el-col>
                 <el-col :span=4>
