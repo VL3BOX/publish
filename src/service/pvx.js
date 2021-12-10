@@ -21,6 +21,11 @@ function deleteEmotion(id) {
     return $cms().delete(`/api/cms/post/emotion/${id}`);
 }
 
+// 通用 - 上传文件
+function uploadEmotion(formdata){
+    return $cms().post(`/api/cms/upload`, formdata)
+}
+
 // 骚话栏目接口
 function postJoke(data) {}
 function updateJoke(id, data) {}
@@ -36,4 +41,4 @@ function deleteJoke(id) {
     return $cms().delete(`/api/cms/post/joke/${id}`);
 }
 
-export { postEmotions, getEmotion, updateEmotion, getMyEmotions, deleteEmotion, postJoke, updateJoke, getJoke, getMyJokes, deleteJoke };
+export { postEmotions, getEmotion, updateEmotion, getMyEmotions, deleteEmotion, uploadEmotion, postJoke, updateJoke, getJoke, getMyJokes, deleteJoke };

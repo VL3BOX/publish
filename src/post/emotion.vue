@@ -7,7 +7,7 @@
             <!-- 编辑 -->
             <div class="m-publish-emotion m-publish-emotion-edit" v-if="id">
                 <el-form-item label="图片">
-                    <div class="u-pic">
+                    <div class="u-pic" v-if="data && data.url">
                         <img class="u-img" :src="data.url | showThumbnail" />
                         <i class="u-mask"></i>
                         <i class="u-preview" @click="previewHandle(data)">
@@ -15,15 +15,56 @@
                         </i>
                         <!-- TODO:替换图片 -->
                     </div>
+                    <div class="c-upload-logo" v-show="!data.url">
+                        <div v-if="data && data.url" class="u-logo">
+                            <img :src="data.url" />
+                            <i class="u-logo-mask"></i>
+                            <i
+                                class="u-logo-delete el-icon-delete"
+                                title="移除"
+                                @click="handleRemove"
+                            ></i>
+                        </div>
+                        <div
+                            v-else
+                            class="u-upload el-upload el-upload--picture-card"
+                            @click="select"
+                        >
+                            <i class="el-icon-plus"></i>
+                        </div>
+                        <input
+                            class="u-upload-input"
+                            type="file"
+                            @change="upload"
+                            ref="uploadInput"
+                        />
+                    </div>
+                    <el-button
+                        v-if="data && data.url"
+                        class="u-remove-btn"
+                        icon="el-icon-delete"
+                        @click="removePic"
+                        >移除</el-button
+                    >
                 </el-form-item>
                 <el-form-item label="描述">
-                    <el-input v-model="data.desc" placeholder="图片说明"></el-input>
+                    <el-input
+                        v-model="data.desc"
+                        placeholder="图片说明"
+                    ></el-input>
                 </el-form-item>
                 <el-form-item label="原创">
-                    <el-switch v-model.number="data.original" :active-value="1" :inactive-value="0"></el-switch>
+                    <el-switch
+                        v-model.number="data.original"
+                        :active-value="1"
+                        :inactive-value="0"
+                    ></el-switch>
                 </el-form-item>
                 <el-form-item label="原作者">
-                    <el-input v-model="data.author" placeholder="（非必填）"></el-input>
+                    <el-input
+                        v-model="data.author"
+                        placeholder="（非必填）"
+                    ></el-input>
                 </el-form-item>
                 <!-- 按钮 -->
                 <div class="m-publish-buttons">
@@ -31,7 +72,8 @@
                         type="primary"
                         @click="update"
                         :disabled="processing"
-                    >更 &nbsp;&nbsp; 新</el-button>
+                        >更 &nbsp;&nbsp; 新</el-button
+                    >
                 </div>
             </div>
 
@@ -52,9 +94,9 @@
                 <!-- 列表 -->
                 <div class="m-publish-emotion-list" v-if="list && list.length">
                     <div class="u-list">
-                        <div class="u-item" v-for="(item,i) in list" :key="i">
+                        <div class="u-item" v-for="(item, i) in list" :key="i">
                             <div class="u-div">
-                                <i class="u-order">{{i + 1}}</i>
+                                <i class="u-order">{{ i + 1 }}</i>
                                 <div class="u-op">
                                     <el-button
                                         class="u-delete"
@@ -62,18 +104,28 @@
                                         @click="deleteHandle(i)"
                                         type="info"
                                         size="mini"
-                                    >删除</el-button>
+                                        >删除</el-button
+                                    >
                                 </div>
                             </div>
                             <div class="u-pic">
-                                <img class="u-img" :src="item.url | showThumbnail" />
+                                <img
+                                    class="u-img"
+                                    :src="item.url | showThumbnail"
+                                />
                                 <i class="u-mask"></i>
-                                <i class="u-preview" @click="previewHandle(item)">
+                                <i
+                                    class="u-preview"
+                                    @click="previewHandle(item)"
+                                >
                                     <i class="el-icon-zoom-in"></i>
                                 </i>
                             </div>
                             <div class="u-desc">
-                                <el-input v-model="item.desc" placeholder="图片说明">
+                                <el-input
+                                    v-model="item.desc"
+                                    placeholder="图片说明"
+                                >
                                     <span slot="prepend">描述</span>
                                 </el-input>
                             </div>
@@ -102,16 +154,19 @@
                             type="primary"
                             @click="publish"
                             :disabled="processing"
-                        >发 &nbsp;&nbsp; 布</el-button>
+                            >发 &nbsp;&nbsp; 布</el-button
+                        >
                     </div>
                 </div>
-
-                <!-- 预览 -->
-                <el-dialog class="m-publish-emotion-preview" :visible.sync="dialogVisible">
-                    <img width="100%" :src="dialogImageUrl" alt />
-                </el-dialog>
             </div>
         </el-form>
+        <!-- 预览 -->
+        <el-dialog
+            class="m-publish-emotion-preview"
+            :visible.sync="dialogVisible"
+        >
+            <img width="100%" :src="dialogImageUrl" alt />
+        </el-dialog>
     </div>
 </template>
 
@@ -124,7 +179,7 @@ import publish_header from "@/components/publish_header.vue";
 import UploadImages from "@jx3box/jx3box-editor/src/Upload.vue";
 
 // 数据逻辑
-import { postEmotions, getEmotion, updateEmotion } from "@/service/pvx.js";
+import { postEmotions, getEmotion, updateEmotion, uploadEmotion } from "@/service/pvx.js";
 
 export default {
     name: "emotion",
@@ -174,6 +229,9 @@ export default {
         id: function () {
             return ~~this.$route.params.id;
         },
+        fileInput: function () {
+            return this.$refs.uploadInput;
+        },
     },
     methods: {
         // 加载
@@ -205,6 +263,7 @@ export default {
         },
         // 预览
         previewHandle: function (item) {
+            console.log(item);
             this.dialogImageUrl = item.url;
             this.dialogVisible = true;
         },
@@ -215,34 +274,69 @@ export default {
         // 发布
         publish: function () {
             this.processing = true;
-            postEmotions(this.list).then((res) => {
-                this.$message({
-                    message: "发布成功",
-                    type: "success",
+            postEmotions(this.list)
+                .then((res) => {
+                    this.$message({
+                        message: "发布成功",
+                        type: "success",
+                    });
+                    // 跳转
+                    setTimeout(() => {
+                        location.href = getLink("emotion");
+                    }, 500);
+                })
+                .finally(() => {
+                    this.processing = false;
                 });
-                // 跳转
-                setTimeout(() => {
-                    location.href = getLink("emotion");
-                }, 500);
-            }).finally(() => {
-                this.processing = false
-            })
         },
         // 更新
         update: function () {
-            this.processing = true;
-            updateEmotion(this.id, this.data).then((res) => {
+            if (!this.data?.url) {
                 this.$message({
-                    message: "更新成功",
+                    message: "图片不能为空",
+                    type: "warning",
+                });
+                return
+            }
+            this.processing = true;
+            updateEmotion(this.id, this.data)
+                .then((res) => {
+                    this.$message({
+                        message: "更新成功",
+                        type: "success",
+                    });
+                    // 跳转
+                    setTimeout(() => {
+                        location.href = getLink("emotion", this.id);
+                    }, 500);
+                })
+                .finally(() => {
+                    this.processing = false;
+                });
+        },
+        // 单页 移除
+        removePic: function () {
+            this.data.url = '';
+        },
+        select: function () {
+            this.fileInput.dispatchEvent(new MouseEvent("click"));
+        },
+        upload: function () {
+            let formdata = new FormData();
+            formdata.append("file", this.fileInput.files[0]);
+            uploadEmotion(formdata).then((res) => {
+                this.data.url = res.data.data[0];
+                this.$message({
+                    message: "上传成功",
                     type: "success",
                 });
-                // 跳转
-                setTimeout(() => {
-                    location.href = getLink("emotion", this.id);
-                }, 500);
-            }).finally(() => {
-                this.processing = false
-            })
+
+                this.fileInput.files = []
+            });
+
+        },
+        handleRemove() {
+            this.data.url = '';
         },
     },
     watch: {
