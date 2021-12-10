@@ -120,8 +120,6 @@ export default {
                 tool: { path: "/cms/tool", name: "教程工具", count: 0 },
                 bbs: { path: "/cms/bbs", name: "茶馆交流", count: 0 },
                 share: { path: "/cms/share", name: "捏脸分享", count: 0 },
-                joke: { path: "/cms/joke", name: "剑三骚话", count: 0 },
-                emotion: { path: "/cms/emotion", name: "剑三表情", count: 0 },
             },
             ads: {
                 notice: { path: "/cms/notice", name: "公告资讯", count: 0 },
@@ -141,21 +139,23 @@ export default {
                 quest: { path: "/wiki/quest", name: "任务百科", count: 0 },
             },
             app: {
-                collection: {
-                    path: "/bucket/collection",
-                    name: "文集小册",
-                    count: 0,
-                },
-                item_plan: {
-                    path: "/bucket/item_plan",
-                    name: "物品清单",
-                    count: 0,
-                },
+                joke: { path: "/bucket/joke", name: "剑三骚话", count: 0 },
+                emotion: { path: "/bucket/emotion", name: "剑三表情", count: 0 },
                 namespace: {
                     path: "/bucket/namespace",
                     name: "剑三铭牌",
                     count: 0,
                 },
+                collection: {
+                    path: "/bucket/collection",
+                    name: "剑三小册",
+                    count: 0,
+                },
+                // item_plan: {
+                //     path: "/bucket/item_plan",
+                //     name: "物品清单",
+                //     count: 0,
+                // },
                 exam_question: {
                     path: "/bucket/question",
                     name: "剑三题目",

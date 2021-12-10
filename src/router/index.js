@@ -35,10 +35,16 @@ const collection = () => import("../post/collection.vue");
 const item_plan = () => import("../post/item_plan.vue");
 const exam_question = () => import("../post/exam_question.vue");
 const exam_paper = () => import("../post/exam_paper.vue");
+
+
 const namespace = () => import("../post/namespace.vue");
 const bucket_namespace = () => import("../bucket/namespace.vue");
+
 const joke = () => import("../post/joke.vue");
+const bucket_joke = () => import("../bucket/joke.vue");
+
 const emotion = () => import("../post/emotion.vue");
+const bucket_emotion = () => import("../bucket/emotion.vue");
 
 Vue.use(VueRouter);
 
@@ -148,6 +154,8 @@ const routes = [
     // 应用=====================
     // 查看
     { path: "/bucket/namespace", name: "bucket_namespace", component: bucket_namespace },
+    { path: "/bucket/joke", name: "bucket", component: bucket_joke },
+    { path: "/bucket/emotion", name: "bucket", component: bucket_emotion },
     { path: "/bucket/:type", name: "bucket", component: bucket },
 
     // 小册发布

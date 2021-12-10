@@ -69,7 +69,7 @@
                 <el-col :span="4">
                     <router-link to="/bbs">
                         <img svg-inline src="../assets/img/channel/post.svg" />
-                        <span>茶馆交流</span>
+                        <span>剑三茶馆</span>
                     </router-link>
                 </el-col>
                 <el-col :span="4">
@@ -97,13 +97,7 @@
                 <el-col :span="4">
                     <router-link to="/collection">
                         <i class="el-icon-notebook-1"></i>
-                        <span>文集小册</span>
-                    </router-link>
-                </el-col>
-                <el-col :span="4">
-                    <router-link to="/item_plan">
-                        <i class="el-icon-folder"></i>
-                        <span>物品清单</span>
+                        <span>剑三小册</span>
                     </router-link>
                 </el-col>
                 <el-col :span="4">
@@ -112,6 +106,12 @@
                         <span>剑三铭牌</span>
                     </router-link>
                 </el-col>
+                <!-- <el-col :span="4">
+                    <router-link to="/item_plan">
+                        <i class="el-icon-folder"></i>
+                        <span>物品清单</span>
+                    </router-link>
+                </el-col> -->
                 <!-- <el-col :span="4">
                     <router-link to="/question">
                         <i class="el-icon-s-opportunity"></i>

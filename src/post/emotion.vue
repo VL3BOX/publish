@@ -181,7 +181,7 @@ export default {
             this.loading = true;
             getEmotion(this.id)
                 .then((res) => {
-                    this.data = res.data?.data;
+                    this.data = res?.data?.data;
                 })
                 .finally(() => {
                     this.loading = false;
@@ -221,9 +221,9 @@ export default {
                     type: "success",
                 });
                 // 跳转
-                // setTimeout(() => {
-                //     location.href = getLink("emotion");
-                // }, 500);
+                setTimeout(() => {
+                    location.href = getLink("emotion");
+                }, 500);
             }).finally(() => {
                 this.processing = false
             })
@@ -240,7 +240,9 @@ export default {
                 setTimeout(() => {
                     location.href = getLink("emotion", this.id);
                 }, 500);
-            });
+            }).finally(() => {
+                this.processing = false
+            })
         },
     },
     watch: {
