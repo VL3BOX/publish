@@ -7,11 +7,11 @@
 
         <el-form label-position="left" label-width="80px">
             <el-form-item label="门派">
-                <el-select v-model="post.type" placeholder="请选择门派">
+                <el-select v-model="data.type" placeholder="请选择门派">
                     <el-option v-for="s in schools" :key="s.value" :value="s.key" :label="s.value">
                         <span style="float: left;">{{ s.value }}</span>
                         <span style="float: right;">
-                            <img :src="s.path" width="32" :alt="s.key">
+                            <img :src="s.path" width="32" :alt="s.key" />
                         </span>
                     </el-option>
                 </el-select>
@@ -19,7 +19,7 @@
 
             <el-form-item label="内容">
                 <el-input
-                    v-model="post.post_title"
+                    v-model="data.content"
                     type="textarea"
                     :rows="6"
                     placeholder="请输入内容"
@@ -51,14 +51,10 @@
                     </el-input>
                     <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 新标签</el-button>
                 </div>
-            </el-form-item> -->
+            </el-form-item>-->
 
             <div class="m-publish-buttons">
-                <el-button
-                    type="primary"
-                    @click="publish('publish',true)"
-                    :disabled="processing"
-                >发 &nbsp;&nbsp; 布</el-button>
+                <el-button type="primary" @click="publish" :disabled="processing">发 &nbsp;&nbsp; 布</el-button>
             </div>
         </el-form>
     </div>
@@ -67,7 +63,7 @@
 <script>
 // 公共模块
 import { getLink } from "@jx3box/jx3box-common/js/utils";
-import Emotion from "@jx3box/jx3box-emotion/src/Emotion.vue"
+import Emotion from "@jx3box/jx3box-emotion/src/Emotion.vue";
 import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
 import schools from "@jx3box/jx3box-data/data/xf/schoolid.json";
 import emotion from "@jx3box/jx3box-emotion/data/default.json";
@@ -76,13 +72,13 @@ import emotion from "@jx3box/jx3box-emotion/data/default.json";
 import publish_header from "@/components/publish_header.vue";
 
 // 数据逻辑
-import { push, pull } from "@/service/cms.js";
+import { postJoke, updateJoke, getJoke } from "@/service/pvx.js";
 
 export default {
     name: "joke",
     components: {
         "publish-header": publish_header,
-        Emotion
+        Emotion,
     },
     data: () => ({
         // 加载状态
@@ -91,79 +87,36 @@ export default {
         processing: false,
 
         inputVisible: false,
-        inputValue: '',
+        inputValue: "",
         contentLength: 0,
 
         // 内容
-        post: {
-            // 文章ID
-            ID: "",
-            // 状态：publish公开、private私有、draft草稿、dustbin删除
-            post_status: "publish",
-            // 类型
-            post_type: "joke",
-
-            // 标题
-            post_title: "",
-            // 子类型：心法、副本名等
-            post_subtype: "0",
-            // 自定义字段
-            post_meta: {},
-            // 内容
-            post_content: "",
-            // 编辑模式(会影响文章详情页渲染规则)
-            post_mode: "joke",
-
-            // 是否原创
-            original: 1,
-            // 客户端：std正式服、origin怀旧服
-            client: "all",
-            // 语言：cn简体、tr繁体
-            lang: "cn",
-            // 资料片
-            zlp: "",
-
-            // 摘要
-            post_excerpt: "",
-            // 海报
-            post_banner: "",
-            // 小册
-            post_collection: "",
-
-            // 评论开关（0开启|默认，1关闭）
-            comment: 0,
-
-            // 阅读权限（0公开，1仅自己，2亲友，3密码，4付费，5粉丝）
-            visible: 0,
-            // 自定义标签 10上限
-            tags: []
+        data: {
+            type: "0",
+            content: "",
         },
 
         // 门派
-        schools: []
+        schools: [],
     }),
     computed: {
         id: function () {
-            return ~~this.post.ID;
+            return this.$route.params.id;
         },
-        data: function () {
-            if (this.id) {
-                return [this.id, this.post];
-            } else {
-                return [this.post];
-            }
+        publishAction: function () {
+            return this.id ? updateJoke : postJoke;
         },
     },
     methods: {
         handleEmotionSelect(key) {
             this.insertVariable(key);
         },
-        handleClose(tag) {
-            this.post.tags = this.post.tags.filter(t => t !== tag)
-        },
+        // handleClose(tag) {
+        //     this.post.tags = this.post.tags.filter(t => t !== tag)
+        // },
         showInput() {
             this.inputVisible = true;
-            this.$nextTick(_ => {
+            this.$nextTick((_) => {
                 this.$refs.saveTagInput.$refs.input.focus();
             });
         },
@@ -174,7 +127,7 @@ export default {
                 this.post.tags.push(inputValue);
             }
             this.inputVisible = false;
-            this.inputValue = '';
+            this.inputValue = "";
         },
         /**
          * add emotion to textarea
@@ -186,7 +139,7 @@ export default {
                 let startPos = myField.selectionStart;
                 let endPos = myField.selectionEnd;
 
-                this.post.post_title =
+                this.data.content =
                     myField.value.substring(0, startPos) +
                     value +
                     myField.value.substring(endPos, myField.value.length);
@@ -199,86 +152,55 @@ export default {
                     endPos + value.length
                 );
             } else {
-                this.post.post_title = value;
+                this.data.content = value;
             }
         },
         formatSchool() {
-            const arr = []
+            const arr = [];
             for (const [key, value] of Object.entries(schools)) {
                 const obj = {
                     key,
                     value: String(value),
-                    path: __imgPath + `image/school/${key}.png`
-                }
-                arr.push(obj)
+                    path: __imgPath + `image/school/${key}.png`,
+                };
+                arr.push(obj);
             }
-            this.schools = arr
+            this.schools = arr;
         },
         // 加载
         init: function () {
-            this.loading = true;
             // 加载文章
-            if (this.$route.params.id) {
-                return pull(this.$route.params.id)
+            if (this.id) {
+                this.loading = true;
+                return getJoke(this.id)
                     .then((res) => {
-                        this.post = res.data.data;
-                        return res.data.data;
+                        this.data = res?.data?.data;
                     })
                     .finally(() => {
                         this.loading = false;
                     });
-            } else {
-                return new Promise((resolve, reject) => {
-                    resolve();
-                }).finally(() => {
-                    this.loading = false;
-                });
             }
         },
         // 发布
-        publish: function (status, skip) {
+        publish: function () {
             if (!this.check()) return;
 
-            this.post.post_status = status;
             this.processing = true;
-            push(...this.data)
+            this.publishAction(this.data)
                 .then((res) => {
-                    let result = res.data.data;
-                    this.done(skip, result);
+                    let id = this.id || res?.data?.data?.id;
+                    this.$message({
+                        message: "发布成功",
+                        type: "success",
+                    });
+                    // 跳转
+                    setTimeout(() => {
+                        location.href = getLink("joke", id);
+                    }, 500);
                 })
                 .finally(() => {
                     this.processing = false;
                 });
-        },
-        // 完成
-        done: function (skip, result) {
-            if (skip) {
-                // 提醒
-                this.$message({
-                    message: "发布成功",
-                    type: "success",
-                });
-                // 跳转
-                setTimeout(() => {
-                    location.href = getLink(result.post_type, result.ID);
-                }, 500);
-            } else {
-                // 提醒
-                this.$notify({
-                    title: "保存成功",
-                    message: "云端草稿保存成功",
-                    type: "success",
-                });
-                // 路由
-                this.post = result;
-                if (!this.$route.params.id) {
-                    this.$router.push({
-                        params: {
-                            id: result.ID,
-                        },
-                    });
-                }
-            }
         },
         // 检查内容合法性
         // 纯数字 纯英文 纯汉字 纯符号长度均为128 表情个数限制在10个
@@ -286,7 +208,7 @@ export default {
             // 表情 key
             const emotionKeys = Object.keys(emotion);
 
-            let str = this.post.post_title.trim();
+            let str = this.data.content.trim();
 
             const regex_1 = /(#[\u4e00-\u9fa5]{1})/g;
             const regex_2 = /(#[\u4e00-\u9fa5]{2})/g;
@@ -296,7 +218,7 @@ export default {
                 this.$notify({
                     title: "错误",
                     message: "内容不能为空",
-                    type: "error"
+                    type: "error",
                 });
                 return false;
             }
@@ -304,19 +226,32 @@ export default {
             /**
              * 依次判定表情字符为1，2，3个的情况
              */
-            const emotion_1 = str.match(regex_1) ? str.match(regex_1).filter(emotion => emotionKeys.includes(emotion)) : [];
+            const emotion_1 = str.match(regex_1)
+                ? str
+                      .match(regex_1)
+                      .filter((emotion) => emotionKeys.includes(emotion))
+                : [];
 
-            emotion_1.forEach(emotion => str.replace(emotion, ''));
+            emotion_1.forEach((emotion) => str.replace(emotion, ""));
 
-            const emotion_2 = str.match(regex_2) ? str.match(regex_2).filter(emotion => emotionKeys.includes(emotion)) : [];
+            const emotion_2 = str.match(regex_2)
+                ? str
+                      .match(regex_2)
+                      .filter((emotion) => emotionKeys.includes(emotion))
+                : [];
 
-            emotion_2.forEach(emotion => str.replace(emotion, ''));
+            emotion_2.forEach((emotion) => str.replace(emotion, ""));
 
-            const emotion_3 = str.match(regex_3) ? str.match(regex_3).filter(emotion => emotionKeys.includes(emotion)) : [];
+            const emotion_3 = str.match(regex_3)
+                ? str
+                      .match(regex_3)
+                      .filter((emotion) => emotionKeys.includes(emotion))
+                : [];
 
-            emotion_3.forEach(emotion => str.replace(emotion, ''));
+            emotion_3.forEach((emotion) => str.replace(emotion, ""));
 
-            const emotionLength = emotion_1.length + emotion_2.length + emotion_3.length;
+            const emotionLength =
+                emotion_1.length + emotion_2.length + emotion_3.length;
 
             this.contentLength = emotionLength;
 
@@ -324,21 +259,21 @@ export default {
                 this.$notify({
                     title: "错误",
                     message: "表情个数不能超过10个",
-                    type: "error"
+                    type: "error",
                 });
-                return false
+                return false;
             }
 
-            // 纯数字 128 纯文字 64 
+            // 纯数字 128 纯文字 64
             const textLength = str.match(/[^\x00-\xff]/g)?.length || 0;
 
             if (textLength * 2 + (str.length - textLength) > 128) {
                 this.$notify({
                     title: "错误",
                     message: "内容长度不能超过128个字符",
-                    type: "error"
+                    type: "error",
                 });
-                return false
+                return false;
             }
             return true;
         },
