@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-box">
         <!-- 头部 -->
-        <publish-header name="文集小册" :localDraft="false">
+        <publish-header name="剑三小册" :localDraft="false">
             <slot name="header"></slot>
         </publish-header>
 
@@ -171,7 +171,7 @@
                     type="primary"
                     @click="submit"
                     :loading="processing"
-                >提交剑三小册</el-button>
+                >提交小册</el-button>
             </el-form-item>
         </el-form>
     </div>

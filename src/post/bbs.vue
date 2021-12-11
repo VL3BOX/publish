@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-box" v-loading="loading">
         <!-- 头部 -->
-        <publish-header name="茶馆交流"></publish-header>
+        <publish-header name="剑三茶馆"></publish-header>
 
         <el-form label-position="left" label-width="80px">
             <!-- 标题 -->

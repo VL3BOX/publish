@@ -9,7 +9,6 @@
                 :key="i"
                 v-model="fbdata.fb_zlp"
                 @change="zlpChange(zlp)"
-                v-show="fbmap[zlp]['client'].includes(client)"
             >
                 {{ zlp }}
                 <span class="u-level">{{ fbmap[zlp]["level"]}}</span>
@@ -25,7 +24,6 @@
                 :key="key"
                 v-model="fbdata.fb_name"
                 @change="subtypeChange(key)"
-                v-show="fb_list[key]['client'].includes(client)"
             >
                 <img :src="fb.icon | thumbnail(fb.icon)" :alt="key" />
                 <span>{{ key }}</span>
@@ -56,7 +54,8 @@
 <script>
 import lodash from "lodash";
 import isEmptyMeta from "@/utils/isEmptyMeta.js";
-import fbmap from "@jx3box/jx3box-data/data/fb/fb_map.json";
+import fbmap_std from "@jx3box/jx3box-data/data/fb/fb_map.json";
+import fbmap_origin from "@jx3box/jx3box-data/data/fb/fb_map_origin.json";
 import { __ossMirror, __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
 // META空模板
 const default_meta = {
@@ -72,7 +71,7 @@ export default {
     data: function () {
         return {
             fbdata: this.data,
-            fbmap,
+            // fbmap,
         };
     },
     model: {
@@ -103,20 +102,26 @@ export default {
         "fbdata.fb_name": function (val) {
             val && this.$emit("updateMeta", { key: 'post_subtype', val: val });
         },
+        client : function (){
+            this.setDefaultOption();
+        }
     },
     computed: {
+        fbmap : function (){
+            return this.client == 'origin' ? fbmap_origin : fbmap_std  
+        },
         zlp_list: function () {
             return Object.keys(this.fbmap);
         },
         fb_list: function () {
-            let zlp = this.fbmap[this.fbdata.fb_zlp];
+            let zlp = this.fbmap?.[this.fbdata.fb_zlp];
             return lodash.get(zlp, "dungeon");
         },
         boss_list: function () {
-            return lodash.get(this.fb_list[this.fbdata.fb_name], "boss");
+            return lodash.get(this.fb_list?.[this.fbdata?.fb_name], "boss");
         },
         level_list: function () {
-            return lodash.get(this.fb_list[this.fbdata.fb_name], "maps");
+            return lodash.get(this.fb_list?.[this.fbdata?.fb_name], "maps");
         },
         default_zlp: function () {
             return lodash.get(this.zlp_list, 0);
@@ -150,8 +155,10 @@ export default {
         },
     },
     created: function () {
+        
+    },
+    mounted: function () {
         this.setDefaultOption();
     },
-    mounted: function () {},
 };
 </script>
