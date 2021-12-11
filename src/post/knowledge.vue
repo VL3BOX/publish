@@ -8,7 +8,12 @@
         <el-form class="m-publish-post">
             <div class="m-publish-source">
             <el-divider content-position="left">选择通识 *</el-divider>
+            <el-radio-group class="m-publish-action" v-model="action">
+                <el-radio-button label="new">新建词条</el-radio-button>
+                <el-radio-button label="update">维护已有词条</el-radio-button>
+            </el-radio-group>
                 <el-select
+                    v-if="!isNew"
                     class="u-source-id"
                     v-model="post.source_id"
                     filterable
@@ -34,29 +39,34 @@
                         </div>
                     </el-option>
                 </el-select>
-                <el-select v-if="types && isNew"
-                    class="u-source-type"
-                    placeholder="选择通识类型"
-                    v-model="knowledge.type"
-                >
-                        <el-option v-for="type in types"
-                            :key="type.name"
-                            :value="type.name"
-                            :label="type.label"
-                        ></el-option>
-                    </el-select>
-                <p class="m-knowledge-add">
-                    <span>如没有合适的通识选择，选择你输入的通识，会在你保存之后自动为你新建该通识。</span>
-                    <!-- <el-button
-                        type="success"
-                        @click="dialogVisible = true"
-                        size="mini"
-                        >添加通识</el-button
-                    > -->
-                    <span
-                        >Note：添加完成后的通识需要经过管理员审核通过后才会在通识百科上展示哦</span
-                    >
-                </p>
+                <template v-if="isNew">    
+                    <div class="u-source-top">
+                        <el-select v-if="types"
+                            class="u-source-type"
+                            placeholder="选择通识类型"
+                            v-model="knowledge.type"
+                        >
+                            <el-option v-for="type in types"
+                                :key="type.name"
+                                :value="type.name"
+                                :label="type.label"
+                            ></el-option>
+                        </el-select>
+                        <el-input class="u-source-name" placeholder="请输入通识名称" v-model="knowledge.name"></el-input>
+                    </div>
+                    <p class="m-knowledge-add">
+                        <!-- <span>如没有合适的通识选择，选择你输入的通识，会在你保存之后自动为你新建该通识。</span> -->
+                        <!-- <el-button
+                            type="success"
+                            @click="dialogVisible = true"
+                            size="mini"
+                            >添加通识</el-button
+                        > -->
+                        <span
+                            >Note：添加完成后的通识需要经过管理员审核通过后才会在通识百科上展示哦</span
+                        >
+                    </p>
+                </template>
             </div>
 
             <div class="m-publish-remark">
@@ -206,9 +216,17 @@ export default {
 
             processing : false,
 
-            isNew: false, // 是否为新建
-            copySource: []
+            // isNew: false, // 是否为新建
+            copySource: [],
+
+            // 用户动作
+            action: 'new'
         };
+    },
+    computed: {
+        isNew() {
+            return this.action === 'new'
+        }
     },
     methods: {
         create_knowledge() {
@@ -250,11 +268,11 @@ export default {
                 this.options.loading = false;
 
                 // 未搜索到通识
-                if (!this.options.sources.length) {
+                /* if (!this.options.sources.length) {
                     this.isNew = true
                 } else {
                     this.isNew = false
-                }
+                } */
 
                 // 重置待选表单
                 if (!keyword) {
@@ -383,6 +401,10 @@ export default {
                 }
             },
         },
+        action: function (){
+            this.knowledge = this.$options.data().knowledge;
+            this.post = this.$options.data().post
+        }
     },
     components: {
         'publish-header':header,
