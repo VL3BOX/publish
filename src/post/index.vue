@@ -92,7 +92,7 @@
                 </el-col>
             </el-row>
 
-            <el-divider content-position="left">应用</el-divider>
+            <el-divider content-position="left">其它</el-divider>
             <el-row :gutter="20">
                 <el-col :span="4">
                     <router-link to="/collection">
