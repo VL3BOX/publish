@@ -16,7 +16,7 @@
             filterable
             clearable
             placeholder="请选择一个小册（可选，非必填，可搜索）"
-            @blur="handleBlur"
+            @visible-change="visibleChange"
         >
             <el-option
                 v-for="(item, index) in collections"
@@ -28,7 +28,7 @@
                 <!-- TODO:click事件被屏蔽？ -->
                 <div>
                     没有找到匹配结果，
-                    <a href="/publish/collection" target="_blank" @click.stop="test" @mouseenter="test">创建小册</a>
+                    <a href="/publish/collection" style="z-index: 1000000000;" target="_blank">创建小册</a>
                 </div>
             </div>
         </el-select>
@@ -107,12 +107,11 @@ export default {
                 this.collections = cloneDeep(this.copyCollections);
             }
         },
-        handleBlur: function () {
-            this.collections = cloneDeep(this.copyCollections);
+        visibleChange: function (val) {
+            if (val) {
+                this.collections = cloneDeep(this.copyCollections);
+            }
         },
-        test : function (){
-            console.log(111)
-        }
     },
     mounted: function () {
         this.loadCollections();
