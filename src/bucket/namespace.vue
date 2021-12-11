@@ -6,46 +6,69 @@
                 <i class="el-icon-document"></i> 创建铭牌
             </a>
         </div>
-        <div class="m-namespace-list" v-loading="loading">
-            <div class="u-namespace-item" v-for="(item, i) in list" :key="i">
-                <div class="u-item">
-                    <div class="u-box">
-                        <div class="u-title">
-                            <span class="el-icon-postcard u-icon"></span>
-                            <a
-                                class="u-name"
-                                target="_blank"
-                                :href="item.link"
-                            >{{ item.key || '未知' }}</a>
-                        </div>
-                        <div class="u-desc">
-                            <span class="u-status u-desc-subitem">
-                                状态:
-                                <b :class="`status${item.status}`">{{ statusmap[item.status] }}</b>
-                            </span>
-                            <time class="u-time u-desc-subitem">创建于 : {{ item.created | dateFormat }}</time>
+
+        <div class="m-namespace-box" v-loading="loading">
+            <el-row class="m-namespace-list" :gutter="20" v-if="list && list.length">
+                <el-col :span="6" v-for="(item, i) in list" :key="i">
+                    <div class="u-namespace-item">
+                        <div class="u-item">
+                            <div class="u-box">
+                                <div class="u-title">
+                                    <span class="el-icon-postcard u-icon"></span>
+                                    <a
+                                        class="u-name"
+                                        target="_blank"
+                                        :href="item.link"
+                                    >{{ item.key || '未知' }}</a>
+                                </div>
+                                <div class="u-desc">
+                                    <span class="u-status u-desc-subitem">
+                                        状态:
+                                        <b
+                                            :class="`status${item.status}`"
+                                        >{{ statusmap[item.status] }}</b>
+                                    </span>
+                                    <time
+                                        class="u-time u-desc-subitem"
+                                    >创建于 : {{ item.created | dateFormat }}</time>
+                                </div>
+                            </div>
+                            <el-button-group class="u-action">
+                                <el-tooltip
+                                    class="item"
+                                    effect="dark"
+                                    content="编辑"
+                                    placement="top-start"
+                                >
+                                    <el-button
+                                        size="mini"
+                                        icon="el-icon-edit"
+                                        @click="edit(item.ID, item.source_type, item.source_id)"
+                                    ></el-button>
+                                </el-tooltip>
+                            </el-button-group>
                         </div>
                     </div>
-                    <el-button-group class="u-action">
-                        <el-button
-                            size="mini"
-                            icon="el-icon-edit"
-                            title="编辑"
-                            @click="edit(item.ID, item.source_type, item.source_id)"
-                        ></el-button>
-                    </el-button-group>
-                </div>
+                </el-col>
+            </el-row>
+            <el-alert
+                v-else
+                class="m-dashboard-box-null"
+                title="没有找到相关条目"
+                type="info"
+                center
+                show-icon
+            ></el-alert>
+            <div class="m-namespace-pages">
+                <el-pagination
+                    background
+                    layout="total, prev, pager, next,jumper"
+                    :page-size="per"
+                    :total="total"
+                    :current-page.sync="page"
+                    :hide-on-single-page="true"
+                ></el-pagination>
             </div>
-        </div>
-        <div class="m-namespace-pages">
-            <el-pagination
-                background
-                layout="total, prev, pager, next,jumper"
-                :page-size="per"
-                :total="total"
-                :current-page.sync="page"
-                :hide-on-single-page="true"
-            ></el-pagination>
         </div>
     </div>
 </template>
@@ -96,6 +119,7 @@ export default {
             location.href = "./#/namespace/" + id;
         },
         loadData: function () {
+            this.loading = true;
             getNamespace(this.params)
                 .then((res) => {
                     this.list = res.data.data.data;
@@ -107,7 +131,6 @@ export default {
         },
     },
     mounted: function () {
-        this.loading = true;
         this.loadData();
     },
     filters: {
@@ -141,7 +164,7 @@ export default {
             color: #49c10f;
         }
         .status2 {
-            color: #fc3c3c;
+            color: #c00;
         }
     }
 }

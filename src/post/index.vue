@@ -72,16 +72,16 @@
                         <span>剑三茶馆</span>
                     </router-link>
                 </el-col>
-                <el-col :span="4">
-                    <router-link to="/emotion">
-                        <img svg-inline src="../assets/img/channel/emotion.svg" />
-                        <span>剑三表情</span>
-                    </router-link>
-                </el-col>
                 <el-col :span=4>
                     <router-link to="/joke">
                         <img svg-inline src="../assets/img/channel/joke.svg" />
                         <span>剑三骚话</span>
+                    </router-link>
+                </el-col>
+                <el-col :span="4">
+                    <router-link to="/emotion">
+                        <img svg-inline src="../assets/img/channel/emotion.svg" />
+                        <span>剑三表情</span>
                     </router-link>
                 </el-col>
                 <el-col :span="4">

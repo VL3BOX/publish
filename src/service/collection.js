@@ -1,4 +1,4 @@
-import { $helper ,$cms} from "@jx3box/jx3box-common/js/https.js";
+import { $helper, $cms } from "@jx3box/jx3box-common/js/https.js";
 
 const qs = require("qs");
 
@@ -45,18 +45,10 @@ function remove_collection(collection_id) {
     } else return null;
 }
 
-
-function appendToCollection(data){
-    return $cms().post(`/api/cms/post/${data.post_type}-${data.post_id}/append-to-collection/${data.post_collection}`,{
-        title : data.post_title
-    })
+function appendToCollection(data) {
+    return $cms().post(`/api/cms/post/${data.post_type}-${data.post_id}/append-to-collection/${data.post_collection}`, {
+        title: data.post_title,
+    });
 }
 
-export {
-    get_legal_tags,
-    get_collection,
-    get_my_collections,
-    submit_collection,
-    remove_collection,
-    appendToCollection,
-};
+export { get_legal_tags, get_collection, get_my_collections, submit_collection, remove_collection, appendToCollection };

@@ -1,6 +1,5 @@
 <template>
     <div class="m-dashboard m-dashboard-work m-dashboard-wiki" v-loading="loading">
-
         <div class="m-dashboard-work-header">
             <h2 class="u-title">百科评论</h2>
         </div>
@@ -12,11 +11,7 @@
             @change="search_comment"
         >
             <template slot="prepend">关键词</template>
-            <el-button
-                slot="append"
-                icon="el-icon-search"
-                @click="search_comment"
-            ></el-button>
+            <el-button slot="append" icon="el-icon-search" @click="search_comment"></el-button>
         </el-input>
 
         <div class="m-dashboard-box">
@@ -27,61 +22,48 @@
                         achievement_comment.data.length
                 "
             >
-                <li
-                    v-for="(comment, key) in achievement_comment.data"
-                    :key="key"
-                >
-                    <span
-                        class="u-tab"
-                        v-text="getTypeLabel(comment.type)"
-                    ></span>
+                <li v-for="(comment, key) in achievement_comment.data" :key="key">
+                    <span class="u-tab" v-text="getTypeLabel(comment.type)"></span>
                     <a
                         class="u-title"
                         target="_blank"
                         :href="comment.link"
-                        >{{ comment.title || "无标题" }}</a
-                    >
-                    <span
-                        v-if="comment.checked == 0"
-                        class="u-mark pending"
-                        >⌛ 等待审核</span
-                    >
-                    <span v-if="comment.checked == 1" class="u-mark"
-                        >✔ 审核通过</span
-                    >
-                    <span
-                        v-if="comment.checked == 2"
-                        class="u-mark reject"
-                        >❌ 审核驳回</span
-                    >
+                    >{{ comment.title || "无标题" }}</a>
+                    <span v-if="comment.checked == 0" class="u-mark pending">⌛ 等待审核</span>
+                    <span v-if="comment.checked == 1" class="u-mark">✔ 审核通过</span>
+                    <span v-if="comment.checked == 2" class="u-mark reject">❌ 审核驳回</span>
                     <div class="u-desc">
-                        <span class="u-content"
-                            ><i class="el-icon-s-comment"></i>
-                            {{ comment.content }}</span
-                        >
-                        <time class="u-desc-subitem"
-                            ><i class="el-icon-finished"></i> 发布 :
+                        <span class="u-content">
+                            <i class="el-icon-s-comment"></i>
+                            {{ comment.content }}
+                        </span>
+                        <time class="u-desc-subitem">
+                            <i class="el-icon-finished"></i>
+                            发布 :
                             {{
-                                new Date(comment.created * 1000)
-                                    | dateFormat
-                            }}</time
-                        >
-                        <time class="u-desc-subitem"
-                            ><i class="el-icon-refresh"></i> 更新 :
+                            new Date(comment.created * 1000)
+                            | dateFormat
+                            }}
+                        </time>
+                        <time class="u-desc-subitem">
+                            <i class="el-icon-refresh"></i>
+                            更新 :
                             {{
-                                new Date(comment.updated * 1000)
-                                    | dateFormat
-                            }}</time
-                        >
+                            new Date(comment.updated * 1000)
+                            | dateFormat
+                            }}
+                        </time>
                     </div>
 
                     <el-button-group class="u-action">
-                        <el-button
-                            size="mini"
-                            icon="el-icon-delete"
-                            title="删除"
-                            @click="comment_del(comment)"
-                        ></el-button>
+                        <el-tooltip class="item" effect="dark" content="删除" placement="top-start">
+                            <el-button
+                                size="mini"
+                                icon="el-icon-delete"
+                                title="删除"
+                                @click="comment_del(comment)"
+                            ></el-button>
+                        </el-tooltip>
                     </el-button-group>
                 </li>
             </ul>
@@ -92,8 +74,7 @@
                 type="info"
                 center
                 show-icon
-            >
-            </el-alert>
+            ></el-alert>
             <el-pagination
                 class="m-dashboard-box-pages"
                 background
@@ -103,8 +84,7 @@
                 :current-page="comment_page"
                 :page-size="length"
                 @current-change="comment_page_change"
-            >
-            </el-pagination>
+            ></el-pagination>
         </div>
     </div>
 </template>
@@ -113,16 +93,13 @@
 import { getTypeLabel } from "@jx3box/jx3box-common/js/utils";
 import { __wikiType } from "@jx3box/jx3box-common/data/jx3box.json";
 import dateFormat from "@/utils/dateFormat";
-import {
-    get_comments,
-    remove_comment,
-} from "@/service/wiki";
+import { get_comments, remove_comment } from "@/service/wiki";
 export default {
     name: "wiki",
     props: [],
-    data: function() {
+    data: function () {
         return {
-            loading:false,
+            loading: false,
 
             active_name: this.$route.query.type
                 ? this.$route.query.type
@@ -137,30 +114,32 @@ export default {
         };
     },
     methods: {
-        getTypeLabel: function(val) {
+        getTypeLabel: function (val) {
             return val ? __wikiType[val] : "未知";
         },
         comment_page_change(i = 1) {
             this.comment_page = i;
-            this.loading = true
+            this.loading = true;
             get_comments({
                 keyword: this.achievement_comment.keyword,
                 page: i,
                 limit: this.length,
-            }).then(
-                (data) => {
-                    data = data.data;
-                    this.achievement_comment.data =
-                        data.code === 200 ? data.data.data : false;
-                    this.achievement_comment.total =
-                        data.code === 200 ? data.data.total : 0;
-                },
-                () => {
-                    this.achievement_comment.data = false;
-                }
-            ).finally(() => {
-                this.loading = false
             })
+                .then(
+                    (data) => {
+                        data = data.data;
+                        this.achievement_comment.data =
+                            data.code === 200 ? data.data.data : false;
+                        this.achievement_comment.total =
+                            data.code === 200 ? data.data.total : 0;
+                    },
+                    () => {
+                        this.achievement_comment.data = false;
+                    }
+                )
+                .finally(() => {
+                    this.loading = false;
+                });
         },
         search_comment() {
             this.comment_page_change(1);
@@ -201,7 +180,7 @@ export default {
         },
     },
     filters: {
-        dateFormat: function(val) {
+        dateFormat: function (val) {
             return dateFormat(new Date(val));
         },
     },

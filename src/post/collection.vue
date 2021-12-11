@@ -196,10 +196,9 @@ import {
     submit_collection,
 } from "../service/collection";
 import { get_posts_by_type } from "../service/post";
-import {getLink} from "@jx3box/jx3box-common/js/utils";
-
-const qs = require("qs");
-const lodash = require("lodash");
+import { getLink } from "@jx3box/jx3box-common/js/utils";
+import qs from "qs";
+import lodash from "lodash";
 
 export default {
     name: "item",
@@ -208,7 +207,7 @@ export default {
         // 文章类型加载
         let source_types = Object.assign(__postType, __otherType);
         source_types["custom"] = "自定义";
-        delete source_types["cj"];
+        delete source_types["item_plan"];
 
         return {
             source_types: source_types,
@@ -307,7 +306,7 @@ export default {
 
                 let collection = JSON.parse(JSON.stringify(this.collection));
 
-                if(!collection.posts) {
+                if (!collection.posts) {
                     collection.posts = [];
                 }
 
@@ -321,13 +320,25 @@ export default {
                     .then((data) => {
                         data = data.data;
                         if (data.code === 200) {
-                            this.$message({message: data.message, type: "success"});
-                            let collection_id = lodash.get(data, 'data.collection.id');
+                            this.$message({
+                                message: data.message,
+                                type: "success",
+                            });
+                            let collection_id = lodash.get(
+                                data,
+                                "data.collection.id"
+                            );
                             setTimeout(() => {
                                 if (collection_id) {
-                                    location.href = getLink('collection', collection_id);
-                                }else {
-                                    this.$router.push({name: 'bucket', params: {type: 'collection'}})
+                                    location.href = getLink(
+                                        "collection",
+                                        collection_id
+                                    );
+                                } else {
+                                    this.$router.push({
+                                        name: "bucket",
+                                        params: { type: "collection" },
+                                    });
                                 }
                             }, 500);
                         } else {

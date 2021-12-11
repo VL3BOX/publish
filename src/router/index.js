@@ -31,11 +31,9 @@ const quest = () => import("../post/quest.vue");
 
 // APP
 const bucket = () => import("../views/bucket.vue");
-const collection = () => import("../post/collection.vue");
 const item_plan = () => import("../post/item_plan.vue");
 const exam_question = () => import("../post/exam_question.vue");
 const exam_paper = () => import("../post/exam_paper.vue");
-
 
 const namespace = () => import("../post/namespace.vue");
 const bucket_namespace = () => import("../bucket/namespace.vue");
@@ -46,28 +44,25 @@ const bucket_joke = () => import("../bucket/joke.vue");
 const emotion = () => import("../post/emotion.vue");
 const bucket_emotion = () => import("../bucket/emotion.vue");
 
+const collection = () => import("../post/collection.vue");
+const bucket_collection = () => import("../bucket/collection.vue");
+
 Vue.use(VueRouter);
 
 const routes = [
-    // 发布索引
+    // 索引
     { path: "/", component: index },
-    // 草稿
-    { path: "/draft", component: draft },
-    // 发布DEMO
-    { path: "/demo", component: demo },
 
-    // CMS=====================
+    // CMS
+    // ================================
+    // 查看
+    { path: "/cms/:type", component: cms },
     // 联合创作
     { name: "union_active", path: "/union/active", component: union },
     { name: "union_passive", path: "/union/passive", component: union },
 
-    // 查看
-    { path: "/cms/:type", component: cms },
-    { path: "/comment/cms", component: cms_comment },
-    {
-        path: "/comment/feedback",
-        component: feedback,
-    },
+    // 发布DEMO
+    { path: "/demo", component: demo },
     // 宏发布
     {
         path: "/macro/:id?",
@@ -112,24 +107,15 @@ const routes = [
         path: "/share/:id?",
         component: share,
     },
-    {
-        path: "/joke/:id?",
-        component: joke,
-    },
+    // 公告
     {
         path: "/notice/:id?",
         component: notice,
     },
-    {
-        path: "/emotion/:id?",
-        component: emotion,
-    },
 
-
-    // WIKI=====================
+    // 百科=====================
     // 查看
     { path: "/wiki/:type", name: "wiki_post", component: wiki },
-    { path: "/comment/wiki", component: wiki_comment },
     // 成就攻略发布
     {
         path: "/achievement/:achievement_id(\\d+)?",
@@ -152,30 +138,21 @@ const routes = [
     },
 
     // 应用=====================
-    // 查看
-    { path: "/bucket/namespace", name: "bucket_namespace", component: bucket_namespace },
-    { path: "/bucket/joke", name: "bucket", component: bucket_joke },
-    { path: "/bucket/emotion", name: "bucket", component: bucket_emotion },
-    { path: "/bucket/:type", name: "bucket", component: bucket },
+    // 骚话
+    { path: "/joke/:id?", component: joke },
+    { path: "/bucket/joke", component: bucket_joke },
+    // 表情
+    { path: "/emotion/:id?", component: emotion },
+    { path: "/bucket/emotion", component: bucket_emotion },
+    // 铭牌
+    { path: "/namespace/:id?", component: namespace },
+    { path: "/bucket/namespace", component: bucket_namespace },
+    // 小册
+    { path: "/collection/:collection_id(\\d+)?", component: collection },
+    { path: "/bucket/collection", component: bucket_collection },
 
-    // 小册发布
-    {
-        name: "collection",
-        path: "/collection/:collection_id(\\d+)?",
-        component: collection,
-    },
-    // 物品清单发布
-    {
-        name: "item_plan",
-        path: "/item_plan/:plan_id(\\d+)?",
-        component: item_plan,
-    },
-    // 铭牌发布
-    {
-        name: "namespace",
-        path: "/namespace/:id?",
-        component: namespace,
-    },
+    // 考试
+    { path: "/bucket/:type", name: "bucket", component: bucket },
     // 题目发布
     {
         name: "question",
@@ -188,6 +165,21 @@ const routes = [
         path: "/paper/:id?",
         component: exam_paper,
     },
+    // 物品清单发布
+    {
+        name: "item_plan",
+        path: "/item_plan/:plan_id(\\d+)?",
+        component: item_plan,
+    },
+
+    // 草稿=====================
+    // 草稿
+    { path: "/draft", component: draft },
+
+    // 评论=====================
+    { path: "/comment/cms", component: cms_comment },
+    { path: "/comment/wiki", component: wiki_comment },
+    { path: "/comment/feedback", component: feedback },
 ];
 
 const router = new VueRouter({

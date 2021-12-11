@@ -1,60 +1,145 @@
 <template>
-    <ul>
-        <li v-for="(item, i) in data" :key="i">
-            <i class="u-icon">
-                <img
-                    v-if="item.public"
-                    svg-inline
-                    src="../assets/img/works/repo.svg"
-                />
-                <img v-else svg-inline src="../assets/img/works/draft.svg" />
-            </i>
-            <a class="u-title" target="_blank" :href="item.id | getCollectionLink">{{
-                item.title || "无标题"
-            }}</a>
-            <div class="u-desc">
-                <time class="u-desc-subitem">
-                    <i class="el-icon-finished"></i>
-                    发布 :
-                    {{ item.created | dateFormat }}
-                </time>
-                <time class="u-desc-subitem">
-                    <i class="el-icon-refresh"></i>
-                    更新 :
-                    {{ item.updated | dateFormat }}
-                </time>
-            </div>
-            <el-button-group class="u-action">
-                <el-button
-                    size="mini"
-                    icon="el-icon-edit"
-                    title="编辑"
-                    @click="post_edit(item.id)"
-                ></el-button>
-                <el-button
-                    size="mini"
-                    icon="el-icon-delete"
-                    title="删除"
-                    @click="post_del(item.id)"
-                ></el-button>
-            </el-button-group>
-            <!-- </div> -->
-        </li>
-    </ul>
+    <div class="m-dashboard m-dashboard-work m-dashboard-other">
+        <div class="m-dashboard-work-header">
+            <h2 class="u-title">剑三小册</h2>
+            <a :href="publishLink" class="u-publish el-button el-button--primary el-button--small">
+                <i class="el-icon-document"></i> 创建小册
+            </a>
+        </div>
+
+        <el-input class="m-dashboard-work-search" placeholder="请输入搜索内容" v-model="search">
+            <span slot="prepend">关键词</span>
+            <el-button slot="append" icon="el-icon-search"></el-button>
+        </el-input>
+
+        <div class="m-dashboard-box" v-loading="loading">
+            <template v-if="data && data.length">
+                <ul class="m-dashboard-box-list">
+                    <li v-for="(item, i) in data" :key="i">
+                        <i class="u-icon">
+                            <img v-if="item.public" svg-inline src="../assets/img/works/repo.svg" />
+                            <img v-else svg-inline src="../assets/img/works/draft.svg" />
+                        </i>
+                        <a class="u-title" target="_blank" :href="item.id | getCollectionLink">
+                            {{
+                            item.title || "无标题"
+                            }}
+                        </a>
+                        <div class="u-desc">
+                            <time class="u-desc-subitem">
+                                <i class="el-icon-finished"></i>
+                                发布 :
+                                {{ item.created | dateFormat }}
+                            </time>
+                            <time class="u-desc-subitem">
+                                <i class="el-icon-refresh"></i>
+                                更新 :
+                                {{ item.updated | dateFormat }}
+                            </time>
+                        </div>
+                        <el-button-group class="u-action">
+                            <el-tooltip
+                                class="item"
+                                effect="dark"
+                                content="编辑"
+                                placement="top-start"
+                            >
+                                <el-button
+                                    size="mini"
+                                    icon="el-icon-edit"
+                                    @click="post_edit(item.id)"
+                                ></el-button>
+                            </el-tooltip>
+                            <el-tooltip
+                                class="item"
+                                effect="dark"
+                                content="删除"
+                                placement="top-start"
+                            >
+                                <el-button
+                                    size="mini"
+                                    icon="el-icon-delete"
+                                    @click="post_del(item.id)"
+                                ></el-button>
+                            </el-tooltip>
+                        </el-button-group>
+                    </li>
+                </ul>
+            </template>
+            <el-alert
+                v-else
+                class="m-dashboard-box-null"
+                title="没有找到相关条目"
+                type="info"
+                center
+                show-icon
+            ></el-alert>
+            <el-pagination
+                class="m-dashboard-box-pages"
+                background
+                :page-size="per"
+                :hide-on-single-page="true"
+                :current-page.sync="page"
+                layout="total, prev, pager, next, jumper"
+                :total="total"
+            ></el-pagination>
+        </div>
+    </div>
 </template>
 
 <script>
-import { remove_collection } from "@/service/collection";
-import { getTypeLabel,getLink } from "@jx3box/jx3box-common/js/utils";
+import { remove_collection, get_my_collections } from "@/service/collection";
+import { getLink } from "@jx3box/jx3box-common/js/utils";
 import dateFormat from "@/utils/dateFormat";
 export default {
-    name: "",
-    props: ["data"],
-    data: function() {
-        return {};
+    name: "collection",
+    props: [],
+    data: function () {
+        return {
+            loading: false,
+            data: [],
+            total: 1,
+            page: 1,
+            per: 10,
+            search: "",
+            type: "collection",
+        };
     },
-    computed: {},
+    computed: {
+        params: function () {
+            return {
+                page: this.page,
+                keyword: this.search,
+                limit: this.per,
+            };
+        },
+        publishLink: function () {
+            return "./#/" + this.type;
+        },
+    },
+    watch: {
+        params: {
+            deep: true,
+            handler: function (val) {
+                this.loadPosts();
+            },
+        },
+    },
     methods: {
+        loadPosts: function () {
+            this.loading = true;
+            get_my_collections(this.params)
+                .then((res) => {
+                    res = res.data;
+                    if (res.code === 200) {
+                        this.data = res.data.data;
+                        this.total = res.data.total;
+                    }
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
         post_edit(id) {
             location.href = "./#/collection/" + id;
         },
@@ -63,39 +148,31 @@ export default {
                 confirmButtonText: "确定",
                 callback: (action) => {
                     remove_collection(id).then((res) => {
-                        res = res.data;
-                        if (res.code === 200) {
-                            this.$message({
-                                type: "success",
-                                message: `删除成功`,
-                            });
-                            this.page_change(this.page);
-                        } else
-                            this.$message({
-                                type: "warning",
-                                message: res.message,
-                            });
+                        this.$message({
+                            type: "success",
+                            message: `删除成功`,
+                        });
                     });
                 },
             });
         },
     },
     filters: {
-        dateFormat: function(val) {
-            return dateFormat(new Date(val*1000));
+        dateFormat: function (val) {
+            return dateFormat(new Date(val * 1000));
         },
-        getCollectionLink: function(val) {
-            return getLink('collection',val);
+        getCollectionLink: function (val) {
+            return getLink("collection", val);
         },
     },
-    mounted: function() {},
-    components: {},
+    mounted: function () {
+        this.loadPosts();
+    },
+    components: {
+    },
 };
 </script>
 
 <style scoped lang="less">
 @import "../assets/css/work.less";
-.u-collection-id{
-    .mr(10px);
-}
 </style>

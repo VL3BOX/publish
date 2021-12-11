@@ -39,12 +39,9 @@
                     </div>
 
                     <el-button-group class="u-action">
-                        <el-button
-                            size="mini"
-                            icon="el-icon-delete"
-                            title="删除"
-                            @click="del(item.id,i)"
-                        ></el-button>
+                        <el-tooltip class="item" effect="dark" content="删除" placement="top-start">
+                            <el-button size="mini" icon="el-icon-delete" @click="del(item.id,i)"></el-button>
+                        </el-tooltip>
                     </el-button-group>
                 </li>
             </ul>

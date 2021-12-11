@@ -15,9 +15,18 @@
         <div class="m-dashboard-box">
             <ul class="m-dashboard-box-list" v-if="data && data.length">
                 <li v-for="(item, i) in data" :key="i">
-                    <i class="u-icon-pending" v-if="!item.status" title="待审核">
-                        <img svg-inline src="../assets/img/works/pending.svg" />
-                    </i>
+                    <el-tooltip
+                        class="item"
+                        effect="dark"
+                        content="待审核"
+                        placement="top-start"
+                        v-if="!item.status"
+                    >
+                        <i class="u-item-icon u-icon-pending">
+                            <img svg-inline src="../assets/img/works/pending.svg" />
+                        </i>
+                    </el-tooltip>
+                    <i class="u-item-icon el-icon-picture-outline-round" v-else></i>
                     <a
                         class="u-title"
                         target="_blank"
@@ -37,18 +46,12 @@
                     </div>
 
                     <el-button-group class="u-action">
-                        <el-button
-                            size="mini"
-                            icon="el-icon-edit"
-                            title="编辑"
-                            @click="edit(type, item.id)"
-                        ></el-button>
-                        <el-button
-                            size="mini"
-                            icon="el-icon-delete"
-                            title="删除"
-                            @click="del(item.id,i)"
-                        ></el-button>
+                        <el-tooltip class="item" effect="dark" content="编辑" placement="top-start">
+                            <el-button size="mini" icon="el-icon-edit" @click="edit(type, item.id)"></el-button>
+                        </el-tooltip>
+                        <el-tooltip class="item" effect="dark" content="删除" placement="top-start">
+                            <el-button size="mini" icon="el-icon-delete" @click="del(item.id,i)"></el-button>
+                        </el-tooltip>
                     </el-button-group>
                 </li>
             </ul>

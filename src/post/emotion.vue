@@ -13,7 +13,6 @@
                         <i class="u-preview" @click="previewHandle(data)">
                             <i class="el-icon-zoom-in"></i>
                         </i>
-                        <!-- TODO:替换图片 -->
                     </div>
                     <div class="c-upload-logo" v-show="!data.url">
                         <div v-if="data && data.url" class="u-logo">
@@ -44,27 +43,17 @@
                         class="u-remove-btn"
                         icon="el-icon-delete"
                         @click="removePic"
-                        >移除</el-button
-                    >
+                        size="mini"
+                    >移除</el-button>
                 </el-form-item>
                 <el-form-item label="描述">
-                    <el-input
-                        v-model="data.desc"
-                        placeholder="图片说明"
-                    ></el-input>
+                    <el-input v-model="data.desc" placeholder="图片说明"></el-input>
                 </el-form-item>
                 <el-form-item label="原创">
-                    <el-switch
-                        v-model.number="data.original"
-                        :active-value="1"
-                        :inactive-value="0"
-                    ></el-switch>
+                    <el-switch v-model.number="data.original" :active-value="1" :inactive-value="0"></el-switch>
                 </el-form-item>
                 <el-form-item label="原作者">
-                    <el-input
-                        v-model="data.author"
-                        placeholder="（非必填）"
-                    ></el-input>
+                    <el-input v-model="data.author" placeholder="（非必填）"></el-input>
                 </el-form-item>
                 <!-- 按钮 -->
                 <div class="m-publish-buttons">
@@ -72,8 +61,7 @@
                         type="primary"
                         @click="update"
                         :disabled="processing"
-                        >更 &nbsp;&nbsp; 新</el-button
-                    >
+                    >更 &nbsp;&nbsp; 新</el-button>
                 </div>
             </div>
 
@@ -89,6 +77,9 @@
                         desc="一次最多同时上传10个文件（不超过5M）"
                         :accept="supportTypes"
                     />
+                    <div class="u-tip">
+                        <i class="el-icon-info"></i> 图片格式支持gif/png/jpg/bmp/webp
+                    </div>
                 </div>
 
                 <!-- 列表 -->
@@ -104,28 +95,18 @@
                                         @click="deleteHandle(i)"
                                         type="info"
                                         size="mini"
-                                        >删除</el-button
-                                    >
+                                    >删除</el-button>
                                 </div>
                             </div>
                             <div class="u-pic">
-                                <img
-                                    class="u-img"
-                                    :src="item.url | showThumbnail"
-                                />
+                                <img class="u-img" :src="item.url | showThumbnail" />
                                 <i class="u-mask"></i>
-                                <i
-                                    class="u-preview"
-                                    @click="previewHandle(item)"
-                                >
+                                <i class="u-preview" @click="previewHandle(item)">
                                     <i class="el-icon-zoom-in"></i>
                                 </i>
                             </div>
                             <div class="u-desc">
-                                <el-input
-                                    v-model="item.desc"
-                                    placeholder="图片说明"
-                                >
+                                <el-input v-model="item.desc" placeholder="图片说明">
                                     <span slot="prepend">描述</span>
                                 </el-input>
                             </div>
@@ -154,18 +135,14 @@
                             type="primary"
                             @click="publish"
                             :disabled="processing"
-                            >发 &nbsp;&nbsp; 布</el-button
-                        >
+                        >发 &nbsp;&nbsp; 布</el-button>
                     </div>
                 </div>
             </div>
         </el-form>
         <!-- 预览 -->
-        <el-dialog
-            class="m-publish-emotion-preview"
-            :visible.sync="dialogVisible"
-        >
-            <img width="100%" :src="dialogImageUrl" alt />
+        <el-dialog class="m-publish-emotion-preview" :visible.sync="dialogVisible" title="预览">
+            <img :src="dialogImageUrl" />
         </el-dialog>
     </div>
 </template>
@@ -179,7 +156,12 @@ import publish_header from "@/components/publish_header.vue";
 import UploadImages from "@jx3box/jx3box-editor/src/Upload.vue";
 
 // 数据逻辑
-import { postEmotions, getEmotion, updateEmotion, uploadEmotion } from "@/service/pvx.js";
+import {
+    postEmotions,
+    getEmotion,
+    updateEmotion,
+    uploadEmotion,
+} from "@/service/pvx.js";
 
 export default {
     name: "emotion",
@@ -263,7 +245,6 @@ export default {
         },
         // 预览
         previewHandle: function (item) {
-            console.log(item);
             this.dialogImageUrl = item.url;
             this.dialogVisible = true;
         },
@@ -296,7 +277,7 @@ export default {
                     message: "图片不能为空",
                     type: "warning",
                 });
-                return
+                return;
             }
             this.processing = true;
             updateEmotion(this.id, this.data)
@@ -316,7 +297,7 @@ export default {
         },
         // 单页 移除
         removePic: function () {
-            this.data.url = '';
+            this.data.url = "";
         },
         select: function () {
             this.fileInput.dispatchEvent(new MouseEvent("click"));
@@ -331,12 +312,11 @@ export default {
                     type: "success",
                 });
 
-                this.fileInput.files = []
+                this.fileInput.files = [];
             });
-
         },
         handleRemove() {
-            this.data.url = '';
+            this.data.url = "";
         },
     },
     watch: {

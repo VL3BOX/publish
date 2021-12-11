@@ -61,16 +61,16 @@
 import { __otherType } from "@jx3box/jx3box-common/data/jx3box.json";
 import { getQuestions, getPapers } from "@/service/exam";
 import { get_my_item_plans } from "@/service/item_plan";
-import { get_my_collections } from "@/service/collection";
+// import { get_my_collections } from "@/service/collection";
 import question from "@/bucket/question.vue";
 import paper from "@/bucket/paper.vue";
 import item_plan from "@/bucket/item_plan.vue";
-import collection from "@/bucket/collection.vue";
+// import collection from "@/bucket/collection.vue";
 const fn = {
     question: getQuestions,
     item_plan: get_my_item_plans,
     paper: getPapers,
-    collection: get_my_collections,
+    // collection: get_my_collections,
 };
 const next_list = ["question", "paper"];
 const helper_list = ["collection", "item_plan"];
@@ -87,7 +87,7 @@ export default {
             search: "",
 
             types: {
-                collection: "我的小册",
+                // collection: "我的小册",
                 item_plan: "我的清单",
                 question: "我的题目",
                 paper: "我的试卷",
@@ -169,7 +169,7 @@ export default {
         question,
         item_plan,
         paper,
-        collection,
+        // collection,
     },
 };
 </script>
