@@ -22,13 +22,17 @@ function deleteEmotion(id) {
 }
 
 // 通用 - 上传文件
-function uploadEmotion(formdata){
-    return $cms().post(`/api/cms/upload`, formdata)
+function uploadEmotion(formdata) {
+    return $cms().post(`/api/cms/upload`, formdata);
 }
 
 // 骚话栏目接口
-function postJoke(data) {}
-function updateJoke(id, data) {}
+function postJoke(data) {
+    return $next().post(`/api/joke/share`, data);
+}
+function updateJoke(id, data) {
+    $next().put(`/api/joke/share/${id}`, data);
+}
 function getJoke(id) {
     return $cms().get(`/api/cms/post/joke/${id}`);
 }

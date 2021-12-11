@@ -1,5 +1,5 @@
 <template>
-    <div class="m-publish-collection">
+    <div class="m-publish-collection-relation">
         <h5 class="u-schema">
             <span class="u-label">关联小册</span>
             <slot></slot>
@@ -24,7 +24,18 @@
                 :label="item.title"
                 :value="item.id"
             ></el-option>
+            <div slot="empty" class="u-collection-null">
+                <!-- TODO:click事件被屏蔽？ -->
+                <div>
+                    没有找到匹配结果，
+                    <a href="/publish/collection" target="_blank" @click.stop="test" @mouseenter="test">创建小册</a>
+                </div>
+            </div>
         </el-select>
+        <div class="u-tip" v-if="isEmpty">
+            <i class="el-icon-info"></i> 当前没有任何小册，
+            <router-link to="/collection">创建小册</router-link>
+        </div>
     </div>
 </template>
 <script>
@@ -50,6 +61,9 @@ export default {
         event: "update",
     },
     computed: {
+        isEmpty: function () {
+            return !this.search && !this.collections.length;
+        },
     },
     watch: {
         data: {
@@ -96,6 +110,9 @@ export default {
         handleBlur: function () {
             this.collections = cloneDeep(this.copyCollections);
         },
+        test : function (){
+            console.log(111)
+        }
     },
     mounted: function () {
         this.loadCollections();
@@ -106,5 +123,51 @@ export default {
 
 
 <style lang="less">
-@import "../assets/css/publish_collection.less";
+.u-collection-null {
+    padding: 5px 10px;
+    .x;
+    .fz(13px,34px);
+    color: #999;
+    a {
+        box-shadow: 0 1px 0 @color-link;
+    }
+}
+.m-publish-collection-relation {
+    h5 {
+        margin: 20px 0;
+        font-size: 14px;
+        line-height: 18px;
+        font-weight: normal;
+    }
+
+    .u-icon-links {
+        margin-left: 10px;
+        font-size: 13px;
+        color: #0366d6;
+        box-shadow: 0 1px 0 #0366d6;
+
+        &:hover {
+            color: @pink;
+            box-shadow: 0 1px 0 #f39;
+        }
+    }
+
+    .u-help {
+        .fr;
+    }
+    .u-collapse {
+        .ml(20px);
+    }
+    .u-collection {
+        .w(100%);
+    }
+    .u-tip {
+        .fz(13px);
+        color: #999;
+        .mt(8px);
+        a {
+            box-shadow: 0 1px 0 @color-link;
+        }
+    }
+}
 </style>

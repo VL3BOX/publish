@@ -7,7 +7,7 @@
 
         <el-form label-position="left" label-width="80px">
             <el-form-item label="门派">
-                <el-select v-model="post.post_subtype" placeholder="请选择门派">
+                <el-select v-model="post.type" placeholder="请选择门派">
                     <el-option v-for="s in schools" :key="s.value" :value="s.key" :label="s.value">
                         <span style="float: left;">{{ s.value }}</span>
                         <span style="float: right;">
