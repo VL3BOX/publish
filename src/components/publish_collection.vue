@@ -24,12 +24,12 @@
                 :label="item.title"
                 :value="item.id"
             ></el-option>
-            <!-- <div slot="empty" class="u-collection-null">
+            <div slot="empty" class="u-collection-null">
                 <div>
                     没有找到匹配结果，
-                    <a href="/publish/collection" style="z-index: 1000000000;" target="_blank">创建小册</a>
+                    <a href="/publish/#/collection" target="_blank">创建小册</a>
                 </div>
-            </div> -->
+            </div>
         </el-select>
         <div class="u-tip" v-if="isEmpty">
             <i class="el-icon-info"></i> 当前没有任何小册，
