@@ -23,9 +23,6 @@
                     <el-radio v-model.number="collection.public" :label="this.public.PUBLIC">公开</el-radio>
                     <el-radio v-model.number="collection.public" :label="this.public.PRIVATE">私有</el-radio>
                 </div>
-                <div class="m-publish-primary-block">
-                    <publish-banner v-model="collection.image"></publish-banner>
-                </div>
                 <div class="m-publish-primary-block m-publish-collection-posts">
                     <el-divider content-position="left">内容</el-divider>
                     <draggable
@@ -46,7 +43,7 @@
                                     <el-select
                                         class="u-item-key"
                                         v-model="item.type"
-                                        placeholder="请选择文章类型"
+                                        placeholder="请选择作品类型"
                                         @change="
                                             () => {
                                                 search_handle(null, item);
@@ -69,7 +66,7 @@
                                         v-model="item.id"
                                         filterable
                                         remote
-                                        placeholder="通过输入文章标题进行搜索"
+                                        placeholder="通过输入作品标题进行搜索"
                                         :remote-method="
                                             (query) => {
                                                 search_handle(query, item);
@@ -103,10 +100,10 @@
                             </el-row>
                         </li>
                     </draggable>
-                    <div v-else class="u-posts-items-empty">暂无文章信息，请进行文章添加</div>
+                    <div v-else class="u-posts-items-empty">暂无作品信息，请进行作品添加</div>
                     <div class="u-posts-add" @click="add_posts_item">
                         <i class="el-icon-plus"></i>
-                        <span>添加文章</span>
+                        <span>添加作品</span>
                     </div>
                 </div>
 
@@ -133,8 +130,11 @@
                         :height="300"
                     />
                 </div>
+                <div class="m-publish-primary-block">
+                    <publish-banner v-model="collection.image"></publish-banner>
+                </div>
 
-                <div class="m-publish-primary-block m-publish-tags">
+                <!-- <div class="m-publish-primary-block m-publish-tags">
                     <el-divider content-position="left">标签（选填）</el-divider>
                     <ul class="m-list-style">
                         <li v-for="(t, key) in collection.tags" :key="key" class="m-tag">
@@ -161,7 +161,7 @@
                             <i class="el-icon-plus"></i>
                         </el-button>
                     </div>
-                </div>
+                </div>-->
             </div>
 
             <el-form-item>
@@ -204,7 +204,7 @@ export default {
     name: "item",
     props: [],
     data() {
-        // 文章类型加载
+        // 作品类型加载
         let source_types = Object.assign(__postType, __otherType);
         source_types["custom"] = "自定义";
         delete source_types["item_plan"];
@@ -228,30 +228,10 @@ export default {
             processing: false,
         };
     },
-    mounted() {
-        if (this.$route.params.collection_id) {
-            get_collection(this.$route.params.collection_id).then((res) => {
-                res = res.data;
-                if (res.code === 200) {
-                    let collection = res.data.collection;
-                    if (collection) {
-                        for (let i in collection.posts) {
-                            let item = collection.posts[i];
-                            collection.posts[i].posts =
-                                item.type === "custom"
-                                    ? null
-                                    : [{ id: item.id, title: item.title }];
-                        }
-                        this.collection = collection;
-                    } else {
-                        this.$message({
-                            message: "该剑三小册已被删除或无权限访问",
-                            type: "warning",
-                        });
-                    }
-                }
-            });
-        }
+    computed: {
+        id: function () {
+            return this.$route.params.collection_id;
+        },
     },
     methods: {
         // 合法标签搜索仅请求数据一次
@@ -297,61 +277,82 @@ export default {
                 }
             });
         },
-        submit: function () {
-            this.$confirm("确定提交剑三小册信息？", "提示", {
-                type: "info",
-            }).then(() => {
-                // 标题长度限制
-                // this.collection.title = this.collection.title.slice(0,40);
-
-                let collection = JSON.parse(JSON.stringify(this.collection));
-
-                if (!collection.posts) {
-                    collection.posts = [];
-                }
-
-                // 去除多余字段
-                for (let i in collection.posts)
-                    delete collection.posts[i].posts;
-                collection.posts = JSON.stringify(collection.posts);
-
-                this.processing = true;
-                submit_collection(collection)
-                    .then((data) => {
-                        data = data.data;
-                        if (data.code === 200) {
-                            this.$message({
-                                message: data.message,
-                                type: "success",
-                            });
-                            let collection_id = lodash.get(
-                                data,
-                                "data.collection.id"
-                            );
-                            setTimeout(() => {
-                                if (collection_id) {
-                                    location.href = getLink(
-                                        "collection",
-                                        collection_id
-                                    );
-                                } else {
-                                    this.$router.push({
-                                        name: "bucket",
-                                        params: { type: "collection" },
-                                    });
-                                }
-                            }, 500);
-                        } else {
-                            this.$message({
-                                message: `${data.message}`,
-                                type: "warning",
-                            });
+        init: function () {
+            get_collection(this.id).then((res) => {
+                res = res.data;
+                if (res.code === 200) {
+                    let collection = res.data.collection;
+                    if (collection) {
+                        for (let i in collection.posts) {
+                            let item = collection.posts[i];
+                            collection.posts[i].posts =
+                                item.type === "custom"
+                                    ? null
+                                    : [{ id: item.id, title: item.title }];
                         }
-                    })
-                    .finally(() => {
-                        this.processing = false;
-                    });
+                        this.collection = collection;
+                    } else {
+                        this.$message({
+                            message: "该剑三小册已被删除或无权限访问",
+                            type: "warning",
+                        });
+                    }
+                }
             });
+        },
+        submit: function () {
+            // this.$confirm("确定提交剑三小册信息？", "提示", {
+            //     type: "info",
+            // }).then(() => {
+            // 标题长度限制
+            // this.collection.title = this.collection.title.slice(0,40);
+
+            let collection = JSON.parse(JSON.stringify(this.collection));
+
+            if (!collection.posts) {
+                collection.posts = [];
+            }
+
+            // 去除多余字段
+            for (let i in collection.posts) delete collection.posts[i].posts;
+            collection.posts = JSON.stringify(collection.posts);
+
+            this.processing = true;
+            submit_collection(collection)
+                .then((data) => {
+                    data = data.data;
+                    if (data.code === 200) {
+                        this.$message({
+                            message: data.message,
+                            type: "success",
+                        });
+                        let collection_id = lodash.get(
+                            data,
+                            "data.collection.id"
+                        );
+                        let id = this.id || collection_id;
+                        setTimeout(() => {
+                            location.href = getLink("collection", id);
+                        }, 500);
+                    } else {
+                        this.$message({
+                            message: `${data.message}`,
+                            type: "warning",
+                        });
+                    }
+                })
+                .finally(() => {
+                    this.processing = false;
+                });
+            // });
+        },
+    },
+    watch: {
+        id: {
+            immediate: true,
+            handler: function (val) {
+                val && this.init();
+            },
         },
     },
     components: {
