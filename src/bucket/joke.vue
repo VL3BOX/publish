@@ -26,7 +26,7 @@
                             <img svg-inline src="../assets/img/works/pending.svg" />
                         </i>
                     </el-tooltip>
-                    <i class="u-item-icon el-icon-picture-outline-round" v-else></i>
+                    <i class="u-item-icon el-icon-chat-dot-round" v-else></i>
                     <a
                         class="u-title"
                         target="_blank"

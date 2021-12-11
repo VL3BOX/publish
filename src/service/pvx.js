@@ -30,8 +30,8 @@ function uploadEmotion(formdata) {
 function postJoke(data) {
     return $next().post(`/api/joke/share`, data);
 }
-function updateJoke(id, data) {
-    $next().put(`/api/joke/share/${id}`, data);
+function updateJoke(data) {
+    return $next().put(`/api/joke/share/${data.id}`, data);
 }
 function getJoke(id) {
     return $cms().get(`/api/cms/post/joke/${id}`);
