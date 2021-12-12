@@ -17,7 +17,7 @@ export default {
     computed: {},
     methods: {
         goBack: function() {
-            this.$router.push("/");
+            this.$router.go(-1);
         },
     },
     mounted: function() {},
