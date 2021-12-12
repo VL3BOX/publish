@@ -49,11 +49,8 @@
                 <el-form-item label="描述">
                     <el-input v-model="data.desc" :maxlength="120" show-word-limit placeholder="图片说明"></el-input>
                 </el-form-item>
-                <el-form-item label="原创">
-                    <el-switch v-model.number="data.original" :active-value="1" :inactive-value="0"></el-switch>
-                </el-form-item>
-                <el-form-item label="门派">
-                    <el-select v-model="data.type" style="margin-left: 10px;">
+                <el-form-item label="类别">
+                    <el-select v-model="data.type" placeholder="选择门派（非必选）">
                         <el-option v-for="(item,i) in schoolmap" :key="i" :value="i" :label="item">
                             <div style="display: flex;align-items: center;">
                                 <img class="u-icon" style="margin-right: 20px" width="24" height="24" :src="i | showSchoolIcon" :alt="item" />
@@ -61,6 +58,9 @@
                             </div>
                         </el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="原创">
+                    <el-switch v-model.number="data.original" :active-value="1" :inactive-value="0"></el-switch>
                 </el-form-item>
                 <el-form-item label="原作者">
                     <el-input v-model="data.author" placeholder="（非必填）"></el-input>
@@ -136,7 +136,7 @@
                                 >
                                     <span slot="prepend">原作者</span>
                                 </el-input>
-                                <el-select v-model="item.type" size="mini" style="margin-left: 10px;">
+                                <el-select v-model="item.type" size="mini" style="margin-left: 10px;" placeholder="请选择门派（非必选）">
                                     <el-option v-for="(school,i) in schoolmap" :key="i" :value="i" :label="school">
                                         <div style="display: flex;align-items: center;">
                                             <img class="u-icon" style="margin-right: 20px" width="24" height="24" :src="i | showSchoolIcon" :alt="item" />
