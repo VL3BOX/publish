@@ -14,12 +14,12 @@
                             <i class="el-icon-zoom-in"></i>
                         </i>
                     </div>
-                    <div class="c-upload-logo" v-show="!data.url">
-                        <div v-if="data && data.url" class="u-logo">
+                    <div class="m-emotion-upload" v-show="!data.url">
+                        <div v-if="data && data.url" class="u-emotion">
                             <img :src="data.url" />
-                            <i class="u-logo-mask"></i>
+                            <i class="u-emotion-mask"></i>
                             <i
-                                class="u-logo-delete el-icon-delete"
+                                class="u-emotion-delete el-icon-delete"
                                 title="移除"
                                 @click="handleRemove"
                             ></i>
@@ -51,6 +51,16 @@
                 </el-form-item>
                 <el-form-item label="原创">
                     <el-switch v-model.number="data.original" :active-value="1" :inactive-value="0"></el-switch>
+                </el-form-item>
+                <el-form-item label="门派">
+                    <el-select v-model="data.type" style="margin-left: 10px;">
+                        <el-option v-for="(item,i) in schoolmap" :key="i" :value="i" :label="item">
+                            <div style="display: flex;align-items: center;">
+                                <img class="u-icon" style="margin-right: 20px" width="24" height="24" :src="i | showSchoolIcon" :alt="item" />
+                                {{item}}
+                            </div>
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="原作者">
                     <el-input v-model="data.author" placeholder="（非必填）"></el-input>
@@ -126,6 +136,14 @@
                                 >
                                     <span slot="prepend">原作者</span>
                                 </el-input>
+                                <el-select v-model="item.type" size="mini" style="margin-left: 10px;">
+                                    <el-option v-for="(school,i) in schoolmap" :key="i" :value="i" :label="school">
+                                        <div style="display: flex;align-items: center;">
+                                            <img class="u-icon" style="margin-right: 20px" width="24" height="24" :src="i | showSchoolIcon" :alt="item" />
+                                            {{school}}
+                                        </div>
+                                    </el-option>
+                                </el-select>
                             </div>
                         </div>
                     </div>
@@ -150,6 +168,8 @@
 <script>
 // 公共模块
 import { getLink, getThumbnail } from "@jx3box/jx3box-common/js/utils";
+import schoolmap from "@jx3box/jx3box-data/data/xf/schoolid.json";
+import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
 
 // 本地模块
 import publish_header from "@/components/publish_header.vue";
@@ -175,6 +195,8 @@ export default {
             loading: false,
             // 发布状态
             processing: false,
+
+            schoolmap,
 
             // 图片类型
             supportTypes:
@@ -238,6 +260,7 @@ export default {
                         url: item.url,
                         original: 0,
                         author: "",
+                        type: ''
                     });
                 }
             });
@@ -330,6 +353,9 @@ export default {
     filters: {
         showThumbnail: function (val) {
             return getThumbnail(val, 146);
+        },
+        showSchoolIcon: function (val) {
+            return __imgPath + "image/school/" + val + ".png";
         },
     },
 };
