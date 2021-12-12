@@ -47,7 +47,7 @@
                     >移除</el-button>
                 </el-form-item>
                 <el-form-item label="描述">
-                    <el-input v-model="data.desc" placeholder="图片说明"></el-input>
+                    <el-input v-model="data.desc" :maxlength="120" show-word-limit placeholder="图片说明"></el-input>
                 </el-form-item>
                 <el-form-item label="类别">
                     <el-select v-model="data.type" placeholder="选择门派（非必选）">
@@ -116,7 +116,7 @@
                                 </i>
                             </div>
                             <div class="u-desc">
-                                <el-input v-model="item.desc" placeholder="图片说明">
+                                <el-input v-model="item.desc" :maxlength="120" show-word-limit placeholder="图片说明">
                                     <span slot="prepend">描述</span>
                                 </el-input>
                             </div>
