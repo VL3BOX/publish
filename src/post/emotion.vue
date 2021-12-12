@@ -281,7 +281,7 @@ export default {
             postEmotions(this.list)
                 .then((res) => {
                     this.$message({
-                        message: "发布成功",
+                        message: "发布成功,请等待审核",
                         type: "success",
                     });
                     // 跳转
@@ -306,7 +306,7 @@ export default {
             updateEmotion(this.id, this.data)
                 .then((res) => {
                     this.$message({
-                        message: "更新成功",
+                        message: "更新成功,请等待审核",
                         type: "success",
                     });
                     // 跳转

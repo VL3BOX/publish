@@ -190,7 +190,7 @@ export default {
                 .then((res) => {
                     let id = this.id || res?.data?.data?.id;
                     this.$message({
-                        message: "发布成功",
+                        message: "发布成功,请等待审核",
                         type: "success",
                     });
                     // 跳转
