@@ -2,12 +2,19 @@
     <div class="m-dashboard m-dashboard-work m-dashboard-other">
         <div class="m-dashboard-work-header">
             <h2 class="u-title">剑三小册</h2>
-            <a :href="publishLink" class="u-publish el-button el-button--primary el-button--small">
+            <a
+                :href="publishLink"
+                class="u-publish el-button el-button--primary el-button--small"
+            >
                 <i class="el-icon-document"></i> 创建小册
             </a>
         </div>
 
-        <el-input class="m-dashboard-work-search" placeholder="请输入搜索内容" v-model="search">
+        <el-input
+            class="m-dashboard-work-search"
+            placeholder="请输入搜索内容"
+            v-model="search"
+        >
             <span slot="prepend">关键词</span>
             <el-button slot="append" icon="el-icon-search"></el-button>
         </el-input>
@@ -17,13 +24,23 @@
                 <ul class="m-dashboard-box-list">
                     <li v-for="(item, i) in data" :key="i">
                         <i class="u-icon">
-                            <img v-if="item.public" svg-inline src="../assets/img/works/repo.svg" />
-                            <img v-else svg-inline src="../assets/img/works/draft.svg" />
+                            <img
+                                v-if="item.public"
+                                svg-inline
+                                src="../assets/img/works/repo.svg"
+                            />
+                            <img
+                                v-else
+                                svg-inline
+                                src="../assets/img/works/draft.svg"
+                            />
                         </i>
-                        <a class="u-title" target="_blank" :href="item.id | getCollectionLink">
-                            {{
-                            item.title || "无标题"
-                            }}
+                        <a
+                            class="u-title"
+                            target="_blank"
+                            :href="item.id | getCollectionLink"
+                        >
+                            {{ item.title || "无标题" }}
                         </a>
                         <div class="u-desc">
                             <time class="u-desc-subitem">
@@ -38,30 +55,18 @@
                             </time>
                         </div>
                         <el-button-group class="u-action">
-                            <el-tooltip
-                                class="item"
-                                effect="dark"
-                                content="编辑"
-                                placement="top-start"
-                            >
-                                <el-button
-                                    size="mini"
-                                    icon="el-icon-edit"
-                                    @click="post_edit(item.id)"
-                                ></el-button>
-                            </el-tooltip>
-                            <el-tooltip
-                                class="item"
-                                effect="dark"
-                                content="删除"
-                                placement="top-start"
-                            >
-                                <el-button
-                                    size="mini"
-                                    icon="el-icon-delete"
-                                    @click="post_del(item.id)"
-                                ></el-button>
-                            </el-tooltip>
+                            <el-button
+                                size="mini"
+                                icon="el-icon-edit"
+                                @click="post_edit(item.id)"
+                                title="编辑"
+                            ></el-button>
+                            <el-button
+                                size="mini"
+                                icon="el-icon-delete"
+                                @click="post_del(item.id)"
+                                title="删除"
+                            ></el-button>
                         </el-button-group>
                     </li>
                 </ul>
@@ -168,8 +173,7 @@ export default {
     mounted: function () {
         this.loadPosts();
     },
-    components: {
-    },
+    components: {},
 };
 </script>
 

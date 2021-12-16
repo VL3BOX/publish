@@ -1,13 +1,20 @@
 <template>
     <div class="m-dashboard-work m-dashboard-cms" v-loading="loading">
         <div class="m-dashboard-work-header">
-            <h2 class="u-title">{{typeLable}}</h2>
-            <a :href="publishLink" class="u-publish el-button el-button--primary el-button--small">
+            <h2 class="u-title">{{ typeLable }}</h2>
+            <a
+                :href="publishLink"
+                class="u-publish el-button el-button--primary el-button--small"
+            >
                 <i class="el-icon-document"></i> 发布作品
             </a>
         </div>
 
-        <el-input class="m-dashboard-work-search" placeholder="请输入搜索内容" v-model="search">
+        <el-input
+            class="m-dashboard-work-search"
+            placeholder="请输入搜索内容"
+            v-model="search"
+        >
             <span slot="prepend">关键词</span>
             <el-button slot="append" icon="el-icon-search"></el-button>
         </el-input>
@@ -22,17 +29,21 @@
                 <li v-for="(item, i) in data" :key="i">
                     <i class="u-icon">
                         <img
-                            v-if="item.post_status == 'publish'"
-                            svg-inline
                             src="../assets/img/works/repo.svg"
+                            v-if="item.post_status == 'publish'"
                         />
-                        <img v-else svg-inline src="../assets/img/works/draft.svg" />
+                        <img
+                            v-else
+                            src="../assets/img/works/draft.svg"
+                            :title="item.post_status | statusFormat"
+                        />
                     </i>
                     <a
                         class="u-title"
                         target="_blank"
                         :href="postLink(item.post_type, item.ID)"
-                    >{{ item.post_title || "无标题" }}</a>
+                        >{{ item.post_title || "无标题" }}</a
+                    >
                     <div class="u-desc">
                         <span class="u-desc-subitem">
                             <i class="el-icon-view"></i>
@@ -95,7 +106,7 @@ import {
     __visibleMap,
 } from "@jx3box/jx3box-common/data/jx3box.json";
 import dateFormat from "../utils/dateFormat";
-const simpleTypes = ["joke"];
+import statusMap from '@/assets/data/status.json'
 export default {
     name: "work",
     props: [],
@@ -111,6 +122,7 @@ export default {
             client: "all",
 
             types: Object.assign(__postType, { joke: "剑三骚话" }),
+            statusMap,
         };
     },
     computed: {
@@ -137,7 +149,7 @@ export default {
     watch: {
         params: {
             deep: true,
-            immediate : true,
+            immediate: true,
             handler: function (newval) {
                 this.loadPosts();
             },
@@ -216,6 +228,9 @@ export default {
         },
         visibleFormat: function (val) {
             return __visibleMap[~~val];
+        },
+        statusFormat: function (val) {
+            return statusMap[val];
         },
     },
 };
