@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-client">
         <el-form-item label="版本">
-            <el-radio-group v-model="client">
+            <el-radio-group v-model="client" @change="handleChange">
                 <el-radio label="std">正式服</el-radio>
                 <el-radio label="origin">怀旧服</el-radio>
                 <el-radio label="all" v-if="!forbidAll">全部</el-radio>
@@ -11,6 +11,7 @@
     </div>
 </template>
 <script>
+import Bus from '@/store/bus.js'
 export default {
     name: "publish_client",
     props: ["data",'forbidAll'],
@@ -35,7 +36,11 @@ export default {
         },
     },
     computed: {},
-    methods: {},
+    methods: {
+        handleChange : function (){
+            Bus.$emit('changeClient',this.client)
+        }
+    },
     mounted: function () {},
     components: {},
 };

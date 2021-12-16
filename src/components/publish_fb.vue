@@ -57,6 +57,7 @@ import isEmptyMeta from "@/utils/isEmptyMeta.js";
 import fbmap_std from "@jx3box/jx3box-data/data/fb/fb_map.json";
 import fbmap_origin from "@jx3box/jx3box-data/data/fb/fb_map_origin.json";
 import { __ossMirror, __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
+import Bus from '@/store/bus.js'
 // META空模板
 const default_meta = {
     fb_zlp: "",
@@ -102,9 +103,6 @@ export default {
         "fbdata.fb_name": function (val) {
             val && this.$emit("updateMeta", { key: 'post_subtype', val: val });
         },
-        client : function (){
-            this.setDefaultOption();
-        }
     },
     computed: {
         fbmap : function (){
@@ -159,6 +157,10 @@ export default {
     },
     mounted: function () {
         this.setDefaultOption();
+        // 当切换客户端版本时
+        Bus.$on('changeClient',(client) => {
+            this.setDefaultOption();
+        })
     },
 };
 </script>
