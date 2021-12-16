@@ -85,6 +85,7 @@
 import lodash from "lodash";
 import { getLink } from "@jx3box/jx3box-common/js/utils";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
+import { autoSave } from "@/utils/autoSave";
 
 // 本地模块
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
@@ -193,7 +194,11 @@ export default {
 
                 // 阅读权限（0公开，1仅自己，2亲友，3密码，4付费，5粉丝）
                 visible: 0,
+
             },
+            // 定时器
+            localTimer: '',
+            webTimer: ''
         };
     },
     computed: {
@@ -308,6 +313,15 @@ export default {
                 post_title: result.post_title,
             });
         },
+
+        autoSave() {
+            if (!this.id) {
+                this.publish('draft', false)
+            }
+
+            const key = this.post.post_type + this.id
+            autoSave(this, key, this.post)
+        }
     },
     created: function () {
         this.post.client = this.$store.state.client;
@@ -322,12 +336,19 @@ export default {
                 this.post.lang = data.meta_4;
             }
         });
+
+        this.localTimer = setInterval(() => {
+            this.autoSave()
+        }, 30000)
     },
     watch: {
         "$route.params.id": function (val) {
             val && this.init();
         },
     },
+    beforeDestroy() {
+        clearInterval(this.localTimer)
+    }
 };
 </script>
 

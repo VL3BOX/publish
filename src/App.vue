@@ -16,19 +16,27 @@
 <script>
 import Nav from "@/components/Nav.vue";
 import User from '@jx3box/jx3box-common/js/user'
+import LocalDraft from "@/utils/localDraft";
 export default {
     name: "publish",
     props: [],
     data: function () {
         return {};
     },
-    methods: {},
+    methods: {
+        init() {
+            const localDraft = new LocalDraft()
+
+            this.$store.commit('SET_DB', localDraft)
+        }
+    },
     created: function () {
         if (location.hostname != "localhost") {
             if (!User.isLogin()) {
                 User.toLogin();
             }
         }
+        this.init()
     },
     components: {
         Nav,

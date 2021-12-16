@@ -67,31 +67,37 @@ const routes = [
     {
         path: "/macro/:id?",
         component: macro,
+        name: 'macro',
     },
     // 插件数据发布
     {
         path: "/jx3dat/:id?",
         component: jx3dat,
+        name: 'jx3dat',
     },
     // 副本发布
     {
         path: "/fb/:id?",
         component: fb,
+        name: 'fb',
     },
     // 职业发布
     {
         path: "/bps/:id?",
         component: bps,
+        name: 'bps',
     },
     // 工具发布
     {
         path: "/tool/:id?",
         component: tool,
+        name: 'tool',
     },
     // 茶馆闲聊
     {
         path: "/bbs/:id?",
         component: bbs,
+        name: 'bbs',
     },
     {
         path: "/post/:id?",
