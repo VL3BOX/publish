@@ -15,68 +15,81 @@
                     size="small"
                     @click="clean"
                     :disabled="!isNotNull"
-                    v-show="isWeb"
-                >清空</el-button>
+                    >清空</el-button
+                >
             </div>
         </div>
-        <el-tabs v-model="activeName">
-            <el-tab-pane label="云端草稿" name="web"></el-tab-pane>
-            <el-tab-pane label="本地草稿" name="local">
-                <template v-if="isSupported">
-                    <div class="m-draft-warning">
-                        <el-alert
-                            title="以下草稿为编辑器为该浏览器产生的临时本地草稿HTML源码，并不存在于服务器中，仅用于断网或窗口异常关闭时恢复。"
-                            type="warning"
-                            show-icon
-                        ></el-alert>
-                    </div>
-                    <div class="m-draft-list" v-if="isNotNull">
-                        <ul class="u-list">
-                            <li class="u-item" v-for="(item,i) in data" :key="i" @click="preview(item)">
-                                <div class="u-label" :class="{on:!!item.active}">
-                                    <i
-                                        class="u-item-icon"
-                                        :class="!!item.active ? 'el-icon-folder-opened' : 'el-icon-folder'"
-                                    ></i>
-                                    <span class="u-item-key">{{item.key}}</span>
-                                    <div class="u-op">
-                                        <el-button
-                                            type="info"
-                                            icon="el-icon-document-copy"
-                                            size="mini"
-                                            class="u-delete"
-                                            @click.stop
-                                            v-clipboard:copy="item.data"
-                                            v-clipboard:success="onCopy"
-                                            v-clipboard:error="onError"
-                                        >复制</el-button>
-                                        <el-popconfirm title="确定删除吗？" @confirm="del(item,i)">
-                                            <el-button
-                                                slot="reference"
-                                                type="danger"
-                                                icon="el-icon-delete"
-                                                size="mini"
-                                                class="u-delete"
-                                                @click.stop
-                                            >删除</el-button>
-                                        </el-popconfirm>
-                                    </div>
-                                </div>
-                                <div class="u-value" v-if="!!item.active">
-                                    <div class="u-content">{{item.data}}</div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="m-draft-null" v-else>
-                        <i class="el-icon-warning-outline"></i> 暂无任何内容
-                    </div>
-                </template>
-                <template v-else>
-                    <el-alert title="您的浏览器太旧了，不支持本功能。" type="error" show-icon></el-alert>
-                </template>
-            </el-tab-pane>
-        </el-tabs>
+        <template v-if="isSupported">
+            <div class="m-draft-warning">
+                <el-alert
+                    title="以下草稿为编辑器为该浏览器产生的临时本地草稿HTML源码，并不存在于服务器中，仅用于断网或窗口异常关闭时恢复。"
+                    type="warning"
+                    show-icon
+                ></el-alert>
+            </div>
+            <div class="m-draft-list" v-if="isNotNull">
+                <ul class="u-list">
+                    <li
+                        class="u-item"
+                        v-for="(item, i) in data"
+                        :key="i"
+                        @click="preview(item)"
+                    >
+                        <div class="u-label" :class="{ on: !!item.active }">
+                            <i
+                                class="u-item-icon"
+                                :class="
+                                    !!item.active
+                                        ? 'el-icon-folder-opened'
+                                        : 'el-icon-folder'
+                                "
+                            ></i>
+                            <span class="u-item-key">{{ item.key }}</span>
+                            <div class="u-op">
+                                <el-button
+                                    type="info"
+                                    icon="el-icon-document-copy"
+                                    size="mini"
+                                    class="u-delete"
+                                    @click.stop
+                                    v-clipboard:copy="item.data"
+                                    v-clipboard:success="onCopy"
+                                    v-clipboard:error="onError"
+                                    >复制</el-button
+                                >
+                                <el-popconfirm
+                                    title="确定删除吗？"
+                                    @confirm="del(item, i)"
+                                >
+                                    <el-button
+                                        slot="reference"
+                                        type="danger"
+                                        icon="el-icon-delete"
+                                        size="mini"
+                                        class="u-delete"
+                                        @click.stop
+                                        >删除</el-button
+                                    >
+                                </el-popconfirm>
+                            </div>
+                        </div>
+                        <div class="u-value" v-if="!!item.active">
+                            <div class="u-content">{{ item.data }}</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="m-draft-null" v-else>
+                <i class="el-icon-warning-outline"></i> 暂无任何内容
+            </div>
+        </template>
+        <template v-else>
+            <el-alert
+                title="您的浏览器太旧了，不支持本功能。"
+                type="error"
+                show-icon
+            ></el-alert>
+        </template>
     </div>
 </template>
 
@@ -91,7 +104,6 @@ export default {
     data: function () {
         return {
             data: [],
-            activeName: 'web',
         };
     },
     computed: {
@@ -102,8 +114,8 @@ export default {
             return !!this.data && !!this.data.length;
         },
         isWeb({ activeName }) {
-            return activeName === 'web'
-        }
+            return activeName === "web";
+        },
     },
     methods: {
         // 加载
