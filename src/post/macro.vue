@@ -69,12 +69,17 @@
 
             <!-- 按钮 -->
             <div class="m-publish-buttons">
-                <el-button
-                    type="primary"
-                    @click="publish('publish',true)"
-                    :disabled="processing"
-                >发 &nbsp;&nbsp; 布</el-button>
-                <el-button type="plain" @click="publish('draft',false)" :disabled="processing">保存为草稿</el-button>
+                <template v-if="!isDraft">
+                    <el-button
+                        type="primary"
+                        @click="publish('publish',true)"
+                        :disabled="processing"
+                    >发 &nbsp;&nbsp; 布</el-button>
+                    <el-button type="plain" @click="publish('draft',false)" :disabled="processing">保存为草稿</el-button>
+                </template>
+                <el-button type="primary" :disabled="processing" @click="useDraft">
+                    使用此版本
+                </el-button>
             </div>
         </el-form>
     </div>
@@ -218,27 +223,42 @@ export default {
             if (mount_id) _query = { mount: mount_id };
             return _query;
         },
+        isDraft() {
+            return this.$route.query?.mode === 'draft'
+        },
+        db() {
+            return this.$store.state.db
+        }
     },
     methods: {
         // 加载
         init: function () {
             this.loading = true;
-            // 加载文章
-            if (this.$route.params.id) {
-                return pull(this.$route.params.id)
-                    .then((res) => {
-                        this.post = res.data.data;
-                        return res.data.data;
-                    })
-                    .finally(() => {
+            // 当 mode = draft 时，先加载本地 IndexedDB 内容
+            if (this.isDraft) {
+                const key = this.$route?.query?.key
+                return this.db.getItem(key).then(res => {
+                    this.post = res
+                    this.loading = false
+                })
+            } else {
+                // 加载文章
+                if (this.$route.params.id) {
+                    return pull(this.$route.params.id)
+                        .then((res) => {
+                            this.post = res.data.data;
+                            return res.data.data;
+                        })
+                        .finally(() => {
+                            this.loading = false;
+                        });
+                } else {
+                    return new Promise((resolve, reject) => {
+                        resolve();
+                    }).finally(() => {
                         this.loading = false;
                     });
-            } else {
-                return new Promise((resolve, reject) => {
-                    resolve();
-                }).finally(() => {
-                    this.loading = false;
-                });
+                }
             }
         },
         // 发布
@@ -249,7 +269,7 @@ export default {
             // 补充心法id
             this.build();
 
-            push(...this.data)
+            return push(...this.data)
                 .then((res) => {
                     let result = res.data.data;
                     return result;
@@ -314,13 +334,30 @@ export default {
             });
         },
 
-        autoSave() {
-            if (!this.id) {
-                this.publish('draft', false)
+        async autoSave() {
+            let key = ''
+            try {
+                if (!this.id) {
+                    await this.publish('draft', false)
+                }
+                key = this.post.post_type + '_' + this.id
+            } catch(err) {
+                key = this.post.post_type + '_temp-' + new Date().getTime()
+            } finally {
+                console.log(key)
+                autoSave(this, key, this.post)
             }
+        },
 
-            const key = this.post.post_type + this.id
-            autoSave(this, key, this.post)
+        useDraft() {
+            this.$alert('是否使用该版本发布？', '确认信息', {
+                confirmButtonText: "确定",
+                callback: (action) => {
+                    if (action === 'confirm') {
+                        this.publish('publish', true)
+                    }
+                }
+            })
         }
     },
     created: function () {

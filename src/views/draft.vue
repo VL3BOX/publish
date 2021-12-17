@@ -33,7 +33,6 @@
                         class="u-item"
                         v-for="(item, i) in data"
                         :key="i"
-                        @click="preview(item)"
                     >
                         <div class="u-label" :class="{ on: !!item.active }">
                             <i
@@ -44,18 +43,15 @@
                                         : 'el-icon-folder'
                                 "
                             ></i>
-                            <span class="u-item-key">{{ item.key }}</span>
+                            <span class="u-item-key">{{ item | itemName }}</span>
                             <div class="u-op">
                                 <el-button
                                     type="info"
-                                    icon="el-icon-document-copy"
+                                    icon="el-icon-view"
                                     size="mini"
                                     class="u-delete"
-                                    @click.stop
-                                    v-clipboard:copy="item.data"
-                                    v-clipboard:success="onCopy"
-                                    v-clipboard:error="onError"
-                                    >复制</el-button
+                                    @click.stop="preview(item)"
+                                    >预览</el-button
                                 >
                                 <el-popconfirm
                                     title="确定删除吗？"
@@ -72,9 +68,6 @@
                                     >
                                 </el-popconfirm>
                             </div>
-                        </div>
-                        <div class="u-value" v-if="!!item.active">
-                            <div class="u-content">{{ item.data }}</div>
                         </div>
                     </li>
                 </ul>
@@ -116,19 +109,22 @@ export default {
         isWeb({ activeName }) {
             return activeName === "web";
         },
+        db() {
+            return this.$store.state.db
+        }
     },
     methods: {
         // 加载
-        loadDrafts: function () {
-            let len = localStorage.length;
+        loadDrafts: async function () {
+            let len = await this.db.length();
             for (let i = 0; i < len; i++) {
-                let key = localStorage.key(i);
-                if (key.startsWith(DRAFT_PREFIX)) {
-                    this.data.push({
-                        key: key,
-                        data: localStorage.getItem(key),
-                    });
-                }
+                let key = await this.db.key(i);
+                // if (key.startsWith(DRAFT_PREFIX)) {
+                this.data.push({
+                    key,
+                    data: await this.db.getItem(key),
+                });
+                // }
             }
         },
         // 清空
@@ -137,9 +133,7 @@ export default {
                 confirmButtonText: "确定清空",
                 callback: (action) => {
                     // 清空localstorage
-                    this.data.forEach((item) => {
-                        localStorage.removeItem(item.key);
-                    });
+                    this.db.clear()
                     // 清空缓存数据
                     this.data = [];
                     // 通知
@@ -153,13 +147,13 @@ export default {
         },
         // 预览
         preview: function (item) {
-            item.active = !!!item.active;
-            this.$forceUpdate();
+            this.$router.push(`/${item.data.post_type}/${item.data.ID}?mode=draft&key=${item.key}`)
         },
         // 删除
         del: function (item, i) {
-            localStorage.removeItem(item.key);
-            this.data.splice(i, 1);
+            this.db.removeItem(item.key).then(() => {
+                this.data.splice(i, 1);
+            })
         },
         // 复制
         onCopy: function (val) {
@@ -176,9 +170,13 @@ export default {
             });
         },
     },
-    filters: {},
+    filters: {
+        itemName(item) {
+            return item.data.post_title || `${item.key}(无标题)`
+        }
+    },
     created: function () {
-        localStorage && this.loadDrafts();
+        this.loadDrafts();
     },
     mounted: function () {},
 };
