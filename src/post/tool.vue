@@ -93,9 +93,11 @@ import publish_authors from "@/components/publish_authors";
 // 数据逻辑
 import { push, pull } from "@/service/cms.js";
 import { appendToCollection } from "@/service/collection.js";
+import {AutoSaveMixin} from "@/utils/autoSaveMixin";
 
 export default {
     name: "bps",
+    mixins: [AutoSaveMixin],
     components: {
         Tinymce,
         "publish-header": publish_header,
@@ -182,29 +184,37 @@ export default {
         // 加载
         init: function () {
             this.loading = true;
-            // 加载文章
-            if (this.$route.params.id) {
-                return pull(this.$route.params.id)
-                    .then((res) => {
-                        this.post = res.data.data;
-                        return res.data.data;
-                    })
-                    .finally(() => {
+            if (this.isDraft) {
+                const key = this.$route?.query?.key
+                return this.db.getItem(key).then(res => {
+                    this.post = res
+                    this.loading = false
+                })
+            } else {
+                // 加载文章
+                if (this.$route.params.id) {
+                    return pull(this.$route.params.id)
+                        .then((res) => {
+                            this.post = res.data.data;
+                            return res.data.data;
+                        })
+                        .finally(() => {
+                            this.loading = false;
+                        });
+                } else {
+                    return new Promise((resolve, reject) => {
+                        resolve();
+                    }).finally(() => {
                         this.loading = false;
                     });
-            } else {
-                return new Promise((resolve, reject) => {
-                    resolve();
-                }).finally(() => {
-                    this.loading = false;
-                });
+                }
             }
         },
         // 发布
         publish: function (status, skip) {
             this.post.post_status = status;
             this.processing = true;
-            push(...this.data)
+            return push(...this.data)
                 .then((res) => {
                     let result = res.data.data;
                     return result
