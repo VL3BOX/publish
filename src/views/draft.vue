@@ -20,13 +20,13 @@
             </div>
         </div>
         <template v-if="isSupported">
-            <div class="m-draft-warning">
+            <!--<div class="m-draft-warning">
                 <el-alert
                     title="以下草稿为编辑器为该浏览器产生的临时本地草稿HTML源码，并不存在于服务器中，仅用于断网或窗口异常关闭时恢复。"
                     type="warning"
                     show-icon
                 ></el-alert>
-            </div>
+            </div>-->
             <div class="m-draft-list" v-if="isNotNull">
                 <ul class="u-list">
                     <li

@@ -1,7 +1,10 @@
 <template>
     <div class="m-publish-box p-publish-macro" v-loading="loading">
         <!-- 头部 -->
-        <publish-header name="云端宏"></publish-header>
+        <publish-header name="云端宏">
+            <!--<el-button type="text" @click="view">历史版本</el-button>-->
+            <revision :post-id="id" ></revision>
+        </publish-header>
 
         <el-form label-position="left" label-width="80px">
             <!-- 标题 -->
@@ -69,7 +72,7 @@
 
             <!-- 按钮 -->
             <div class="m-publish-buttons">
-                <template v-if="!isDraft">
+                <template v-if="!isDraft && !isRevision">
                     <el-button
                         type="primary"
                         @click="publish('publish',true)"
@@ -77,7 +80,7 @@
                     >发 &nbsp;&nbsp; 布</el-button>
                     <el-button type="plain" @click="publish('draft',false)" :disabled="processing">保存为草稿</el-button>
                 </template>
-                <el-button type="primary" :disabled="processing" @click="useDraft">
+                <el-button v-else type="primary" :disabled="processing" @click="useDraft">
                     使用此版本
                 </el-button>
             </div>
@@ -93,6 +96,7 @@ import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import { AutoSaveMixin } from "@/utils/autoSaveMixin";
 
 // 本地模块
+import revision from "@/components/revision";
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 import publish_header from "@/components/publish_header.vue";
 import publish_title from "@/components/publish_title.vue";
@@ -135,6 +139,7 @@ export default {
         "publish-visible": publish_visible,
         "publish-authors": publish_authors,
         "publish-pz": publish_pz,
+        revision
     },
     data: function () {
         return {
@@ -232,6 +237,8 @@ export default {
                     this.post = res
                     this.loading = false
                 })
+            } else if (this.isRevision) {
+                return this.getRevision()
             } else {
                 // 加载文章
                 if (this.$route.params.id) {

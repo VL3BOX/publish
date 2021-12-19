@@ -1,5 +1,9 @@
 import { autoSave } from "@/utils/post_draft";
+import {saveLocalRevision} from "@/utils/post_revision";
 import {pull} from "@/service/cms";
+import { webDuration, localDuration } from '@/assets/data/setting.json'
+import {addRevision, getRevision} from "@/service/revision";
+import hash from 'object-hash'
 
 export const AutoSaveMixin = {
     data() {
@@ -13,15 +17,30 @@ export const AutoSaveMixin = {
         isDraft() {
             return this.$route.query?.mode === 'draft'
         },
+        isRevision() {
+            return this.$route.query?.mode === 'revision'
+        },
         db() {
             return this.$store.state.db
+        }
+    },
+    watch: {
+        '$route': {
+            deep: true,
+            handler() {
+                this.init()
+            }
         }
     },
     mounted() {
         if (!this.isDraft) {
             this.localTimer = setInterval(async () => {
                 await this.autoSave()
-            }, 30000)
+            }, localDuration)
+
+            this.webTimer = setInterval(() => {
+                this.postRevision()
+            }, webDuration)
         }
     },
     methods: {
@@ -34,6 +53,8 @@ export const AutoSaveMixin = {
                     this.post = res
                     this.loading = false
                 })
+            } else if (this.isRevision) {
+                return this.getRevision()
             } else {
                 // 加载文章
                 if (this.$route.params.id) {
@@ -54,18 +75,43 @@ export const AutoSaveMixin = {
                 }
             }
         },
+        getRevision() {
+            getRevision(this.$route.params.id, this.$route.query.id)
+                .then((res) => {
+                    this.post = res.data.data;
+                    return res.data.data;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
         async autoSave() {
             let key = ''
             try {
                 if (!this.id) {
                     await this.publish('draft', false)
                     key = this.post.post_type + '_' + this.id
+
+                    saveLocalRevision(this, key, this.post)
                 }
             } catch(err) {
                 key = this.post.post_type + '_temp-' + new Date().getTime()
             } finally {
                 autoSave(this, key, this.post)
             }
+        },
+
+        postRevision() {
+            const isSame = hash.MD5(sessionStorage.getItem(`${this.post.post_type}_${this.post.ID}`))
+                === hash.MD5(JSON.stringify(this.post))
+            if (isSame) return
+            addRevision(this.post.ID, this.post).then(() => {
+                this.$notify({
+                    title: '提醒',
+                    type: 'success',
+                    message: '历史版本保存成功'
+                })
+            })
         },
 
         async useDraft() {
@@ -82,6 +128,7 @@ export const AutoSaveMixin = {
     beforeDestroy() {
         if (!this.isDraft) {
             clearInterval(this.localTimer)
+            clearInterval(this.webTimer)
         }
     }
 }

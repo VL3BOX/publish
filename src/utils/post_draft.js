@@ -4,7 +4,7 @@ import throttle from 'lodash/throttle'
  * @param ctx vue实例对象
  * @returns {boolean}
  */
-const canAutoSave = (ctx) => {
+export  const canAutoSave = (ctx) => {
     const _routeNames = ['macro', 'jx3dat', 'fb', 'bps', 'tool', 'bbs']
 
     if (!_routeNames.includes(ctx.$route.name)) return false

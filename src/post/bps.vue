@@ -189,6 +189,8 @@ export default {
                     this.post = res
                     this.loading = false
                 })
+            } else if (this.isRevision) {
+                return this.getRevision()
             } else {
                 // 加载文章
                 if (this.$route.params.id) {
