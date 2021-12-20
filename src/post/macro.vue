@@ -1,7 +1,10 @@
 <template>
     <div class="m-publish-box p-publish-macro" v-loading="loading">
         <!-- 头部 -->
-        <publish-header name="云端宏"></publish-header>
+        <publish-header name="云端宏">
+            <!--<el-button type="text" @click="view">历史版本</el-button>-->
+            <revision :post-id="id" ></revision>
+        </publish-header>
 
         <el-form label-position="left" label-width="80px">
             <!-- 标题 -->
@@ -69,7 +72,7 @@
 
             <!-- 按钮 -->
             <div class="m-publish-buttons">
-                <template v-if="!isDraft">
+                <template v-if="!isDraft && !isRevision">
                     <el-button
                         type="primary"
                         @click="publish('publish',true)"
@@ -77,7 +80,7 @@
                     >发 &nbsp;&nbsp; 布</el-button>
                     <el-button type="plain" @click="publish('draft',false)" :disabled="processing">保存为草稿</el-button>
                 </template>
-                <el-button type="primary" :disabled="processing" @click="useDraft">
+                <el-button v-else type="primary" :disabled="processing" @click="useDraft">
                     使用此版本
                 </el-button>
             </div>
@@ -90,9 +93,10 @@
 import lodash from "lodash";
 import { getLink } from "@jx3box/jx3box-common/js/utils";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
-import { autoSave } from "@/utils/autoSave";
+import { AutoSaveMixin } from "@/utils/autoSaveMixin";
 
 // 本地模块
+import revision from "@/components/revision";
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 import Markdown from "@jx3box/jx3box-editor/src/Markdown";
 import publish_header from "@/components/publish_header.vue";
@@ -118,6 +122,7 @@ import { appendToCollection } from "@/service/collection.js";
 
 export default {
     name: "macro",
+    mixins: [AutoSaveMixin],
     components: {
         Tinymce,
         Markdown,
@@ -136,6 +141,7 @@ export default {
         "publish-visible": publish_visible,
         "publish-authors": publish_authors,
         "publish-pz": publish_pz,
+        revision
     },
     data: function () {
         return {
@@ -201,11 +207,7 @@ export default {
 
                 // 阅读权限（0公开，1仅自己，2亲友，3密码，4付费，5粉丝）
                 visible: 0,
-
             },
-            // 定时器
-            localTimer: '',
-            webTimer: ''
         };
     },
     computed: {
@@ -225,12 +227,6 @@ export default {
             if (mount_id) _query = { mount: mount_id };
             return _query;
         },
-        isDraft() {
-            return this.$route.query?.mode === 'draft'
-        },
-        db() {
-            return this.$store.state.db
-        }
     },
     methods: {
         // 加载
@@ -243,6 +239,8 @@ export default {
                     this.post = res
                     this.loading = false
                 })
+            } else if (this.isRevision) {
+                return this.getRevision()
             } else {
                 // 加载文章
                 if (this.$route.params.id) {
@@ -335,32 +333,6 @@ export default {
                 post_title: result.post_title,
             });
         },
-
-        async autoSave() {
-            let key = ''
-            try {
-                if (!this.id) {
-                    await this.publish('draft', false)
-                }
-                key = this.post.post_type + '_' + this.id
-            } catch(err) {
-                key = this.post.post_type + '_temp-' + new Date().getTime()
-            } finally {
-                console.log(key)
-                autoSave(this, key, this.post)
-            }
-        },
-
-        useDraft() {
-            this.$alert('是否使用该版本发布？', '确认信息', {
-                confirmButtonText: "确定",
-                callback: (action) => {
-                    if (action === 'confirm') {
-                        this.publish('publish', true)
-                    }
-                }
-            })
-        }
     },
     created: function () {
         this.post.client = this.$store.state.client;
@@ -375,19 +347,12 @@ export default {
                 this.post.lang = data.meta_4;
             }
         });
-
-        this.localTimer = setInterval(() => {
-            this.autoSave()
-        }, 30000)
     },
     watch: {
         "$route.params.id": function (val) {
             val && this.init();
         },
     },
-    beforeDestroy() {
-        clearInterval(this.localTimer)
-    }
 };
 </script>
 
