@@ -21,7 +21,7 @@
             <!-- 正文 -->
             <div class="m-publish-content">
                 <el-divider content-position="left">正文</el-divider>
-                <el-radio-group class="m-publish-editormode" size="small" v-model="post.post_mode" >
+                <el-radio-group class="m-publish-editormode" size="small" v-model="post.post_mode">
                     <el-radio-button label="tinymce">可视化编辑器</el-radio-button>
                     <el-radio-button label="markdown">Markdown</el-radio-button>
                 </el-radio-group>
@@ -56,8 +56,13 @@
 
             <!-- 按钮 -->
             <div class="m-publish-buttons">
-                <el-button type="primary" @click="publish('publish', true)" :disabled="processing">发 &nbsp;&nbsp; 布</el-button>
-                <el-button type="plain" @click="publish('draft', false)" :disabled="processing">保存为草稿</el-button>
+                <template v-if="isDraft || isRevision">
+                    <el-button type="primary" @click="useDraft" :disabled="processing">使用此版本</el-button>
+                </template>
+                <template v-else>
+                    <el-button type="primary" @click="publish('publish', true)" :disabled="processing">发 &nbsp;&nbsp; 布</el-button>
+                    <el-button type="plain" @click="publish('draft', false)" :disabled="processing">保存为草稿</el-button>
+                </template>
             </div>
         </el-form>
     </div>
@@ -87,11 +92,12 @@ import publish_authors from "@/components/publish_authors";
 // 数据逻辑
 import { push, pull } from "@/service/cms.js";
 import { appendToCollection } from "@/service/collection.js";
-import {AutoSaveMixin} from "@/utils/autoSaveMixin";
+import { AutoSaveMixin } from "@/utils/autoSaveMixin";
+import { cmsMetaMixin } from "@/utils/cmsMetaMixin";
 
 export default {
     name: "bbs",
-    mixins: [AutoSaveMixin],
+    mixins: [AutoSaveMixin, cmsMetaMixin],
     components: {
         Tinymce,
         Markdown,
@@ -176,36 +182,13 @@ export default {
         },
     },
     methods: {
-        // 加载
+        // 初始化
         init: function() {
-            this.loading = true;
-            if (this.isDraft) {
-                const key = this.$route?.query?.key
-                return this.db.getItem(key).then(res => {
-                    this.post = res
-                    this.loading = false
-                })
-            } else if (this.isRevision) {
-                return this.getRevision()
-            } else {
-                // 加载文章
-                if (this.$route.params.id) {
-                    return pull(this.$route.params.id)
-                        .then((res) => {
-                            this.post = res.data.data;
-                            return res.data.data;
-                        })
-                        .finally(() => {
-                            this.loading = false;
-                        });
-                } else {
-                    return new Promise((resolve, reject) => {
-                        resolve();
-                    }).finally(() => {
-                        this.loading = false;
-                    });
-                }
-            }
+            // 尝试加载
+            this.loadData().then(() => {
+                // 加载成功后执行自动保存逻辑（含本地草稿、本地缓存、云端历史版本）
+                this.autoSave();
+            });
         },
         // 发布
         publish: function(status, skip) {
@@ -269,13 +252,13 @@ export default {
             });
         },
     },
-    created: function() {
-        this.post.client = this.$store.state.client;
-        this.init();
-    },
     watch: {
-        "$route.params.id": function(val) {
-            val && this.init();
+        $route: {
+            immediate : true,
+            deep: true,
+            handler() {
+                this.init();
+            },
         },
     },
 };

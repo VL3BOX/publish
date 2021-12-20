@@ -11,10 +11,16 @@
         i {
             .fz(16px);
         }
-        &:hover {
-            color: @pink;
+        span {
+            border-bottom: 1px dashed #999;
         }
+        // &:hover {
+        //     color: @pink;
+        // }
     }
+}
+.m-draft-help-tip {
+    .fz(12px, 2);
 }
 
 .m-draft-warning {
@@ -40,8 +46,8 @@
         padding: 8px 10px;
         .r(4px);
         .mb(20px);
-        .pointer;
-        user-select: none;
+        // .pointer;
+        // user-select: none;
 
         &.on {
             background-color: #e6f0fb;
@@ -62,10 +68,21 @@
                 .ml(10px);
             }
         }
+
+        padding-right: 160px;
+        box-sizing: border-box;
+        .nobreak;
     }
 
     .u-item-icon {
         .mr(5px);
+    }
+
+    .u-item-time {
+        .fz(12px);
+        color: #fba524;
+        font-style: normal;
+        .ml(10px);
     }
 
     .u-value {

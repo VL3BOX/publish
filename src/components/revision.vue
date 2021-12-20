@@ -16,14 +16,8 @@
                                 <el-checkbox class="u-checkbox" v-model="item.checked" @change="(val) => checkChange(val, item)"></el-checkbox>
                                 <i class="u-icon el-icon-tickets"></i>
                                 <span>{{ item | revisionName }}</span>
-                                <span class="u-remark" v-if="item.remark">
-                                    (备注: {{ item.remark }})
-                                </span>
-                                <i
-                                    class="u-edit el-icon-edit"
-                                    title="添加备注"
-                                    @click="remark(item)"
-                                ></i>
+                                <span class="u-remark" v-if="item.remark"> (备注: {{ item.remark }}) </span>
+                                <i class="u-edit el-icon-edit" title="添加备注" @click="remark(item)"></i>
                             </span>
 
                             <el-button-group>
@@ -55,19 +49,19 @@
 </template>
 
 <script>
-import {getRevisions, putRevision, removeRevision, removeRevisions} from "@/service/revision";
+import { getRevisions, putRevision, removeRevision, removeRevisions } from "@/service/revision";
 
 export default {
     name: "revision",
     props: {
         postId: {
             type: [String, Number],
-            default: 0
+            default: 0,
         },
         visible: {
             type: Boolean,
-            default: true
-        }
+            default: true,
+        },
     },
     data() {
         return {
@@ -76,11 +70,11 @@ export default {
                 {
                     id: 1,
                     version: 1,
-                    updated_at: '2021-12-19 16:29',
-                    remark: '',
+                    updated_at: "2021-12-19 16:29",
+                    remark: "",
                     data: {},
                     checked: false,
-                }
+                },
             ],
 
             per: 10,
@@ -91,95 +85,99 @@ export default {
             checked: [],
             checkedAll: false,
             isIndeterminate: false,
-        }
+        };
     },
     watch: {
         params: {
             deep: true,
             handler() {
-                this.loadList()
-            }
-        }
+                this.loadList();
+            },
+        },
     },
     filters: {
         revisionName(val) {
-            return `版本${val.version}~${val.updated_at}`
-        }
+            return `版本${val.version}~${val.updated_at}`;
+        },
     },
     computed: {
         params() {
             return {
                 page: this.page,
-                per: this.per
-            }
-        }
+                per: this.per,
+            };
+        },
     },
     methods: {
         view() {
-            if (!this.postId) return
-            this.show = true
-            this.loadList()
+            if (!this.postId) return;
+            this.show = true;
+            this.loadList();
         },
         loadList() {
-            this.loading = true
-            getRevisions(this.postId, this.params).then(res => {
-                this.data = res.data.data.list.map(item => {
-                    this.$set(item, 'checked', false)
-                    return item
+            this.loading = true;
+            getRevisions(this.postId, this.params)
+                .then((res) => {
+                    this.data = res.data.data.list.map((item) => {
+                        this.$set(item, "checked", false);
+                        return item;
+                    });
+                    this.page = res.data.data.page;
+                    this.per = res.data.data.per;
+                    this.total = res.data.data.total;
+                })
+                .finally(() => {
+                    this.loading = false;
                 });
-                this.page = res.data.data.page;
-                this.per = res.data.data.per;
-                this.total = res.data.data.total;
-            }).finally(() => {
-                this.loading = false
-            })
         },
         remark(item) {
-            this.$prompt('请输入备注', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
+            this.$prompt("请输入备注", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
                 closeOnClickModal: false,
-                inputValue: item.remark || '',
+                inputValue: item.remark || "",
             }).then(({ value }) => {
                 // item.remark = value
-                putRevision(this.postId, item.id, { remark: value }).then(() => {
-                    this.$message.success('备注添加成功')
-                    item.remark = value
-                    return true
-                }).catch(() => {
-                    return false
-                })
-            })
+                putRevision(this.postId, item.id, { remark: value })
+                    .then(() => {
+                        this.$message.success("备注添加成功");
+                        item.remark = value;
+                        return true;
+                    })
+                    .catch(() => {
+                        return false;
+                    });
+            });
         },
         checkChange(val, item) {
             if (val) {
-                this.checked.push(item.id)
+                this.checked.push(item.id);
             } else {
-                this.checked = this.checked.filter(c => c !== item.id)
+                this.checked = this.checked.filter((c) => c !== item.id);
             }
-            this.checkedAll = this.checked.length === this.data.length
+            this.checkedAll = this.checked.length === this.data.length;
         },
         checkAll(val) {
             if (val) {
-                this.checked = this.data.map(item => item.id)
-                this.data.map(item => {
-                    item.checked = true
-                    return item
-                })
+                this.checked = this.data.map((item) => item.id);
+                this.data.map((item) => {
+                    item.checked = true;
+                    return item;
+                });
             } else {
-                this.checked = []
-                this.data.map(item => {
-                    item.checked = false
-                    return item
-                })
+                this.checked = [];
+                this.data.map((item) => {
+                    item.checked = false;
+                    return item;
+                });
             }
             this.isIndeterminate = false;
 
-            console.log(this.checked)
+            console.log(this.checked);
         },
         use(item) {
-            const routeName = this.$route.name
-            this.$router.push(`/${routeName}/${item.post_id}/?mode=revision&id=${item.id}`)
+            const routeName = this.$route.name;
+            this.$router.push(`/${routeName}/${item.post_id}/?mode=revision&id=${item.id}`);
         },
         del(item) {
             this.$confirm(`确认删除历史版本[版本${item.version}~${item.updated_at}]？`, "提示", {
@@ -204,7 +202,7 @@ export default {
                 cancelButtonText: "取消",
                 type: "warning",
             }).then(() => {
-                const ids = this.checked.join(',')
+                const ids = this.checked.join(",");
                 removeRevisions(this.postId, ids).then(() => {
                     this.$notify({
                         type: "success",
@@ -213,17 +211,17 @@ export default {
                     });
 
                     if (this.page === 1) {
-                        this.loadList()
+                        this.loadList();
                     } else {
-                        this.page = 1
+                        this.page = 1;
                     }
 
-                    this.checked = []
-                })
-            })
-        }
-    }
-}
+                    this.checked = [];
+                });
+            });
+        },
+    },
+};
 </script>
 
 <style lang="less">
@@ -256,7 +254,7 @@ export default {
             height: 40px;
             align-items: center;
             padding: 5px;
-            .fz(12px,28px);
+            .fz(12px, 28px);
             border-bottom: 1px dashed #eee;
 
             .u-checkbox {
