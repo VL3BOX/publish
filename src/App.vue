@@ -15,28 +15,40 @@
 
 <script>
 import Nav from "@/components/Nav.vue";
-import User from '@jx3box/jx3box-common/js/user'
+import User from "@jx3box/jx3box-common/js/user";
 import LocalDraft from "@/utils/localDraft";
+import { getUserConf } from "@/service/user.js";
 export default {
     name: "publish",
     props: [],
-    data: function () {
-        return {};
+    data: function() {
+        return {
+        };
     },
     methods: {
-        init() {
-            const localDraft = new LocalDraft()
+        loadUserConf : function (){
+            getUserConf().then((res) => {
+                this.$store.commit('setUserConf',res?.data?.data)
+            })
+        },
+        init : function (){
 
-            this.$store.commit('SET_DB', localDraft)
-        }
+            // 草稿箱
+            const localDraft = new LocalDraft();
+            this.$store.commit("SET_DB", localDraft);
+
+            // 用户偏好
+            this.loadUserConf();
+
+        },
     },
-    created: function () {
+    created: function() {
         if (location.hostname != "localhost") {
             if (!User.isLogin()) {
                 User.toLogin();
             }
         }
-        this.init()
+        this.init();
     },
     components: {
         Nav,

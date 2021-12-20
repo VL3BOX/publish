@@ -6,7 +6,10 @@ Vue.use(Vuex);
 let store = {
     state: {
         client : location.href.includes('origin') ? 'origin' : 'std',
-        db: ''
+        db: '',
+        user_conf : {
+            editor_mode : 'tinymce'
+        },
     },
     mutations: {
         switchClient : function (state,val){
@@ -14,6 +17,11 @@ let store = {
         },
         SET_DB: (state, val) => {
             state.db = val
+        },
+        setUserConf : (state,val) => {
+            state.user_conf = val || {
+                editor_mode : 'tinymce'
+            }
         }
     },
     getters: {},

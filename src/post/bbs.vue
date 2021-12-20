@@ -189,7 +189,7 @@ export default {
         // 初始化
         init: function() {
             // 尝试加载
-            this.loadData().then(() => {
+            return this.loadData().then(() => {
                 // 加载成功后执行自动保存逻辑（含本地草稿、本地缓存、云端历史版本）
                 this.autoSave();
             });
@@ -254,15 +254,6 @@ export default {
                 post_collection: result.post_collection,
                 post_title: result.post_title,
             });
-        },
-    },
-    watch: {
-        $route: {
-            immediate : true,
-            deep: true,
-            handler() {
-                this.init();
-            },
         },
     },
 };

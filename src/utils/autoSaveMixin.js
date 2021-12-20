@@ -113,30 +113,42 @@ export const AutoSaveMixin = {
         // 自动保存：生成本地草稿
         async createLocalDraft() {
             let key = this.post.post_type + '_' + this.id;
-            try {
-                // 如果是全新作品，自动为其发布为草稿状态以获取唯一标识
-                if (this.isNewPost) {
-                    await this.publish("draft", false).then((res) => {
-                        key = this.post.post_type + "_" + this.post.ID;
-                    });
-                }
-            } catch (err) {
-                // 如果尝试失败，为其创建匿名本地缓存（处理网站接口异常，断网等情况）
+            // try {
+            //     // 如果是全新作品，自动为其发布为草稿状态以获取唯一标识
+            //     if (this.isNewPost) {
+            //         await this.publish("draft", false).then((res) => {
+            //             key = this.post.post_type + "_" + this.post.ID;
+            //         });
+            //     }
+            // } catch (err) {
+            //     // 如果尝试失败，为其创建匿名本地缓存（处理网站接口异常，断网等情况）
+            //     key = this.post.post_type + "_" + (this.post.post_title || ('无标题-' + new Date().getTime()))
+            // } finally {
+
+            //     let post_cache = cloneDeep(this.post)
+            //     post_cache.cache_time = new Date().getTime()
+
+            //     this.db.setItem(key, post_cache).then(() => {
+            //         // this.$notify({
+            //         //     title: "本地草稿缓存成功",
+            //         //     message: "本地草稿保存成功",
+            //         //     type: "success",
+            //         // });
+            //         console.log('本地草稿备份完成',new Date().getTime())
+            //     });
+            // }
+
+            // 如果是全新作品且有内容，为其创建匿名本地缓存（处理网站接口异常，断网等情况）
+            if (this.isNewPost && this.post.post_content) {
                 key = this.post.post_type + "_" + (this.post.post_title || ('无标题-' + new Date().getTime()))
-            } finally {
-
-                let post_cache = cloneDeep(this.post)
-                post_cache.cache_time = new Date().getTime()
-
-                this.db.setItem(key, post_cache).then(() => {
-                    // this.$notify({
-                    //     title: "本地草稿缓存成功",
-                    //     message: "本地草稿保存成功",
-                    //     type: "success",
-                    // });
-                    console.log('本地草稿备份完成',new Date().getTime())
-                });
             }
+
+            let post_cache = cloneDeep(this.post)
+            post_cache.cache_time = new Date().getTime()
+
+            this.db.setItem(key, post_cache).then(() => {
+                console.log('本地草稿备份完成',new Date().getTime())
+            });
         },
 
         // 自动保存：生成云端备份
