@@ -6,7 +6,6 @@
 </template>
 
 <script>
-
 export default {
     name: "publish_header",
     props: ["name"],
@@ -17,10 +16,15 @@ export default {
     computed: {},
     methods: {
         goBack: function() {
-            this.$router.go(-1);
+            if(window.history.length){
+                this.$router.go(-1);
+            }else{
+                this.$router.push('/')
+            }
         },
     },
     mounted: function() {},
-    components: {},
+    components: {
+    },
 };
 </script>

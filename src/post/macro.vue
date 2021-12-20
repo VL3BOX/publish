@@ -2,8 +2,6 @@
     <div class="m-publish-box p-publish-macro" v-loading="loading">
         <!-- 头部 -->
         <publish-header name="云端宏">
-            <!--<el-button type="text" @click="view">历史版本</el-button>-->
-            <revision :post-id="id" ></revision>
         </publish-header>
 
         <el-form label-position="left" label-width="80px">
@@ -96,7 +94,6 @@ import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import { AutoSaveMixin } from "@/utils/autoSaveMixin";
 
 // 本地模块
-import revision from "@/components/revision";
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 import Markdown from "@jx3box/jx3box-editor/src/Markdown";
 import publish_header from "@/components/publish_header.vue";
@@ -141,7 +138,6 @@ export default {
         "publish-visible": publish_visible,
         "publish-authors": publish_authors,
         "publish-pz": publish_pz,
-        revision
     },
     data: function () {
         return {

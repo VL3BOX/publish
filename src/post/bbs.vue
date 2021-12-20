@@ -1,7 +1,9 @@
 <template>
     <div class="m-publish-box" v-loading="loading">
         <!-- 头部 -->
-        <publish-header name="剑三茶馆"></publish-header>
+        <publish-header name="剑三茶馆">
+            <publish-revision :enable="true" :post-id="id"></publish-revision>
+        </publish-header>
 
         <el-form label-position="left" label-width="80px">
             <!-- 标题 -->
@@ -88,6 +90,7 @@ import publish_comment from "@/components/publish_comment";
 import publish_visible from "@/components/publish_visible";
 import publish_subtype from "@/components/publish_subtype";
 import publish_authors from "@/components/publish_authors";
+import publish_revision from '@/components/publish_revision.vue'
 
 // 数据逻辑
 import { push, pull } from "@/service/cms.js";
@@ -113,6 +116,7 @@ export default {
         "publish-visible": publish_visible,
         "publish-subtype": publish_subtype,
         "publish-authors": publish_authors,
+        'publish-revision' : publish_revision
     },
     data: function() {
         return {
