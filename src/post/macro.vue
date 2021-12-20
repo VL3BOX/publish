@@ -2,6 +2,7 @@
     <div class="m-publish-box p-publish-macro" v-loading="loading">
         <!-- 头部 -->
         <publish-header name="云端宏">
+            <publish-revision :enable="true" :post-id="id"></publish-revision>
         </publish-header>
 
         <el-form label-position="left" label-width="80px">
@@ -70,17 +71,13 @@
 
             <!-- 按钮 -->
             <div class="m-publish-buttons">
-                <template v-if="!isDraft && !isRevision">
-                    <el-button
-                        type="primary"
-                        @click="publish('publish',true)"
-                        :disabled="processing"
-                    >发 &nbsp;&nbsp; 布</el-button>
-                    <el-button type="plain" @click="publish('draft',false)" :disabled="processing">保存为草稿</el-button>
+                <template v-if="isDraft || isRevision">
+                    <el-button type="primary" @click="useDraft" :disabled="processing">使用此版本</el-button>
                 </template>
-                <el-button v-else type="primary" :disabled="processing" @click="useDraft">
-                    使用此版本
-                </el-button>
+                <template v-else>
+                    <el-button type="primary" @click="publish('publish', true)" :disabled="processing">发 &nbsp;&nbsp; 布</el-button>
+                    <el-button type="plain" @click="publish('draft', false)" :disabled="processing">保存为草稿</el-button>
+                </template>
             </div>
         </el-form>
     </div>
@@ -91,7 +88,6 @@
 import lodash from "lodash";
 import { getLink } from "@jx3box/jx3box-common/js/utils";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
-import { AutoSaveMixin } from "@/utils/autoSaveMixin";
 
 // 本地模块
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
@@ -111,15 +107,18 @@ import publish_comment from "@/components/publish_comment";
 import publish_visible from "@/components/publish_visible";
 import publish_authors from "@/components/publish_authors";
 import publish_pz from "@/components/publish_pz";
+import publish_revision from '@/components/publish_revision.vue'
 
 // 数据逻辑
 import { push, pull } from "@/service/cms.js";
 import { syncRedis } from "@/service/macro.js";
 import { appendToCollection } from "@/service/collection.js";
+import { AutoSaveMixin } from "@/utils/autoSaveMixin";
+import { cmsMetaMixin } from "@/utils/cmsMetaMixin";
 
 export default {
     name: "macro",
-    mixins: [AutoSaveMixin],
+    mixins: [AutoSaveMixin, cmsMetaMixin],
     components: {
         Tinymce,
         Markdown,
@@ -138,6 +137,7 @@ export default {
         "publish-visible": publish_visible,
         "publish-authors": publish_authors,
         "publish-pz": publish_pz,
+        'publish-revision' : publish_revision
     },
     data: function () {
         return {
@@ -225,37 +225,13 @@ export default {
         },
     },
     methods: {
-        // 加载
-        init: function () {
-            this.loading = true;
-            // 当 mode = draft 时，先加载本地 IndexedDB 内容
-            if (this.isDraft) {
-                const key = this.$route?.query?.key
-                return this.db.getItem(key).then(res => {
-                    this.post = res
-                    this.loading = false
-                })
-            } else if (this.isRevision) {
-                return this.getRevision()
-            } else {
-                // 加载文章
-                if (this.$route.params.id) {
-                    return pull(this.$route.params.id)
-                        .then((res) => {
-                            this.post = res.data.data;
-                            return res.data.data;
-                        })
-                        .finally(() => {
-                            this.loading = false;
-                        });
-                } else {
-                    return new Promise((resolve, reject) => {
-                        resolve();
-                    }).finally(() => {
-                        this.loading = false;
-                    });
-                }
-            }
+        // 初始化
+        init: function() {
+            // 尝试加载
+            return this.loadData().then(() => {
+                // 加载成功后执行自动保存逻辑（含本地草稿、本地缓存、云端历史版本）
+                this.autoSave();
+            });
         },
         // 发布
         publish: function (status, skip) {
@@ -268,10 +244,10 @@ export default {
             return push(...this.data)
                 .then((res) => {
                     let result = res.data.data;
-                    return result;
                     syncRedis(result).catch((err) => {
                         console.log("[Redis同步作业失败]", err);
                     });
+                    return result;
                 })
                 .then((result) => {
                     this.afterPublish(result).finally(() => {
@@ -282,6 +258,7 @@ export default {
                     this.processing = false;
                 });
         },
+        // 搜索扩展
         build: function () {
             this.post.meta_2 =
                 ~~lodash.get(xfmap[this.post.post_subtype], "id") || 0;
@@ -331,23 +308,17 @@ export default {
         },
     },
     created: function () {
-        this.post.client = this.$store.state.client;
-        this.init().then((data) => {
-            if (!data) return;
+        // this.init().then((data) => {
+        //     if (!data) return;
 
-            // 迁移兼容
-            if (!this.post.zlp && data.meta_1) {
-                this.post.zlp = data.meta_1;
-            }
-            if (!this.post.lang && data.meta_4) {
-                this.post.lang = data.meta_4;
-            }
-        });
-    },
-    watch: {
-        "$route.params.id": function (val) {
-            val && this.init();
-        },
+        //     // 迁移兼容
+        //     if (!this.post.zlp && data.meta_1) {
+        //         this.post.zlp = data.meta_1;
+        //     }
+        //     if (!this.post.lang && data.meta_4) {
+        //         this.post.lang = data.meta_4;
+        //     }
+        // });
     },
 };
 </script>
