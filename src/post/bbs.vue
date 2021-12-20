@@ -21,12 +21,12 @@
             <!-- 正文 -->
             <div class="m-publish-content">
                 <el-divider content-position="left">正文</el-divider>
-                <Tinymce
-                    v-model="post.post_content"
-                    :attachmentEnable="true"
-                    :resourceEnable="true"
-                    v-show="!post.post_mode || post.post_mode == 'tinymce'"
-                />
+                <el-radio-group class="m-publish-editormode" size="small" v-model="post.post_mode" >
+                    <el-radio-button label="tinymce">可视化编辑器</el-radio-button>
+                    <el-radio-button label="markdown">Markdown</el-radio-button>
+                </el-radio-group>
+                <Markdown v-model="post.post_content" :editable="true" :readOnly="false" v-show="post.post_mode == 'markdown'"></Markdown>
+                <Tinymce v-model="post.post_content" :attachmentEnable="true" :resourceEnable="true" v-show="!post.post_mode || post.post_mode == 'tinymce'" />
             </div>
 
             <!-- 附加 -->
@@ -36,10 +36,7 @@
             </div>
             <div class="m-publish-append">
                 <el-divider content-position="left">合集</el-divider>
-                <publish-collection
-                    v-model="post.post_collection"
-                    :defaultCollapse="post.collection_collapse"
-                >
+                <publish-collection v-model="post.post_collection" :defaultCollapse="post.collection_collapse">
                     <publish-collection-collapse v-model="post.collection_collapse"></publish-collection-collapse>
                 </publish-collection>
             </div>
@@ -59,12 +56,8 @@
 
             <!-- 按钮 -->
             <div class="m-publish-buttons">
-                <el-button
-                    type="primary"
-                    @click="publish('publish',true)"
-                    :disabled="processing"
-                >发 &nbsp;&nbsp; 布</el-button>
-                <el-button type="plain" @click="publish('draft',false)" :disabled="processing">保存为草稿</el-button>
+                <el-button type="primary" @click="publish('publish', true)" :disabled="processing">发 &nbsp;&nbsp; 布</el-button>
+                <el-button type="plain" @click="publish('draft', false)" :disabled="processing">保存为草稿</el-button>
             </div>
         </el-form>
     </div>
@@ -77,6 +70,7 @@ import bbs_types from "@/assets/data/bbs.json";
 
 // 本地模块
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
+import Markdown from "@jx3box/jx3box-editor/src/Markdown";
 import publish_header from "@/components/publish_header.vue";
 import publish_title from "@/components/publish_title.vue";
 import publish_original from "@/components/publish_original.vue";
@@ -98,6 +92,7 @@ export default {
     name: "bbs",
     components: {
         Tinymce,
+        Markdown,
         "publish-header": publish_header,
         "publish-title": publish_title,
         "publish-original": publish_original,
@@ -111,7 +106,7 @@ export default {
         "publish-subtype": publish_subtype,
         "publish-authors": publish_authors,
     },
-    data: function () {
+    data: function() {
         return {
             // 加载状态
             loading: false,
@@ -167,10 +162,10 @@ export default {
         };
     },
     computed: {
-        id: function () {
+        id: function() {
             return ~~this.post.ID;
         },
-        data: function () {
+        data: function() {
             if (this.id) {
                 return [this.id, this.post];
             } else {
@@ -180,7 +175,7 @@ export default {
     },
     methods: {
         // 加载
-        init: function () {
+        init: function() {
             this.loading = true;
             // 加载文章
             if (this.$route.params.id) {
@@ -201,25 +196,25 @@ export default {
             }
         },
         // 发布
-        publish: function (status, skip) {
+        publish: function(status, skip) {
             this.post.post_status = status;
             this.processing = true;
             push(...this.data)
                 .then((res) => {
                     let result = res.data.data;
-                    return result
+                    return result;
                 })
                 .then((result) => {
                     this.afterPublish(result).finally(() => {
                         this.done(skip, result);
-                    })
+                    });
                 })
                 .finally(() => {
                     this.processing = false;
                 });
         },
         // 完成
-        done: function (skip, result) {
+        done: function(skip, result) {
             if (skip) {
                 // 提醒
                 this.$message({
@@ -249,27 +244,27 @@ export default {
             }
         },
         // 跳转前操作
-        afterPublish: function (result) {
-            if(!~~result.post_collection) return new Promise((resolve,reject)=>{
-                resolve(true)
-            })
+        afterPublish: function(result) {
+            if (!~~result.post_collection)
+                return new Promise((resolve, reject) => {
+                    resolve(true);
+                });
             return appendToCollection({
                 post_type: result.post_type,
                 post_id: result.ID,
                 post_collection: result.post_collection,
                 post_title: result.post_title,
-            })
+            });
         },
     },
-    created: function () {
+    created: function() {
         this.post.client = this.$store.state.client;
         this.init();
     },
     watch: {
-        "$route.params.id": function (val) {
+        "$route.params.id": function(val) {
             val && this.init();
         },
     },
 };
 </script>
-

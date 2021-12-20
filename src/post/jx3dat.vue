@@ -31,12 +31,12 @@
             <!-- 正文 -->
             <div class="m-publish-content">
                 <el-divider content-position="left">正文</el-divider>
-                <Tinymce
-                    v-model="post.post_content"
-                    :attachmentEnable="true"
-                    :resourceEnable="true"
-                    v-show="!post.post_mode || post.post_mode == 'tinymce'"
-                />
+                <el-radio-group class="m-publish-editormode" size="small" v-model="post.post_mode" >
+                    <el-radio-button label="tinymce">可视化编辑器</el-radio-button>
+                    <el-radio-button label="markdown">Markdown</el-radio-button>
+                </el-radio-group>
+                <Markdown v-model="post.post_content" :editable="true" :readOnly="false" v-show="post.post_mode == 'markdown'"></Markdown>
+                <Tinymce v-model="post.post_content" :attachmentEnable="true" :resourceEnable="true" v-show="!post.post_mode || post.post_mode == 'tinymce'" />
             </div>
 
             <!-- 附加 -->
@@ -88,6 +88,7 @@ import { jx3dat_types, jx3dat_tags } from "@/assets/data/jx3dat.json";
 
 // 本地模块
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
+import Markdown from "@jx3box/jx3box-editor/src/Markdown";
 import publish_header from "@/components/publish_header.vue";
 import publish_title from "@/components/publish_title.vue";
 import publish_original from "@/components/publish_original.vue";
@@ -113,6 +114,7 @@ export default {
     name: "jx3dat",
     components: {
         Tinymce,
+        Markdown,
         "publish-header": publish_header,
         "publish-title": publish_title,
         "publish-original": publish_original,
