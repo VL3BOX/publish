@@ -7,21 +7,22 @@
             <main class="m-revision-container" v-loading="loading">
                 <div class="u-actions">
                     <el-checkbox :indeterminate="isIndeterminate" v-model="checkedAll" @change="checkAll">全选</el-checkbox>
-                    <el-button class="u-del-btn" size="mini" plain icon="el-icon-delete" @click="delRevisions" :disabled="!checked || !checked.length">批量删除</el-button>
+                    <el-button class="u-empty" size="mini" plain icon="el-icon-delete" @click="delRevisions" :disabled="!checked || !checked.length">批量删除</el-button>
                 </div>
                 <div class="m-revision-list">
-                    <ul v-if="data && data.length">
+                    <ul class="u-list" v-if="data && data.length">
                         <li class="m-revision-item" v-for="(item, i) in data" :key="i">
                             <span class="u-name">
                                 <el-checkbox class="u-checkbox" v-model="item.checked" @change="(val) => checkChange(val, item)"></el-checkbox>
                                 <el-tooltip class="item" effect="dark" :content="item.remark" placement="top" :disabled="!item.remark">
-    
-                                <i class="u-icon el-icon-tickets"></i>
-                                <span>
-                                    <b class="u-version">{{ item | revisionName }}</b>
-                                    <span class="u-remark" v-if="item.remark"> - <span :title="item.remark">{{ item.remark | formatRemark }}</span></span>
-                                    <em class="u-time">{{ item.updated_at | formatDate }}</em>
-                                </span>
+                                    <i class="u-icon el-icon-tickets"></i>
+                                    <span>
+                                        <b class="u-version">{{ item | revisionName }}</b>
+                                        <span class="u-remark" v-if="item.remark">
+                                            - <span :title="item.remark">{{ item.remark | formatRemark }}</span></span
+                                        >
+                                        <em class="u-time">{{ item.updated_at | formatDate }}</em>
+                                    </span>
                                 </el-tooltip>
                                 <i class="u-edit el-icon-edit" @click="remark(item)" title="添加备注"></i>
                             </span>
@@ -33,7 +34,7 @@
                         </li>
 
                         <el-pagination
-                            class="u-list-pagination"
+                            class="u-pagination"
                             background
                             hide-on-single-page
                             layout="prev,pager,next,->,total"
@@ -43,7 +44,7 @@
                         ></el-pagination>
                     </ul>
 
-                    <el-alert v-else title="当前没有任何历史版本" type="info" show-icon></el-alert>
+                    <el-alert class="u-null" v-else title="当前没有任何历史版本" type="info" show-icon></el-alert>
                 </div>
             </main>
         </el-drawer>
@@ -100,13 +101,13 @@ export default {
                 per: this.per,
             };
         },
-        isPostMode : function (){
-            return !this.$route.query.mode || this.$route.query.mode == 'default'
+        isPostMode: function() {
+            return !this.$route.query.mode || this.$route.query.mode == "default";
         },
-        ready : function (){
+        ready: function() {
             // 栏目启用 && 非新文 && 非草稿|历史版本模式
-            return this.enable && this.postId && this.isPostMode
-        }
+            return this.enable && this.postId && this.isPostMode;
+        },
     },
     filters: {
         revisionName(val) {
@@ -115,9 +116,9 @@ export default {
         formatDate: function(gmt) {
             return showTime(new Date(gmt));
         },
-        formatRemark : function (str){
-            return str?.length > 2 ? str.slice(0,2) + '..' : str
-        }
+        formatRemark: function(str) {
+            return str?.length > 2 ? str.slice(0, 2) + ".." : str;
+        },
     },
     methods: {
         view() {
@@ -245,14 +246,15 @@ export default {
 
 <style lang="less">
 .m-revision {
-    .pa;.rt(0);
+    .pa;
+    .rt(0);
 }
 .m-revision-drawer {
     .size(100%);
     .pf;
     .rt(0);
 
-    .el-drawer{
+    .el-drawer {
         min-width: 420px;
     }
 
@@ -261,81 +263,84 @@ export default {
     }
     .m-revision-container {
         padding: 0 10px;
+
+        .u-actions {
+            display: flex;
+            align-items: center;
+            .ml(15px);
+            min-height: 28px;
+        }
+        .u-empty {
+            .ml(10px);
+        }
+        .u-null {
+            .mt(10px);
+        }
     }
 
     .m-revision-list {
-        ul {
+        .u-list {
             margin: 0;
             padding: 0;
             list-style: none;
         }
-        .m-revision-item {
-            display: flex;
-            justify-content: space-between;
-            height: 40px;
-            align-items: center;
-            padding: 5px;
-            .fz(12px, 28px);
-            border-bottom: 1px dashed #eee;
-            white-space: nowrap;
-
-            .u-checkbox {
-                .mr(5px);
-            }
-
-            .u-edit {
-                cursor: pointer;
-                color: @color-link !important;
-                .ml(5px);
-            }
-
-            .u-time {
-                color: #999;
-                .ml(5px);
-                font-style: normal;
-            }
-            .u-remark span{
-                color:#fba524;
-            }
-        }
-        .u-list-pagination {
+        .u-pagination {
             .mt(20px);
             text-align: center;
         }
     }
 
-    .u-name {
-        .ml(10px);
-        i {
-            .fz(16px);
-            color: #888;
-            .y(-2px);
+    .m-revision-item {
+        display: flex;
+        justify-content: space-between;
+        height: 40px;
+        align-items: center;
+        padding: 5px;
+        .fz(12px, 28px);
+        border-bottom: 1px dashed #eee;
+        white-space: nowrap;
+
+        .u-checkbox {
             .mr(5px);
         }
-    }
 
-    .u-actions {
-        display: flex;
-        align-items: center;
-        .ml(15px);
-        min-height: 28px;
-    }
+        .u-edit {
+            cursor: pointer;
+            color: @color-link !important;
+            .ml(5px);
+        }
 
-    .u-del-btn {
-        .ml(10px);
+        .u-time {
+            color: #999;
+            .ml(5px);
+            font-style: normal;
+        }
+        .u-remark span {
+            color: #fba524;
+        }
+
+        .u-name {
+            .ml(10px);
+            i {
+                .fz(16px);
+                color: #888;
+                .y(-2px);
+                .mr(5px);
+            }
+        }
     }
 }
-@media screen and (max-width:@ipad){
-    .m-revision-drawer{
-        .el-drawer{
+@media screen and (max-width: @ipad) {
+    .m-revision-drawer {
+        .el-drawer {
             .w(100%) !important;
-            overflow-y:auto;
+            overflow-y: auto;
             min-width: 0;
         }
     }
 }
-@media screen and (max-width:@ip5){
-    .m-revision-drawer .m-revision-list .m-revision-item{
+@media screen and (max-width: @ip5) {
+    .m-revision-drawer .m-revision-list .m-revision-item {
         .h(auto);
         flex-wrap: wrap;
     }
