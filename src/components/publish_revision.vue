@@ -14,12 +14,15 @@
                         <li class="m-revision-item" v-for="(item, i) in data" :key="i">
                             <span class="u-name">
                                 <el-checkbox class="u-checkbox" v-model="item.checked" @change="(val) => checkChange(val, item)"></el-checkbox>
+                                <el-tooltip class="item" effect="dark" :content="item.remark" placement="top" :disabled="!item.remark">
+    
                                 <i class="u-icon el-icon-tickets"></i>
                                 <span>
                                     <b class="u-version">{{ item | revisionName }}</b>
-                                    <span class="u-remark" v-if="item.remark"> - <span>{{ item.remark }}</span></span>
+                                    <span class="u-remark" v-if="item.remark"> - <span :title="item.remark">{{ item.remark | formatRemark }}</span></span>
                                     <em class="u-time">{{ item.updated_at | formatDate }}</em>
                                 </span>
+                                </el-tooltip>
                                 <i class="u-edit el-icon-edit" @click="remark(item)" title="添加备注"></i>
                             </span>
 
@@ -112,6 +115,9 @@ export default {
         formatDate: function(gmt) {
             return showTime(new Date(gmt));
         },
+        formatRemark : function (str){
+            return str?.length > 2 ? str.slice(0,2) + '..' : str
+        }
     },
     methods: {
         view() {
@@ -239,14 +245,16 @@ export default {
 
 <style lang="less">
 .m-revision {
-    float: right;
-    position: relative;
-    top: -30px;
+    .pa;.rt(0);
 }
 .m-revision-drawer {
     .size(100%);
     .pf;
     .rt(0);
+
+    .el-drawer{
+        min-width: 420px;
+    }
 
     .u-revision-title {
         margin: 0;
@@ -269,6 +277,7 @@ export default {
             padding: 5px;
             .fz(12px, 28px);
             border-bottom: 1px dashed #eee;
+            white-space: nowrap;
 
             .u-checkbox {
                 .mr(5px);
@@ -314,6 +323,21 @@ export default {
 
     .u-del-btn {
         .ml(10px);
+    }
+}
+@media screen and (max-width:@ipad){
+    .m-revision-drawer{
+        .el-drawer{
+            .w(100%) !important;
+            overflow-y:auto;
+            min-width: 0;
+        }
+    }
+}
+@media screen and (max-width:@ip5){
+    .m-revision-drawer .m-revision-list .m-revision-item{
+        .h(auto);
+        flex-wrap: wrap;
     }
 }
 </style>

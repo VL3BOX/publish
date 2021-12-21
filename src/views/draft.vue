@@ -124,7 +124,7 @@ export default {
     },
     filters: {
         itemName(item) {
-            return item?.data?.post_title || `${item.key}(无标题)`;
+            return item?.data?.post_title || `${item.key}`;
         },
         formatDate(item) {
             let time = item?.data?.cache_time

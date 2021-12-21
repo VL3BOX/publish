@@ -28,3 +28,10 @@ export default {
     },
 };
 </script>
+
+<style lang="less">
+    .m-publish-header{
+        .pr;
+    }
+    
+</style>

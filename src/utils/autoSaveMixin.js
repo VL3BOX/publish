@@ -93,7 +93,7 @@ export const AutoSaveMixin = {
         autoSave: function() {
             // 首次初始化时，为内容创建镜像缓存（以做后续对比功能或其他应用读取原始状态）
             if (this.id) {
-                sessionStorage.setItem(this.id, JSON.stringify(this.post));
+                sessionStorage.setItem(this.post.post_type + '_' + this.id, JSON.stringify(this.post));
             }
 
             // 非草稿或历史版本，执行自动保存逻辑
@@ -104,14 +104,16 @@ export const AutoSaveMixin = {
                 }, localDuration);
 
                 // 云端备份
-                this.webTimer = setInterval(() => {
-                    this.createCloudRevision();
-                }, webDuration);
+                if(this.id){
+                    this.webTimer = setInterval(() => {
+                        this.createCloudRevision();
+                    }, webDuration);
+                }
             }
         },
 
         // 自动保存：生成本地草稿
-        async createLocalDraft() {
+        createLocalDraft() {
             let key = this.post.post_type + '_' + this.id;
             // try {
             //     // 如果是全新作品，自动为其发布为草稿状态以获取唯一标识
@@ -140,7 +142,8 @@ export const AutoSaveMixin = {
 
             // 如果是全新作品且有内容，为其创建匿名本地缓存（处理网站接口异常，断网等情况）
             if (this.isNewPost && this.post.post_content) {
-                key = this.post.post_type + "_" + (this.post.post_title || ('无标题-' + new Date().getTime()))
+                let anonymous = '无标题-' + new Date().getTime()
+                key = this.post.post_type + "_" + (this.post.post_title || anonymous)
             }
 
             let post_cache = cloneDeep(this.post)
