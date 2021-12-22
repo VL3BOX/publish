@@ -15,11 +15,6 @@ Vue.use(JX3BOX_UI);
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 
-// markdown编辑器
-import mavonEditor from "@jx3box/markdown";
-import "@jx3box/markdown/dist/css/index.css";
-Vue.use(mavonEditor)
-
 // 数据与路由
 import router from "./router";
 import store from "./store";
