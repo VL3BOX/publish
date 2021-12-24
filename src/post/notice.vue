@@ -80,7 +80,7 @@ import publish_authors from "@/components/publish_authors";
 import { push, pull } from "@/service/cms.js";
 
 export default {
-    name: "bbs",
+    name: "notice",
     components: {
         Tinymce,
         "publish-header": publish_header,

@@ -102,7 +102,7 @@ import { AutoSaveMixin } from "@/utils/autoSaveMixin";
 import { cmsMetaMixin } from "@/utils/cmsMetaMixin";
 
 export default {
-    name: "bps",
+    name: "tool",
     mixins: [AutoSaveMixin, cmsMetaMixin],
     components: {
         Tinymce,

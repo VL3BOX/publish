@@ -272,7 +272,7 @@ const { __Root } = require("@jx3box/jx3box-common/data/jx3box.json");
 import EquipPosition from "@jx3box/jx3box-editor/service/enum/EquipPosition";
 
 export default {
-    name: "item",
+    name: "item_plan",
     props: [],
     data: function() {
         let positions = [

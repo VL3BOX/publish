@@ -201,7 +201,7 @@ import qs from "qs";
 import lodash from "lodash";
 
 export default {
-    name: "item",
+    name: "collection",
     props: [],
     data() {
         // 作品类型加载
