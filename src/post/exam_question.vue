@@ -8,16 +8,7 @@
         <!-- <h1 class="m-publish-exam-header">贡献题目</h1> -->
         <el-form label-position="left" label-width="80px" class="m-publish-exam">
             <el-form-item label="题目" class="m-publish-exam-title">
-                <el-input
-                    v-model="primary.title"
-                    :maxlength="500"
-                    :minlength="2"
-                    show-word-limit
-                    required
-                    :rows="3"
-                    type="textarea"
-                    placeholder="请填写题目内容 (支持html)"
-                ></el-input>
+                <el-input v-model="primary.title" :maxlength="500" :minlength="2" show-word-limit required :rows="3" type="textarea" placeholder="请填写题目内容 (支持html)"></el-input>
             </el-form-item>
             <el-form-item label="题型" class="m-publish-exam-type">
                 <el-radio-group v-model="primary.type">
@@ -48,30 +39,14 @@
                 </el-checkbox-group>
             </el-form-item>
             <el-form-item label="难度" class="m-publish-exam-level">
-                <el-rate
-                    v-model="primary.hardStar"
-                    show-score
-                    text-color="#ff9900"
-                    score-template="{value} 星"
-                ></el-rate>
+                <el-rate v-model="primary.hardStar" show-score text-color="#ff9900" score-template="{value} 星"></el-rate>
             </el-form-item>
 
             <exam_tags class="m-publish-exam-tags" v-model="primary.tags" />
 
             <el-form-item label="答案解析" class="m-publish-exam-content">
-                <Tinymce
-                    v-model="primary.whyami"
-                    :attachmentEnable="true"
-                    :resourceEnable="true"
-                    :height="400"
-                />
-                <el-button
-                    class="u-publish"
-                    icon="el-icon-s-promotion"
-                    type="primary"
-                    @click="publish"
-                    :disabled="processing"
-                >提交题目</el-button>
+                <Tinymce v-model="primary.whyami" :attachmentEnable="true" :resourceEnable="true" :height="400" />
+                <el-button class="u-publish" icon="el-icon-s-promotion" type="primary" @click="publish" :disabled="processing">提交题目</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -87,7 +62,7 @@ import { getLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "exam_question",
     props: [],
-    data: function () {
+    data: function() {
         return {
             primary: {
                 title: "",
@@ -103,16 +78,16 @@ export default {
         };
     },
     computed: {
-        id: function () {
+        id: function() {
             return this.$route.params.id;
         },
-        isNew: function () {
+        isNew: function() {
             return !this.id;
         },
     },
     watch: {},
     methods: {
-        publish: function () {
+        publish: function() {
             this.processing = true;
             if (this.id) {
                 updateQuestion(this.id, this.primary, this)
@@ -132,19 +107,16 @@ export default {
                     });
             }
         },
-        success: function (res) {
+        success: function(res) {
             this.$message({
                 message: res.data.msg || "提交成功",
                 type: "success",
             });
             setTimeout(() => {
-                location.href = getLink(
-                    "question",
-                    this.id || res.data.data.id
-                );
+                location.href = getLink("question", this.id || res.data.data.id);
             }, 500);
         },
-        loadData: function () {
+        loadData: function() {
             getQuestion(this.id, this).then((res) => {
                 let data = res.data;
                 this.primary.title = data.title;
@@ -159,11 +131,11 @@ export default {
                 this.primary.whyami = data.whyami;
             });
         },
-        updateTags: function (val) {
+        updateTags: function(val) {
             this.tags = val;
         },
     },
-    created: function () {
+    created: function() {
         if (this.id) {
             this.loadData();
         }
