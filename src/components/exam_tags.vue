@@ -7,12 +7,12 @@
                 <el-checkbox :label="game" v-for="game in options.game" :key="game">{{game}}</el-checkbox>
             </div>
             <div class="u-group">
-                <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">玩法</span></label>
-                <el-checkbox :label="play" v-for="play in options.play" :key="play">{{play}}</el-checkbox>
-            </div>
-            <div class="u-group">
                 <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">门派</span></label>
                 <el-checkbox :label="school" v-for="school in options.school" :key="school">{{school}}</el-checkbox>
+            </div>
+            <div class="u-group">
+                <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">玩法</span></label>
+                <el-checkbox :label="play" v-for="play in options.play" :key="play">{{play}}</el-checkbox>
             </div>
             <div class="u-group">
                 <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">学科</span></label>
