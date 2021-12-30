@@ -24,6 +24,7 @@
                                         <em class="u-time">{{ item.updated_at | formatDate }}</em>
                                     </span>
                                 </el-tooltip>
+                                <span class="u-creator" v-if="item.user_info" title="创建人">{{ item.user_info.display_name }}</span>
                                 <i class="u-edit el-icon-edit" @click="remark(item)" title="添加备注"></i>
                             </span>
 
@@ -327,6 +328,11 @@ export default {
                 .y(-2px);
                 .mr(5px);
             }
+        }
+
+        .u-creator {
+            margin-left: 5px;
+            margin-right: 5px;
         }
     }
 }

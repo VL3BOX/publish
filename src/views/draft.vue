@@ -19,7 +19,7 @@
                         <div class="u-label" :class="{ on: !!item.active }">
                             <!-- <i class="u-item-icon" :class="!!item.active ? 'el-icon-folder-opened' : 'el-icon-folder'"></i> -->
                             <i class="u-item-icon el-icon-document"></i>
-                            <span class="u-item-key">{{ item | itemName }} <em class="u-item-time">( {{ item | formatDate }} )</em></span>
+                            <span class="u-item-key">{{ item | itemName }} <em class="u-item-time" v-if="item.data.cache_time">( {{ item | formatDate }} )</em></span>
                             <div class="u-op">
                                 <el-button type="primary" plain icon="el-icon-view" size="mini" class="u-delete" @click.stop="preview(item)">预览</el-button>
                                 <el-popconfirm title="确定删除吗？" @confirm="del(item, i)">
@@ -128,7 +128,7 @@ export default {
         },
         formatDate(item) {
             let time = item?.data?.cache_time
-            return showRecently(new Date(time));
+            return time ? showRecently(new Date(time)) : '';
         },
     },
     created: function() {
