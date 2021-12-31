@@ -14,7 +14,10 @@ export const AutoSaveMixin = {
     },
     beforeDestroy: function() {
         // 清空引用，释放内存
+        clearInterval(this.localTimer);
         this.localTimer = null;
+
+        clearInterval(this.webTimer);
         this.webTimer = null;
     },
     computed: {
@@ -93,7 +96,7 @@ export const AutoSaveMixin = {
         autoSave: function() {
             // 首次初始化时，为内容创建镜像缓存（以做后续对比功能或其他应用读取原始状态）
             if (this.id) {
-                sessionStorage.setItem(this.post.post_type + '_' + this.id, JSON.stringify(this.post));
+                sessionStorage.setItem(this.post.post_type + "_" + this.id, JSON.stringify(this.post));
             }
 
             // 非草稿或历史版本，执行自动保存逻辑
@@ -104,7 +107,7 @@ export const AutoSaveMixin = {
                 }, localDuration);
 
                 // 云端备份
-                if(this.id){
+                if (this.id) {
                     this.webTimer = setInterval(() => {
                         this.createCloudRevision();
                     }, webDuration);
@@ -114,7 +117,7 @@ export const AutoSaveMixin = {
 
         // 自动保存：生成本地草稿
         createLocalDraft() {
-            let key = this.post.post_type + '_' + this.id;
+            let key = "";
             // try {
             //     // 如果是全新作品，自动为其发布为草稿状态以获取唯一标识
             //     if (this.isNewPost) {
@@ -142,16 +145,23 @@ export const AutoSaveMixin = {
 
             // 如果是全新作品且有内容，为其创建匿名本地缓存（处理网站接口异常，断网等情况）
             if (this.isNewPost && this.post.post_content) {
-                let anonymous = '无标题-' + new Date().getTime()
-                key = this.post.post_type + "_" + (this.post.post_title || anonymous)
+                let anonymous = "无标题-" + new Date().getTime();
+                key = this.post.post_type + "_" + (this.post.post_title || anonymous);
+            }
+            // 如果是发布过的作品，不检测有没有内容
+            if (this.id) {
+                key = this.post.post_type + "_" + this.id;
             }
 
-            let post_cache = cloneDeep(this.post)
-            post_cache.cache_time = new Date().getTime()
+            // 缓存内容
+            let post_cache = cloneDeep(this.post);
+            post_cache.cache_time = new Date().getTime();
 
-            this.db.setItem(key, post_cache).then(() => {
-                console.log('本地草稿备份完成',new Date().getTime())
-            });
+            if (key) {
+                this.db.setItem(key, post_cache).then(() => {
+                    console.log("本地草稿备份完成", key, new Date().getTime());
+                });
+            }
         },
 
         // 自动保存：生成云端备份
