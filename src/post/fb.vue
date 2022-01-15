@@ -27,8 +27,10 @@
                     <el-radio-button label="tinymce">可视化编辑器</el-radio-button>
                     <el-radio-button label="markdown">Markdown</el-radio-button>
                 </el-radio-group>
-                <Markdown v-model="post.post_content" :editable="true" :readOnly="false" v-show="post.post_mode == 'markdown'"></Markdown>
-                <Tinymce v-model="post.post_content" :attachmentEnable="true" :resourceEnable="true" v-show="!post.post_mode || post.post_mode == 'tinymce'" />
+                <keep-alive>
+                    <Markdown v-model="post.post_content" :editable="true" :readOnly="false" v-if="post.post_mode == 'markdown'"></Markdown>
+                    <Tinymce v-model="post.post_content" :attachmentEnable="true" :resourceEnable="true" v-if="!post.post_mode || post.post_mode == 'tinymce'" />
+                </keep-alive>
             </div>
 
             <!-- 附加 -->
