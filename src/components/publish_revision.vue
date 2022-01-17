@@ -223,13 +223,15 @@ export default {
                         message: "历史版本删除成功",
                     });
 
+                    this.checkedAll = false;
+                    this.checked = [];
+
                     if (this.page === 1) {
                         this.loadList();
                     } else {
                         this.page = 1;
                     }
 
-                    this.checked = [];
                 });
             });
         },
