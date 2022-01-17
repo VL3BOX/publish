@@ -284,10 +284,7 @@ export default {
                         message: "发布成功,请等待审核",
                         type: "success",
                     });
-                    // 跳转
-                    setTimeout(() => {
-                        location.href = getLink("emotion");
-                    }, 500);
+                    this.list = []
                 })
                 .finally(() => {
                     this.processing = false;
