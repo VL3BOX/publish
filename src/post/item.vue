@@ -75,11 +75,10 @@ import header from "@/components/publish_header.vue";
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 
 // 本地依赖
-import { JX3BOX } from "@jx3box/jx3box-common";
 import { WikiPost } from "@jx3box/jx3box-common/js/helper";
 import User from "@jx3box/jx3box-common/js/user";
 import { search_items } from "../service/item";
-
+import {iconLink} from '@jx3box/jx3box-common/js/utils'
 export default {
     name: "item",
     data() {
@@ -165,11 +164,7 @@ export default {
                 });
         },
         icon_url_filter(icon_id) {
-            if (isNaN(parseInt(icon_id))) {
-                return `${JX3BOX.__imgPath}image/common/nullicon.png`;
-            } else {
-                return `${JX3BOX.__iconPath}icon/${icon_id}.png`;
-            }
+            return iconLink(icon_id)
         },
         // 物品搜索
         search_handle(keyword = "") {
