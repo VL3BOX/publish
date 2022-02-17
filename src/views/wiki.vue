@@ -1,63 +1,35 @@
 <template>
     <div class="m-dashboard m-dashboard-work m-dashboard-wiki" v-loading="loading">
-
         <div class="m-dashboard-work-header">
-            <h2 class="u-title">{{typeLable}}百科</h2>
+            <h2 class="u-title">{{ typeLable }}百科</h2>
             <a :href="publishLink" class="u-publish el-button el-button--primary el-button--small"><i class="el-icon-document"></i> 发布作品</a>
         </div>
 
-        <el-input
-            class="m-dashboard-work-search u-source-search"
-            placeholder="请输入搜索内容"
-            v-model="achievement_post.keyword"
-            @change="search_post"
-        >
+        <el-input class="m-dashboard-work-search u-source-search" placeholder="请输入搜索内容" v-model="achievement_post.keyword" @change="search_post">
             <template slot="prepend">关键词</template>
             <el-button slot="append" icon="el-icon-search" @click="search_post"></el-button>
         </el-input>
 
         <div class="m-dashboard-box">
-            <ul
-                class="m-dashboard-box-list"
-                v-if="
-                    achievement_post.data &&
-                        achievement_post.data.length
-                "
-            >
+            <ul class="m-dashboard-box-list" v-if="achievement_post.data && achievement_post.data.length">
                 <li v-for="(post, key) in achievement_post.data" :key="key">
                     <span class="u-tab" v-text="getTypeLabel(post.type)"></span>
-                    <a
-                        class="u-title"
-                        target="_blank"
-                        :href="post.link"
-                    >{{ post.title || "无标题" }}</a>
+                    <a class="u-title" target="_blank" :href="getLink(post)">{{ post.title || "无标题" }}</a>
                     <span v-if="post.checked == 0" class="u-mark pending">⌛ 等待审核</span>
                     <span v-if="post.checked == 1" class="u-mark">✔ 审核通过</span>
                     <span v-if="post.checked == 2" class="u-mark reject">❌ 审核驳回</span>
                     <span v-if="post.checked == 3" class="u-mark hold">🔐 等待验证</span>
                     <div class="u-desc">
-                        <span
-                            v-if="
-                                post.checked == 2 && post.check_remark
-                            "
-                            class="u-check_remark"
-                            v-html="`驳回理由：${post.check_remark}`"
-                        ></span>
+                        <span v-if="post.checked == 2 && post.check_remark" class="u-check_remark" v-html="`驳回理由：${post.check_remark}`"></span>
                         <time class="u-desc-subitem">
                             <i class="el-icon-finished"></i>
                             发布 :
-                            {{
-                            new Date(post.created * 1000)
-                            | dateFormat
-                            }}
+                            {{ new Date(post.created * 1000) | dateFormat }}
                         </time>
                         <time class="u-desc-subitem">
                             <i class="el-icon-refresh"></i>
                             更新 :
-                            {{
-                            new Date(post.updated * 1000)
-                            | dateFormat
-                            }}
+                            {{ new Date(post.updated * 1000) | dateFormat }}
                         </time>
                     </div>
 
@@ -69,23 +41,11 @@
                             title="编辑"
                             @click="post_edit('achievement', post)"
                         ></el-button>-->
-                        <el-button
-                            size="mini"
-                            icon="el-icon-delete"
-                            title="删除"
-                            @click="post_del(post)"
-                        ></el-button>
+                        <el-button size="mini" icon="el-icon-delete" title="删除" @click="post_del(post)"></el-button>
                     </el-button-group>
                 </li>
             </ul>
-            <el-alert
-                v-else
-                class="m-dashboard-box-null"
-                title="没有找到相关条目"
-                type="info"
-                center
-                show-icon
-            ></el-alert>
+            <el-alert v-else class="m-dashboard-box-null" title="没有找到相关条目" type="info" center show-icon></el-alert>
             <el-pagination
                 class="m-dashboard-box-pages"
                 background
@@ -104,20 +64,16 @@
 import { getTypeLabel } from "@jx3box/jx3box-common/js/utils";
 import { __wikiType } from "@jx3box/jx3box-common/data/jx3box.json";
 import dateFormat from "@/utils/dateFormat";
-import {
-    get_posts,
-    remove_post,
-} from "@/service/wiki";
+import { get_posts, remove_post } from "@/service/wiki";
+import {getLink} from '@jx3box/jx3box-common/js/utils'
 export default {
     name: "wiki",
     props: [],
-    data: function () {
+    data: function() {
         return {
-            loading : false,
+            loading: false,
 
-            active_name: this.$route.query.type
-                ? this.$route.query.type
-                : "wiki_post",
+            active_name: this.$route.query.type ? this.$route.query.type : "wiki_post",
             achievement_post: {
                 data: null,
                 total: 0,
@@ -127,43 +83,43 @@ export default {
             length: 10,
         };
     },
-    computed : {
-        type: function () {
+    computed: {
+        type: function() {
             return this.$route.params.type;
         },
-        typeLable: function () {
+        typeLable: function() {
             return __wikiType[this.type];
         },
-        publishLink : function (){
-            return './#/' + this.type
-        }
+        publishLink: function() {
+            return "./#/" + this.type;
+        },
     },
     methods: {
-        getTypeLabel: function (val) {
+        getTypeLabel: function(val) {
             return val ? __wikiType[val] : "未知";
         },
         post_page_change(i = 1) {
             this.post_page = i;
-            this.loading = true
+            this.loading = true;
             get_posts({
                 type: this.type,
                 keyword: this.achievement_post.keyword,
                 page: i,
                 limit: this.length,
-            }).then(
-                (data) => {
-                    data = data.data;
-                    this.achievement_post.data =
-                        data.code === 200 ? data.data.data : false;
-                    this.achievement_post.total =
-                        data.code === 200 ? data.data.total : 0;
-                },
-                () => {
-                    this.achievement_post.data = false;
-                }
-            ).finally(() => {
-                this.loading = false
             })
+                .then(
+                    (data) => {
+                        data = data.data;
+                        this.achievement_post.data = data.code === 200 ? data.data.data : false;
+                        this.achievement_post.total = data.code === 200 ? data.data.total : 0;
+                    },
+                    () => {
+                        this.achievement_post.data = false;
+                    }
+                )
+                .finally(() => {
+                    this.loading = false;
+                });
         },
         search_post() {
             this.post_page_change(1);
@@ -207,9 +163,12 @@ export default {
                 },
             });
         },
+        getLink : function (post){
+            return getLink(post?.type,post?.source_id) + '/' + post?.id
+        }
     },
     filters: {
-        dateFormat: function (val) {
+        dateFormat: function(val) {
             return dateFormat(new Date(val));
         },
     },
@@ -229,11 +188,8 @@ export default {
 
                     // 置空输入框ID
                     this.$nextTick(() => {
-                        let input_doms = document.querySelectorAll(
-                            ".u-source-search input"
-                        );
-                        for (let i = 0; i < input_doms.length; i++)
-                            input_doms[i].value = "";
+                        let input_doms = document.querySelectorAll(".u-source-search input");
+                        for (let i = 0; i < input_doms.length; i++) input_doms[i].value = "";
                     });
                 } else {
                     this.achievement_post.keyword = "";
