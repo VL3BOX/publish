@@ -18,18 +18,9 @@
                     :remote-method="search_handle"
                     :loading="options.loading"
                 >
-                    <el-option
-                        v-for="item in options.sources"
-                        :key="item.ID"
-                        :label="item.Name"
-                        :value="item.ID"
-                    >
+                    <el-option v-for="item in options.sources" :key="item.ID" :label="item.Name" :value="item.ID">
                         <div class="m-selector-item">
-                            <img
-                                class="u-icon"
-                                :src="icon_url_filter(item.IconID)"
-                                :alt="item.Name"
-                            />
+                            <img class="u-icon" :src="icon_url_filter(item.IconID)" :alt="item.Name" />
                             <span class="u-name" v-text="item.Name"></span>
                         </div>
                     </el-option>
@@ -43,36 +34,17 @@
 
             <div class="m-publish-remark">
                 <el-divider content-position="left">修订说明 *</el-divider>
-                <el-input
-                    v-model="post.remark"
-                    :maxlength="200"
-                    :minlength="1"
-                    show-word-limit
-                    required
-                    placeholder="请简单描述一下本次修订的说明"
-                ></el-input>
+                <el-input v-model="post.remark" :maxlength="200" :minlength="1" show-word-limit required placeholder="请简单描述一下本次修订的说明"></el-input>
             </div>
 
             <div class="m-publish-content">
                 <el-divider content-position="left">攻略正文 *</el-divider>
-                <Tinymce
-                    v-model="post.content"
-                    :attachmentEnable="true"
-                    :resourceEnable="true"
-                    :height="400"
-                />
+                <Tinymce v-model="post.content" :attachmentEnable="true" :resourceEnable="true" :height="400" />
             </div>
 
             <div class="m-publish-commit">
                 <el-divider content-position="left"></el-divider>
-                <el-button
-                    class="u-publish"
-                    icon="el-icon-s-promotion"
-                    type="primary"
-                    @click="toPublish"
-                    :disabled="processing"
-                    >提交攻略
-                </el-button>
+                <el-button class="u-publish" icon="el-icon-s-promotion" type="primary" @click="toPublish" :disabled="processing">提交攻略 </el-button>
             </div>
         </el-form>
     </div>
@@ -86,7 +58,7 @@ import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 import { WikiPost } from "@jx3box/jx3box-common/js/helper";
 import User from "@jx3box/jx3box-common/js/user";
 import { search_achievements } from "../service/achievement";
-import {iconLink} from '@jx3box/jx3box-common/js/utils'
+import { iconLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "achievement",
     data() {
@@ -107,10 +79,14 @@ export default {
 
             // 状态控制
             loading: false,
-            processing : false
+            processing: false,
         };
     },
-    computed: {},
+    computed : {
+        client : function (){
+            return this.$store.state.client
+        }
+    },
     methods: {
         toPublish: function() {
             if (!this.post.source_id) {
@@ -142,7 +118,7 @@ export default {
                 return;
             }
 
-            this.processing = true
+            this.processing = true;
             WikiPost.save({
                 type: "achievement",
                 source_id: this.post.source_id,
@@ -159,7 +135,7 @@ export default {
                             type: "success",
                         });
                         setTimeout(() => {
-                            this.$router.push({name: 'wiki_post', params: {type: 'achievement'}})
+                            this.$router.push({ name: "wiki_post", params: { type: "achievement" } });
                         }, 500);
                     } else {
                         this.$message({
@@ -169,11 +145,11 @@ export default {
                     }
                 })
                 .finally(() => {
-                    this.processing = false
+                    this.processing = false;
                 });
         },
         icon_url_filter(icon_id) {
-            return iconLink(icon_id)
+            return iconLink(icon_id);
         },
         // 成就搜索
         search_handle(keyword = "") {
@@ -183,10 +159,53 @@ export default {
                 limit: 10,
             }).then((res) => {
                 res = res.data;
-                if (res.code === 200)
-                    this.options.sources = res.data.achievements;
+                if (res.code === 200) this.options.sources = res.data.achievements;
                 this.loading = false;
             });
+        },
+        loadData: function(client) {
+            this.loading = true;
+            return WikiPost.newest("achievement", this.post.source_id, 0, client)
+                .then((res) => {
+                    let data = res.data;
+                    // 数据填充
+                    let post = data.data.post;
+                    let achievement = data.data.source;
+
+                    if (post) {
+                        this.post.source_id = parseInt(post.source_id);
+                        this.post.level = post.level || 1;
+                        this.post.remark = "";
+                        let content = post.content;
+                        content = content.replace(/(<p>)?\s*◆成就难度 [★]+\s*(<\/p>)?/gi, "");
+                        content = content.replace(/(<p>)?\s*◆花费时长 [★]+\s*(<\/p>)?/gi, "");
+                        content = content.replace(/(<p>)?\s*◆成就攻略\s*(<\/p>)?/gi, "");
+                        this.post.content = content;
+                    } else {
+                        this.post.source_id = this.post.source_id ? parseInt(this.post.source_id) : "";
+                        this.post.level = 0;
+                        this.post.remark = "";
+                        this.post.content = "";
+                    }
+
+                    if (achievement) {
+                        // 将选择项恢复至下拉框
+                        let exist = false;
+                        this.options.sources = this.options.sources || [];
+                        for (let index in this.options.sources) {
+                            if (this.options.sources[index].ID == achievement.ID) {
+                                exist = true;
+                                break;
+                            }
+                        }
+                        if (!exist) this.options.sources.push(achievement);
+                    }
+
+                    return post;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         },
     },
     created() {
@@ -198,71 +217,24 @@ export default {
     },
     watch: {
         "post.source_id": {
-            handler() {
-                if (!this.post.source_id) return;
-                this.loading = true
-                WikiPost.newest("achievement", this.post.source_id, 0).then(
-                    (res) => {
-                        let data = res.data;
-                        if (data.code === 200) {
-                            // 数据填充
-                            let post = data.data.post;
-                            let achievement = data.data.source;
+            handler: function(val) {
+                if (!val) return;
 
-                            if (post) {
-                                this.post.source_id = parseInt(post.source_id);
-                                this.post.level = post.level || 1;
-                                this.post.remark = "";
-                                let content = post.content;
-                                content = content.replace(
-                                    /(<p>)?\s*◆成就难度 [★]+\s*(<\/p>)?/gi,
-                                    ""
-                                );
-                                content = content.replace(
-                                    /(<p>)?\s*◆花费时长 [★]+\s*(<\/p>)?/gi,
-                                    ""
-                                );
-                                content = content.replace(
-                                    /(<p>)?\s*◆成就攻略\s*(<\/p>)?/gi,
-                                    ""
-                                );
-                                this.post.content = content;
-                            } else {
-                                this.post.source_id = this.post.source_id
-                                    ? parseInt(this.post.source_id)
-                                    : "";
-                                this.post.level = 0;
-                                this.post.remark = "";
-                                this.post.content = "";
-                            }
-
-                            if (achievement) {
-                                // 将选择项恢复至下拉框
-                                let exist = false;
-                                this.options.sources =
-                                    this.options.sources || [];
-                                for (let index in this.options.sources) {
-                                    if (
-                                        this.options.sources[index].ID ==
-                                        achievement.ID
-                                    ) {
-                                        exist = true;
-                                        break;
-                                    }
-                                }
-                                if (!exist)
-                                    this.options.sources.push(achievement);
-                            }
+                if(this.client == 'std'){
+                    this.loadData('std')
+                }else{
+                    this.loadData('origin').then((post) => {
+                        console.log('兼容获取')
+                        if(!post){
+                            this.loadData('std')
                         }
-                    }
-                ).finally(() => {
-                    this.loading = false
-                })
+                    })
+                }
             },
         },
     },
     components: {
-        'publish-header':header,
+        "publish-header": header,
         Tinymce,
     },
 };

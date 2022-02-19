@@ -18,18 +18,9 @@
                     :remote-method="search_handle"
                     :loading="options.loading"
                 >
-                    <el-option
-                        v-for="item in options.sources"
-                        :key="item.id"
-                        :label="item.Name"
-                        :value="item.id"
-                    >
+                    <el-option v-for="item in options.sources" :key="item.id" :label="item.Name" :value="item.id">
                         <div class="m-selector-item">
-                            <img
-                                class="u-icon"
-                                :src="icon_url_filter(item.IconID)"
-                                :alt="item.Name"
-                            />
+                            <img class="u-icon" :src="icon_url_filter(item.IconID)" :alt="item.Name" />
                             <span class="u-name" v-text="item.Name"></span>
                         </div>
                     </el-option>
@@ -48,23 +39,12 @@
 
             <div class="m-publish-content">
                 <el-divider content-position="left">攻略正文 *</el-divider>
-                <Tinymce
-                    v-model="post.content"
-                    :attachmentEnable="true"
-                    :resourceEnable="true"
-                    :height="400"
-                />
+                <Tinymce v-model="post.content" :attachmentEnable="true" :resourceEnable="true" :height="400" />
             </div>
 
             <div class="m-publish-commit">
                 <el-divider content-position="left"></el-divider>
-                <el-button
-                    class="u-publish"
-                    icon="el-icon-s-promotion"
-                    type="primary"
-                    @click="toPublish"
-                    :disabled="processing"
-                >提交攻略</el-button>
+                <el-button class="u-publish" icon="el-icon-s-promotion" type="primary" @click="toPublish" :disabled="processing">提交攻略</el-button>
             </div>
         </el-form>
     </div>
@@ -78,7 +58,7 @@ import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 import { WikiPost } from "@jx3box/jx3box-common/js/helper";
 import User from "@jx3box/jx3box-common/js/user";
 import { search_items } from "../service/item";
-import {iconLink} from '@jx3box/jx3box-common/js/utils'
+import { iconLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "item",
     data() {
@@ -102,8 +82,13 @@ export default {
             processing: false,
         };
     },
+    computed : {
+        client : function (){
+            return this.$store.state.client
+        }
+    },
     methods: {
-        toPublish: function () {
+        toPublish: function() {
             if (!this.post.source_id) {
                 this.$message({
                     message: "请选择要修订攻略的物品",
@@ -150,7 +135,7 @@ export default {
                             type: "success",
                         });
                         setTimeout(() => {
-                            this.$router.push({name: 'wiki_post', params: {type: 'item'}})
+                            this.$router.push({ name: "wiki_post", params: { type: "item" } });
                         }, 500);
                     } else {
                         this.$message({
@@ -164,7 +149,7 @@ export default {
                 });
         },
         icon_url_filter(icon_id) {
-            return iconLink(icon_id)
+            return iconLink(icon_id);
         },
         // 物品搜索
         search_handle(keyword = "") {
@@ -174,6 +159,46 @@ export default {
                 if (res.code === 200) this.options.sources = res.data.data;
                 this.loading = false;
             });
+        },
+        loadData: function(client) {
+            this.loading = true;
+            return WikiPost.newest("item", this.post.source_id, 0, client)
+                .then((res) => {
+                    let data = res.data;
+                    // 数据填充
+                    let post = data.data.post;
+                    let item = data.data.source;
+
+                    if (post) {
+                        this.post.source_id = post.source_id;
+                        this.post.level = post.level || 1;
+                        this.post.remark = "";
+                        this.post.content = post.content;
+                    } else {
+                        this.post.source_id = this.post.source_id ? this.post.source_id : "";
+                        this.post.level = 0;
+                        this.post.remark = "";
+                        this.post.content = "";
+                    }
+
+                    if (item) {
+                        // 将选择项恢复至下拉框
+                        let exist = false;
+                        this.options.sources = this.options.sources || [];
+                        for (let index in this.options.sources) {
+                            if (this.options.sources[index].id == item.id) {
+                                exist = true;
+                                break;
+                            }
+                        }
+                        if (!exist) this.options.sources.push(item);
+                    }
+
+                    return post;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         },
     },
     created() {
@@ -185,52 +210,19 @@ export default {
     },
     watch: {
         "post.source_id": {
-            handler() {
-                if (!this.post.source_id) return;
-                this.loading = true;
-                WikiPost.newest("item", this.post.source_id, 0)
-                    .then((res) => {
-                        let data = res.data;
-                        if (data.code === 200) {
-                            // 数据填充
-                            let post = data.data.post;
-                            let item = data.data.source;
+            handler: function(val) {
+                if (!val) return;
 
-                            if (post) {
-                                this.post.source_id = post.source_id;
-                                this.post.level = post.level || 1;
-                                this.post.remark = "";
-                                this.post.content = post.content;
-                            } else {
-                                this.post.source_id = this.post.source_id
-                                    ? this.post.source_id
-                                    : "";
-                                this.post.level = 0;
-                                this.post.remark = "";
-                                this.post.content = "";
-                            }
-
-                            if (item) {
-                                // 将选择项恢复至下拉框
-                                let exist = false;
-                                this.options.sources =
-                                    this.options.sources || [];
-                                for (let index in this.options.sources) {
-                                    if (
-                                        this.options.sources[index].id ==
-                                        item.id
-                                    ) {
-                                        exist = true;
-                                        break;
-                                    }
-                                }
-                                if (!exist) this.options.sources.push(item);
-                            }
+                if(this.client == 'std'){
+                    this.loadData('std')
+                }else{
+                    this.loadData('origin').then((post) => {
+                        console.log('兼容获取')
+                        if(!post){
+                            this.loadData('std')
                         }
                     })
-                    .finally(() => {
-                        this.loading = false;
-                    });
+                }
             },
         },
     },
