@@ -151,11 +151,11 @@ export default {
                     name: "剑三小册",
                     count: 0,
                 },
-                // item_plan: {
-                //     path: "/bucket/item_plan",
-                //     name: "物品清单",
-                //     count: 0,
-                // },
+                item_plan: {
+                    path: "/bucket/item_plan",
+                    name: "物品清单",
+                    count: 0,
+                },
                 exam_question: {
                     path: "/bucket/question",
                     name: "剑三题目",
