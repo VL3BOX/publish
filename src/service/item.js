@@ -21,4 +21,13 @@ function searchItems(params) {
 		});
 }
 
-export { search_items, searchItems };
+// 物品id搜索
+function searchItemsID(params) { 
+	return $helper()
+		.get(`/api/items`, { params })
+		.then((res) => {
+			return res.data.data;
+		});
+}
+
+export { search_items, searchItems,searchItemsID };
