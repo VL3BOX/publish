@@ -44,7 +44,7 @@ function getMyPlans(params) {
 			return res.data.data;
 		});
 }
-function getPlanID(id) {
+function getPlanByID(id) {
 	return $cms()
 		.get(`/api/cms/app/item_plan/${id}`)
 		.then((res) => {
@@ -64,4 +64,4 @@ function delMyPlans(id) {
 	return $cms().delete(`/api/cms/app/item_plan/${id}`);
 }
 
-export { get_item_plan, save_item_plan, get_my_item_plans, delete_item_plan, getMyPlans, delMyPlans, addMyPlans, postMyPlans, getPlanID };
+export { get_item_plan, save_item_plan, get_my_item_plans, delete_item_plan, getMyPlans, delMyPlans, addMyPlans, postMyPlans, getPlanByID };

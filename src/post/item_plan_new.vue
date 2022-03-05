@@ -16,13 +16,13 @@
 			</el-form-item>
 			<!-- 清单描述 -->
 			<el-form-item label="描述">
-				<el-input type="textarea" :rows="3" v-model="description" placeholder="简单说明一下你的物品清单" maxlength="2000" show-word-limit></el-input>
+				<el-input type="textarea" :rows="3" v-model="description" placeholder="简单说明一下你的物品清单" :maxlength="2000" show-word-limit></el-input>
 			</el-form-item>
 			<!-- 清单类型 -->
 			<el-form-item label="类型">
-				<el-radio-group v-model="type" size="medium" @change="changeType">
-					<el-radio-button label="item">道具清单</el-radio-button>
-					<el-radio-button label="equip">装备清单</el-radio-button>
+				<el-radio-group v-model="type" size="medium" @change="resetPages">
+					<el-radio-button label="1">道具清单</el-radio-button>
+					<el-radio-button label="2">装备清单</el-radio-button>
 				</el-radio-group>
 			</el-form-item>
 			<!-- 制作清单 -->
@@ -30,7 +30,7 @@
 				<div class="m-plan-list">
 					<!-- 搜索物品 -->
 					<div class="u-list-search">
-						<el-input class="u-title" placeholder="请输入物品名称（可适配中括号）" prefix-icon="el-icon-search" v-model="keyword"></el-input>
+						<el-input class="u-title" placeholder="请输入物品名称（可适配中括号）" prefix-icon="el-icon-search" v-model.lazy.trim="keyword"></el-input>
 						<draggable
 							v-model="searchList"
 							draggable=".u-selected"
@@ -43,16 +43,16 @@
 						>
 							<div class="u-selected" v-for="(item, index) in searchList" :key="index">
 								<span class="u-name" :class="`quality-${item.Quality}`">
-									<img class="u-icon" :src="`${icon}/icon/${item.IconID}.png`" alt="" />
+									<img class="u-icon" :src="iconLink(item.IconID)"/>
 									<span>{{ item.Name }}</span>
 								</span>
 								<span class="u-value">ID: {{ item.id }}</span>
 							</div>
 						</draggable>
-						<el-pagination small class="m-archive-pages" background layout="prev, pager, next, jumper" :hide-on-single-page="true" :page-size="per" :total="total" :current-page.sync="page" @current-change="changePage"></el-pagination>
+						<el-pagination small class="m-archive-pages" background layout="prev, pager, next, jumper" :hide-on-single-page="true" :page-size="per" :total="total" :current-page.sync="page" size="mini"></el-pagination>
 					</div>
 					<!-- 物品子清单 -->
-					<el-row v-if="type == 'item'" class="u-list-box" :gutter="20">
+					<el-row v-if="type == '1'" class="u-list-box" :gutter="20">
 						<el-col :span="6">
 							<el-button class="u-list u-list-btn" icon="el-icon-plus" @click="addRelation">新增清单</el-button>
 						</el-col>
@@ -64,10 +64,10 @@
 									<template v-if="relation.list && relation.list.length">
 										<div v-for="(item, key) in relation.list" :key="key" class="u-selected u-selected-item">
 											<span class="u-name" :class="`quality-${item.Quality}`">
-												<img class="u-icon" :src="`${icon}/icon/${item.IconID}.png`" alt="" />
+												<img class="u-icon" :src="iconLink(item.IconID)"/>
 												<span> {{ item.Name }}</span>
 											</span>
-											<input class="u-input" placeholder="数量" v-model="item.count" />
+											<el-input-number class="u-input" v-model.number="item.count" @change="handleChange" :min="1" label="数字" size="mini"></el-input-number>
 											<i class="u-close el-icon-circle-close" @click="relation.list.splice(key, 1)"></i>
 										</div>
 									</template>
@@ -85,7 +85,7 @@
 									<template v-if="eq.list && eq.list.length">
 										<div v-for="(item, key) in eq.list" :key="key" class="u-selected u-selected-item">
 											<span class="u-name" :class="`quality-${item.Quality}`">
-												<img class="u-icon" :src="`${icon}/icon/${item.IconID}.png`" alt="" />
+												<img class="u-icon" :src="iconLink(item.IconID)" />
 												<span>{{ item.Name }}</span>
 											</span>
 											<span class="u-value">ID: {{ item.id }}</span>
@@ -109,9 +109,12 @@
 <script>
 import header from "@/components/publish_header.vue";
 import draggable from "vuedraggable";
-import { __iconPath } from "@jx3box/jx3box-common/data/jx3box.json";
 import { searchItems, searchItemsID } from "../service/item";
-import { getPlanID, postMyPlans, addMyPlans } from "../service/item_plan";
+import { getPlanByID, postMyPlans, addMyPlans } from "../service/item_plan";
+import {iconLink} from '@jx3box/jx3box-common/js/utils';
+const default_plan = {
+	title : '',
+}
 export default {
 	name: "plan",
 	components: {
@@ -120,17 +123,17 @@ export default {
 	},
 	data: function () {
 		return {
-			loading: false,
-			icon: __iconPath,
-			keyword: "",
+			
+			// 清单
+			data : Object.assign({},default_plan),
 
 			id: this.plan_id || "",
 			title: "",
 			open: 1,
-			type: "item",
+			type: "1",
 			description: "",
 
-			searchList: [],
+			
 			relationList: [],
 			equipList: [
 				[
@@ -155,67 +158,107 @@ export default {
 				],
 			],
 
+			// 缓存区
+			cache_items : [],
+			cache_equips : [],
+
+			// 物品
+			loading: false,
+			keyword: "",
 			per: 15,
 			page: 1,
-			pages: 1,
 			total: 1,
+			searchList: [],
 		};
 	},
 	computed: {
+		plan_id() {
+			return this.$route.params.plan_id;
+		},
+		
+		// 搜索参数
+		search_params() {
+			let params = {
+				page: this.page,
+				limit: this.per,
+				is_equip: this.type == 2 ? 1 : 0,
+				fields: ["id", "UiID", "Name", "IconID", "Quality", "AucGenre", "AucSubType"],
+				apply: 1,
+			};
+			if (this.keyword) params.keyword = this.keyword;
+			return params;
+		},
+
+
 		params() {
 			return {
 				id: this.id,
 				title: this.title,
 				public: this.open,
-				type: this.type == "item" ? 1 : 2,
+				type: this.type,
 				description: this.description,
 			};
 		},
-		search_params() {
-			let params = {
-				page: this.page,
-				limit: this.per,
-				is_equip: this.type == "item" ? 2 : 1,
-				fields: ["id", "UiID", "Name", "IconID", "Quality", "AucGenre", "AucSubType"],
-				apply: 1,
-			};
-			if (this.keyword) params.keyword = this.keyword;
-
-			return params;
-		},
-		plan_id() {
-			return this.$route.params.plan_id;
-		},
 	},
 	watch: {
+		// 搜索物品重置
 		keyword() {
-			this.page = 1;
+			this.resetPages()
 		},
+		// 重新搜索
 		search_params: {
 			immediate: true,
+			deep : true,
 			handler: function () {
-				this.searchData();
+				this.loadItems();
 			},
 		},
+		// 修改清单数据
+		cache_items : {
+			deep : true,
+			handler : function (arr){
+				this.data.relation = arr.map((item,i) => {
+					return {id : item.id , count : item.count}
+				})
+			}
+		},
+		cache_equips : {
+			deep : true,
+			handler : function (){
+				
+			}
+		}
 	},
 
 	methods: {
-		// 获取plan_id的数据
-		getPlanData() {
-			getPlanID(this.plan_id).then((res) => {
-				this.id = res.id;
-				this.title = res.title;
-				this.type = res.type == 1 ? "item" : "equip";
-				this.open = res.public;
-				this.description = res.description;
-				this.forItemList(res.relation);
-			});
-		},
+
+		// 物品
+		// ===================================
 		// 物品搜索
-		searchData() {
+		loadItems() {
 			searchItems(this.search_params).then((res) => {
 				this.searchList = res.data;
 				this.total = res.total;
+			});
+		},
+		// 重置分页
+		resetPages() {
+			this.page = 1;
+		},
+
+
+		// 清单
+		// ===================================
+
+		// 获取plan_id的数据
+		getPlanData() {
+			getPlanByID(this.plan_id).then((res) => {
+				this.id = res.id;
+				this.title = res.title;
+				this.type = res.type;
+				this.open = res.public;
+				this.description = res.description;
+				this.forItemList(res.relation);
 			});
 		},
 
@@ -288,16 +331,7 @@ export default {
 				});
 			});
 		},
-		// 物品翻页
-		changePage(i) {
-			this.page = i;
-		},
-		// 切换搜索类型
-		changeType(i) {
-			this.type = i;
-			this.page = 1;
-			this.keyword = "";
-		},
+		
 		// 新增清单
 		addRelation() {
 			this.relationList.unshift({
@@ -365,6 +399,8 @@ export default {
 							this.loading = false;
 						});
 		},
+
+		iconLink,
 	},
 	created: function () {
 		if (this.plan_id) this.getPlanData();
