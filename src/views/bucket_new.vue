@@ -68,7 +68,7 @@ export default {
 		},
 		params() {
 			let params = { page: this.page, limit: this.per };
-			this.type == "item_plan" ? (params.keyword = this.search) : (params.title = this.search);
+			this.type == "item_plan" ? (params.search = this.search) : (params.title = this.search);
 			return params;
 		},
 	},
