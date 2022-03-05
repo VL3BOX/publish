@@ -43,10 +43,14 @@
 		.u-name {
 			.size(100%,30px);
 			.flex;
+            .mr(5px);
 			align-items: center;
 			border-right: 0;
 			border-top-left-radius: 4px;
 			border-bottom-left-radius: 4px;
+            span{
+                .nobreak;
+            }
 		}
 		.u-icon {
 			.size(24px);
@@ -106,6 +110,11 @@
 		.rt(-6px);
 		.color(#fff);
 	}
+}
+.u-item-drag{
+    .u-name span{
+        .nobreak;
+    }
 }
 
 .m-archive-pages {

@@ -21,8 +21,8 @@
 			<!-- 清单类型 -->
 			<el-form-item label="类型">
 				<el-radio-group v-model="type" size="medium" @change="changeType">
-					<el-radio-button label="2">道具清单</el-radio-button>
-					<el-radio-button label="1">装备清单</el-radio-button>
+					<el-radio-button label="item">道具清单</el-radio-button>
+					<el-radio-button label="equip">装备清单</el-radio-button>
 				</el-radio-group>
 			</el-form-item>
 			<!-- 制作清单 -->
@@ -52,7 +52,7 @@
 						<el-pagination small class="m-archive-pages" background layout="prev, pager, next, jumper" :hide-on-single-page="true" :page-size="per" :total="total" :current-page.sync="page" @current-change="changePage"></el-pagination>
 					</div>
 					<!-- 物品子清单 -->
-					<el-row v-if="type == 2" class="u-list-box" :gutter="20">
+					<el-row v-if="type == 'item'" class="u-list-box" :gutter="20">
 						<el-col :span="6">
 							<el-button class="u-list u-list-btn" icon="el-icon-plus" @click="addRelation">新增清单</el-button>
 						</el-col>
@@ -65,7 +65,7 @@
 										<div v-for="(item, key) in relation.list" :key="key" class="u-selected u-selected-item">
 											<span class="u-name" :class="`quality-${item.Quality}`">
 												<img class="u-icon" :src="`${icon}/icon/${item.IconID}.png`" alt="" />
-												{{ item.Name }}
+												<span> {{ item.Name }}</span>
 											</span>
 											<input class="u-input" placeholder="数量" v-model="item.count" />
 											<i class="u-close el-icon-circle-close" @click="relation.list.splice(key, 1)"></i>
@@ -86,7 +86,7 @@
 										<div v-for="(item, key) in eq.list" :key="key" class="u-selected u-selected-item">
 											<span class="u-name" :class="`quality-${item.Quality}`">
 												<img class="u-icon" :src="`${icon}/icon/${item.IconID}.png`" alt="" />
-												{{ item.Name }}
+												<span>{{ item.Name }}</span>
 											</span>
 											<span class="u-value">ID: {{ item.id }}</span>
 											<i class="u-close el-icon-circle-close" @click="eq.list.splice(key, 1)"></i>
@@ -111,7 +111,7 @@ import header from "@/components/publish_header.vue";
 import draggable from "vuedraggable";
 import { __iconPath } from "@jx3box/jx3box-common/data/jx3box.json";
 import { searchItems, searchItemsID } from "../service/item";
-import { get_item_plan, save_item_plan } from "../service/item_plan";
+import { getPlanID, postMyPlans, addMyPlans } from "../service/item_plan";
 export default {
 	name: "plan",
 	components: {
@@ -124,10 +124,10 @@ export default {
 			icon: __iconPath,
 			keyword: "",
 
-			id: "",
+			id: this.plan_id || "",
 			title: "",
 			open: 1,
-			type: 2,
+			type: "item",
 			description: "",
 
 			searchList: [],
@@ -164,10 +164,10 @@ export default {
 	computed: {
 		params() {
 			return {
-				id: "",
+				id: this.id,
 				title: this.title,
 				public: this.open,
-				type: this.type,
+				type: this.type == "item" ? 1 : 2,
 				description: this.description,
 			};
 		},
@@ -175,7 +175,7 @@ export default {
 			let params = {
 				page: this.page,
 				limit: this.per,
-				is_equip: this.type,
+				is_equip: this.type == "item" ? 2 : 1,
 				fields: ["id", "UiID", "Name", "IconID", "Quality", "AucGenre", "AucSubType"],
 				apply: 1,
 			};
@@ -183,31 +183,32 @@ export default {
 
 			return params;
 		},
-		plan_id() { 
+		plan_id() {
 			return this.$route.params.plan_id;
 		},
 	},
 	watch: {
-		keyword(val) {
+		keyword() {
 			this.page = 1;
-			this.searchData();
+		},
+		search_params: {
+			immediate: true,
+			handler: function () {
+				this.searchData();
+			},
 		},
 	},
 
 	methods: {
 		// 获取plan_id的数据
 		getPlanData() {
-			get_item_plan(this.plan_id).then((res) => {
-                console.log(res)
-				let data = res.data.data.plan;
-
-				this.id = data.id;
-				this.title = data.title;
-				this.type = data.type;
-				this.open = data.public;
-				this.description = data.description;
-
-				this.forItemList(data.relation);
+			getPlanID(this.plan_id).then((res) => {
+				this.id = res.id;
+				this.title = res.title;
+				this.type = res.type == 1 ? "item" : "equip";
+				this.open = res.public;
+				this.description = res.description;
+				this.forItemList(res.relation);
 			});
 		},
 		// 物品搜索
@@ -220,8 +221,9 @@ export default {
 
 		// 按plan_id的获取数据数组
 		forItemList(list) {
+			if (typeof list == "string") list = JSON.parse(list);
 			let _arr = [];
-			if (this.type == 2) {
+			if (this.type == "item") {
 				list.forEach((el) => {
 					let a = el.data.map((a) => {
 						return (a = a.id);
@@ -240,7 +242,7 @@ export default {
 					}
 				}
 				_arr = [...new Set(_arr)];
-				searchItemsID({ ids: _arr }).then((res) => {
+				searchItemsID({ ids: _arr, limit: _arr.length }).then((res) => {
 					this.forEquipList(list, res.data);
 				});
 			}
@@ -262,21 +264,19 @@ export default {
 		// 获取的装备数据转换
 		forEquipList(lists, data) {
 			for (const key in lists) {
-				if (lists[key]) {
-					let _lists = [];
-					lists[key].forEach((list) => {
-						let _list = [];
-						data.forEach((el) => {
-							if (list == el.id) {
-								let { id, UiID, Name, IconID, Quality, AucGenre, AucSubType } = el;
-								let _el = { id, UiID, Name, IconID, Quality, AucGenre, AucSubType };
-								_list.push(_el);
-							}
-						});
-						_lists.push(..._list);
+				let _lists = [];
+				lists[key]?.forEach((list) => {
+					let _list = [];
+					data.forEach((el) => {
+						if (list == el.id) {
+							let { id, UiID, Name, IconID, Quality, AucGenre, AucSubType } = el;
+							let _el = { id, UiID, Name, IconID, Quality, AucGenre, AucSubType };
+							_list.push(_el);
+						}
 					});
-					lists[key] = [..._lists];
-				}
+					_lists.push(..._list);
+				});
+				lists[key] = [..._lists];
 			}
 			this.equipList.map((equips) => {
 				equips.map((eq) => {
@@ -291,14 +291,12 @@ export default {
 		// 物品翻页
 		changePage(i) {
 			this.page = i;
-			this.searchData();
 		},
 		// 切换搜索类型
 		changeType(i) {
 			this.type = i;
 			this.page = 1;
 			this.keyword = "";
-			this.searchData();
 		},
 		// 新增清单
 		addRelation() {
@@ -324,7 +322,7 @@ export default {
 				obj[i].list?.forEach((k) => {
 					data.push({ id: k.id, count: k.count || 1 });
 				});
-				list.push({ title: obj.title || "", data });
+				list.push({ title: obj[i].title || "", data });
 			}
 			return list;
 		},
@@ -344,33 +342,32 @@ export default {
 		},
 		// 提交表单
 		submit() {
-			let params = this.type == 2 ? this.toRelationList(this.relationList) : this.toEquipList(this.equipList);
+			let params = this.type == "item" ? this.toRelationList(this.relationList) : this.toEquipList(this.equipList);
 			this.params.relation = JSON.stringify(params);
 
 			this.loading = true;
-			save_item_plan(this.params)
-				.then((data) => {
-					data = data.data;
-					if (data.code === 200) {
-						this.$message({ message: "物品清单提交成功", type: "success" });
-						setTimeout(() => {
+			this.id
+				? postMyPlans(this.id, this.params)
+						.then((res) => {
+							console.log(res, "postMyPlans");
+							this.$message({ message: "物品清单修改成功", type: "success" });
 							this.$router.push({ name: "bucket", params: { type: "item_plan" } });
-						}, 500);
-					} else {
-						this.$message({
-							message: `${data.message}`,
-							type: "warning",
+						})
+						.finally(() => {
+							this.loading = false;
+						})
+				: addMyPlans(this.params)
+						.then(() => {
+							this.$message({ message: "物品清单提交成功", type: "success" });
+							this.$router.push({ name: "bucket", params: { type: "item_plan" } });
+						})
+						.finally(() => {
+							this.loading = false;
 						});
-					}
-				})
-				.finally(() => {
-					this.loading = false;
-				});
 		},
 	},
 	created: function () {
 		if (this.plan_id) this.getPlanData();
-		this.searchData();
 	},
 };
 </script>

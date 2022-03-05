@@ -28,19 +28,6 @@ function get_my_item_plans(params) {
 		params: params,
 	});
 }
-// 获取我的清单
-function getMyPlans(params) {
-	return $cms()
-		.get(`/api/cms/app/item_plans/mine`, { params })
-		.then((res) => {
-			return res.data.data;
-		});
-}
-// 删除我的清单
-function delMyPlans(id) {
-	return $cms().delete(`/api/cms/app/item_plan/${id}`);
-}
-
 function delete_item_plan(plan_id) {
 	return $helper()({
 		method: "PUT",
@@ -49,4 +36,32 @@ function delete_item_plan(plan_id) {
 	});
 }
 
-export { get_item_plan, save_item_plan, get_my_item_plans, delete_item_plan, getMyPlans, delMyPlans };
+// 获取我的清单
+function getMyPlans(params) {
+	return $cms()
+		.get(`/api/cms/app/item_plans/mine`, { params })
+		.then((res) => {
+			return res.data.data;
+		});
+}
+function getPlanID(id) {
+	return $cms()
+		.get(`/api/cms/app/item_plan/${id}`)
+		.then((res) => {
+			return res.data.data;
+		});
+}
+// 新增清单
+function addMyPlans(params) {
+	return $cms().post(`/api/cms/app/item_plan`, params);
+}
+// 修改我的清单
+function postMyPlans(id, params) { 
+	return $cms().put(`/api/cms/app/item_plan/${id}`, params);
+}
+// 删除我的清单
+function delMyPlans(id) {
+	return $cms().delete(`/api/cms/app/item_plan/${id}`);
+}
+
+export { get_item_plan, save_item_plan, get_my_item_plans, delete_item_plan, getMyPlans, delMyPlans, addMyPlans, postMyPlans, getPlanID };
