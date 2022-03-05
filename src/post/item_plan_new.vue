@@ -183,7 +183,7 @@ export default {
 
 			return params;
 		},
-		plan_id() {
+		plan_id() { 
 			return this.$route.params.plan_id;
 		},
 	},
@@ -198,6 +198,7 @@ export default {
 		// 获取plan_id的数据
 		getPlanData() {
 			get_item_plan(this.plan_id).then((res) => {
+                console.log(res)
 				let data = res.data.data.plan;
 
 				this.id = data.id;
