@@ -110,7 +110,7 @@ import { iconLink } from "@jx3box/jx3box-common/js/utils";
 const default_plan = {
 	id: "",
 	title: "",
-	public: "1",
+	public: 1,
 	type: "1",
 	description: "",
 };
