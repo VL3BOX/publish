@@ -252,7 +252,7 @@ export default {
 		// ===================================
 		// 新增清单
 		addRelation() {
-			this.relationList.push({
+			this.relationList.unshift({
 				title: "",
 				data: [],
 			});
