@@ -62,7 +62,7 @@
 												<el-input-number size="mini" v-model.number="item.count" :min="1" label="数字"></el-input-number>
 											</div>
 
-											<i class="u-close el-icon-circle-close" @click="relation.list.splice(key, 1)"></i>
+											<i class="u-close el-icon-circle-close" @click="relation.data.splice(key, 1)"></i>
 										</div>
 									</template>
 									<div class="u-normal" v-else>拖拽所需道具到此处</div>
@@ -210,6 +210,7 @@ export default {
 					});
 			},
 		},
+		// 获取物品信息数组后进行分类处理
 		cache_list: {
 			immediate: true,
 			deep: true,
@@ -251,7 +252,7 @@ export default {
 		// ===================================
 		// 新增清单
 		addRelation() {
-			this.relationList.unshift({
+			this.relationList.push({
 				title: "",
 				data: [],
 			});
@@ -270,8 +271,8 @@ export default {
 		// ===================================
 		// 获取plan_id的数据
 		getPlanData() {
-			getPlanByID(this.plan_id).then((res) => { 
-				this.data = res; 
+			getPlanByID(this.plan_id).then((res) => {
+				this.data = res;
 				this.extractID(res);
 			});
 		},
@@ -299,7 +300,7 @@ export default {
 			}
 		},
 
-		// --有ID数据处理------------
+		// --有记录ID数据处理------------
 		// 替换物品id得到的数据
 		idToItem(data) {
 			if (!data) return;
@@ -351,7 +352,7 @@ export default {
 			});
 		},
 
-		// --无ID数据处理------------
+		// --提交数据处理------------
 		// 物品处理
 		toItem() {
 			this.data.relation = this.relationList;
@@ -371,10 +372,10 @@ export default {
 		submit() {
 			this.data.type == 1 ? this.toItem() : this.toEquip();
 
-			this.loading = true; 
+			this.loading = true;
 			this.plan_id
 				? postMyPlans(this.plan_id, this.data)
-						.then((res) => { 
+						.then((res) => {
 							this.$message({ message: "物品清单修改成功", type: "success" });
 							this.$router.push({ name: "bucket", params: { type: "item_plan" } });
 						})
