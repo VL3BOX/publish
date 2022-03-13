@@ -92,7 +92,7 @@ import header from "@/components/publish_header.vue";
 import ItemSimple from "@jx3box/jx3box-editor/src/ItemSimple";
 import itemIcon from "@/components/publish_icon.vue";
 import draggable from "vuedraggable";
-import { searchItems, searchItemsID } from "../service/item";
+import { searchItems } from "../service/item";
 import { getPlanByID, postMyPlans, addMyPlans } from "../service/item_plan";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 const default_plan = {
@@ -312,4 +312,7 @@ export default {
 </script>
 <style scoped lang="less">
 @import "../assets/css/item_plan_new.less";
+.el-col{
+    min-width: 260px;
+}
 </style>
