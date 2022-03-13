@@ -237,7 +237,6 @@ export default {
 			if (data.type == 1) {
 				data.relation = data.relation.map((item) => {
 					item.data = item.data.map((el) => {
-						console.log(el, ".........");
 						if (typeof el == "string") el = { id: el, count: 1 };
 						if (typeof el == "object") el = { id: el.id, count: el.count };
 						return el;
@@ -312,7 +311,7 @@ export default {
 </script>
 <style scoped lang="less">
 @import "../assets/css/item_plan_new.less";
-.el-col{
-    min-width: 260px;
+.el-col {
+	min-width: 260px;
 }
 </style>
