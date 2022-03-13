@@ -17,11 +17,13 @@
 	.u-list-search,
 	.u-list {
 		.pr;
-		.mb(10px);
 		min-width: 220px;
 		padding: 10px;
 		border: 1px solid #dcdfe6;
 		border-radius: 4px;
+	}
+	.u-list {
+		.mb(10px);
 	}
 	.u-list-equip .u-title {
 		.fz(18px);
@@ -58,12 +60,16 @@
 }
 
 .m-plan-list {
+	.u-change {
+		.db;
+		.mb(10px);
+		cursor: move;
+	}
 	.u-selected {
 		.pr;
 		.flex;
-		.pointer;
-		.mb(10px);
 		.fz(13px);
+		.mb(10px);
 		.lh(28px);
 		.r(4px);
 		cursor: move;
@@ -74,21 +80,8 @@
 		align-items: center;
 		justify-content: space-between;
 
-		.u-name {
-			.size(100%,30px);
-			.flex;
-			.mr(5px);
-			align-items: center;
-			border-right: 0;
-			border-top-left-radius: 4px;
-			border-bottom-left-radius: 4px;
-			span {
-				.nobreak;
-			}
-		}
 		.u-icon {
-			.size(24px);
-			.mr(5px);
+			padding: 10px 0;
 		}
 		.u-close {
 			.pointer;
@@ -134,10 +127,10 @@
 		.pa;
 		.r(4px);
 		.bold;
-		.x; 
-        .lh(24px);
-        .lt(-26px,2px);
-        width: 24px;
+		.x;
+		.lh(24px);
+		.lt(-26px,2px);
+		width: 24px;
 		color: #fff;
 		background-color: #0366d6;
 		border: 1px solid #0366d6;
@@ -169,6 +162,7 @@
 	}
 }
 .m-archive-pages {
+	.pt(10px);
 	overflow-x: auto;
 }
 @keyframes show {

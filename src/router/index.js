@@ -35,11 +35,9 @@ const item = () => import("../post/item.vue");
 const knowledge = () => import("../post/knowledge.vue");
 const quest = () => import("../post/quest.vue");
 
-// APP
-const bucket = () => import("../views/bucket_new.vue");
-// const bucket = () => import("../views/bucket.vue");
-// const item_plan = () => import("../post/item_plan.vue");
-const item_plan = () => import("../post/item_plan_new.vue");
+// APP 
+const bucket = () => import("../views/bucket.vue");
+const item_plan = () => import("../post/item_plan.vue"); 
 const exam_question = () => import("../post/exam_question.vue");
 const exam_paper = () => import("../post/exam_paper.vue");
 

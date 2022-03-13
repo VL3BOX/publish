@@ -1,189 +1,141 @@
 <template>
-    <div class="m-dashboard m-dashboard-work m-dashboard-other">
+	<div class="m-dashboard m-dashboard-bucket" v-loading="loading">
+		<!-- 标题 -->
+		<div class="m-header">
+			<h2 class="u-title">{{ title }}</h2>
+			<a :href="publishLink" class="u-publish" v-if="type == 'item_plan'"> <i class="el-icon-document"></i> 发布作品 </a>
+		</div>
+		<!-- 搜索框 -->
+		<el-input class="m-search" placeholder="请输入搜索内容" v-model="search">
+			<span slot="prepend">关键词</span>
+			<el-button slot="append" icon="el-icon-search"></el-button>
+		</el-input>
+		<!-- 列表 -->
+		<div class="m-dashboard-box">
+			<template v-if="data && data.length">
+				<component class="m-dashboard-box-list" :data="data" v-bind:is="currentComponent" @refresh="loadPosts()"></component>
+			</template>
 
-        <div class="m-dashboard-work-header">
-            <h2 class="u-title">{{typeLable}}</h2>
-            <a :href="publishLink" class="u-publish el-button el-button--primary el-button--small" v-if="isNotExam">
-                <i class="el-icon-document"></i> 发布作品
-            </a>
-        </div>
-
-        <el-input class="m-dashboard-work-search" placeholder="请输入搜索内容" v-model="search">
-            <span slot="prepend">关键词</span>
-            <el-button slot="append" icon="el-icon-search"></el-button>
-        </el-input>
-
-        <div class="m-dashboard-box" v-loading="loading">
-            <template v-if="data && data.length">
-                <collection
-                    class="m-dashboard-box-list"
-                    :data="data"
-                    v-if="type === 'collection'"
-                    key="collection"
-                />
-                <item_plan
-                    class="m-dashboard-box-list"
-                    :data="data"
-                    v-if="type === 'item_plan'"
-                    @refresh="loadPosts(type)"
-                    key="item_plan"
-                />
-                <question
-                    class="m-dashboard-box-list"
-                    :data="data"
-                    v-if="type === 'question'"
-                    key="question"
-                />
-                <paper class="m-dashboard-box-list" :data="data" v-if="type === 'paper'" />
-            </template>
-            <el-alert
-                v-else
-                class="m-dashboard-box-null"
-                title="没有找到相关条目"
-                type="info"
-                center
-                show-icon
-            ></el-alert>
-            <el-pagination
-                class="m-dashboard-box-pages"
-                background
-                :page-size="per"
-                :hide-on-single-page="true"
-                :current-page.sync="page"
-                layout="total, prev, pager, next, jumper"
-                :total="total"
-            ></el-pagination>
-        </div>
-    </div>
+			<el-alert v-else-if="!loading" class="u-list-null" title="没有找到相关条目" type="info" center show-icon></el-alert>
+			<el-pagination class="m-dashboard-pagination" background :page-size="per" :hide-on-single-page="true" :current-page.sync="page" layout="total, prev, pager, next, jumper" :total="total" @onPageKey="onPageKey"></el-pagination>
+		</div>
+	</div>
 </template>
 
 <script>
-import { __otherType } from "@jx3box/jx3box-common/data/jx3box.json";
 import { getQuestions, getPapers } from "@/service/exam";
-import { get_my_item_plans } from "@/service/item_plan";
-// import { get_my_collections } from "@/service/collection";
+import { getMyPlans } from "@/service/item_plan";
 import question from "@/bucket/question.vue";
 import paper from "@/bucket/paper.vue";
 import item_plan from "@/bucket/item_plan.vue";
-// import collection from "@/bucket/collection.vue";
-const fn = {
-    question: getQuestions,
-    item_plan: get_my_item_plans,
-    paper: getPapers,
-    // collection: get_my_collections,
-};
-const next_list = ["question", "paper"];
-const helper_list = ["collection", "item_plan"];
+
 export default {
-    name: "ideas",
-    props: [],
-    data: function () {
-        return {
-            loading: false,
-            data: [],
-            total: 1,
-            page: 1,
-            per: 10,
-            search: "",
+	name: "bucket",
+	props: [],
+	components: {
+		question,
+		item_plan,
+		paper,
+	},
+	data: function () {
+		return {
+			loading: false,
+			data: "",
+			total: 1,
+			page: 1,
+			per: 10,
+			search: "",
 
-            types: {
-                // collection: "我的小册",
-                item_plan: "我的清单",
-                question: "我的题目",
-                paper: "我的试卷",
-            },
-        };
-    },
-    computed: {
-        type: function () {
-            return this.$route.params.type;
-        },
-        typeLable: function () {
-            return this.types[this.type];
-        },
-        params: function () {
-            if (next_list.includes(this.type)) {
-                return {
-                    pageIndex: this.page,
-                    title: this.search,
-                    pageSize: this.per,
-                };
-            } else if (helper_list.includes(this.type)) {
-                return {
-                    page: this.page,
-                    keyword: this.search,
-                    limit: this.per,
-                };
-            }
-            return {
-                page: this.page,
-                query: this.search,
-                per: this.per,
-            };
-        },
-        publishLink : function (){
-            return './#/' + this.type
-        },
-        isNotExam : function (){
-            return this.type != 'question' && this.type != 'paper'
-        }
-    },
-    watch: {
-        type: function () {
-            this.page = 1;
-        },
-        params: {
-            deep: true,
-            handler: function (val) {
-                this.loadPosts();
-            },
-        },
-    },
-    methods: {
-        loadPosts: function () {
-            if(!this.type) return
+			types: {
+				item_plan: "我的清单",
+				question: "我的题目",
+				paper: "我的试卷",
+			},
+		};
+	},
+	computed: {
+		type: function () {
+			return this.$route.params.type;
+		},
+		title() {
+			return this.types[this.type];
+		},
+		publishLink: function () {
+			return "./#/" + this.type;
+		},
+		currentComponent() {
+			return this.type;
+		},
+		params() {
+			let params = { page: this.page, limit: this.per };
+			this.type == "item_plan" ? (params.search = this.search) : (params.title = this.search);
+			return params;
+		},
+	},
+	watch: {
+		type() {
+			this.data = "";
+			this.page = 1;
+			this.search = "";
+		},
+		params: {
+			deep: true,
+			handler: function () {
+				this.loadPosts();
+			},
+		},
+	},
+	methods: {
+		// 判断获取数据
+		loadPosts: function () {
+			this.loading = true;
+			this.type == "item_plan" ? this.getMyPlan() : this.type == "paper" ? this.getMyPaper() : this.getMyQuestion();
+		},
+		// 获取我的清单
+		getMyPlan() {
+			getMyPlans(this.params)
+				.then((res) => {
+					this.data = res.list;
+					this.total = res.total;
+				})
+				.finally(() => {
+					this.loading = false;
+				});
+		},
+		// 获取我的题目
+		getMyPaper() {
+			getPapers(this.params)
+				.then((res) => {
+					this.data = res.data.data;
+					this.total = res.data.page.total;
+				})
+				.finally(() => {
+					this.loading = false;
+				});
+		},
+		// 获取我的试卷
+		getMyQuestion() {
+			getQuestions(this.params)
+				.then((res) => {
+					this.data = res.data.data;
+					this.total = res.data.page.total;
+				})
+				.finally(() => {
+					this.loading = false;
+				});
+		},
 
-            this.loading = true;
-            fn[this.type](this.params)
-                .then((res) => {
-                    if (helper_list.includes(this.type)) {
-                        res = res.data;
-                        if (res.code === 200) {
-                            this.data = res.data.data;
-                            this.total = res.data.total;
-                        }
-                    } else {
-                        this.data = res.data.data;
-                        this.total = res.data.page.total;
-                    }
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
-        },
-    },
-    mounted: function () {
-        this.loadPosts();
-    },
-    components: {
-        question,
-        item_plan,
-        paper,
-        // collection,
-    },
+		// 切换页码
+		onPageKey(val) {
+			this.page = val;
+		},
+	},
+	mounted: function () {
+		this.loadPosts();
+	},
 };
 </script>
 
 <style scoped lang="less">
-@import "../assets/css/work.less";
-.m-dashboard-other {
-    padding: 20px;
-}
-.m-dashboard-work-search {
-    .mb(10px);
-}
-
-.m-dashboard-box-pages {
-    .mt(10px);
-}
+@import "../assets/css/bucket.less";
 </style>

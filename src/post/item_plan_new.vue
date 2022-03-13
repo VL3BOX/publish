@@ -273,6 +273,7 @@ export default {
 		getPlanData() {
 			getPlanByID(this.plan_id).then((res) => {
 				this.data = res;
+				this.data.type == 1 ? (this.relationList = this.data.relation) : (this.equipList = this.data.relation);
 				this.extractID(res);
 			});
 		},

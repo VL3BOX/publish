@@ -13,7 +13,7 @@ function search_items(keyword, length, fields, is_equip = null) {
 }
 
 // 物品搜索
-function searchItems(params) { 
+function searchItems(params) {
 	return $helper()
 		.get(`/api/item/search`, { params })
 		.then((res) => {
@@ -22,7 +22,7 @@ function searchItems(params) {
 }
 
 // 物品id搜索
-function searchItemsID(params) { 
+function searchItemsID(params) {
 	return $helper()
 		.get(`/api/items`, { params })
 		.then((res) => {
@@ -30,4 +30,9 @@ function searchItemsID(params) {
 		});
 }
 
-export { search_items, searchItems,searchItemsID };
+// 获取物品
+function get_item(item_id) {
+	if (!item_id) return;
+	return $helper().get(`api/item/${item_id}`);
+}
+export { search_items, get_item, searchItems, searchItemsID };
