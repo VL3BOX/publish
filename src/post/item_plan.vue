@@ -310,7 +310,7 @@ export default {
 };
 </script>
 <style scoped lang="less">
-@import "../assets/css/item_plan_new.less";
+@import "../assets/css/item_plan.less";
 .el-col {
 	min-width: 260px;
 }

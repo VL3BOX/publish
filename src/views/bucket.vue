@@ -1,23 +1,27 @@
 <template>
-	<div class="m-dashboard m-dashboard-bucket" v-loading="loading">
+	<div class="m-dashboard-work m-dashboard-bucket" v-loading="loading">
 		<!-- 标题 -->
-		<div class="m-header">
+		<div class="m-dashboard-work-header">
 			<h2 class="u-title">{{ title }}</h2>
-			<a :href="publishLink" class="u-publish" v-if="type == 'item_plan'"> <i class="el-icon-document"></i> 发布作品 </a>
+			<a :href="publishLink" class="u-publish el-button el-button--primary el-button--small" v-if="type == 'item_plan'"> <i class="el-icon-document"></i> 发布作品 </a>
 		</div>
+
 		<!-- 搜索框 -->
-		<el-input class="m-search" placeholder="请输入搜索内容" v-model="search">
+		<el-input class="m-dashboard-work-search" placeholder="请输入搜索内容" v-model="search">
 			<span slot="prepend">关键词</span>
 			<el-button slot="append" icon="el-icon-search"></el-button>
 		</el-input>
+		
 		<!-- 列表 -->
 		<div class="m-dashboard-box">
+
 			<template v-if="data && data.length">
 				<component class="m-dashboard-box-list" :data="data" v-bind:is="currentComponent" @refresh="loadPosts()"></component>
 			</template>
 
-			<el-alert v-else-if="!loading" class="u-list-null" title="没有找到相关条目" type="info" center show-icon></el-alert>
-			<el-pagination class="m-dashboard-pagination" background :page-size="per" :hide-on-single-page="true" :current-page.sync="page" layout="total, prev, pager, next, jumper" :total="total" @onPageKey="onPageKey"></el-pagination>
+			<el-alert v-else-if="!loading" class="m-dashboard-box-null" title="没有找到相关条目" type="info" center show-icon></el-alert>
+
+			<el-pagination class="m-dashboard-box-pages" background :page-size="per" :hide-on-single-page="true" :current-page.sync="page" layout="total, prev, pager, next, jumper" :total="total" @onPageKey="onPageKey"></el-pagination>
 		</div>
 	</div>
 </template>
@@ -136,6 +140,6 @@ export default {
 };
 </script>
 
-<style scoped lang="less">
-@import "../assets/css/bucket.less";
+<style lang="less">
+@import "../assets/css/work.less";
 </style>
