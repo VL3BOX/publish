@@ -12,7 +12,7 @@
 
         <div class="m-dashboard-box">
             <ul class="m-dashboard-box-list" v-if="achievement_post.data && achievement_post.data.length">
-                <li v-for="(post, key) in achievement_post.data" :key="key">
+                <li class="u-wiki" v-for="(post, key) in achievement_post.data" :key="key">
                     <span class="u-tab" v-text="getTypeLabel(post.type)"></span>
                     <a class="u-title" target="_blank" :href="getLink(post)">{{ post.title || "无标题" }}</a>
                     <span v-if="post.checked == 0" class="u-mark pending">⌛ 等待审核</span>
