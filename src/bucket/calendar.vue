@@ -2,18 +2,18 @@
     <div class="m-dashboard-work m-dashboard-cms" v-loading="loading">
         <div class="m-dashboard-work-header">
             <h2 class="u-title">日历记录</h2>
-            <!-- <a
+            <a
                 :href="publishLink"
                 class="u-publish el-button el-button--primary el-button--small"
             >
-                <i class="el-icon-document"></i> 说句骚话
-            </a> -->
+                <i class="el-icon-document"></i> 贡献纪事
+            </a>
         </div>
 
         <el-input
             class="m-dashboard-work-search"
             placeholder="请输入搜索内容"
-            v-model="search"
+            v-model.lazy="search"
         >
             <span slot="prepend">关键词</span>
             <el-button slot="append" icon="el-icon-search"></el-button>
@@ -24,17 +24,17 @@
                 <li v-for="(item, i) in data" :key="i">
                     <i
                         class="u-item-icon el-icon-chat-dot-round"
-                        v-if="item.status"
+                        v-if="item.status == 1"
                     ></i>
                     <i
                         class="u-item-icon el-icon-lock"
                         v-else
-                        title="待审核"
+                        :title="item.status == 0 ? '待审核' : '审核未通过'"
                     ></i>
                     <a
                         class="u-title"
                         target="_blank"
-                        :href="postLink(type, item.id)"
+                        :href="postLink(item.id)"
                         >{{ item.desc || "未命名" }}</a
                     >
                     <div class="u-desc">
@@ -54,15 +54,9 @@
                         <el-button
                             size="mini"
                             icon="el-icon-edit"
-                            @click="edit(type, item.id)"
+                            @click="edit(item.id)"
                             title="编辑"
                         ></el-button>
-                        <!-- <el-button
-                            size="mini"
-                            icon="el-icon-delete"
-                            @click="del(item.id, i)"
-                            title="删除"
-                        ></el-button> -->
                     </el-button-group>
                 </li>
             </ul>
@@ -89,7 +83,6 @@
 
 <script>
 import { getMyCalendar } from "@/service/calendar.js";
-import { editLink, getLink } from "@jx3box/jx3box-common/js/utils.js";
 import dateFormat from "../utils/dateFormat";
 export default {
     name: "calendar",
@@ -102,7 +95,6 @@ export default {
             page: 1,
             per: 10,
             search: "",
-            type: "calendar",
         };
     },
     computed: {
@@ -114,7 +106,7 @@ export default {
             };
         },
         publishLink: function () {
-            return "./#/" + this.type;
+            return '/calendar';
         },
     },
     watch: {
@@ -138,28 +130,11 @@ export default {
                     this.loading = false;
                 });
         },
-        edit: function (type, id) {
-            location.href = "./#/" + type + "/" + id;
+        edit: function (id) {
+            location.href = "/calendar/view/" + id
         },
-        del: function (id, i) {
-            this.$alert("确定要删除吗？", "确认信息", {
-                confirmButtonText: "确定",
-                callback: (action) => {
-                    if (action == "confirm") {
-                        deleteJoke(id).then((res) => {
-                            this.$notify({
-                                title: "删除成功",
-                                message: "骚话删除成功",
-                                type: "success",
-                            });
-                            this.data.splice(i, 1);
-                        });
-                    }
-                },
-            });
-        },
-        postLink: function (type, id) {
-            return "./#/" + type + "/" + id;
+        postLink: function (id) {
+            return "/calendar/view/" + id
         },
     },
     filters: {
