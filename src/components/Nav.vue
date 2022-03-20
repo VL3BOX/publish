@@ -166,6 +166,11 @@ export default {
                     name: "剑三试卷",
                     count: 0,
                 },
+                calendar: {
+                    path: "/bucket/calendar",
+                    name: "日历记录",
+                    count: 0
+                }
             },
             comment: {
                 comment_cms: {

@@ -11,7 +11,7 @@
 			<span slot="prepend">关键词</span>
 			<el-button slot="append" icon="el-icon-search"></el-button>
 		</el-input>
-		
+
 		<!-- 列表 -->
 		<div class="m-dashboard-box">
 

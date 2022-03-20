@@ -35,9 +35,9 @@ const item = () => import("../post/item.vue");
 const knowledge = () => import("../post/knowledge.vue");
 const quest = () => import("../post/quest.vue");
 
-// APP 
+// APP
 const bucket = () => import("../views/bucket.vue");
-const item_plan = () => import("../post/item_plan.vue"); 
+const item_plan = () => import("../post/item_plan.vue");
 const exam_question = () => import("../post/exam_question.vue");
 const exam_paper = () => import("../post/exam_paper.vue");
 
@@ -52,6 +52,8 @@ const bucket_emotion = () => import("../bucket/emotion.vue");
 
 const collection = () => import("../post/collection.vue");
 const bucket_collection = () => import("../bucket/collection.vue");
+
+const bucket_calendar = () => import("../bucket/calendar.vue");
 
 Vue.use(VueRouter);
 
@@ -162,6 +164,9 @@ const routes = [
     // 小册
     { path: "/collection/:collection_id(\\d+)?", component: collection },
     { path: "/bucket/collection", component: bucket_collection },
+
+    // 日历
+    { path: "/bucket/calendar", component: bucket_calendar },
 
     // 考试
     { path: "/bucket/:type", name: "bucket", component: bucket },
