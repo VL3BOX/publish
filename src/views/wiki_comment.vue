@@ -22,7 +22,7 @@
                         achievement_comment.data.length
                 "
             >
-                <li v-for="(comment, key) in achievement_comment.data" :key="key">
+                <li class="u-wiki" v-for="(comment, key) in achievement_comment.data" :key="key">
                     <span class="u-tab" v-text="getTypeLabel(comment.type)"></span>
                     <a
                         class="u-title"
