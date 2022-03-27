@@ -12,7 +12,7 @@
   "dependencies": {
     "@jx3box/jx3box-common": "^7.0.21",
     "@jx3box/jx3box-common-ui": "^5.5.25",
-    "@jx3box/jx3box-data": "^1.8.4",
+    "@jx3box/jx3box-data": "^1.8.5",
     "@jx3box/jx3box-editor": "^1.2.6",
     "@jx3box/jx3box-emotion": "^1.0.10",
     "@jx3box/jx3box-facedat": "^2.3.1",
