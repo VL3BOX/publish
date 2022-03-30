@@ -17,7 +17,7 @@
                                 <el-tooltip class="item" effect="dark" :content="item.remark" placement="top" :disabled="!item.remark">
                                     <i class="u-icon el-icon-tickets"></i>
                                     <span>
-                                        <b class="u-version">{{ item | revisionName }}</b>
+                                        <!-- <b class="u-version">{{ item | revisionName }}</b> -->
                                         <span class="u-remark" v-if="item.remark">
                                             - <span :title="item.remark">{{ item.remark | formatRemark }}</span></span
                                         >
