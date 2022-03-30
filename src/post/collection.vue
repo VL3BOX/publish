@@ -34,10 +34,7 @@
                     >
                         <li v-for="(item, key) in collection.posts" :key="key" class="c-posts-item">
                             <i class="u-move el-icon-more"></i>
-                            <i
-                                class="u-delete el-icon-close"
-                                @click="collection.posts.splice(key, 1)"
-                            ></i>
+                            <i class="u-delete el-icon-close" @click="collection.posts.splice(key, 1)"></i>
                             <el-row class="m-posts-item" :gutter="10">
                                 <el-col :span="4" class="u-collection-type">
                                     <el-select
@@ -108,20 +105,11 @@
                 </div>
 
                 <div class="m-publish-primary-block m-publish-description">
-                    <el-divider
-                        content-position="left"
-                        @click="show_description = !show_description"
-                    >描述（选填）</el-divider>
-                    <span
-                        v-if="!show_description"
-                        @click="show_description = true"
-                        class="u-show"
-                    >▼ 展开</span>
-                    <span
-                        v-if="show_description"
-                        @click="show_description = false"
-                        class="u-hide"
-                    >▲ 收起</span>
+                    <el-divider content-position="left" @click="show_description = !show_description"
+                        >描述（选填）</el-divider
+                    >
+                    <span v-if="!show_description" @click="show_description = true" class="u-show">▼ 展开</span>
+                    <span v-if="show_description" @click="show_description = false" class="u-hide">▲ 收起</span>
                     <Tinymce
                         v-show="show_description"
                         v-model="collection.description"
@@ -171,18 +159,15 @@
                     type="primary"
                     @click="submit"
                     :loading="processing"
-                >提交小册</el-button>
+                    >提交小册</el-button
+                >
             </el-form-item>
         </el-form>
     </div>
 </template>
 
 <script>
-import {
-    __Root,
-    __postType,
-    __otherType,
-} from "@jx3box/jx3box-common/data/jx3box.json";
+import { __Root, __postType, __wikiType, __appType } from "@jx3box/jx3box-common/data/jx3box.json";
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 import CollectionPublic from "@jx3box/jx3box-editor/service/enum/CollectionPublic";
 import header from "@/components/publish_header.vue";
@@ -190,11 +175,7 @@ import publish_banner from "@/components/publish_banner.vue";
 import draggable from "vuedraggable";
 
 // 本地依赖
-import {
-    get_legal_tags,
-    get_collection,
-    submit_collection,
-} from "../service/collection";
+import { get_legal_tags, get_collection, submit_collection } from "../service/collection";
 import { get_posts_by_type } from "../service/post";
 import { getLink } from "@jx3box/jx3box-common/js/utils";
 import qs from "qs";
@@ -205,9 +186,8 @@ export default {
     props: [],
     data() {
         // 作品类型加载
-        let source_types = Object.assign(__postType, __otherType);
-        source_types["custom"] = "自定义";
-        delete source_types["item_plan"];
+        let source_types = Object.assign({ custom: "自定义" }, __postType, __wikiType, __appType);
+        delete source_types.calendar
 
         return {
             source_types: source_types,
@@ -229,7 +209,7 @@ export default {
         };
     },
     computed: {
-        id: function () {
+        id: function() {
             return this.$route.params.collection_id;
         },
     },
@@ -277,7 +257,7 @@ export default {
                 }
             });
         },
-        init: function () {
+        init: function() {
             get_collection(this.id).then((res) => {
                 res = res.data;
                 if (res.code === 200) {
@@ -286,9 +266,7 @@ export default {
                         for (let i in collection.posts) {
                             let item = collection.posts[i];
                             collection.posts[i].posts =
-                                item.type === "custom"
-                                    ? null
-                                    : [{ id: item.id, title: item.title }];
+                                item.type === "custom" ? null : [{ id: item.id, title: item.title }];
                         }
                         this.collection = collection;
                     } else {
@@ -300,7 +278,7 @@ export default {
                 }
             });
         },
-        submit: function () {
+        submit: function() {
             // this.$confirm("确定提交剑三小册信息？", "提示", {
             //     type: "info",
             // }).then(() => {
@@ -326,10 +304,7 @@ export default {
                             message: data.message,
                             type: "success",
                         });
-                        let collection_id = lodash.get(
-                            data,
-                            "data.collection.id"
-                        );
+                        let collection_id = lodash.get(data, "data.collection.id");
                         let id = this.id || collection_id;
                         setTimeout(() => {
                             location.href = getLink("collection", id);
@@ -350,7 +325,7 @@ export default {
     watch: {
         id: {
             immediate: true,
-            handler: function (val) {
+            handler: function(val) {
                 val && this.init();
             },
         },
