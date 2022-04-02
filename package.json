@@ -10,8 +10,8 @@
     "update": "npm --registry https://registry.npmjs.org install @jx3box/jx3box-common-ui@latest @jx3box/jx3box-common@latest @jx3box/jx3box-data@latest @jx3box/jx3box-editor@latest @jx3box/jx3box-emotion@latest @jx3box/jx3box-facedat@latest"
   },
   "dependencies": {
-    "@jx3box/jx3box-common": "^7.0.24",
-    "@jx3box/jx3box-common-ui": "^5.5.29",
+    "@jx3box/jx3box-common": "^7.1.0",
+    "@jx3box/jx3box-common-ui": "^5.5.31",
     "@jx3box/jx3box-data": "^1.8.8",
     "@jx3box/jx3box-editor": "^1.2.6",
     "@jx3box/jx3box-emotion": "^1.0.10",
