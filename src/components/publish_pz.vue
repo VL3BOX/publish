@@ -43,7 +43,7 @@
                                 <i
                                     class="u-client i-client"
                                     :class="option.client || 'std'"
-                                >{{option.client == 'origin' ? '怀旧服' : '正式服'}}</i>
+                                >{{option.client == 'origin' ? '缘起' : '重制'}}</i>
                                 <i
                                     class="u-level i-client"
                                     :class="option.client || 'std'"
