@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-banner">
         <el-divider content-position="left">海报</el-divider>
-        <uploadImage v-model="banner" info="首页海报尺寸1100*300，非必选，部分栏目不会展示海报，分享功能将使用该图作为预览图"></uploadImage>
+        <uploadImage v-model="banner" info="非必选。首页海报尺寸1100*300（推荐2200*600支持高分屏），最大20M。"></uploadImage>
     </div>
 </template>
 
