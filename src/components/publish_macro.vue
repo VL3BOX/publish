@@ -60,7 +60,7 @@
                                     v-model="item.name"
                                     placeholder="每个宏名称请使用自己名下唯一命名"
                                     :minlength="1"
-                                    :maxlength="20"
+                                    :maxlength="maxlength"
                                     show-word-limit
                                     @change="checkDataName(item)"
                                 >
@@ -207,7 +207,7 @@ export default {
     data: function () {
         return {
             macros: this.data,
-            
+
             activeIndex: "1",
             nickname: User.getInfo().name,
             equip_types: {
@@ -240,7 +240,11 @@ export default {
             },
         },
     },
-    computed: {},
+    computed: {
+        maxlength : function (){
+            return 20 - this.nickname.length - 1
+        }
+    },
     methods: {
         // 添加宏
         addMacro: function () {
