@@ -38,6 +38,7 @@ const quest = () => import("../post/quest.vue");
 // APP
 const bucket = () => import("../views/bucket.vue");
 const item_plan = () => import("../post/item_plan.vue");
+const exam = () => import("../post/exam.vue");
 const exam_question = () => import("../post/exam_question.vue");
 const exam_paper = () => import("../post/exam_paper.vue");
 
@@ -175,6 +176,12 @@ const routes = [
         name: "question",
         path: "/question/:id?",
         component: exam_question,
+    },
+    // 考试
+    {
+        name: "exam",
+        path: "/exam",
+        component: exam,
     },
     // 试卷发布
     {
