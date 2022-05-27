@@ -68,6 +68,7 @@ export default {
     data: function() {
         return {
             primary: {
+                client : 'std',
                 title: "",
                 desc: "",
                 questionList: [],

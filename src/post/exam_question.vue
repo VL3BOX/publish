@@ -88,6 +88,7 @@ export default {
     data: function () {
         return {
             primary: {
+                client : 'std',
                 title: "",
                 type: "radio",
                 options: ["", "", "", ""],
