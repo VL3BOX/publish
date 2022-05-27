@@ -7,6 +7,8 @@
 
         <!-- <h1 class="m-publish-exam-header">制作试卷</h1> -->
         <el-form label-position="left" label-width="80px" class="m-publish-exam">
+            <!-- 客户端 -->
+            <publish-client v-model="primary.client"></publish-client>
             <el-form-item label="标题" class="m-publish-exam-title">
                 <el-input v-model="primary.title" :maxlength="120" :minlength="2" show-word-limit required placeholder="请填写试卷标题"></el-input>
             </el-form-item>
@@ -54,6 +56,7 @@
 
 <script>
 import header from "@/components/publish_header.vue";
+import publish_client from "@/components/publish_client.vue";
 import exam_tags from "@/components/exam_tags.vue";
 import User from "@jx3box/jx3box-common/js/user";
 import { getPaper, createPaper, updatePaper } from "../service/exam";
@@ -81,6 +84,7 @@ export default {
             marks,
             styles,
             processing: false,
+            loading : false,
         };
     },
     computed: {
@@ -122,20 +126,16 @@ export default {
             }, 500);
         },
         loadData: function() {
+            this.loading = true
             getPaper(this.id, this).then((res) => {
                 let data = res.data;
-                this.primary.title = data.title;
-                this.primary.desc = data.desc;
-                this.primary.medalAward = data.medalAward;
-                this.primary.corner = data.corner;
+                this.primary = data
                 this.primary.tags = JSON.parse(data.tags);
-                this.primary.style = data.style;
-                this.primary.hardStar = data.hardStar;
-                this.primary.iframe = data.iframe
-
                 this.primary.questionList = JSON.parse(data.questionList);
                 this.list = this.primary.questionList.toString();
-            });
+            }).finally(() => {
+                this.loading = false
+            })
         },
         checkList: function() {
             let list = this.list.split(",");
@@ -161,6 +161,7 @@ export default {
         // upload,
         // tinymce,
         exam_tags,
+        "publish-client": publish_client,
     },
 };
 </script>
