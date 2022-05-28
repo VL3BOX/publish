@@ -1,31 +1,31 @@
 <template>
-<el-form-item label="标签" >
-    <div class="m-publish-exam-tags-list">
-        <el-checkbox-group v-model="list">
-            <div class="u-group">
-                <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">方向</span></label>
-                <el-checkbox :label="game" v-for="game in options.game" :key="game">{{game}}</el-checkbox>
-            </div>
-            <div class="u-group">
-                <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">门派</span></label>
-                <el-checkbox :label="school" v-for="school in options.school" :key="school">{{school}}</el-checkbox>
-            </div>
-            <div class="u-group">
-                <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">玩法</span></label>
-                <el-checkbox :label="play" v-for="play in options.play" :key="play">{{play}}</el-checkbox>
-            </div>
-            <div class="u-group">
-                <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">学科</span></label>
-                <el-checkbox :label="subject" v-for="subject in options.subject" :key="subject">{{subject}}</el-checkbox>
-            </div>
-            <div class="u-group">
-                <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">领域</span></label>
-                <el-checkbox :label="domain" v-for="domain in options.domain" :key="domain">{{domain}}</el-checkbox>
-            </div>
-        </el-checkbox-group>
-    </div>
+    <el-form-item label="标签">
+        <div class="m-publish-exam-tags-list">
+            <el-checkbox-group v-model="list">
+                <div class="u-group">
+                    <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">方向</span></label>
+                    <el-checkbox :label="game" v-for="game in options.game" :key="game">{{game}}</el-checkbox>
+                </div>
+                <div class="u-group">
+                    <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">门派</span></label>
+                    <el-checkbox :label="item" v-for="item in school" :key="item">{{item}}</el-checkbox>
+                </div>
+                <div class="u-group">
+                    <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">玩法</span></label>
+                    <el-checkbox :label="play" v-for="play in options.play" :key="play">{{play}}</el-checkbox>
+                </div>
+                <div class="u-group">
+                    <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">学科</span></label>
+                    <el-checkbox :label="subject" v-for="subject in options.subject" :key="subject">{{subject}}</el-checkbox>
+                </div>
+                <div class="u-group">
+                    <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">领域</span></label>
+                    <el-checkbox :label="domain" v-for="domain in options.domain" :key="domain">{{domain}}</el-checkbox>
+                </div>
+            </el-checkbox-group>
+        </div>
 
-    <!-- <div class="m-publish-exam-tags-custom">
+        <!-- <div class="m-publish-exam-tags-custom">
         <el-tag
             :key="tag"
             v-for="tag in custom"
@@ -50,34 +50,36 @@
             >+ 添加自定义</el-button
         >
     </div> -->
-</el-form-item>
+    </el-form-item>
 </template>
 
 
 <script>
-import {tags} from '@/assets/data/exam.json'
+import { tags } from "@/assets/data/exam.json";
+import school from "@jx3box/jx3box-data/data/xf/forceid.json";
 export default {
     name: "exam_tags",
     props: ["tags"],
-    data: function() {
+    data: function () {
         return {
-            options : tags,
+            options: tags,
+            school,
             inputVisible: false,
             inputValue: "",
-            list : this.tags
+            list: this.tags,
         };
     },
-    model : {
-        prop : "tags",
-        event : "update"
+    model: {
+        prop: "tags",
+        event: "update",
     },
-    watch : {
-        tags : function (newval){
-            this.list =  newval
+    watch: {
+        tags: function (newval) {
+            this.list = newval;
         },
-        list : function (newval){
-            this.$emit('update',newval)
-        }
+        list: function (newval) {
+            this.$emit("update", newval);
+        },
     },
     methods: {
         // TAG
@@ -99,18 +101,18 @@ export default {
             this.inputValue = "";
         },
     },
-    mounted: function() {
-        console.log(this.tags)
+    mounted: function () {
+        console.log(this.tags);
     },
     components: {},
 };
 </script>
 
 <style scoped lang="less">
-.u-group-label {
-    .bold;
-    background-color: #ebeef5;
-    padding: 2px 10px;
-    .r(2px);
-}
+    .u-group-label {
+        .bold;
+        background-color: #ebeef5;
+        padding: 2px 10px;
+        .r(2px);
+    }
 </style>
