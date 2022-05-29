@@ -21,7 +21,7 @@
             </el-form-item>
             <el-form-item label="外链" class="m-publish-exam-common">
                 <div>如果为外链地址，则设置的题目将不会生效</div>
-                <el-input v-model="primary.iframe" show-word-limit required placeholder="请填写外链问卷地址" @change="checkIframe">
+                <el-input v-model="primary.iframe" show-word-limit required placeholder="请填写外链问卷地址">
                 </el-input>
             </el-form-item>
             <el-form-item label="难度" class="m-publish-exam-level">
