@@ -158,9 +158,9 @@ export default {
                 message: res.data.msg || "提交成功",
                 type: "success",
             });
-            // setTimeout(() => {
-            //     location.href = getLink("question", this.id || res.data.data.id);
-            // }, 500);
+            setTimeout(() => {
+                location.href = getLink("question", this.id || res.data.data.id);
+            }, 500);
         },
         loadData: function () {
             this.loading = true;
