@@ -41,7 +41,13 @@
                 </el-input>
             </el-form-item>
             <el-form-item label="答案" class="m-publish-exam-answer">
-                <el-checkbox-group v-model="primary.answer">
+                <el-radio-group v-model="answer_radio" v-if="primary.type == 'radio'">
+                    <el-radio :label="0">A</el-radio>
+                    <el-radio :label="1">B</el-radio>
+                    <el-radio :label="2">C</el-radio>
+                    <el-radio :label="3">D</el-radio>
+                </el-radio-group>
+                <el-checkbox-group v-model="answer_checkbox" v-else>
                     <el-checkbox :label="0">A</el-checkbox>
                     <el-checkbox :label="1">B</el-checkbox>
                     <el-checkbox :label="2">C</el-checkbox>
@@ -88,7 +94,7 @@ export default {
     data: function () {
         return {
             primary: {
-                client : 'std',
+                client: "std",
                 title: "",
                 type: "radio",
                 options: ["", "", "", ""],
@@ -100,22 +106,37 @@ export default {
             },
             processing: false,
             loading: false,
+
+            // 缓存答案
+            answer_radio : "",
+            answer_checkbox : [],
         };
     },
     computed: {
         id: function () {
             return this.$route.params.id;
         },
-        isNew: function () {
-            return !this.id;
+    },
+    watch: {
+        answer_radio : function (val) {
+            this.primary.answer = [val];
+        },
+        answer_checkbox : function (val) {
+            this.primary.answer = val;
+        },
+        'primary.answer' : function (val) {
+            if (this.primary.type == 'radio') {
+                this.answer_radio = val[0];
+            } else {
+                this.answer_checkbox = val;
+            }
         },
     },
-    watch: {},
     methods: {
         publish: function () {
             this.processing = true;
             if (this.id) {
-                updateQuestion(this.id, this.primary, this)
+                updateQuestion(this.id, this.primary)
                     .then((res) => {
                         this.success(res);
                     })
@@ -123,7 +144,7 @@ export default {
                         this.processing = false;
                     });
             } else {
-                createQuestion(this.primary, this)
+                createQuestion(this.primary)
                     .then((res) => {
                         this.success(res);
                     })
@@ -137,25 +158,23 @@ export default {
                 message: res.data.msg || "提交成功",
                 type: "success",
             });
-            setTimeout(() => {
-                location.href = getLink("question", this.id || res.data.data.id);
-            }, 500);
+            // setTimeout(() => {
+            //     location.href = getLink("question", this.id || res.data.data.id);
+            // }, 500);
         },
         loadData: function () {
             this.loading = true;
-            getQuestion(this.id, this)
+            getQuestion(this.id)
                 .then((res) => {
                     let data = res.data;
                     this.primary = data;
                     this.primary.options = JSON.parse(data.options);
                     this.primary.tags = JSON.parse(data.tags);
+                    this.primary.answer = data.answerList || [];
                 })
                 .finally(() => {
                     this.loading = false;
                 });
-        },
-        updateTags: function (val) {
-            this.tags = val;
         },
     },
     created: function () {
