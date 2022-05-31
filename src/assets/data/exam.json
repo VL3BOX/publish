@@ -4,33 +4,15 @@
         "checkbox": "多选题"
     },
     "styles": [
-        { "label": "默认（蓝色）", "value": "default" },
-        { "label": "PVE（绿色）", "value": "green" },
-        { "label": "PVX（橙色）", "value": "orange" },
-        { "label": "PVP（红色）", "value": "red" },
-        { "label": "PVBB（紫色）", "value": "purple" }
+        { "label": "蓝色", "value": "default" },
+        { "label": "绿色", "value": "green" },
+        { "label": "橙色", "value": "orange" },
+        { "label": "红色", "value": "red" },
+        { "label": "紫色", "value": "purple" }
     ],
     "awards": [{ "label": "剑三老司机", "value": "driver" }],
     "marks": [{ "label": "官方试卷", "value": "official" }],
     "tags": {
-        "school": [
-            "七秀",
-            "万花",
-            "五毒",
-            "长歌",
-            "天策",
-            "少林",
-            "明教",
-            "苍云",
-            "纯阳",
-            "唐门",
-            "藏剑",
-            "丐帮",
-            "蓬莱",
-            "凌雪",
-            "衍天",
-            "药宗"
-        ],
         "subject": [
             "语文",
             "数学",
