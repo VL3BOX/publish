@@ -15,15 +15,12 @@
                             <span class="u-name">
                                 <el-checkbox class="u-checkbox" v-model="item.checked" @change="(val) => checkChange(val, item)"></el-checkbox>
                                 <el-tooltip class="item" effect="dark" :content="item.remark" placement="top" :disabled="!item.remark">
-                                    <i class="u-icon el-icon-tickets"></i>
                                     <span>
-                                        <!-- <b class="u-version">{{ item | revisionName }}</b> -->
-                                        <span class="u-remark" v-if="item.remark">
-                                            - <span :title="item.remark">{{ item.remark | formatRemark }}</span></span
-                                        >
-                                        <em class="u-time">{{ item.updated_at | formatDate }}</em>
+                                        <i class="u-icon el-icon-tickets"></i>
+                                    <span class="u-remark">{{ item.remark ? formatRemark(item.remark) : item.post_title }}</span>
                                     </span>
                                 </el-tooltip>
+                                <em class="u-time">{{ item.updated_at | formatDate }}</em>
                                 <span class="u-creator" v-if="item.user_info" title="创建人">{{ item.user_info.display_name }}</span>
                                 <i class="u-edit el-icon-edit" @click="remark(item)" title="添加备注"></i>
                             </span>
@@ -118,11 +115,11 @@ export default {
         formatDate: function(gmt) {
             return showTime(new Date(gmt));
         },
-        formatRemark: function(str) {
-            return str?.length > 2 ? str.slice(0, 2) + ".." : str;
-        },
     },
     methods: {
+        formatRemark: function(str) {
+            return str?.length > 10 ? str.slice(0, 10) + ".." : str;
+        },
         view() {
             if (!this.postId) return;
             this.show = true;
