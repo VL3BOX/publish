@@ -178,7 +178,7 @@ export default {
     },
     computed: {
         id: function () {
-            return this.isDraft ? ~~this.post.post_id : ~~this.post.ID;
+            return this.isRevision ? ~~this.post.post_id : ~~this.post.ID;
         },
         data: function () {
             if (this.id) {
@@ -208,7 +208,7 @@ export default {
                 })
                 .then((result) => {
                     this.afterPublish(result).finally(() => {
-                        this.done(skip, result);
+                        // this.done(skip, result);
                     });
                 })
                 .finally(() => {
