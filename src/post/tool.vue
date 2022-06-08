@@ -208,7 +208,7 @@ export default {
                 })
                 .then((result) => {
                     this.afterPublish(result).finally(() => {
-                        // this.done(skip, result);
+                        this.done(skip, result);
                     });
                 })
                 .finally(() => {
