@@ -65,7 +65,7 @@ export default {
         return {
             //选项 - 加载可选项
             options: {
-                sources: null,
+                sources: [],
             },
 
             //文章 - 主表数据
@@ -184,12 +184,13 @@ export default {
                     if (item) {
                         // 将选择项恢复至下拉框
                         let exist = false;
+                        console.log(this.options.sources, '1');
                         this.options.sources = this.options.sources || [];
-                        for (let index in this.options.sources) {
-                            if (this.options.sources[index].id == item.id) {
-                                exist = true;
-                                break;
-                            }
+                        const index = this.options.sources.findIndex((source) => {
+                            return source.id === item.id;
+                        });
+                        if (index > -1) {
+                            exist = true;
                         }
                         if (!exist) this.options.sources.push(item);
                     }
