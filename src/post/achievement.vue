@@ -126,7 +126,7 @@ export default {
                 user_nickname: User.getInfo().name,
                 content: this.post.content,
                 remark: this.post.remark,
-            })
+            }, this.client)
                 .then((data) => {
                     data = data.data;
                     if (data.code === 200) {

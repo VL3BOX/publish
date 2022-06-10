@@ -181,6 +181,9 @@ export default {
         source_id: function() {
             return this.post?.source_id;
         },
+        client: function (){
+            return this.$store.state.client;
+        }
     },
     methods: {
         // 加载指定通识
@@ -291,7 +294,7 @@ export default {
                 remark: this.post.remark,
                 tags: this.post.tags,
                 client : 'all'
-            })
+            }, this.client)
                 .then((res) => {
                     res = res.data;
                     if (res.code === 200) {

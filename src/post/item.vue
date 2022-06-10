@@ -59,6 +59,8 @@ import { WikiPost } from "@jx3box/jx3box-common/js/helper";
 import User from "@jx3box/jx3box-common/js/user";
 import { search_items } from "../service/item";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
+
+import uniqBy from 'lodash/uniqBy';
 export default {
     name: "item",
     data() {
@@ -80,6 +82,8 @@ export default {
             // 状态控制
             loading: false,
             processing: false,
+
+            compatible: false, // 是否兼容模式
         };
     },
     computed : {
@@ -126,7 +130,7 @@ export default {
                 user_nickname: User.getInfo().name,
                 content: this.post.content,
                 remark: this.post.remark,
-            })
+            }, this.client)
                 .then((data) => {
                     data = data.data;
                     if (data.code === 200) {
@@ -156,7 +160,7 @@ export default {
             this.loading = true;
             search_items(keyword, 10).then((res) => {
                 res = res.data;
-                if (res.code === 200) this.options.sources = res.data.data;
+                this.options.sources = res.data.data;
                 this.loading = false;
             });
         },
@@ -183,16 +187,13 @@ export default {
 
                     if (item) {
                         // 将选择项恢复至下拉框
-                        let exist = false;
-                        console.log(this.options.sources, '1');
-                        this.options.sources = this.options.sources || [];
-                        const index = this.options.sources.findIndex((source) => {
-                            return source.id === item.id;
-                        });
-                        if (index > -1) {
-                            exist = true;
+                        if (this.compatible) {
+                            // 兼容模式下，客户端为正式服的物品，不放入下拉框
+                            if (client !== 'std') this.options.sources = uniqBy([this.options.sources, item], "id");
+                        } else {
+                            // 非兼容模式下的物品直接放入下拉框
+                            this.options.sources = uniqBy([this.options.sources, item], "id");
                         }
-                        if (!exist) this.options.sources.push(item);
                     }
 
                     return post;
@@ -218,6 +219,7 @@ export default {
                     this.loadData('std')
                 }else{
                     this.loadData('origin').then((post) => {
+                        this.compatible = true
                         console.log('兼容获取')
                         if(!post){
                             this.loadData('std')
