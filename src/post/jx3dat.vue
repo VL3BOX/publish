@@ -115,10 +115,11 @@ import { syncRedis } from "@/service/jx3dat.js";
 import { appendToCollection } from "@/service/collection.js";
 import { AutoSaveMixin } from "@/utils/autoSaveMixin";
 import { cmsMetaMixin } from "@/utils/cmsMetaMixin";
+import { atAuthorMixin } from "@/utils/atAuthorMixin";
 
 export default {
     name: "jx3dat",
-    mixins: [AutoSaveMixin, cmsMetaMixin],
+    mixins: [AutoSaveMixin, cmsMetaMixin, atAuthorMixin],
     components: {
         Tinymce,
         Markdown,
@@ -259,6 +260,7 @@ export default {
                             console.log("[Redis同步作业失败]", err);
                         });
                     }
+                    this.atUser()
                     return result
                 })
                 .then((result) => {

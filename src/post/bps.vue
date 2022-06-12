@@ -98,10 +98,11 @@ import { push, pull } from "@/service/cms.js";
 import { appendToCollection } from "@/service/collection.js";
 import { AutoSaveMixin } from "@/utils/autoSaveMixin";
 import { cmsMetaMixin } from "@/utils/cmsMetaMixin";
+import { atAuthorMixin } from "@/utils/atAuthorMixin";
 
 export default {
     name: "bps",
-    mixins: [AutoSaveMixin, cmsMetaMixin],
+    mixins: [AutoSaveMixin, cmsMetaMixin, atAuthorMixin],
     components: {
         Tinymce,
         Markdown,
@@ -203,6 +204,7 @@ export default {
             return push(...this.data)
                 .then((res) => {
                     let result = res.data.data;
+                    this.atUser()
                     return result
                 })
                 .then((result) => {

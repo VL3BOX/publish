@@ -55,7 +55,7 @@ import header from "@/components/publish_header.vue";
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 
 // 本地依赖
-import { WikiPost } from "@jx3box/jx3box-common/js/helper";
+import { wiki } from "@jx3box/jx3box-common/js/wiki";
 import User from "@jx3box/jx3box-common/js/user";
 import { search_achievements } from "../service/achievement";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
@@ -119,14 +119,14 @@ export default {
             }
 
             this.processing = true;
-            WikiPost.save({
-                type: "achievement",
-                source_id: this.post.source_id,
+            const data = {
+                source_id: String(this.post.source_id),
                 level: this.post.level,
                 user_nickname: User.getInfo().name,
                 content: this.post.content,
                 remark: this.post.remark,
-            }, this.client)
+            }
+            wiki.post({ type: 'achievement', data: data, client: this.client }, {})
                 .then((data) => {
                     data = data.data;
                     if (data.code === 200) {
@@ -165,7 +165,8 @@ export default {
         },
         loadData: function(client) {
             this.loading = true;
-            return WikiPost.newest("achievement", this.post.source_id, 0, client)
+            // return WikiPost.newest("achievement", this.post.source_id, 0, client)
+            return wiki.get({ type: 'achievement', id: this.post.source_id }, { supply: 0, client })
                 .then((res) => {
                     let data = res.data;
                     // 数据填充

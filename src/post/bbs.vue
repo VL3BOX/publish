@@ -93,14 +93,15 @@ import publish_authors from "@/components/publish_authors";
 import publish_revision from '@/components/publish_revision.vue'
 
 // 数据逻辑
-import { push, pull } from "@/service/cms.js";
+import { push } from "@/service/cms.js";
 import { appendToCollection } from "@/service/collection.js";
 import { AutoSaveMixin } from "@/utils/autoSaveMixin";
 import { cmsMetaMixin } from "@/utils/cmsMetaMixin";
+import { atAuthorMixin } from "@/utils/atAuthorMixin";
 
 export default {
     name: "bbs",
-    mixins: [AutoSaveMixin, cmsMetaMixin],
+    mixins: [AutoSaveMixin, cmsMetaMixin, atAuthorMixin],
     components: {
         Tinymce,
         Markdown,
@@ -201,6 +202,7 @@ export default {
             return push(...this.data)
                 .then((res) => {
                     let result = res.data.data;
+                    this.atUser();
                     return result;
                 })
                 .then((result) => {
@@ -244,10 +246,11 @@ export default {
         },
         // 跳转前操作
         afterPublish: function(result) {
-            if (!~~result.post_collection)
+            if (!~~result.post_collection) {
                 return new Promise((resolve, reject) => {
                     resolve(true);
                 });
+            }
             return appendToCollection({
                 post_type: result.post_type,
                 post_id: result.ID,
