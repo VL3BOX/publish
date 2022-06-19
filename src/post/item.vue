@@ -55,17 +55,21 @@ import header from "@/components/publish_header.vue";
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 
 // 本地依赖
-import { WikiPost } from "@jx3box/jx3box-common/js/helper";
+// import { WikiPost } from "@jx3box/jx3box-common/js/helper";
+import { wiki } from "@jx3box/jx3box-common/js/wiki";
+
 import User from "@jx3box/jx3box-common/js/user";
 import { search_items } from "../service/item";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
+
+import uniqBy from 'lodash/uniqBy';
 export default {
     name: "item",
     data() {
         return {
             //选项 - 加载可选项
             options: {
-                sources: null,
+                sources: [],
             },
 
             //文章 - 主表数据
@@ -80,6 +84,8 @@ export default {
             // 状态控制
             loading: false,
             processing: false,
+
+            compatible: false, // 是否兼容模式
         };
     },
     computed : {
@@ -119,14 +125,22 @@ export default {
             }
 
             this.processing = true;
-            WikiPost.save({
+            const data = {
+                source_id: String(this.post.source_id),
+                level: this.post.level,
+                user_nickname: User.getInfo().name,
+                content: this.post.content,
+                remark: this.post.remark,
+            }
+            wiki.post({ type: 'item', data: data, client: this.client }, {})
+            /* WikiPost.save({
                 type: "item",
                 source_id: this.post.source_id,
                 level: this.post.level,
                 user_nickname: User.getInfo().name,
                 content: this.post.content,
                 remark: this.post.remark,
-            })
+            }) */
                 .then((data) => {
                     data = data.data;
                     if (data.code === 200) {
@@ -156,13 +170,13 @@ export default {
             this.loading = true;
             search_items(keyword, 10).then((res) => {
                 res = res.data;
-                if (res.code === 200) this.options.sources = res.data.data;
+                this.options.sources = res.data.data;
                 this.loading = false;
             });
         },
         loadData: function(client) {
             this.loading = true;
-            return WikiPost.newest("item", this.post.source_id, 0, client)
+            return wiki.get({ type: 'item', id: this.post.source_id }, { supply: 0, client })
                 .then((res) => {
                     let data = res.data;
                     // 数据填充
@@ -183,15 +197,13 @@ export default {
 
                     if (item) {
                         // 将选择项恢复至下拉框
-                        let exist = false;
-                        this.options.sources = this.options.sources || [];
-                        for (let index in this.options.sources) {
-                            if (this.options.sources[index].id == item.id) {
-                                exist = true;
-                                break;
-                            }
+                        if (this.compatible) {
+                            // 兼容模式下，客户端为正式服的物品，不放入下拉框
+                            if (client !== 'std') this.options.sources = uniqBy([this.options.sources, item], "id");
+                        } else {
+                            // 非兼容模式下的物品直接放入下拉框
+                            this.options.sources = uniqBy([this.options.sources, item], "id");
                         }
-                        if (!exist) this.options.sources.push(item);
                     }
 
                     return post;
@@ -217,6 +229,7 @@ export default {
                     this.loadData('std')
                 }else{
                     this.loadData('origin').then((post) => {
+                        this.compatible = true
                         console.log('兼容获取')
                         if(!post){
                             this.loadData('std')

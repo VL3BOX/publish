@@ -78,7 +78,8 @@ import header from "@/components/publish_header.vue";
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 
 // 本地依赖
-import { WikiPost } from "@jx3box/jx3box-common/js/helper";
+// import { WikiPost } from "@jx3box/jx3box-common/js/helper";
+import { wiki } from "@jx3box/jx3box-common/js/wiki";
 import User from "@jx3box/jx3box-common/js/user";
 import { get_list } from "../service/quest";
 
@@ -105,7 +106,11 @@ export default {
             processing: false,
         };
     },
-    computed: {},
+    computed: {
+        client() {
+            return this.$store.state.client
+        }
+    },
     methods: {
         toPublish: function () {
             if (!this.post.source_id) {
@@ -138,14 +143,22 @@ export default {
             }
 
             this.processing = true;
-            WikiPost.save({
+            /* WikiPost.save({
                 type: "quest",
                 source_id: this.post.source_id,
                 level: this.post.level,
                 user_nickname: User.getInfo().name,
                 content: this.post.content,
                 remark: this.post.remark,
-            })
+            }) */
+            const data = {
+                source_id: String(this.post.source_id),
+                level: this.post.level,
+                user_nickname: User.getInfo().name,
+                content: this.post.content,
+                remark: this.post.remark,
+            }
+            wiki.post({ type: 'quest', data: data, client: this.client }, {})
                 .then((data) => {
                     data = data.data;
                     if (data.code === 200) {
@@ -195,7 +208,8 @@ export default {
             handler() {
                 if (!this.post.source_id) return;
                 this.loading = true;
-                WikiPost.newest("quest", this.post.source_id, 0)
+                // WikiPost.newest("quest", this.post.source_id, 0)
+                wiki.get({ type: 'quest', id: this.post.source_id }, { supply: 0, client: this.client })
                     .then((res) => {
                         let data = res.data;
                         if (data.code === 200) {

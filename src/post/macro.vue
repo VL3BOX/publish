@@ -115,6 +115,7 @@ import { syncRedis } from "@/service/macro.js";
 import { appendToCollection } from "@/service/collection.js";
 import { AutoSaveMixin } from "@/utils/autoSaveMixin";
 import { cmsMetaMixin } from "@/utils/cmsMetaMixin";
+import { atAuthorMixin } from "@/utils/atAuthorMixin";
 
 export default {
     name: "macro",
@@ -247,6 +248,7 @@ export default {
                     syncRedis(result).catch((err) => {
                         console.log("[Redis同步作业失败]", err);
                     });
+                    this.atUser()
                     return result;
                 })
                 .then((result) => {

@@ -128,10 +128,10 @@ import header from "@/components/publish_header.vue";
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 
 // 本地依赖
-import { WikiPost } from "@jx3box/jx3box-common/js/helper";
+// import { WikiPost } from "@jx3box/jx3box-common/js/helper";
+import { wiki } from "@jx3box/jx3box-common/js/wiki";
 import User from "@jx3box/jx3box-common/js/user";
 import { get_menus, get_list, create_knowledge } from "../service/knowledge";
-import cloneDeep from "lodash/cloneDeep";
 
 export default {
     name: "knowledge",
@@ -181,12 +181,17 @@ export default {
         source_id: function() {
             return this.post?.source_id;
         },
+        client: function (){
+            return this.$store.state.client;
+        }
     },
     methods: {
         // 加载指定通识
         loadData: function(id) {
             if(!id) return
-            WikiPost.newest("knowledge", id, 0).then((res) => {
+            // WikiPost.newest("knowledge", id, 0)
+            wiki.get({ type: "knowledge", id }, { supply: 0 })
+            .then((res) => {
                 // 设置通识
                 let source = res.data?.data?.source;
                 this.currentSource = source?.name;
@@ -283,7 +288,7 @@ export default {
             // 表单校验
             if (!this.validate()) return;
             this.processing = true;
-            WikiPost.save({
+            /* WikiPost.save({
                 type: "knowledge",
                 source_id: this.post.source_id,
                 user_nickname: User.getInfo().name,
@@ -291,7 +296,15 @@ export default {
                 remark: this.post.remark,
                 tags: this.post.tags,
                 client : 'all'
-            })
+            }) */
+            const data = {
+                source_id: String(this.post.source_id),
+                user_nickname: User.getInfo().name,
+                content: this.post.content,
+                remark: this.post.remark,
+                tags: this.post.tags,
+            }
+            wiki.post({ type: 'knowledge', data: data, client: 'all' }, {})
                 .then((res) => {
                     res = res.data;
                     if (res.code === 200) {
