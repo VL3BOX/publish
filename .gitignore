@@ -24,3 +24,4 @@ yarn-error.log*
 .user.ini
 .nuxt
 
+yarn.lock
