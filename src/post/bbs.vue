@@ -202,10 +202,10 @@ export default {
             return push(...this.data)
                 .then((res) => {
                     let result = res.data.data;
-                    this.atUser();
                     return result;
                 })
                 .then((result) => {
+                    this.atUser(result.ID);
                     this.afterPublish(result).finally(() => {
                         this.done(skip, result);
                     });

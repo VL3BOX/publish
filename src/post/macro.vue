@@ -119,7 +119,7 @@ import { atAuthorMixin } from "@/utils/atAuthorMixin";
 
 export default {
     name: "macro",
-    mixins: [AutoSaveMixin, cmsMetaMixin],
+    mixins: [AutoSaveMixin, cmsMetaMixin, atAuthorMixin],
     components: {
         Tinymce,
         Markdown,
@@ -248,7 +248,7 @@ export default {
                     syncRedis(result).catch((err) => {
                         console.log("[Redis同步作业失败]", err);
                     });
-                    this.atUser()
+                    this.atUser(result.ID)
                     return result;
                 })
                 .then((result) => {

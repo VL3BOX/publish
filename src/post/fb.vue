@@ -198,7 +198,7 @@ export default {
             return push(...this.data)
                 .then((res) => {
                     let result = res.data.data;
-                    this.atUser()
+                    this.atUser(result.ID)
                     return result
                 })
                 .then((result) => {

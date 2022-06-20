@@ -260,7 +260,7 @@ export default {
                             console.log("[Redis同步作业失败]", err);
                         });
                     }
-                    this.atUser()
+                    this.atUser(result.ID)
                     return result
                 })
                 .then((result) => {
