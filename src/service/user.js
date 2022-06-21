@@ -4,4 +4,14 @@ function getUserConf() {
     return $cms().get(`/api/cms/user/conf`);
 }
 
-export { getUserConf };
+// 批量获取用户信息
+function getUserInfoByIds(ids) {
+    return $cms().get(`/api/cms/user/list/info`, {
+        params: {
+            list: ids
+        }
+    });
+}
+
+
+export { getUserConf, getUserInfoByIds };

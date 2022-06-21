@@ -15,6 +15,12 @@ Vue.use(JX3BOX_UI);
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 
+// 监听 sessionStorage 变化
+import handleSessionStorage from '@/utils/handleSessionStorage.js'
+Vue.use(handleSessionStorage)
+
+handleSessionStorage();
+
 // 数据与路由
 import router from "./router";
 import store from "./store";
