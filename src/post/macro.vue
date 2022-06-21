@@ -64,6 +64,12 @@
                 <publish-authors :id="id" :uid="post.post_author"></publish-authors>
             </div>
 
+            <!-- 临时 -->
+            <div class="m-publish-extend">
+                <el-divider content-position="left">临时</el-divider>
+                <publish-at-authors></publish-at-authors>
+            </div>
+
             <!-- 其它 -->
             <div class="m-publish-other">
                 <publish-banner v-model="post.post_banner"></publish-banner>
@@ -108,6 +114,7 @@ import publish_visible from "@/components/publish_visible";
 import publish_authors from "@/components/publish_authors";
 import publish_pz from "@/components/publish_pz";
 import publish_revision from '@/components/publish_revision.vue'
+import publish_at_authors from '@/components/publish_at_authors.vue'
 
 // 数据逻辑
 import { push, pull } from "@/service/cms.js";
@@ -138,7 +145,8 @@ export default {
         "publish-visible": publish_visible,
         "publish-authors": publish_authors,
         "publish-pz": publish_pz,
-        'publish-revision' : publish_revision
+        'publish-revision' : publish_revision,
+        'publish-at-authors': publish_at_authors
     },
     data: function () {
         return {
@@ -228,6 +236,7 @@ export default {
     methods: {
         // 初始化
         init: function() {
+            sessionStorage.removeItem("atAuthor")
             // 尝试加载
             return this.loadData().then(() => {
                 // 加载成功后执行自动保存逻辑（含本地草稿、本地缓存、云端历史版本）

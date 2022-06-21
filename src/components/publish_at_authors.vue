@@ -45,6 +45,7 @@ export default {
     },
     methods: {
         handleSession (e) {
+            if (e.key !== 'atAuthor') return
             try {
                 const newVal = JSON.parse(e.newVal);
                 this.authorIds = newVal;
