@@ -1,6 +1,6 @@
 <template>
     <div class="m-publish-authors">
-        <el-form-item label="圈人">
+        <el-form-item label="@圈一下">
             <div class="u-list">
                 <div class="u-item" v-for="(item,i) in list" :key="i">
                     <img class="u-avatar" :src="item.user_avatar | showAvatar" />
