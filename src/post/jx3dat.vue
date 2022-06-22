@@ -246,8 +246,8 @@ export default {
     methods: {
         // 初始化
         init: function() {
-            // 尝试加载
             sessionStorage.removeItem("atAuthor")
+            // 尝试加载
             return this.loadData().then(() => {
                 // 加载成功后执行自动保存逻辑（含本地草稿、本地缓存、云端历史版本）
                 this.autoSave();

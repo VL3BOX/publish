@@ -41,6 +41,12 @@
                 <publish-authors :id="id" :uid="post.post_author"></publish-authors>
             </div>
 
+            <!-- 临时 -->
+            <div class="m-publish-extend">
+                <el-divider content-position="left">临时</el-divider>
+                <publish-at-authors></publish-at-authors>
+            </div>
+
             <!-- 其它 -->
             <div class="m-publish-other">
                 <publish-banner v-model="post.post_banner"></publish-banner>
@@ -75,6 +81,9 @@ import publish_comment from "@/components/publish_comment";
 import publish_visible from "@/components/publish_visible";
 import publish_subtype from "@/components/publish_subtype";
 import publish_authors from "@/components/publish_authors";
+import publish_at_authors from "@/components/publish_at_authors";
+
+import { atAuthorMixin } from "@/utils/atAuthorMixin";
 
 // 数据逻辑
 import { push, pull } from "@/service/cms.js";
@@ -93,7 +102,9 @@ export default {
         "publish-visible": publish_visible,
         "publish-subtype": publish_subtype,
         "publish-authors": publish_authors,
+        "publish-at-authors": publish_at_authors
     },
+    mixins: [atAuthorMixin],
     data: function () {
         return {
             // 加载状态
@@ -164,6 +175,7 @@ export default {
         // 加载
         init: function () {
             this.loading = true;
+            sessionStorage.removeItem("atAuthor")
             // 加载文章
             if (this.$route.params.id) {
                 return pull(this.$route.params.id)
@@ -189,6 +201,7 @@ export default {
             push(...this.data)
                 .then((res) => {
                     let result = res.data.data;
+                    this.atUser(result.ID)
                     this.done(skip, result);
                 })
                 .finally(() => {
