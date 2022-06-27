@@ -28,9 +28,9 @@
 
             <el-tabs class="tabs-sort" v-model="activeIndex" type="card" closable @tab-remove="removeMacro">
                 <el-tab-pane v-for="(item, i) in macros.data" :key="i" :name="i + 1 + ''">
-                    <span slot="label">
+                    <span slot="label" class="u-tab-box">
                         <img class="u-tabicon" :src="icon(item)" />
-                        {{ i + 1 + "号位-" + item.name }}
+                        <span class="u-tab-name" :title="item.name">{{ i + 1 + "号位-" + item.name }}</span>
                     </span>
                     <div class="m-macro-cloud m-macro-item">
                         <h5 class="u-title">
@@ -350,3 +350,23 @@ export default {
     },
 };
 </script>
+
+<style lang="less" scoped>
+/deep/.el-tabs__item {
+    display: inline-flex;
+    align-items: center;
+}
+.tabs-sort {
+    .u-tab-box {
+        display: inline-flex;
+        align-items: center;
+        .u-tab-name {
+            display: inline-block;
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+}
+</style>
