@@ -13,7 +13,7 @@
     "@jx3box/jx3box-common": "^7.3.9",
     "@jx3box/jx3box-common-ui": "^6.0.6",
     "@jx3box/jx3box-data": "^1.10.3",
-    "@jx3box/jx3box-editor": "^1.4.3",
+    "@jx3box/jx3box-editor": "^1.4.4",
     "@jx3box/jx3box-emotion": "^1.0.10",
     "@jx3box/jx3box-facedat": "^2.3.1",
     "axios": "^0.19.2",
