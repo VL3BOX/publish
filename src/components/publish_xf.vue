@@ -18,7 +18,6 @@ export default {
     data: function () {
         return {
             xf: this.data,
-            xfmap,
             exact_client : this.client || 'std'
         };
     },
@@ -40,7 +39,12 @@ export default {
             this.exact_client = val || 'std'
         }
     },
-    computed: {},
+    computed: {
+        xfmap() {
+            delete xfmap['山居剑意']
+            return xfmap;
+        }
+    },
     methods: {},
     filters : {
         xficon: function (id) {
