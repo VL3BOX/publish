@@ -1,6 +1,11 @@
 <template>
     <div class="m-publish m-index">
-        <h1 class="m-title"><i class="el-icon-edit-outline"></i> 创作台<span class="u-desc">丹青著华年，墨香漫天下</span></h1>
+        <h1 class="m-title">
+            <i class="el-icon-edit-outline"></i> 创作台<span class="u-desc">丹青著华年，墨香漫天下</span>
+            <el-tooltip content="成为签约作者，获取更多福利与权益" placement="top">
+                <a href="/dashboard/cooperation" size="mini" type="primary" class="el-button el-tooltip el-button--primary el-button--mini u-btn" target="_blank">申请签约作者</a>
+            </el-tooltip>
+        </h1>
         <div class="u-nav">
             <el-divider content-position="left">PVE / PVP</el-divider>
             <el-row :gutter="20">
