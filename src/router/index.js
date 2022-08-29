@@ -24,6 +24,7 @@ const tool = () => import("../post/tool.vue");
 const bbs = () => import("../post/bbs.vue");
 // const house = () => import("../post/house.vue");
 const share = () => import("../post/share.vue");
+const face = () => import("../post/face.vue");
 const notice = () => import("../post/notice.vue");
 const feedback = () => import("../views/feedback.vue");
 
@@ -121,6 +122,10 @@ const routes = [
     {
         path: "/share/:id?",
         component: share,
+    },
+    {
+        path: "/face/:id?",
+        component: face,
     },
     // 公告
     {
