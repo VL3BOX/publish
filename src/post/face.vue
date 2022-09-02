@@ -55,6 +55,8 @@
                 <el-form-item label="图片列表">
                     <UploadAlbum v-model="post.images"></UploadAlbum>
                 </el-form-item>
+                <!-- TODO: 关联作品 -->
+                <!-- <el-form-item label="关联作品"></el-form-item> -->
                 <publish-banner v-model="post.banner"></publish-banner>
             </div>
 
@@ -72,7 +74,7 @@
 </template>
 
 <script>
-import { attachmentRelatePost, addFace, getFace } from "@/service/face";
+import { attachmentRelatePost, addFace, getFace, updateFace } from "@/service/face";
 import publishHeader from "@/components/publish_header.vue";
 import publishTitle from "@/components/publish_title.vue";
 import publishOriginal from "@/components/publish_original.vue";
@@ -104,9 +106,9 @@ export default {
                 banner: "", // 海报图
                 // 数据信息
                 client: "std", // 客户端
-                body_type: 2, // 体型
-                data: "{\"tBone\":{\"CHEEK_Y\":-32,\"CHEEK_Z\":-5,\"EYEBOW_DIRC\":42,\"EYEBOW_OUT\":46,\"EYEBOW_POS\":-56,\"EYECROW_Y\":-7,\"EYE_DIRC\":-42,\"EYE_DIST\":38,\"EYE_OPEN\":14,\"EYE_POS\":-18,\"EYE_SIZE\":18,\"FACE_SCALE\":-50,\"FACE_Y\":113,\"FACE_Z\":-57,\"JAW_END\":-39,\"JAW_LENGTH\":-14,\"JAW_POS\":-31,\"JAW_ROT\":-4,\"JAW_WIDTH\":-10,\"LOW_FACE\":23,\"LOW_LID_POS\":34,\"LOW_LIP\":-39,\"LOW_LIP_OUT\":-6,\"LOW_LIP_POS\":89,\"MOUTH_END\":4,\"MOUTH_END_L\":6,\"MOUTH_END_R\":6,\"MOUTH_OPEN\":-14,\"MOUTH_OUT\":-68,\"MOUTH_POS\":13,\"MOUTH_ROT\":0,\"MOUTH_SIZE\":-8,\"NOSEBOW_BEND\":55,\"NOSEBOW_WIDTH\":-78,\"NOSETOP_POS_Y\":14,\"NOSETOP_POS_Z\":-77,\"NOSETOP_UP\":62,\"NOSETOP_WIDTH\":-67,\"NOSE_HEIGHT\":-44,\"NOSE_SIZE\":-92,\"OUT\":-110,\"PUPIL_DIRC\":15,\"PUPIL_SIZE\":-63,\"RIDGE_Y\":-9,\"UP_FACE\":-107,\"UP_LID_POS\":18,\"UP_LIP\":-23,\"UP_LIP_OUT\":10,\"UP_LIP_POS\":25},\"nDecorationID\":0,\"tDecal\":{\"EYE_SHADOW_FLASH2\":{\"fValue1\":-1,\"nColorID\":0,\"fValue2\":-1,\"fValue3\":-1,\"nShowID\":0,\"bUse\":false},\"EYE_SHADOW1\":{\"fValue1\":-1,\"nColorID\":0,\"bUse\":false,\"nShowID\":0,\"fValue3\":-1,\"fValue2\":-1},\"LIP_LIGHT\":{\"fValue1\":-1,\"nColorID\":0,\"fValue2\":-1,\"fValue3\":-1,\"nShowID\":0,\"bUse\":false},\"BLUSHER_MOUSTACHE\":{\"fValue1\":-0.0099999997764826,\"nColorID\":0,\"fValue2\":-0.0099999997764826,\"fValue3\":-0.0099999997764826,\"nShowID\":0,\"bUse\":false},\"EYE_LINE\":{\"fValue1\":2,\"nColorID\":3,\"fValue2\":0.5,\"fValue3\":1,\"nShowID\":2,\"bUse\":true},\"EYE_SHADOW_FLASH1\":{\"fValue1\":-1,\"nColorID\":0,\"bUse\":false,\"nShowID\":0,\"fValue3\":-1,\"fValue2\":-1},\"DECAL\":{\"fValue1\":-1,\"nColorID\":0,\"bUse\":false,\"nShowID\":0,\"fValue3\":-1,\"fValue2\":-1},\"BROW\":{\"fValue1\":2,\"nColorID\":9,\"bUse\":true,\"nShowID\":25,\"fValue3\":1,\"fValue2\":0.55},\"EYE_LIGHT\":{\"fValue1\":-1,\"nColorID\":0,\"bUse\":false,\"nShowID\":7,\"fValue3\":-1,\"fValue2\":-1},\"LIP_FLASH\":{\"fValue1\":-1,\"nColorID\":0,\"fValue2\":-1,\"fValue3\":-1,\"nShowID\":0,\"bUse\":false},\"EYE_SHADOW4\":{\"fValue1\":-0.0099999997764826,\"nColorID\":0,\"fValue2\":-0.0099999997764826,\"fValue3\":-0.0099999997764826,\"nShowID\":0,\"bUse\":false},\"IRIS_RIGHT\":{\"fValue1\":2,\"nColorID\":2,\"fValue2\":0.6,\"fValue3\":1,\"nShowID\":4,\"bUse\":true},\"EYE_SHADOW\":{\"fValue1\":1,\"nColorID\":17,\"bUse\":true,\"nShowID\":2,\"fValue3\":1,\"fValue2\":0.4},\"IRIS_LEFT\":{\"fValue1\":2,\"nColorID\":2,\"bUse\":true,\"nShowID\":4,\"fValue3\":1,\"fValue2\":0.6},\"EYE_SHADOW2\":{\"fValue1\":1,\"nColorID\":20,\"fValue2\":0.7,\"fValue3\":0,\"nShowID\":15,\"bUse\":true},\"BASE\":{\"fValue1\":-1,\"nColorID\":0,\"bUse\":false,\"nShowID\":3,\"fValue3\":-1,\"fValue2\":-1},\"EYE_SHADOW_FLASH3\":{\"fValue1\":-0.0099999997764826,\"nColorID\":0,\"fValue2\":-0.0099999997764826,\"fValue3\":-0.0099999997764826,\"nShowID\":0,\"bUse\":false},\"LIP_GLOSS\":{\"fValue1\":1,\"nColorID\":4,\"fValue2\":0.7,\"fValue3\":0,\"nShowID\":8,\"bUse\":true},\"EYE_SHADOW_FLASH4\":{\"fValue1\":-0.0099999997764826,\"nColorID\":0,\"fValue2\":-0.0099999997764826,\"fValue3\":-0.0099999997764826,\"nShowID\":0,\"bUse\":false},\"EYE_SHADOW3\":{\"fValue1\":-1,\"nColorID\":0,\"bUse\":false,\"nShowID\":0,\"fValue3\":-1,\"fValue2\":-1},\"LIP_OVERLAP\":{\"fValue1\":-0.0099999997764826,\"nColorID\":0,\"fValue2\":-0.0099999997764826,\"fValue3\":-0.0099999997764826,\"nShowID\":0,\"bUse\":false}},\"nMajorVersion\":1,\"nRoleType\":1,\"nVersion\":5}", // 解析lua的json数据
-                file: "d8a1319dbb424e47950339c42c6fd527", // 关联的附件表uuid
+                body_type: 1, // 体型
+                data: "", // 解析lua的json数据
+                file: "", // 关联的附件表uuid
                 // 作者扩展
                 cover: "", // 封面
                 images: [], // 图片列表
@@ -120,7 +122,7 @@ export default {
             loading: false,
             processing: false,
 
-            fileId: "", // 附件id
+            fileId: 4, // 附件id
             postId: "", // 帖子id
             postType: "face", // 帖子类型
         }
@@ -141,6 +143,12 @@ export default {
             this.loading = true;
             getFace(this.id).then(res => {
                 this.post = res.data.data;
+                this.post.images = this.post.images.map(item => {
+                    return {
+                        name: item,
+                        url: item
+                    }
+                })
                 this.loading = false;
             });
         },
@@ -151,19 +159,37 @@ export default {
         },
         publish() {
             this.processing = true;
-            addFace(this.post).then(res => {
-                this.$message({
-                    message: "发布成功",
-                    type: "success",
-                });
-                this.afterPublish(res.data.data.id).finally(() => {
+            const data = {
+                ...this.post,
+                images: this.post.images.map(item => item.url || item),
+            }
+            if (this.id) {
+                updateFace(this.id, data).then(res => {
                     this.processing = false;
-                    // 跳转
-                    setTimeout(() => {
-                        location.href = getLink(this.postType, res.data.data.id);
-                    }, 500);
+                    this.$message.success('修改成功');
+                    this.afterPublish(this.id).finally(() => {
+                        this.processing = false;
+                        // 跳转
+                        setTimeout(() => {
+                            location.href = getLink(this.postType, this.id);
+                        }, 500);
+                    });
                 });
-            });
+            } else {
+                addFace(data).then(res => {
+                    this.$message({
+                        message: "发布成功",
+                        type: "success",
+                    });
+                    this.afterPublish(res.data.data.id).finally(() => {
+                        this.processing = false;
+                        // 跳转
+                        setTimeout(() => {
+                            location.href = getLink(this.postType, res.data.data.id);
+                        }, 500);
+                    });
+                });
+            }
         },
         afterPublish(id) {
             if (!this.fileId) {

@@ -27,7 +27,7 @@ export default {
     data() {
         return {
             data: {
-                id: '4',
+                id: '',
                 uuid: '',
                 json: '',
             }
