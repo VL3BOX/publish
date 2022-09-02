@@ -27,7 +27,7 @@ export default {
     data() {
         return {
             data: {
-                id: '',
+                id: '4',
                 uuid: '',
                 json: '',
             }
@@ -41,13 +41,13 @@ export default {
             formdata.append("body", this.body);
             formdata.append("describe", this.describe);
             uploadFile(formdata).then((res) => {
-                console.log(res);
-                debugger
-                this.facedat.file = res.data.data[0];
+                this.data.uuid = res.data.data.uuid;
+                this.data.id = res.data.data.id
                 this.$message({
                     message: "上传成功",
                     type: "success",
                 });
+                this.$emit("update:data", this.data);
             });
             e.target.value = "";
             this.parseData(file);
@@ -72,6 +72,7 @@ export default {
                 data = data.slice(data.indexOf("return {"));
 
                 try {
+                    console.log(0)
                     vm.object = parse(data)
                     vm.data.json = JSON.stringify(parse(data));
                     vm.$notify({
@@ -79,7 +80,9 @@ export default {
                         message: "脸型数据解析成功",
                         type: "success",
                     });
+                    vm.$emit("update:data", this.data);
                 } catch (e) {
+                    console.log(e)
                     vm.$notify.error({
                         title: "错误",
                         message: "无法解析脸型数据",
@@ -101,6 +104,13 @@ export default {
 .m-paid_attachment {
     .u-data-input {
         display: none;
+    }
+
+    .u-data-ready {
+        margin-left: 10px;
+        i {
+            color: #67c23a;
+        }
     }
 }
 </style>
