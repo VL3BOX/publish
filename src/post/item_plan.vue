@@ -162,7 +162,7 @@ export default {
 				page: this.page,
 				limit: this.per,
 				is_equip: this.data.type == 2 ? 1 : 0,
-				fields: ["id", "UiID", "Name", "IconID", "Quality", "AucGenre", "AucSubType", "DescHtml"],
+				fields: ["id", "UiID", "Name", "IconID", "Quality", "AucGenre", "AucSubType", "Desc"],
 				apply: 1,
 			};
 			if (this.keyword) params.keyword = this.keyword;
