@@ -4,7 +4,6 @@
         <publish-header name="捏脸分享"></publish-header>
 
         <el-form label-position="left" label-width="90px">
-
             <!-- 标题 -->
             <publish-title v-model="post.title"></publish-title>
             <!-- 信息 -->
@@ -23,24 +22,26 @@
                     </el-form-item>
                 </template>
 
-                <el-form-item label="价格类型">
+                <el-form-item label="价格">
                     <el-radio-group v-model="post.price_type">
-                        <el-radio  label="0">免费</el-radio>
-                        <el-radio label="1">盒币</el-radio>
+                        <el-radio label="0">免费</el-radio>
+                        <!-- <el-radio label="1">盒币</el-radio> -->
                         <el-radio label="2">金箔</el-radio>
                     </el-radio-group>
-                </el-form-item>
-
-                <el-form-item label="价格" v-if="post.price_type  != '0'">
-                    <el-input-number v-model="post.price_count"></el-input-number>
+                    <el-input-number
+                        class="u-price"
+                        v-model="post.price_count"
+                        v-if="post.price_type != '0'"
+                        size="small"
+                        :max="10000"
+                    ></el-input-number>
                 </el-form-item>
 
                 <el-form-item label="体型">
                     <el-radio-group v-model="post.body_type">
-                        <el-radio :label="1">成男</el-radio>
-                        <el-radio :label="2">成女</el-radio>
-                        <el-radio :label="5">正太</el-radio>
-                        <el-radio :label="6">小女孩</el-radio>
+                        <el-radio :label="body_type" v-for="(body_label, body_type) in bodyMap" :key="body_type">{{
+                            body_label
+                        }}</el-radio>
                     </el-radio-group>
                 </el-form-item>
 
@@ -62,11 +63,7 @@
 
             <!-- 按钮 -->
             <div class="m-publish-buttons">
-                <el-button
-                    type="primary"
-                    @click="publish"
-                    :disabled="processing"
-                >发 &nbsp;&nbsp; 布</el-button>
+                <el-button type="primary" @click="publish" :disabled="processing">发 &nbsp;&nbsp; 布</el-button>
                 <!-- <el-button type="plain" @click="publish('draft',false)" :disabled="processing">保存为草稿</el-button> -->
             </div>
         </el-form>
@@ -82,8 +79,9 @@ import publishClient from "@/components/publish_client.vue";
 import faceAttachment from "@/components/face_attachment.vue";
 import UploadAlbum from "@jx3box/jx3box-editor/src/UploadAlbum.vue";
 import publishBanner from "@/components/publish_banner.vue";
+import { bodyMap } from "@jx3box/jx3box-facedat/assets/data/index.json";
 export default {
-    name: 'face',
+    name: "face",
     components: {
         publishHeader,
         publishTitle,
@@ -91,7 +89,7 @@ export default {
         publishClient,
         faceAttachment,
         UploadAlbum,
-        publishBanner
+        publishBanner,
     },
     data() {
         return {
@@ -115,8 +113,7 @@ export default {
                 related: [], // 相关作品
                 // 价格
                 price_type: "0", // 价格类型 0:免费 1:盒币 2:金箔
-                price_count: 0 // 数量
-
+                price_count: 0, // 数量
             },
 
             loading: false,
@@ -125,7 +122,8 @@ export default {
             fileId: 4, // 附件id
             postId: "", // 帖子id
             postType: "face", // 帖子类型
-        }
+            bodyMap,
+        };
     },
     computed: {
         id() {
@@ -141,32 +139,32 @@ export default {
         },
         getData() {
             this.loading = true;
-            getFace(this.id).then(res => {
+            getFace(this.id).then((res) => {
                 this.post = res.data.data;
-                this.post.images = this.post.images.map(item => {
+                this.post.images = this.post.images.map((item) => {
                     return {
                         name: item,
-                        url: item
-                    }
-                })
+                        url: item,
+                    };
+                });
                 this.loading = false;
             });
         },
         handleFaceChange({ json, uuid, id }) {
-            this.post.data = json || '';
-            this.post.file = uuid || '';
-            this.fileId = id || '';
+            this.post.data = json || "";
+            this.post.file = uuid || "";
+            this.fileId = id || "";
         },
         publish() {
             this.processing = true;
             const data = {
                 ...this.post,
-                images: this.post.images.map(item => item.url || item),
-            }
+                images: this.post.images.map((item) => item.url || item),
+            };
             if (this.id) {
-                updateFace(this.id, data).then(res => {
+                updateFace(this.id, data).then((res) => {
                     this.processing = false;
-                    this.$message.success('修改成功');
+                    this.$message.success("修改成功");
                     this.afterPublish(this.id).finally(() => {
                         this.processing = false;
                         // 跳转
@@ -176,7 +174,7 @@ export default {
                     });
                 });
             } else {
-                addFace(data).then(res => {
+                addFace(data).then((res) => {
                     this.$message({
                         message: "发布成功",
                         type: "success",
@@ -195,8 +193,12 @@ export default {
             if (!this.fileId) {
                 return Promise.resolve();
             }
-            return attachmentRelatePost(this.fileId, this.postType, id)
+            return attachmentRelatePost(this.fileId, this.postType, id);
         },
-    }
-}
+    },
+};
 </script>
+
+<style lang="less">
+@import "~@/assets/css/face.less";
+</style>
