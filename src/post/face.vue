@@ -13,7 +13,7 @@
                 <publish-client v-model="post.client" :forbidAll="true"></publish-client>
                 <!-- 原创 -->
                 <publish-original v-model="post.original"></publish-original>
-                <template v-if="post.original">
+                <template v-if="!post.original">
                     <el-form-item label="原作者名称" prop="author_name">
                         <el-input v-model="post.author_name" placeholder="输入原作者名称"></el-input>
                     </el-form-item>
@@ -36,21 +36,26 @@
                         :max="10000"
                     ></el-input-number>
                 </el-form-item>
+                <!-- <el-alert title="警告提示的文案" type="warning" show-icon :closable="false"></el-alert> -->
 
                 <el-form-item label="体型">
                     <el-radio-group v-model="post.body_type">
-                        <el-radio :label="body_type" v-for="(body_label, body_type) in bodyMap" :key="body_type">{{
+                        <el-radio :label="~~body_type" v-for="(body_label, body_type) in bodyMap" :key="body_type">{{
                             body_label
                         }}</el-radio>
                     </el-radio-group>
                 </el-form-item>
 
                 <el-form-item label="数据">
-                    <face-attachment :body="post.body_type" @update:data="handleFaceChange"></face-attachment>
+                    <face-attachment v-if="!post.file" :body="post.body_type" @update:data="handleFaceChange" />
+                    <div v-else>
+                        <span>当前数据唯一标识符：{{ post.file }}</span>
+                        <i class="el-icon-close u-close-icon" @click="removeFile"></i>
+                    </div>
                 </el-form-item>
 
                 <el-form-item label="描述">
-                    <publish-title v-model="post.remark" :hideDiv="true" placeholder="请填写描述"></publish-title>
+                    <el-input v-model="post.remark" placeholder="请填写描述" type="textarea" :rows="3"></el-input>
                 </el-form-item>
                 <el-divider content-position="left">扩展</el-divider>
                 <el-form-item label="图片列表">
@@ -63,14 +68,23 @@
 
             <!-- 按钮 -->
             <div class="m-publish-buttons">
+                <el-alert
+                    v-if="post.price_type != '0' && post.price_count > 0"
+                    class="u-tips"
+                    type="warning"
+                    show-icon
+                    :closable="false"
+                    title="我承诺该上传属于自己原创的捏脸作品，且相关信息中不带有非授权的元素（比如贴图、字体）等，若违反法律规定我将承担全部责任，魔盒有权下架作品"
+                ></el-alert>
                 <el-button type="primary" @click="publish" :disabled="processing">发 &nbsp;&nbsp; 布</el-button>
-                <!-- <el-button type="plain" @click="publish('draft',false)" :disabled="processing">保存为草稿</el-button> -->
             </div>
         </el-form>
     </div>
 </template>
 
 <script>
+import { getLink } from "@jx3box/jx3box-common/js/utils";
+
 import { attachmentRelatePost, addFace, getFace, updateFace } from "@/service/face";
 import publishHeader from "@/components/publish_header.vue";
 import publishTitle from "@/components/publish_title.vue";
@@ -95,7 +109,7 @@ export default {
         return {
             post: {
                 // 用户信息
-                original: 0, // 是否原创
+                original: 1, // 是否原创
                 author_name: "", // 原作者名称
                 author_link: "", // 原作者链接
                 // 作品信息
@@ -129,13 +143,20 @@ export default {
         id() {
             return this.$route.params.id;
         },
+        client() {
+            return this.$store.state.client;
+        },
     },
     mounted() {
         this.init();
     },
     methods: {
         init() {
-            this.id && this.getData();
+            if (this.id) {
+                this.getData();
+            } else {
+                this.post.client = this.client;
+            }
         },
         getData() {
             this.loading = true;
@@ -150,10 +171,27 @@ export default {
                 this.loading = false;
             });
         },
-        handleFaceChange({ json, uuid, id }) {
-            this.post.data = json || "";
-            this.post.file = uuid || "";
-            this.fileId = id || "";
+        handleFaceChange({ json = "", uuid = "", id = "" }) {
+            this.post.data = json;
+            this.post.file = uuid;
+            this.fileId = id;
+        },
+        validator() {
+            // 必填字段 title file
+            const required = ['title', 'file'];
+            const requiredMsg = ['请填写标题', '请上传数据']
+            let message;
+            for (let i = 0; i < required.length; i++) {
+                if (!this.post[required[i]]) {
+                    message = requiredMsg[i]
+                    break;
+                }
+            }
+            if (message) {
+                this.$message.warning(message);
+                return false
+            }
+            return true
         },
         publish() {
             this.processing = true;
@@ -161,6 +199,10 @@ export default {
                 ...this.post,
                 images: this.post.images.map((item) => item.url || item),
             };
+            if (!this.validator()) {
+                this.processing = false;
+                return;
+            }
             if (this.id) {
                 updateFace(this.id, data).then((res) => {
                     this.processing = false;
@@ -169,7 +211,7 @@ export default {
                         this.processing = false;
                         // 跳转
                         setTimeout(() => {
-                            location.href = getLink(this.postType, this.id);
+                            location.href = `/face/${this.id}`
                         }, 500);
                     });
                 });
@@ -183,7 +225,7 @@ export default {
                         this.processing = false;
                         // 跳转
                         setTimeout(() => {
-                            location.href = getLink(this.postType, res.data.data.id);
+                            location.href = `/face/${res.data.data.id}`
                         }, 500);
                     });
                 });
@@ -194,6 +236,10 @@ export default {
                 return Promise.resolve();
             }
             return attachmentRelatePost(this.fileId, this.postType, id);
+        },
+        // 移除文件标识
+        removeFile() {
+            this.post.file = "";
         },
     },
 };
