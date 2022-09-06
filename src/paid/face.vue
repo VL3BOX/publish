@@ -35,18 +35,18 @@
                         class="u-title"
                         target="_blank"
                         :href="postLink(item.id)"
-                        >{{ item.desc || "未命名" }}</a
+                        >{{ item.title || "未命名" }}</a
                     >
                     <div class="u-desc">
                         <time class="u-desc-subitem">
                             <i class="el-icon-finished"></i>
                             发布 :
-                            {{ item.created_at | dateFormat }}
+                            {{ item.CreatedAt | dateFormat }}
                         </time>
                         <time class="u-desc-subitem">
                             <i class="el-icon-refresh"></i>
                             更新 :
-                            {{ item.updated_at | dateFormat }}
+                            {{ item.UpdatedAt | dateFormat }}
                         </time>
                     </div>
 
@@ -57,6 +57,8 @@
                             @click="edit(item.id)"
                             title="编辑"
                         ></el-button>
+                        <el-button size="mini" icon="el-icon-upload2" @click="handleOnline(item.id)" title="上架"></el-button>
+                        <el-button size="mini" icon="el-icon-download" @click="handleOffline(item.id)" title="下架"></el-button>
                     </el-button-group>
                 </li>
             </ul>
@@ -82,10 +84,11 @@
 </template>
 
 <script>
-import { getMyCalendar } from "@/service/calendar.js";
+import { getFaceList, faceOnline, faceOffline } from "@/service/face.js";
 import dateFormat from "../utils/dateFormat";
+import User from "@jx3box/jx3box-common/js/user.js";
 export default {
-    name: "calendar",
+    name: "face",
     props: [],
     data: function () {
         return {
@@ -98,11 +101,14 @@ export default {
         };
     },
     computed: {
+        uid() {
+            return User.getInfo().uid;
+        },
         params: function () {
             return {
-                page: this.page,
-                per: this.per,
-                search: this.search,
+                pageIndex: this.page,
+                pageSize: this.per,
+                title: this.search,
             };
         },
         publishLink: function () {
@@ -113,7 +119,7 @@ export default {
         params: {
             deep: true,
             immediate: true,
-            handler: function () {
+            handler: function (val) {
                 this.loadPosts();
             },
         },
@@ -121,21 +127,37 @@ export default {
     methods: {
         loadPosts: function () {
             this.loading = true;
-            getMyCalendar(this.params)
+            const _params = {
+                ...this.params,
+                user_id: this.uid,
+            }
+            getFaceList(_params)
                 .then((res) => {
                     this.data = res.data.data.list;
-                    this.total = res.data.data.total;
+                    this.total = res.data.data.page.total;
                 })
                 .finally(() => {
                     this.loading = false;
                 });
         },
         edit: function (id) {
-            location.href = "/calendar/view/" + id
+            location.href = "/#/face/" + id
         },
         postLink: function (id) {
-            return "/calendar/view/" + id
+            return "/face/" + id
         },
+        handleOnline: function (id){
+            faceOnline(id).then(res => {
+                this.$message.success('上架成功');
+                this.loadPosts();
+            })
+        },
+        handleOffline: function (id){
+            faceOffline(id).then(res => {
+                this.$message.success('下架成功');
+                this.loadPosts();
+            })
+        }
     },
     filters: {
         dateFormat: function (val) {

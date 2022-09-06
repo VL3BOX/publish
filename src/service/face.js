@@ -52,3 +52,27 @@ export function attachmentRelatePost(id, postType, postId) {
 export function attachmentRemoveRelatePost(id, postType, postId) {
     return $next().delete(`/api/charge_attachment/${postType}/${postId}/${id}`);
 }
+
+/**
+ * 获取捏脸列表
+ * @param {*} params
+ */
+export function getFaceList(params) {
+    return $next().get("/api/face", { params });
+}
+
+/**
+ * 上架一个捏脸数据
+ * @param {*} id
+ */
+export function faceOnline(id) {
+    return $next().post(`/api/face/${id}/online`);
+}
+
+/**
+ * 下架一个捏脸数据
+ * @param {*} id
+ */
+export function faceOffline(id) {
+    return $next().post(`/api/face/${id}/offline`);
+}
