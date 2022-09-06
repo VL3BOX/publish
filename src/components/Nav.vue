@@ -24,6 +24,16 @@
                     <span>{{item.name}}</span>
                     <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span>
                 </router-link>
+                <router-link
+                    :to="item.path"
+                    v-for="(item,key) in paid"
+                    :key="key"
+                    @click.native="closeSidebar"
+                >
+                    <i class="el-icon-collection"></i>
+                    <span>{{item.name}}</span>
+                    <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span>
+                </router-link>
                 <template v-if="isAdmin">
                     <router-link
                         :to="item.path"
@@ -120,6 +130,9 @@ export default {
                 tool: { path: "/cms/tool", name: "教程工具", count: 0 },
                 bbs: { path: "/cms/bbs", name: "茶馆交流", count: 0 },
                 share: { path: "/cms/share", name: "捏脸分享", count: 0 },
+            },
+            paid: {
+                face: { path: "/paid/face", name: "捏脸数据", count: 0 }
             },
             ads: {
                 notice: { path: "/cms/notice", name: "公告资讯", count: 0 },

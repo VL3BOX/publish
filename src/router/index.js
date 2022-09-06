@@ -2,10 +2,10 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 
 // 解决重复点击路由报错的BUG
-const originalPush = VueRouter.prototype.push
+const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
-    return originalPush.call(this, location).catch((err) => err)
-}
+    return originalPush.call(this, location).catch((err) => err);
+};
 
 // COMMON
 const demo = () => import("../post/demo.vue");
@@ -24,9 +24,12 @@ const tool = () => import("../post/tool.vue");
 const bbs = () => import("../post/bbs.vue");
 // const house = () => import("../post/house.vue");
 const share = () => import("../post/share.vue");
-const face = () => import("../post/face.vue");
 const notice = () => import("../post/notice.vue");
 const feedback = () => import("../views/feedback.vue");
+
+// paid
+const face = () => import("../post/face.vue");
+const paidFace = () => import("../paid/face.vue");
 
 // WIKI
 const wiki = () => import("../views/wiki.vue");
@@ -61,53 +64,70 @@ Vue.use(VueRouter);
 
 const routes = [
     // 索引
-    { path: "/", component: index },
+    {
+        path: "/",
+        component: index,
+    },
 
     // CMS
     // ================================
     // 查看
-    { path: "/cms/:type", component: cms },
+    {
+        path: "/cms/:type",
+        component: cms,
+    },
     // 联合创作
-    { name: "union_active", path: "/union/active", component: union },
-    { name: "union_passive", path: "/union/passive", component: union },
+    {
+        name: "union_active",
+        path: "/union/active",
+        component: union,
+    },
+    {
+        name: "union_passive",
+        path: "/union/passive",
+        component: union,
+    },
 
     // 发布DEMO
-    { path: "/demo", component: demo },
+    {
+        path: "/demo",
+        component: demo,
+    },
     // 宏发布
     {
         path: "/macro/:id?",
         component: macro,
-        name: 'macro',
+        name: "macro",
     },
     // 插件数据发布
     {
         path: "/jx3dat/:id?",
         component: jx3dat,
-        name: 'jx3dat',
+        name: "jx3dat",
     },
     // 副本发布
     {
         path: "/fb/:id?",
         component: fb,
-        name: 'fb',
+        name: "fb",
     },
     // 职业发布
     {
         path: "/bps/:id?",
         component: bps,
-        name: 'bps',
+        name: "bps",
     },
     // 工具发布
     {
         path: "/tool/:id?",
         component: tool,
-        name: 'tool',
+        name: "tool",
     },
     // 茶馆闲聊
     {
         path: "/bbs/:id?",
         component: bbs,
-        name: 'bbs',
+        name: "bbs",
     },
     {
         path: "/post/:id?",
@@ -127,6 +147,10 @@ const routes = [
         path: "/face/:id?",
         component: face,
     },
+    {
+        path: "/paid/face",
+        component: paidFace,
+    },
     // 公告
     {
         path: "/notice/:id?",
@@ -135,7 +159,11 @@ const routes = [
 
     // 百科=====================
     // 查看
-    { path: "/wiki/:type", name: "wiki_post", component: wiki },
+    {
+        path: "/wiki/:type",
+        name: "wiki_post",
+        component: wiki,
+    },
     // 成就攻略发布
     {
         path: "/achievement/:achievement_id(\\d+)?",
@@ -159,23 +187,54 @@ const routes = [
 
     // 应用=====================
     // 骚话
-    { path: "/joke/:id?", component: joke },
-    { path: "/bucket/joke", component: bucket_joke },
+    {
+        path: "/joke/:id?",
+        component: joke,
+    },
+    {
+        path: "/bucket/joke",
+        component: bucket_joke,
+    },
     // 表情
-    { path: "/emotion/:id?", component: emotion },
-    { path: "/bucket/emotion", component: bucket_emotion },
+    {
+        path: "/emotion/:id?",
+        component: emotion,
+    },
+    {
+        path: "/bucket/emotion",
+        component: bucket_emotion,
+    },
     // 铭牌
-    { path: "/namespace/:id?", component: namespace },
-    { path: "/bucket/namespace", component: bucket_namespace },
+    {
+        path: "/namespace/:id?",
+        component: namespace,
+    },
+    {
+        path: "/bucket/namespace",
+        component: bucket_namespace,
+    },
     // 小册
-    { path: "/collection/:collection_id(\\d+)?", component: collection },
-    { path: "/bucket/collection", component: bucket_collection },
+    {
+        path: "/collection/:collection_id(\\d+)?",
+        component: collection,
+    },
+    {
+        path: "/bucket/collection",
+        component: bucket_collection,
+    },
 
     // 日历
-    { path: "/bucket/calendar", component: bucket_calendar },
+    {
+        path: "/bucket/calendar",
+        component: bucket_calendar,
+    },
 
     // 考试
-    { path: "/bucket/:type", name: "bucket", component: bucket },
+    {
+        path: "/bucket/:type",
+        name: "bucket",
+        component: bucket,
+    },
     // 题目发布
     {
         name: "question",
@@ -203,12 +262,24 @@ const routes = [
 
     // 草稿=====================
     // 草稿
-    { path: "/draft", component: draft },
+    {
+        path: "/draft",
+        component: draft,
+    },
 
     // 评论=====================
-    { path: "/comment/cms", component: cms_comment },
-    { path: "/comment/wiki", component: wiki_comment },
-    { path: "/comment/feedback", component: feedback },
+    {
+        path: "/comment/cms",
+        component: cms_comment,
+    },
+    {
+        path: "/comment/wiki",
+        component: wiki_comment,
+    },
+    {
+        path: "/comment/feedback",
+        component: feedback,
+    },
 ];
 
 const router = new VueRouter({
