@@ -1,6 +1,6 @@
 <template>
     <div class="m-paid_attachment">
-        <input class="u-data-input" type="file" id="face_file" @change="uploadData" />
+        <input class="u-data-input" type="file" id="face_file" @change="uploadData"/>
         <el-button type="primary" @click="selectData" icon="el-icon-upload2">上传脸型数据</el-button>
         <span class="u-data-ready" v-show="data.uuid">
             <i class="el-icon-success"></i>

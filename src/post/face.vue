@@ -35,8 +35,16 @@
                         size="small"
                         :max="10000"
                     ></el-input-number>
+                    <div class="u-tip-box" v-if="post.price_type != '0' && post.price_count > 0">
+                        <div class="u-warning">
+                            <el-checkbox
+                                v-model="promise"
+                                disabled
+                                >我承诺该上传属于自己的原创作品或已得到原作者授权，且相关信息中不带有非授权的元素（比如贴图、字体）等，若违反法律规定我将承担全部责任，魔盒有权下架作品。</el-checkbox
+                            >
+                        </div>
+                    </div>
                 </el-form-item>
-                <!-- <el-alert title="警告提示的文案" type="warning" show-icon :closable="false"></el-alert> -->
 
                 <el-form-item label="体型">
                     <el-radio-group v-model="post.body_type">
@@ -48,9 +56,9 @@
 
                 <el-form-item label="数据">
                     <face-attachment v-if="!post.file" :body="post.body_type" @update:data="handleFaceChange" />
-                    <div v-else>
-                        <span>当前数据唯一标识符：{{ post.file }}</span>
-                        <i class="el-icon-close u-close-icon" @click="removeFile"></i>
+                    <div class="u-attachment" v-else>
+                        <span class="u-attachment-text">当前数据唯一标识符：<b>{{ post.file }}</b></span>
+                        <el-button type="primary" icon="el-icon-delete" circle @click="removeFile" size="mini"/>
                     </div>
                 </el-form-item>
 
@@ -68,14 +76,6 @@
 
             <!-- 按钮 -->
             <div class="m-publish-buttons">
-                <el-alert
-                    v-if="post.price_type != '0' && post.price_count > 0"
-                    class="u-tips"
-                    type="warning"
-                    show-icon
-                    :closable="false"
-                    title="我承诺该上传属于自己原创的捏脸作品，且相关信息中不带有非授权的元素（比如贴图、字体）等，若违反法律规定我将承担全部责任，魔盒有权下架作品"
-                ></el-alert>
                 <el-button type="primary" @click="publish" :disabled="processing">发 &nbsp;&nbsp; 布</el-button>
             </div>
         </el-form>
@@ -137,6 +137,7 @@ export default {
             postId: "", // 帖子id
             postType: "face", // 帖子类型
             bodyMap,
+            promise: true,
         };
     },
     computed: {
@@ -178,20 +179,20 @@ export default {
         },
         validator() {
             // 必填字段 title file
-            const required = ['title', 'file'];
-            const requiredMsg = ['请填写标题', '请上传数据']
+            const required = ["title", "file"];
+            const requiredMsg = ["请填写标题", "请上传数据"];
             let message;
             for (let i = 0; i < required.length; i++) {
                 if (!this.post[required[i]]) {
-                    message = requiredMsg[i]
+                    message = requiredMsg[i];
                     break;
                 }
             }
             if (message) {
                 this.$message.warning(message);
-                return false
+                return false;
             }
-            return true
+            return true;
         },
         publish() {
             this.processing = true;
@@ -211,7 +212,7 @@ export default {
                         this.processing = false;
                         // 跳转
                         setTimeout(() => {
-                            location.href = `/face/${this.id}`
+                            location.href = `/face/${this.id}`;
                         }, 500);
                     });
                 });
@@ -225,7 +226,7 @@ export default {
                         this.processing = false;
                         // 跳转
                         setTimeout(() => {
-                            location.href = `/face/${res.data.data.id}`
+                            location.href = `/face/${res.data.data.id}`;
                         }, 500);
                     });
                 });
