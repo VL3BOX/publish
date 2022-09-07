@@ -41,12 +41,12 @@
                         <time class="u-desc-subitem">
                             <i class="el-icon-finished"></i>
                             发布 :
-                            {{ item.CreatedAt | dateFormat }}
+                            {{ item.created_at }}
                         </time>
                         <time class="u-desc-subitem">
                             <i class="el-icon-refresh"></i>
                             更新 :
-                            {{ item.UpdatedAt | dateFormat }}
+                            {{ item.updated_at }}
                         </time>
                     </div>
 
@@ -85,7 +85,7 @@
 
 <script>
 import { getFaceList, faceOnline, faceOffline } from "@/service/face.js";
-import dateFormat from "../utils/dateFormat";
+import dayjs from "dayjs";
 import User from "@jx3box/jx3box-common/js/user.js";
 export default {
     name: "face",
@@ -101,9 +101,6 @@ export default {
         };
     },
     computed: {
-        uid() {
-            return User.getInfo().uid;
-        },
         params: function () {
             return {
                 pageIndex: this.page,
@@ -129,7 +126,6 @@ export default {
             this.loading = true;
             const _params = {
                 ...this.params,
-                user_id: this.uid,
             }
             getFaceList(_params)
                 .then((res) => {
@@ -158,12 +154,7 @@ export default {
                 this.loadPosts();
             })
         }
-    },
-    filters: {
-        dateFormat: function (val) {
-            return dateFormat(new Date(val));
-        },
-    },
+    }
 };
 </script>
 

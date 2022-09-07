@@ -58,7 +58,7 @@ export function attachmentRemoveRelatePost(id, postType, postId) {
  * @param {*} params
  */
 export function getFaceList(params) {
-    return $next().get("/api/face", { params });
+    return $next().get("/api/face/my-list", { params });
 }
 
 /**
@@ -66,7 +66,7 @@ export function getFaceList(params) {
  * @param {*} id
  */
 export function faceOnline(id) {
-    return $next().post(`/api/face/${id}/online`);
+    return $next().put(`/api/face/${id}/online`);
 }
 
 /**
@@ -74,5 +74,5 @@ export function faceOnline(id) {
  * @param {*} id
  */
 export function faceOffline(id) {
-    return $next().post(`/api/face/${id}/offline`);
+    return $next().put(`/api/face/${id}/offline`);
 }
