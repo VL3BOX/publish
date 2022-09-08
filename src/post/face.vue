@@ -34,6 +34,7 @@
                         v-if="post.price_type != '0'"
                         size="small"
                         :max="3000"
+                        :min="0"
                     ></el-input-number>
                     <div class="u-tip-box" v-if="post.price_type != '0' && post.price_count > 0">
                         <div class="u-warning">
