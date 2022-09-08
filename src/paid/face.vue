@@ -2,19 +2,12 @@
     <div class="m-dashboard-work m-dashboard-cms" v-loading="loading">
         <div class="m-dashboard-work-header">
             <h2 class="u-title">捏脸数据</h2>
-            <a
-                :href="publishLink"
-                class="u-publish el-button el-button--primary el-button--small"
-            >
+            <a :href="publishLink" class="u-publish el-button el-button--primary el-button--small">
                 <i class="el-icon-document"></i> 发布数据
             </a>
         </div>
 
-        <el-input
-            class="m-dashboard-work-search"
-            placeholder="请输入搜索内容"
-            v-model.lazy="search"
-        >
+        <el-input class="m-dashboard-work-search" placeholder="请输入搜索内容" v-model.lazy="search">
             <span slot="prepend">关键词</span>
             <el-button slot="append" icon="el-icon-search"></el-button>
         </el-input>
@@ -22,21 +15,9 @@
         <div class="m-dashboard-box">
             <ul class="m-dashboard-box-list" v-if="data && data.length">
                 <li v-for="(item, i) in data" :key="i">
-                    <i
-                        class="u-item-icon el-icon-chat-dot-round"
-                        v-if="item.status == 1"
-                    ></i>
-                    <i
-                        class="u-item-icon el-icon-lock"
-                        v-else
-                        :title="item.status == 0 ? '待审核' : '审核未通过'"
-                    ></i>
-                    <a
-                        class="u-title"
-                        target="_blank"
-                        :href="postLink(item.id)"
-                        >{{ item.title || "未命名" }}</a
-                    >
+                    <i class="u-item-icon u-success-icon el-icon-success" v-if="item.status == 1" title="上架中"></i>
+                    <i class="u-item-icon u-remove-icon el-icon-remove" v-else title="已下架"></i>
+                    <a class="u-title" target="_blank" :href="postLink(item.id)">{{ item.title || "未命名" }}</a>
                     <div class="u-desc">
                         <time class="u-desc-subitem">
                             <i class="el-icon-finished"></i>
@@ -51,14 +32,21 @@
                     </div>
 
                     <el-button-group class="u-action">
+                        <el-button size="mini" icon="el-icon-edit" @click="edit(item.id)" title="编辑"></el-button>
                         <el-button
+                            v-show="item.status == 2"
                             size="mini"
-                            icon="el-icon-edit"
-                            @click="edit(item.id)"
-                            title="编辑"
+                            icon="el-icon-upload2"
+                            @click="handleOnline(item.id)"
+                            title="上架"
                         ></el-button>
-                        <el-button size="mini" icon="el-icon-upload2" @click="handleOnline(item.id)" title="上架"></el-button>
-                        <el-button size="mini" icon="el-icon-download" @click="handleOffline(item.id)" title="下架"></el-button>
+                        <el-button
+                            v-show="item.status == 1"
+                            size="mini"
+                            icon="el-icon-download"
+                            @click="handleOffline(item.id)"
+                            title="下架"
+                        ></el-button>
                     </el-button-group>
                 </li>
             </ul>
@@ -109,7 +97,7 @@ export default {
             };
         },
         publishLink: function () {
-            return '/#/face';
+            return "/#/face";
         },
     },
     watch: {
@@ -126,7 +114,7 @@ export default {
             this.loading = true;
             const _params = {
                 ...this.params,
-            }
+            };
             getFaceList(_params)
                 .then((res) => {
                     this.data = res.data.data.list;
@@ -137,24 +125,30 @@ export default {
                 });
         },
         edit: function (id) {
-            location.href = "/#/face/" + id
+            location.href = "/#/face/" + id;
         },
         postLink: function (id) {
-            return "/face/" + id
+            return "/face/" + id;
         },
-        handleOnline: function (id){
-            faceOnline(id).then(res => {
-                this.$message.success('上架成功');
+        handleOnline: function (id) {
+            faceOnline(id).then((res) => {
+                this.$message.success("上架成功");
                 this.loadPosts();
-            })
+            });
         },
-        handleOffline: function (id){
-            faceOffline(id).then(res => {
-                this.$message.success('下架成功');
-                this.loadPosts();
-            })
-        }
-    }
+        handleOffline: function (id) {
+            this.$confirm("此操作将下架该条数据, 是否继续?", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+            }).then(() => {
+                faceOffline(id).then((res) => {
+                    this.$message.success("下架成功");
+                    this.loadPosts();
+                });
+            });
+        },
+    },
 };
 </script>
 
