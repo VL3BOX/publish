@@ -262,6 +262,7 @@ export default {
                 this.comment.comment_cms.count = data.comment;
                 this.app.exam_question.count = data.question;
                 this.app.exam_paper.count = data.paper;
+                this.paid.face.count = data?.face || 0;
             });
         },
         init: function () {
