@@ -133,7 +133,7 @@ export default {
             loading: false,
             processing: false,
 
-            fileId: 4, // 附件id
+            fileId: "", // 附件id
             postId: "", // 帖子id
             postType: "face", // 帖子类型
             bodyMap,
