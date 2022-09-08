@@ -37,11 +37,6 @@ export default {
         uploadData(e) {
             let formdata = new FormData();
             let file = e.target.files[0];
-            // 数据类型必须为 .jx3dat .dat
-            if (!file.name.endsWith('.jx3dat') && !file.name.endsWith('.dat')) {
-                this.$message.error('文件格式错误');
-                return;
-            }
 
             formdata.append("jx3dat", file, "data.jx3dat");
             formdata.append("body", this.body);
