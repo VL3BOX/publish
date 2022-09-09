@@ -1,6 +1,6 @@
 <template>
     <div class="m-paid_attachment">
-        <input class="u-data-input" type="file" id="face_file" @change="uploadData" accept=".jx3dat, .dat"/>
+        <input class="u-data-input" type="file" id="face_file" @change="processFile" accept=".jx3dat, .dat, .ini"/>
         <el-button type="primary" @click="selectData" icon="el-icon-upload2">上传脸型数据</el-button>
         <span class="u-data-ready" v-show="data.uuid">
             <i class="el-icon-success"></i>
@@ -11,7 +11,7 @@
 
 <script>
 import { uploadFile } from "@/service/face.js";
-import { parse } from "lua-json";
+import { parseFace } from "@jx3box/jx3box-facedat/src/faceParser.js";
 export default {
     name: 'paid_attachment',
     props: {
@@ -34,68 +34,87 @@ export default {
         }
     },
     methods: {
-        uploadData(e) {
+        selectData() {
+            let fileInput = document.getElementById("face_file");
+            fileInput.dispatchEvent(new MouseEvent("click"));
+        },
+        uploadData(file) {
+            // 上传源文件
             let formdata = new FormData();
-            let file = e.target.files[0];
-
-            formdata.append("jx3dat", file, "data.jx3dat");
+            formdata.append("jx3dat", file);
             formdata.append("body", this.body);
             formdata.append("describe", this.describe);
             uploadFile(formdata).then((res) => {
                 this.data.uuid = res.data.data.uuid;
                 this.data.id = res.data.data.id
                 this.$message({
-                    message: "上传成功",
+                    message: "数据上传成功",
                     type: "success",
                 });
                 this.$emit("update:data", this.data);
             });
+        },
+        processFile(e) {
+            let file = e.target.files[0];
+            if(file && file.size > 16384) {
+                this.$message({
+                    message: "文件过大，限 16KB 以内",
+                    type: "error",
+                });
+                return;
+            }
+            // 解析并上传数据
+            this.parseAndUpload(file);
             e.target.value = "";
-            this.parseData(file);
         },
-        selectData() {
-            let fileInput = document.getElementById("face_file");
-            fileInput.dispatchEvent(new MouseEvent("click"));
-        },
-        // 解析数据
-        parseData (facedata) {
+        parseAndUpload(file) {
+            if (!FileReader) return;
+            if (!file) return;
             const vm = this;
 
-            // 如果不支持本地读取
-            if (!FileReader) return;
-
+            // 读入 File 转 ArrayBuffer 进行读取
             let fr = new FileReader();
-            fr.readAsText(facedata);
             fr.onload = function (e) {
                 console.log("读取成功...开始执行分析...");
-
-                let data = e.target.result;
-                data = data.slice(data.indexOf("return {"));
-
                 try {
-                    console.log(0)
-                    vm.object = parse(data)
-                    vm.data.json = JSON.stringify(parse(data));
-                    vm.$notify({
-                        title: "成功",
-                        message: "脸型数据解析成功",
-                        type: "success",
-                    });
-                    vm.$emit("update:data", this.data);
-                } catch (e) {
-                    console.log(e)
+                    vm.object = parseFace(e.target.result);
+                    vm.json = JSON.stringify(vm.object);
+                }
+                catch(ex) {
+                    console.log(ex);
                     vm.$notify.error({
                         title: "错误",
-                        message: "无法解析脸型数据",
+                        message: "无法读取数据",
+                    });
+                    vm.$emit("fail", {
+                        file: vm.file,
+                    });
+                    return;
+                }
+
+                // 解析成功开始上传
+                if (vm.object && vm.json) {
+                    setTimeout(() => vm.$notify({
+                            title: "成功",
+                            message: "数据读取成功，开始上传",
+                            type: "success",
+                        }), 0);
+                    vm.uploadData(file);
+                    vm.done = true;
+                    vm.$emit("success", {
+                        file: vm.file,
+                        json: vm.json,
+                        object: vm.object,
                     });
                 }
             };
             fr.onerror = function (e) {
                 vm.$notify.error({
                     title: "错误",
-                    message: "无法解析脸型数据",
+                    message: "文件读取异常",
                 });
             };
+            fr.readAsArrayBuffer(file);
         },
         clearData() {
             this.data = {
@@ -104,7 +123,7 @@ export default {
                 json: '',
             }
             this.$emit("update:data", this.data);
-        }
+        },
     }
 }
 </script>
