@@ -73,8 +73,6 @@
 
 <script>
 import { getFaceList, faceOnline, faceOffline } from "@/service/face.js";
-import dayjs from "dayjs";
-import User from "@jx3box/jx3box-common/js/user.js";
 export default {
     name: "face",
     props: [],

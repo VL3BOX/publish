@@ -56,14 +56,16 @@ export default {
         },
         processFile(e) {
             let file = e.target.files[0];
-            if(file && file.size > 16384) {
+            // 大于64kb
+            if(file && file.size > 65536) {
                 this.$message({
-                    message: "文件过大，限 16KB 以内",
+                    message: "文件过大，限 64KB 以内",
                     type: "error",
                 });
                 return;
             }
             // 解析并上传数据
+
             this.parseAndUpload(file);
             e.target.value = "";
         },
@@ -76,9 +78,11 @@ export default {
             let fr = new FileReader();
             fr.onload = function (e) {
                 console.log("读取成功...开始执行分析...");
+                let json = '';
+                let object = '';
                 try {
-                    vm.object = parseFace(e.target.result);
-                    vm.json = JSON.stringify(vm.object);
+                    object = parseFace(e.target.result);
+                    json = JSON.stringify(object);
                 }
                 catch(ex) {
                     console.log(ex);
@@ -86,26 +90,18 @@ export default {
                         title: "错误",
                         message: "无法读取数据",
                     });
-                    vm.$emit("fail", {
-                        file: vm.file,
-                    });
                     return;
                 }
 
                 // 解析成功开始上传
-                if (vm.object && vm.json) {
+                if (object && json) {
                     setTimeout(() => vm.$notify({
-                            title: "成功",
-                            message: "数据读取成功，开始上传",
-                            type: "success",
-                        }), 0);
+                        title: "成功",
+                        message: "数据读取成功，开始上传",
+                        type: "success",
+                    }), 0);
                     vm.uploadData(file);
-                    vm.done = true;
-                    vm.$emit("success", {
-                        file: vm.file,
-                        json: vm.json,
-                        object: vm.object,
-                    });
+                    vm.data.json = json;
                 }
             };
             fr.onerror = function (e) {
