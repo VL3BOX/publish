@@ -95,7 +95,7 @@ export default {
             };
         },
         publishLink: function () {
-            return "/#/face";
+            return "./#/face";
         },
     },
     watch: {
