@@ -24,16 +24,6 @@
                     <span>{{item.name}}</span>
                     <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span>
                 </router-link>
-                <router-link
-                    :to="item.path"
-                    v-for="(item,key) in paid"
-                    :key="key"
-                    @click.native="closeSidebar"
-                >
-                    <i class="el-icon-collection"></i>
-                    <span>{{item.name}}</span>
-                    <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span>
-                </router-link>
                 <template v-if="isAdmin">
                     <router-link
                         :to="item.path"
