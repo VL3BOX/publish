@@ -207,7 +207,6 @@ export default {
             }
             if (this.id) {
                 updateFace(this.id, data).then((res) => {
-                    this.processing = false;
                     this.$message.success("修改成功");
                     this.afterPublish(this.id).finally(() => {
                         this.processing = false;
@@ -216,6 +215,8 @@ export default {
                             location.href = `/face/${this.id}`;
                         }, 500);
                     });
+                }).finally(() => {
+                    this.processing = false;
                 });
             } else {
                 addFace(data).then((res) => {
@@ -229,6 +230,8 @@ export default {
                         setTimeout(() => {
                             location.href = `/face/${res.data.data.id}`;
                         }, 500);
+                    }).finally(() => {
+                        this.processing = false;
                     });
                 });
             }

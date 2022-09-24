@@ -123,7 +123,7 @@ export default {
                 });
         },
         edit: function (id) {
-            location.href = "/#/face/" + id;
+            location.href = "./#/face/" + id;
         },
         postLink: function (id) {
             return "/face/" + id;
