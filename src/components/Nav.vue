@@ -129,10 +129,7 @@ export default {
                 bps: { path: "/cms/bps", name: "职业攻略", count: 0 },
                 tool: { path: "/cms/tool", name: "教程工具", count: 0 },
                 bbs: { path: "/cms/bbs", name: "茶馆交流", count: 0 },
-                share: { path: "/cms/share", name: "捏脸分享", count: 0 },
-            },
-            paid: {
-                face: { path: "/paid/face", name: "捏脸数据", count: 0 }
+                // share: { path: "/cms/share", name: "捏脸分享", count: 0 },
             },
             ads: {
                 notice: { path: "/cms/notice", name: "公告资讯", count: 0 },
@@ -152,6 +149,7 @@ export default {
                 quest: { path: "/wiki/quest", name: "任务百科", count: 0 },
             },
             app: {
+                face: { path: "/bucket/face", name: "捏脸数据", count: 0 },
                 joke: { path: "/bucket/joke", name: "剑三骚话", count: 0 },
                 emotion: { path: "/bucket/emotion", name: "剑三表情", count: 0 },
                 namespace: {
@@ -262,7 +260,7 @@ export default {
                 this.comment.comment_cms.count = data.comment;
                 this.app.exam_question.count = data.question;
                 this.app.exam_paper.count = data.paper;
-                this.paid.face.count = data?.face || 0;
+                this.app.face.count = data.face
             });
         },
         init: function () {

@@ -26,10 +26,7 @@ const bbs = () => import("../post/bbs.vue");
 const share = () => import("../post/share.vue");
 const notice = () => import("../post/notice.vue");
 const feedback = () => import("../views/feedback.vue");
-
-// paid
 const face = () => import("../post/face.vue");
-const paidFace = () => import("../paid/face.vue");
 
 // WIKI
 const wiki = () => import("../views/wiki.vue");
@@ -59,6 +56,7 @@ const collection = () => import("../post/collection.vue");
 const bucket_collection = () => import("../bucket/collection.vue");
 
 const bucket_calendar = () => import("../bucket/calendar.vue");
+const bucket_face = () => import("../bucket/face.vue");
 
 Vue.use(VueRouter);
 
@@ -133,24 +131,6 @@ const routes = [
         path: "/post/:id?",
         component: bbs,
     },
-    // 家园发布
-    // {
-    //     path: "/house/:id?",
-    //     component: house,
-    // },
-    // 捏脸分享
-    {
-        path: "/share/:id?",
-        component: share,
-    },
-    {
-        path: "/face/:id?",
-        component: face,
-    },
-    {
-        path: "/paid/face",
-        component: paidFace,
-    },
     // 公告
     {
         path: "/notice/:id?",
@@ -186,6 +166,24 @@ const routes = [
     },
 
     // 应用=====================
+    // 捏脸分享
+    {
+        path: "/share/:id?",
+        component: share,
+    },
+    {
+        path: "/face/:id?",
+        component: face,
+    },
+    {
+        path: "/bucket/face",
+        component: bucket_face,
+    },
+    // 家园发布
+    // {
+    //     path: "/house/:id?",
+    //     component: house,
+    // },
     // 骚话
     {
         path: "/joke/:id?",
