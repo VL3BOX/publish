@@ -90,8 +90,8 @@
                     </router-link>
                 </el-col>
                 <el-col :span="4">
-                    <router-link to="/share">
-                        <img svg-inline src="../assets/img/channel/share.svg" />
+                    <router-link to="/face">
+                        <img svg-inline src="../assets/img/channel/face.svg" />
                         <span>捏脸分享</span>
                     </router-link>
                 </el-col>
