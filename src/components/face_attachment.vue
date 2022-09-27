@@ -29,6 +29,7 @@ export default {
             data: {
                 id: '',
                 uuid: '',
+                object: '',
                 json: '',
             }
         }
@@ -101,6 +102,7 @@ export default {
                         type: "success",
                     }), 0);
                     vm.uploadData(file);
+                    vm.data.object = object;
                     vm.data.json = json;
                 }
             };
@@ -116,6 +118,7 @@ export default {
             this.data = {
                 id: '',
                 uuid: '',
+                object: null,
                 json: '',
             }
             this.$emit("update:data", this.data);

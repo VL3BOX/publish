@@ -173,10 +173,11 @@ export default {
                 this.loading = false;
             });
         },
-        handleFaceChange({ json = "", uuid = "", id = "" }) {
+        handleFaceChange({ object = null, json = "", uuid = "", id = "" }) {
             this.post.data = json;
             this.post.file = uuid;
             this.fileId = id;
+            this.post.body_type = object["nRoleType"];
         },
         validator() {
             // 必填字段 title file
