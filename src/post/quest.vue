@@ -258,7 +258,11 @@ export default {
                                         break;
                                     }
                                 }
-                                if (!exist) this.options.sources.push(source);
+                                if (!exist) {
+                                    source.id = source?.QuestID
+                                    source.Name = source?.QuestName
+                                    this.options.sources.push(source);
+                                }
                             }
                         }
                     })
