@@ -207,7 +207,6 @@ export default {
     data: function () {
         return {
             macros: this.data,
-
             activeIndex: "1",
             nickname: User.getInfo().name,
             equip_types: {
@@ -333,20 +332,22 @@ export default {
     filters: {},
     created: function () {},
     mounted: function () {
-        // let el = document.querySelector('.tabs-sort .el-tabs__nav');
-        // const _this = this
-        // let sortTabs = Sortable.create(el, {
-        //     animation: 200,
-        //     filter: ".el-icon-close",
-        //     onEnd({ newIndex, oldIndex }) {
-        //         const data = cloneDeep(_this.macros.data)
-        //         const currRow = cloneDeep(data.splice(oldIndex, 1)[0])
-        //         data.splice(newIndex, 0, currRow)
-        //         console.log(data)
-
-        //         _this.macros.data = data
-        // 　　}
-        // })
+        let el = document.querySelector('.tabs-sort .el-tabs__nav');
+        const _this = this
+        let sortTabs = Sortable.create(el, {
+            animation: 200,
+            filter: ".el-icon-close",
+            onEnd({ newIndex, oldIndex }) {
+                const data = cloneDeep(_this.macros.data)
+                const currRow = cloneDeep(data.splice(oldIndex, 1)[0])
+                data.splice(newIndex, 0, currRow)
+                console.log(data)
+                _this.macros.data=[]
+                _this.$nextTick(function () {
+                    _this.$set(_this.macros,'data',data)
+                });
+        　　}
+        })
     },
 };
 </script>
