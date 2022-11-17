@@ -259,7 +259,7 @@ export default {
             this.processing = true;
 
             // 作品私有时，自动强制所有数据私有
-            if(status != 'publish' || !!this.post.visible){
+            if(!!~~this.post.visible){
                 this.post.post_meta?.data?.forEach((item) => {
                     item.status = false
                 })
@@ -298,9 +298,9 @@ export default {
                     type: "success",
                 });
                 // 跳转
-                setTimeout(() => {
-                    location.href = getLink(result.post_type, result.ID);
-                }, 500);
+                // setTimeout(() => {
+                //     location.href = getLink(result.post_type, result.ID);
+                // }, 500);
             } else {
                 // 提醒
                 this.$notify({
