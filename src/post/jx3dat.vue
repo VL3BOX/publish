@@ -257,6 +257,14 @@ export default {
         publish: function (status, skip) {
             this.post.post_status = status;
             this.processing = true;
+
+            // 作品私有时，自动强制所有数据私有
+            if(status != 'publish' || !!this.post.visible){
+                this.post.post_meta?.data?.forEach((item) => {
+                    item.status = false
+                })
+            }
+
             return push(...this.data)
                 .then((res) => {
                     let result = res.data.data;
