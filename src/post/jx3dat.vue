@@ -298,9 +298,9 @@ export default {
                     type: "success",
                 });
                 // 跳转
-                // setTimeout(() => {
-                //     location.href = getLink(result.post_type, result.ID);
-                // }, 500);
+                setTimeout(() => {
+                    location.href = getLink(result.post_type, result.ID);
+                }, 500);
             } else {
                 // 提醒
                 this.$notify({
