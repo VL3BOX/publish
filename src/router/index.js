@@ -20,6 +20,7 @@ const macro = () => import("../post/macro.vue");
 const jx3dat = () => import("../post/jx3dat.vue");
 const fb = () => import("../post/fb.vue");
 const bps = () => import("../post/bps.vue");
+const skill = () => import("../post/skill.vue");
 const tool = () => import("../post/tool.vue");
 const bbs = () => import("../post/bbs.vue");
 // const house = () => import("../post/house.vue");
@@ -114,6 +115,12 @@ const routes = [
         path: "/bps/:id?",
         component: bps,
         name: "bps",
+    },
+    // 技能百科
+    {
+        path: "/skill/:id?",
+        component: skill,
+        name: "skill",
     },
     // 工具发布
     {
