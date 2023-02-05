@@ -68,6 +68,7 @@
                             class="preview el-button delete el-button--text"
                             :href="item.id | getLink"
                             v-if="item.id"
+                            target="_blank"
                         >
                             <i class="el-icon-view"></i>预览
                         </a>
