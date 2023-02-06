@@ -15,7 +15,7 @@
                 <!-- 原创 -->
                 <publish-original v-model="post.original"></publish-original>
                 <!-- 客户端 -->
-                <publish-client v-model="post.client" :forbidAll="true"></publish-client>
+                <!-- <publish-client v-model="post.client" :forbidAll="true"></publish-client> -->
                 <!-- 语言：简体/繁体 -->
                 <publish-lang v-model="post.lang"></publish-lang>
                 <!-- 资料片 -->
@@ -133,7 +133,7 @@ export default {
         "publish-header": publish_header,
         "publish-title": publish_title,
         "publish-original": publish_original,
-        "publish-client": publish_client,
+        // "publish-client": publish_client,
         "publish-lang": publish_lang,
         "publish-zlp": publish_zlp,
         "publish-xf": publish_xf,
