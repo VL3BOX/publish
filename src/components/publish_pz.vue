@@ -188,7 +188,9 @@ export default {
         },
     },
     created: function () {},
-    mounted: function () {},
+    mounted: function () {
+        this.loadOptions();
+    },
 };
 </script>
 
