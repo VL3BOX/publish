@@ -118,9 +118,9 @@
                         :height="300"
                     />
                 </div>
-                <div class="m-publish-primary-block">
+                <!-- <div class="m-publish-primary-block">
                     <publish-banner v-model="collection.image"></publish-banner>
-                </div>
+                </div> -->
 
                 <!-- <div class="m-publish-primary-block m-publish-tags">
                     <el-divider content-position="left">标签（选填）</el-divider>
@@ -171,7 +171,7 @@ import { __Root, __postType, __wikiType, __appType } from "@jx3box/jx3box-common
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 import CollectionPublic from "@jx3box/jx3box-editor/service/enum/CollectionPublic";
 import header from "@/components/publish_header.vue";
-import publish_banner from "@/components/publish_banner.vue";
+// import publish_banner from "@/components/publish_banner.vue";
 import draggable from "vuedraggable";
 
 // 本地依赖
@@ -334,7 +334,7 @@ export default {
         Tinymce,
         draggable,
         "publish-header": header,
-        "publish-banner": publish_banner,
+        // "publish-banner": publish_banner,
     },
 };
 </script>

@@ -72,7 +72,7 @@
                 </el-form-item>
                 <!-- TODO: 关联作品 -->
                 <!-- <el-form-item label="关联作品"></el-form-item> -->
-                <publish-banner v-model="post.banner"></publish-banner>
+                <!-- <publish-banner v-model="post.banner"></publish-banner> -->
             </div>
 
             <!-- 按钮 -->
@@ -93,7 +93,7 @@ import publishOriginal from "@/components/publish_original.vue";
 import publishClient from "@/components/publish_client.vue";
 import faceAttachment from "@/components/face_attachment.vue";
 import UploadAlbum from "@jx3box/jx3box-editor/src/UploadAlbum.vue";
-import publishBanner from "@/components/publish_banner.vue";
+// import publishBanner from "@/components/publish_banner.vue";
 import { bodyMap } from "@jx3box/jx3box-facedat/assets/data/index.json";
 export default {
     name: "face",
@@ -104,7 +104,7 @@ export default {
         publishClient,
         faceAttachment,
         UploadAlbum,
-        publishBanner,
+        // publishBanner,
     },
     data() {
         return {

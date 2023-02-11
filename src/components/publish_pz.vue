@@ -34,7 +34,7 @@
                             size="small"
                         >
                             <el-option
-                                v-for="option in options"
+                                v-for="option in computedOptions"
                                 :key="option.id"
                                 :label="option.title"
                                 :value="option.id"
@@ -91,7 +91,7 @@
 import draggable from "vuedraggable";
 import { getMyPzList } from "@/service/app.js";
 import { getLink } from "@jx3box/jx3box-common/js/utils";
-import cloneDeep from "lodash/cloneDeep";
+import {cloneDeep, unionBy} from "lodash";
 export default {
     name: "PublishPz",
     props: {
@@ -123,6 +123,8 @@ export default {
             // 选项列表
             options: [],
             search_loading: false,
+
+            selectedOptions: []
         };
     },
     model: {
@@ -139,6 +141,7 @@ export default {
                 } else {
                     this.list = newval;
                 }
+                this.getSelectedOptions();
             },
         },
         list: {
@@ -153,6 +156,9 @@ export default {
             let _params = {};
             _params = Object.assign(_params, this.query);
             return _params;
+        },
+        computedOptions: function () {
+            return this.selectedOptions?.length ? unionBy([...this.options, ...this.selectedOptions], 'id') : [...this.options];
         },
     },
     methods: {
@@ -173,6 +179,13 @@ export default {
             let _params = Object.assign(this.params, { search: keywords });
             this.loadOptions();
         },
+        // 获取已选取的选项
+        getSelectedOptions: function () {
+            const ids = this.list.map((item) => item.id)?.join(",");
+            getMyPzList({ ids }).then((res) => {
+                this.selectedOptions = res.data.data.list || [];
+            });
+        },
         // 添加
         addItem: function () {
             this.list.push(cloneDeep(this.default_item));
@@ -186,10 +199,6 @@ export default {
         getLink: function (val) {
             return getLink("pz", val);
         },
-    },
-    created: function () {},
-    mounted: function () {
-        this.loadOptions();
     },
 };
 </script>

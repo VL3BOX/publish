@@ -58,9 +58,9 @@
             </div>
 
             <!-- 其它 -->
-            <div class="m-publish-other">
+            <!-- <div class="m-publish-other">
                 <publish-banner v-model="post.post_banner"></publish-banner>
-            </div>
+            </div> -->
 
             <!-- 按钮 -->
             <div class="m-publish-buttons">
@@ -92,7 +92,7 @@ import publish_zlp from "@/components/publish_zlp";
 import publish_xf from "@/components/publish_xf";
 import publish_collection from "@/components/publish_collection";
 import publish_collection_collapse from "@/components/publish_collection_collapse";
-import publish_banner from "@/components/publish_banner";
+// import publish_banner from "@/components/publish_banner";
 import publish_comment from "@/components/publish_comment";
 import publish_visible from "@/components/publish_visible";
 import publish_tags from "@/components/publish_tags";
@@ -121,7 +121,7 @@ export default {
         "publish-xf": publish_xf,
         "publish-collection": publish_collection,
         "publish-collection-collapse": publish_collection_collapse,
-        "publish-banner": publish_banner,
+        // "publish-banner": publish_banner,
         "publish-comment": publish_comment,
         "publish-visible": publish_visible,
         "publish-tags": publish_tags,
