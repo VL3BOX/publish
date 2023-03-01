@@ -1,7 +1,8 @@
 <template>
     <div class="m-publish-collection-relation">
         <h5 class="u-schema">
-            <span class="u-label">关联小册</span>
+            <!-- <span class="u-label">关联小册</span> -->
+            <a class="u-add el-button el-button--primary el-button--mini" href="/publish/#/collection" target="_blank">+ 创建小册</a>
             <slot></slot>
             <a class="u-help u-icon-links" href="/tool/20891" target="_blank">
                 <i class="el-icon-question"></i> 小册帮助指南
@@ -150,6 +151,9 @@ export default {
         }
     }
 
+    // .u-add{
+    //     .ml(5px);
+    // }
     .u-help {
         .fr;
     }

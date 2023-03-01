@@ -47,7 +47,7 @@
 
             <!-- 附加 -->
             <div class="m-publish-append">
-                <el-divider content-position="left">合集</el-divider>
+                <el-divider content-position="left">小册</el-divider>
                 <publish-collection
                     v-model="post.post_collection"
                     :defaultCollapse="post.collection_collapse"

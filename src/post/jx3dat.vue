@@ -47,7 +47,7 @@
                 <publish-excerpt v-model="post.post_excerpt"></publish-excerpt>
             </div>
             <div class="m-publish-append">
-                <el-divider content-position="left">合集</el-divider>
+                <el-divider content-position="left">小册</el-divider>
                 <publish-collection
                     v-model="post.post_collection"
                     :defaultCollapse="post.collection_collapse"

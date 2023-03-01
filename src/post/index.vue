@@ -23,9 +23,9 @@
                     </router-link>
                 </el-col>
                 <el-col :span="4">
-                    <router-link to="/jx3dat">
-                        <img svg-inline src="../assets/img/channel/jx3dat.svg" />
-                        <span>插件数据</span>
+                    <router-link to="/bps">
+                        <img svg-inline src="../assets/img/channel/bps.svg" />
+                        <span>职业攻略</span>
                     </router-link>
                 </el-col>
                 <el-col :span="4">
@@ -35,15 +35,21 @@
                     </router-link>
                 </el-col>
                 <el-col :span="4">
-                    <router-link to="/bps">
-                        <img svg-inline src="../assets/img/channel/bps.svg" />
-                        <span>职业攻略</span>
+                    <router-link to="/jx3dat">
+                        <img svg-inline src="../assets/img/channel/jx3dat.svg" />
+                        <span>插件数据</span>
                     </router-link>
                 </el-col>
                 <el-col :span="4">
                     <router-link to="/tool">
                         <img svg-inline src="../assets/img/channel/tool.svg" />
                         <span>教程工具</span>
+                    </router-link>
+                </el-col>
+                <el-col :span="4">
+                    <router-link to="/bbs">
+                        <img svg-inline src="../assets/img/channel/post.svg" />
+                        <span>剑三茶馆</span>
                     </router-link>
                 </el-col>
             </el-row>
@@ -85,11 +91,15 @@
                     </router-link>
                 </el-col>
                 <el-col :span="4">
-                    <router-link to="/bbs">
-                        <img svg-inline src="../assets/img/channel/post.svg" />
-                        <span>剑三茶馆</span>
+                    <router-link to="/blueprint" class="disabled">
+                        <img svg-inline src="../assets/img/channel/house.svg" />
+                        <span>家园蓝图</span>
                     </router-link>
                 </el-col>
+            </el-row>
+
+            <el-divider content-position="left">PVBB</el-divider>
+            <el-row :gutter="20">
                 <el-col :span="4">
                     <router-link to="/joke">
                         <img svg-inline src="../assets/img/channel/joke.svg" />

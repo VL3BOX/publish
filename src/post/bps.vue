@@ -15,29 +15,41 @@
                 <!-- 原创 -->
                 <publish-original v-model="post.original"></publish-original>
                 <!-- 客户端 -->
-                <publish-client v-model="post.client"></publish-client>
+                <!-- <publish-client v-model="post.client"></publish-client> -->
                 <!-- 资料片 -->
                 <publish-zlp v-model="post.zlp" :client="post.client"></publish-zlp>
+                <!-- 类型 -->
+                <publish-tags v-model="post.tags" :options="prefer" label="类型"></publish-tags>
+                <!-- 主题 -->
+                <publish-tags v-model="post.topics" :options="topics" label="主题"></publish-tags>
                 <!-- 心法 -->
                 <publish-xf v-model="post.post_subtype" :client="post.client"></publish-xf>
-                <!-- 方向 -->
-                <publish-tags v-model="post.tags" :options="prefer"></publish-tags>
             </div>
 
             <!-- 正文 -->
             <div class="m-publish-content">
                 <el-divider content-position="left">正文</el-divider>
-                <el-radio-group class="m-publish-editormode" size="small" v-model="post.post_mode" >
+                <el-radio-group class="m-publish-editormode" size="small" v-model="post.post_mode">
                     <el-radio-button label="tinymce">可视化编辑器</el-radio-button>
                     <el-radio-button label="markdown">Markdown</el-radio-button>
                 </el-radio-group>
-                <Markdown v-model="post.post_content" :editable="true" :readOnly="false" v-show="post.post_mode == 'markdown'"></Markdown>
-                <Tinymce v-model="post.post_content" :attachmentEnable="true" :resourceEnable="true" v-show="!post.post_mode || post.post_mode == 'tinymce'" />
+                <Markdown
+                    v-model="post.post_content"
+                    :editable="true"
+                    :readOnly="false"
+                    v-show="post.post_mode == 'markdown'"
+                ></Markdown>
+                <Tinymce
+                    v-model="post.post_content"
+                    :attachmentEnable="true"
+                    :resourceEnable="true"
+                    v-show="!post.post_mode || post.post_mode == 'tinymce'"
+                />
             </div>
 
             <!-- 附加 -->
             <div class="m-publish-append">
-                <el-divider content-position="left">合集</el-divider>
+                <el-divider content-position="left">小册</el-divider>
                 <publish-collection v-model="post.post_collection" :defaultCollapse="post.collection_collapse">
                     <publish-collection-collapse v-model="post.collection_collapse"></publish-collection-collapse>
                 </publish-collection>
@@ -68,8 +80,12 @@
                     <el-button type="primary" @click="useDraft" :disabled="processing">使用此版本</el-button>
                 </template>
                 <template v-else>
-                    <el-button type="primary" @click="publish('publish', true)" :disabled="processing">发 &nbsp;&nbsp; 布</el-button>
-                    <el-button type="plain" @click="publish('draft', false)" :disabled="processing">保存为草稿</el-button>
+                    <el-button type="primary" @click="publish('publish', true)" :disabled="processing"
+                        >发 &nbsp;&nbsp; 布</el-button
+                    >
+                    <el-button type="plain" @click="publish('draft', false)" :disabled="processing"
+                        >保存为草稿</el-button
+                    >
                 </template>
             </div>
         </el-form>
@@ -79,7 +95,7 @@
 <script>
 // 公共模块
 import { getLink } from "@jx3box/jx3box-common/js/utils";
-import { prefer } from "@/assets/data/bps.json";
+import { prefer, pve_topics, pvp_topics } from "@/assets/data/bps.json";
 
 // 本地模块
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
@@ -97,8 +113,8 @@ import publish_comment from "@/components/publish_comment";
 import publish_visible from "@/components/publish_visible";
 import publish_tags from "@/components/publish_tags";
 import publish_authors from "@/components/publish_authors";
-import publish_revision from '@/components/publish_revision.vue'
-import publish_at_authors from '@/components/publish_at_authors.vue'
+import publish_revision from "@/components/publish_revision.vue";
+import publish_at_authors from "@/components/publish_at_authors.vue";
 
 // 数据逻辑
 import { push, pull } from "@/service/cms.js";
@@ -116,7 +132,7 @@ export default {
         "publish-header": publish_header,
         "publish-title": publish_title,
         "publish-original": publish_original,
-        "publish-client": publish_client,
+        // "publish-client": publish_client,
         "publish-zlp": publish_zlp,
         "publish-xf": publish_xf,
         "publish-collection": publish_collection,
@@ -126,8 +142,8 @@ export default {
         "publish-visible": publish_visible,
         "publish-tags": publish_tags,
         "publish-authors": publish_authors,
-        'publish-revision' : publish_revision,
-        'publish-at-authors': publish_at_authors
+        "publish-revision": publish_revision,
+        "publish-at-authors": publish_at_authors,
     },
     data: function () {
         return {
@@ -164,6 +180,10 @@ export default {
                 lang: "cn",
                 // 资料片
                 zlp: "",
+                // 标签
+                tags: ["PVE"],
+                // 主题
+                topics: [],
 
                 // 摘要
                 post_excerpt: "",
@@ -171,7 +191,7 @@ export default {
                 post_banner: "",
                 // 小册
                 post_collection: "",
-                collection_collapse : 0,
+                collection_collapse: 0,
 
                 // 评论开关（0开启|默认，1关闭）
                 comment: 0,
@@ -195,11 +215,22 @@ export default {
                 return [this.post];
             }
         },
+        topics: function () {
+            let topics = [];
+            if (this.post.tags.includes("PVE")) {
+                topics.push(...pve_topics);
+            }
+            if (this.post.tags.includes("PVP")) {
+                topics.push(...pvp_topics);
+            }
+            let _topics = new Set(topics);
+            return Array.from(_topics);
+        },
     },
     methods: {
         // 初始化
-        init: function() {
-            sessionStorage.removeItem("atAuthor")
+        init: function () {
+            sessionStorage.removeItem("atAuthor");
             // 尝试加载
             return this.loadData().then(() => {
                 // 加载成功后执行自动保存逻辑（含本地草稿、本地缓存、云端历史版本）
@@ -213,13 +244,13 @@ export default {
             return push(...this.data)
                 .then((res) => {
                     let result = res.data.data;
-                    this.atUser(result.ID)
-                    return result
+                    this.atUser(result.ID);
+                    return result;
                 })
                 .then((result) => {
                     this.afterPublish(result).finally(() => {
                         this.done(skip, result);
-                    })
+                    });
                 })
                 .finally(() => {
                     this.processing = false;
@@ -257,29 +288,25 @@ export default {
         },
         // 跳转前操作
         afterPublish: function (result) {
-            if(!~~result.post_collection) return new Promise((resolve,reject)=>{
-                resolve(true)
-            })
+            if (!~~result.post_collection)
+                return new Promise((resolve, reject) => {
+                    resolve(true);
+                });
             return appendToCollection({
                 post_type: result.post_type,
                 post_id: result.ID,
                 post_collection: result.post_collection,
                 post_title: result.post_title,
-            })
+            });
         },
     },
-    // created: function () {
-    //     this.init().then((data) => {
-    //         if (!data) return;
-
-    //         // 迁移兼容
-    //         if (!this.post.zlp && data.post_meta.zlp) {
-    //             this.post.zlp = data.post_meta.zlp;
-    //         }
-    //         if ((!this.post.tags || !this.post.tags.length) && data.post_meta.pvmode) {
-    //             this.post.tags = data.post_meta.pvmode.split(',');
-    //         }
-    //     });
-    // },
+    created: function () {
+        this.init().then((data) => {
+            if (!data) return;
+            if (!this.post.tags || !this.post.tags.length) {
+                this.post.tags = [];
+            }
+        });
+    },
 };
 </script>

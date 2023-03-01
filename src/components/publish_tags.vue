@@ -1,9 +1,12 @@
 <template>
     <div class="m-publish-tags">
-        <el-form-item label="标签">
-            <el-checkbox-group v-model="tag">
-                <el-checkbox v-for="item in tags" :label="item" :key="item"></el-checkbox>
-            </el-checkbox-group>
+        <el-form-item :label="label || '标签'">
+            <template v-if="tags && tags.length">
+                <el-checkbox-group v-model="tag">
+                    <el-checkbox v-for="item in tags" :label="item" :key="item"></el-checkbox>
+                </el-checkbox-group>
+            </template>
+            <span v-else>无</span>
         </el-form-item>
         <slot></slot>
     </div>
@@ -11,10 +14,10 @@
 <script>
 export default {
     name: "publish_tags",
-    props: ["data",'options'],
+    props: ["data", "options", "label"],
     data: function () {
         return {
-            tag : this.data || [],
+            tag: this.data || [],
             tags: this.options || [],
         };
     },
