@@ -151,17 +151,16 @@
                     </div>
                 </div>-->
             </div>
-
-            <el-form-item>
+            <div class="m-publish-collection-publish">
                 <el-button
-                    class="m-publish-collection-publish u-publish"
-                    icon="el-icon-s-promotion"
+                    class="u-button"
                     type="primary"
                     @click="submit"
                     :loading="processing"
-                    >提交小册</el-button
+                    :disabled="processing"
+                    >发 &nbsp;&nbsp; 布</el-button
                 >
-            </el-form-item>
+            </div>
         </el-form>
     </div>
 </template>
@@ -186,8 +185,7 @@ export default {
     props: [],
     data() {
         // 作品类型加载
-        let source_types = Object.assign({ custom: "自定义" }, __postType, __wikiType, __appType);
-        delete source_types.calendar
+        let source_types = Object.assign({ custom: "自定义" }, __postType, __wikiType);
 
         return {
             source_types: source_types,
@@ -204,12 +202,12 @@ export default {
             },
             tag: "",
             legal_tags: null,
-            show_description: false,
+            show_description: true,
             processing: false,
         };
     },
     computed: {
-        id: function() {
+        id: function () {
             return this.$route.params.collection_id;
         },
     },
@@ -257,7 +255,7 @@ export default {
                 }
             });
         },
-        init: function() {
+        init: function () {
             get_collection(this.id).then((res) => {
                 res = res.data;
                 if (res.code === 200) {
@@ -278,7 +276,7 @@ export default {
                 }
             });
         },
-        submit: function() {
+        submit: function () {
             // this.$confirm("确定提交剑三小册信息？", "提示", {
             //     type: "info",
             // }).then(() => {
@@ -325,7 +323,7 @@ export default {
     watch: {
         id: {
             immediate: true,
-            handler: function(val) {
+            handler: function (val) {
                 val && this.init();
             },
         },

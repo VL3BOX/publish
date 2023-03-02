@@ -54,7 +54,7 @@
                 </el-col>
             </el-row>
 
-            <el-divider content-position="left">PVW</el-divider>
+            <el-divider content-position="left">PVA</el-divider>
             <el-row :gutter="20">
                 <el-col :span="4">
                     <router-link to="/achievement">
@@ -98,7 +98,7 @@
                 </el-col>
             </el-row>
 
-            <el-divider content-position="left">PVB</el-divider>
+            <el-divider content-position="left">其它</el-divider>
             <el-row :gutter="20">
                 <el-col :span="4">
                     <router-link to="/joke">
@@ -112,10 +112,6 @@
                         <span>剑三表情</span>
                     </router-link>
                 </el-col>
-            </el-row>
-
-            <el-divider content-position="left">其它</el-divider>
-            <el-row :gutter="20">
                 <el-col :span="4">
                     <router-link to="/collection">
                         <i class="el-icon-notebook-1"></i>
