@@ -54,7 +54,7 @@
                 </el-col>
             </el-row>
 
-            <el-divider content-position="left">PVA</el-divider>
+            <el-divider content-position="left">PVW</el-divider>
             <el-row :gutter="20">
                 <el-col :span="4">
                     <router-link to="/achievement">
@@ -98,7 +98,7 @@
                 </el-col>
             </el-row>
 
-            <el-divider content-position="left">PVBB</el-divider>
+            <el-divider content-position="left">PVB</el-divider>
             <el-row :gutter="20">
                 <el-col :span="4">
                     <router-link to="/joke">
