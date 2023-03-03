@@ -217,10 +217,10 @@ export default {
         },
         topics: function () {
             let topics = [];
-            if (this.post.tags.includes("PVE")) {
+            if (this.post.tags?.includes("PVE")) {
                 topics.push(...pve);
             }
-            if (this.post.tags.includes("PVP")) {
+            if (this.post.tags?.includes("PVP")) {
                 topics.push(...pvp);
             }
             let _topics = new Set(topics);
@@ -303,6 +303,7 @@ export default {
     created: function () {
         this.init().then((data) => {
             if (!data) return;
+            console.log(111)
             if (!this.post.tags || !this.post.tags.length) {
                 this.post.tags = [];
             }
