@@ -95,7 +95,7 @@
 <script>
 // 公共模块
 import { getLink } from "@jx3box/jx3box-common/js/utils";
-import { pve, pvp } from "@jx3box/jx3box-common/data/post_topics.json";
+import { bps_pve, bps_pvp } from "@jx3box/jx3box-common/data/post_topics.json";
 
 // 本地模块
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
@@ -218,10 +218,10 @@ export default {
         topics: function () {
             let topics = [];
             if (this.post.tags?.includes("PVE")) {
-                topics.push(...pve);
+                topics.push(...bps_pve);
             }
             if (this.post.tags?.includes("PVP")) {
-                topics.push(...pvp);
+                topics.push(...bps_pvp);
             }
             let _topics = new Set(topics);
             return Array.from(_topics);
