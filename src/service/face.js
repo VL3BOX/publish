@@ -34,16 +34,6 @@ export function updateFace(id, data) {
 }
 
 /**
- * 附件关联作品
- * @param {*} id 附件id
- * @param {*} postType 作品类型
- * @param {*} postId 作品id
- */
-export function attachmentRelatePost(id, postType, postId) {
-    return $next().post(`/api/charge_attachment/${id}/link-to/${postType}/${postId}`);
-}
-
-/**
  * 移除关联作品
  * @param {*} id 附件id
  * @param {*} postType 作品类型
@@ -75,4 +65,13 @@ export function faceOnline(id) {
  */
 export function faceOffline(id) {
     return $next().put(`/api/face/${id}/offline`);
+}
+
+/**
+ * 作品关联的附件
+ * @param {*} postType 作品类型
+ * @param {*} postId 作品id
+ */
+export function getAttachmentOfPost(postId) {
+    return $next().get(`/api/charge_attachment/face/${postId}/edit`);
 }

@@ -28,21 +28,12 @@
                         <!-- <el-radio label="1">盒币</el-radio> -->
                         <el-radio label="2">金箔</el-radio>
                     </el-radio-group>
-                    <el-input-number
-                        class="u-price"
-                        v-model="post.price_count"
-                        v-if="post.price_type != '0'"
-                        size="small"
-                        :max="3000"
-                        :min="0"
-                    ></el-input-number>
+                    <el-input-number class="u-price" v-model="post.price_count" v-if="post.price_type != '0'" size="small"
+                        :max="3000" :min="0"></el-input-number>
                     <div class="u-tip-box" v-if="post.price_type != '0' && post.price_count > 0">
                         <div class="u-warning">
-                            <el-checkbox
-                                v-model="promise"
-                                disabled
-                                >我承诺该上传属于自己的原创作品或已得到原作者授权，且相关信息中不带有非授权的元素（比如贴图、字体）等，若违反法律规定我将承担全部责任，魔盒有权下架作品。</el-checkbox
-                            >
+                            <el-checkbox v-model="promise"
+                                disabled>我承诺该上传属于自己的原创作品或已得到原作者授权，且相关信息中不带有非授权的元素（比如贴图、字体）等，若违反法律规定我将承担全部责任，魔盒有权下架作品。</el-checkbox>
                         </div>
                     </div>
                 </el-form-item>
@@ -56,10 +47,10 @@
                 </el-form-item>
 
                 <el-form-item label="数据">
-                    <face-attachment v-if="!post.file" :body="post.body_type" @update:data="handleFaceChange" />
-                    <div class="u-attachment" v-else>
-                        <span class="u-attachment-text">当前数据唯一标识符：<b>{{ post.file }}</b></span>
-                        <el-button type="primary" icon="el-icon-delete" circle @click="removeFile" size="mini"/>
+                    <face-attachment :body="post.body_type" @update:data="handleFaceChange" />
+                    <div class="u-attachment" v-for="item in faceAttachments" :key="item.id">
+                        <span class="u-attachment-text">文件名: <b>{{ item.name }}</b> 唯一标识符：<b>{{ item.file }}</b></span>
+                        <el-button type="primary" icon="el-icon-delete" circle @click="removeFile(item.id)" size="mini" />
                     </div>
                 </el-form-item>
 
@@ -86,7 +77,7 @@
 <script>
 import { getLink } from "@jx3box/jx3box-common/js/utils";
 
-import { attachmentRelatePost, addFace, getFace, updateFace } from "@/service/face";
+import { getAttachmentOfPost, addFace, getFace, updateFace } from "@/service/face";
 import publishHeader from "@/components/publish_header.vue";
 import publishTitle from "@/components/publish_title.vue";
 import publishOriginal from "@/components/publish_original.vue";
@@ -133,12 +124,11 @@ export default {
 
             loading: false,
             processing: false,
-
-            fileId: "", // 附件id
             postId: "", // 帖子id
             postType: "face", // 帖子类型
             bodyMap,
             promise: true,
+            faceAttachments: [],
         };
     },
     computed: {
@@ -170,22 +160,37 @@ export default {
                         url: item,
                     };
                 });
-                this.loading = false;
+                getAttachmentOfPost(this.id).then((res) => {
+                    let result = res.data;
+                    if (result && result.data) {
+                        this.faceAttachments = result.data.map((item) => {
+                            return {
+                                id: item.id,
+                                file: item.uuid,
+                                name: item.name,
+                            }
+                        });
+                    }
+                    this.loading = false;
+                });
             });
         },
-        handleFaceChange({ object = null, json = "", uuid = "", id = "" }) {
-            this.post.data = json;
-            this.post.file = uuid;
-            this.fileId = id;
-            this.post.body_type = object["nRoleType"];
+        handleFaceChange({ object = null, json = "", uuid = "", id = "", name = "" }) {
+            this.faceAttachments.push({
+                id: id,
+                file: uuid,
+                name: name,
+                data: json,
+                body_type: object["nRoleType"],
+            });
         },
-        validator() {
+        validator(data) {
             // 必填字段 title file
             const required = ["title", "file"];
             const requiredMsg = ["请填写标题", "请上传数据"];
             let message;
             for (let i = 0; i < required.length; i++) {
-                if (!this.post[required[i]]) {
+                if (!data[required[i]]) {
                     message = requiredMsg[i];
                     break;
                 }
@@ -200,22 +205,32 @@ export default {
             this.processing = true;
             const data = {
                 ...this.post,
+                //data: this.post.data,
                 images: this.post.images.map((item) => item.url || item),
             };
-            if (!this.validator()) {
+            let faceAttachmentIds = this.faceAttachments.map((item) => item.id);
+            if (this.faceAttachments.length > 0) {
+                // 如果第一个附件有data，证明这个附件是新上传的，那么更新face使用这个data
+                // 如果第一个附件没有data，那么表示第一个附件是以前的，是通过init()获取的，那么更新face使用原来的data
+                if (this.faceAttachments[0].data) {
+                    data.data = this.faceAttachments[0].data
+                }
+                data.body_type = this.faceAttachments[0].body_type
+                data.file = this.faceAttachments[0].file
+            }
+            data.attachments = faceAttachmentIds;
+            if (!this.validator(data)) {
                 this.processing = false;
                 return;
             }
             if (this.id) {
                 updateFace(this.id, data).then((res) => {
                     this.$message.success("修改成功");
-                    this.afterPublish(this.id).finally(() => {
-                        this.processing = false;
-                        // 跳转
-                        setTimeout(() => {
-                            location.href = `/face/${this.id}`;
-                        }, 500);
-                    });
+                    this.processing = false;
+                    // 跳转
+                    setTimeout(() => {
+                        location.href = `/face/${this.id}`;
+                    }, 500);
                 }).finally(() => {
                     this.processing = false;
                 });
@@ -225,27 +240,24 @@ export default {
                         message: "发布成功",
                         type: "success",
                     });
-                    this.afterPublish(res.data.data.id).finally(() => {
-                        this.processing = false;
-                        // 跳转
-                        setTimeout(() => {
-                            location.href = `/face/${res.data.data.id}`;
-                        }, 500);
-                    }).finally(() => {
-                        this.processing = false;
-                    });
+                    this.processing = false;
+                    // 跳转
+                    setTimeout(() => {
+                        location.href = `/face/${res.data.data.id}`;
+                    }, 500);
                 });
             }
         },
-        afterPublish(id) {
-            if (!this.fileId) {
-                return Promise.resolve();
-            }
-            return attachmentRelatePost(this.fileId, this.postType, id);
-        },
         // 移除文件标识
-        removeFile() {
-            this.post.file = "";
+        removeFile(id) {
+            let newQueue = [];
+            for (let i = 0; i < this.faceAttachments.length; i++) {
+                if (this.faceAttachments[i].id == id) {
+                    continue
+                }
+                newQueue.push(this.faceAttachments[i])
+            }
+            this.faceAttachments = newQueue
         },
     },
 };

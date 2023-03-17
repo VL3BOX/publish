@@ -31,6 +31,7 @@ export default {
                 uuid: '',
                 object: '',
                 json: '',
+                name: '',
             }
         }
     },
@@ -48,6 +49,7 @@ export default {
             uploadFile(formdata).then((res) => {
                 this.data.uuid = res.data.data.uuid;
                 this.data.id = res.data.data.id
+                this.data.name = res.data.data.name
                 this.$message({
                     message: "数据上传成功",
                     type: "success",
@@ -120,6 +122,7 @@ export default {
                 uuid: '',
                 object: null,
                 json: '',
+                name: '',
             }
             this.$emit("update:data", this.data);
         },
