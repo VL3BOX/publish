@@ -21,7 +21,7 @@ export default {
         },
         describe: {
             type: String,
-            default: '个人收藏',
+            default: '',
         }
     },
     data() {

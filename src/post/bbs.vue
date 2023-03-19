@@ -58,9 +58,9 @@
             </div>
 
             <!-- 其它 -->
-            <!-- <div class="m-publish-other">
+            <div class="m-publish-other">
                 <publish-banner v-model="post.post_banner"></publish-banner>
-            </div> -->
+            </div>
 
             <!-- 按钮 -->
             <div class="m-publish-buttons">
@@ -80,6 +80,7 @@
 // 公共模块
 import { getLink } from "@jx3box/jx3box-common/js/utils";
 import bbs_types from "@/assets/data/bbs.json";
+import User from "@jx3box/jx3box-common/js/user.js";
 
 // 本地模块
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
@@ -91,7 +92,7 @@ import publish_client from "@/components/publish_client.vue";
 import publish_collection from "@/components/publish_collection";
 import publish_collection_collapse from "@/components/publish_collection_collapse";
 import publish_excerpt from "@/components/publish_excerpt";
-// import publish_banner from "@/components/publish_banner";
+import publish_banner from "@/components/publish_banner";
 import publish_comment from "@/components/publish_comment";
 import publish_visible from "@/components/publish_visible";
 import publish_subtype from "@/components/publish_subtype";
@@ -119,7 +120,7 @@ export default {
         "publish-excerpt": publish_excerpt,
         "publish-collection": publish_collection,
         "publish-collection-collapse": publish_collection_collapse,
-        // "publish-banner": publish_banner,
+        "publish-banner": publish_banner,
         "publish-comment": publish_comment,
         "publish-visible": publish_visible,
         "publish-subtype": publish_subtype,
@@ -193,6 +194,9 @@ export default {
                 return [this.post];
             }
         },
+        isSuperAuthor() {
+            return User.isSuperAuthor();
+        }
     },
     methods: {
         // 初始化

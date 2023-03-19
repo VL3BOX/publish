@@ -54,9 +54,9 @@
             </div>
 
             <!-- 其它 -->
-            <!-- <div class="m-publish-other">
+            <div class="m-publish-other" v-if="isSuperAuthor">
                 <publish-banner v-model="post.post_banner"></publish-banner>
-            </div> -->
+            </div>
 
             <!-- 按钮 -->
             <div class="m-publish-buttons">
@@ -75,6 +75,7 @@
 <script>
 // 公共模块
 import { getLink } from "@jx3box/jx3box-common/js/utils";
+import User from "@jx3box/jx3box-common/js/user.js";
 
 // 本地模块
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
@@ -86,7 +87,7 @@ import publish_client from "@/components/publish_client.vue";
 import publish_fb from "@/components/publish_fb";
 import publish_collection from "@/components/publish_collection";
 import publish_collection_collapse from "@/components/publish_collection_collapse";
-// import publish_banner from "@/components/publish_banner";
+import publish_banner from "@/components/publish_banner";
 import publish_comment from "@/components/publish_comment";
 import publish_visible from "@/components/publish_visible";
 import publish_authors from "@/components/publish_authors";
@@ -114,7 +115,7 @@ export default {
         "publish-fb": publish_fb,
         "publish-collection": publish_collection,
         "publish-collection-collapse": publish_collection_collapse,
-        // "publish-banner": publish_banner,
+        "publish-banner": publish_banner,
         "publish-comment": publish_comment,
         "publish-visible": publish_visible,
         "publish-authors": publish_authors,
@@ -189,6 +190,9 @@ export default {
                 return [this.post];
             }
         },
+        isSuperAuthor() {
+            return User.isSuperAuthor();
+        }
     },
     methods: {
         // 初始化

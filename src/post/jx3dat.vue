@@ -71,9 +71,9 @@
             </div>
 
             <!-- 其它 -->
-            <!-- <div class="m-publish-other">
+            <div class="m-publish-other" v-if="isSuperAuthor">
                 <publish-banner v-model="post.post_banner"></publish-banner>
-            </div> -->
+            </div>
 
             <!-- 按钮 -->
             <div class="m-publish-buttons">
@@ -107,7 +107,7 @@ import publish_jx3dat from "@/components/publish_jx3dat";
 import publish_collection from "@/components/publish_collection";
 import publish_collection_collapse from "@/components/publish_collection_collapse";
 import publish_excerpt from "@/components/publish_excerpt";
-// import publish_banner from "@/components/publish_banner";
+import publish_banner from "@/components/publish_banner";
 import publish_comment from "@/components/publish_comment";
 import publish_visible from "@/components/publish_visible";
 import publish_subtype from "@/components/publish_subtype";
@@ -139,7 +139,7 @@ export default {
         "publish-collection": publish_collection,
         "publish-collection-collapse": publish_collection_collapse,
         "publish-excerpt": publish_excerpt,
-        // "publish-banner": publish_banner,
+        "publish-banner": publish_banner,
         "publish-comment": publish_comment,
         "publish-visible": publish_visible,
         "publish-subtype": publish_subtype,
@@ -242,6 +242,9 @@ export default {
         isLock: function () {
             return User.isEditor() ? false : true;
         },
+        isSuperAuthor() {
+            return User.isSuperAuthor();
+        }
     },
     methods: {
         // 初始化

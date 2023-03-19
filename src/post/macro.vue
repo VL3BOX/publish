@@ -71,9 +71,9 @@
             </div>
 
             <!-- 其它 -->
-            <!-- <div class="m-publish-other">
+            <div class="m-publish-other" v-if="isSuperAuthor">
                 <publish-banner v-model="post.post_banner"></publish-banner>
-            </div> -->
+            </div>
 
             <!-- 按钮 -->
             <div class="m-publish-buttons">
@@ -94,6 +94,7 @@
 import lodash from "lodash";
 import { getLink } from "@jx3box/jx3box-common/js/utils";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
+import User from "@jx3box/jx3box-common/js/user.js";
 
 // 本地模块
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
@@ -108,7 +109,7 @@ import publish_xf from "@/components/publish_xf";
 import publish_macro from "@/components/publish_macro";
 import publish_collection from "@/components/publish_collection";
 import publish_collection_collapse from "@/components/publish_collection_collapse";
-// import publish_banner from "@/components/publish_banner";
+import publish_banner from "@/components/publish_banner";
 import publish_comment from "@/components/publish_comment";
 import publish_visible from "@/components/publish_visible";
 import publish_authors from "@/components/publish_authors";
@@ -140,7 +141,7 @@ export default {
         "publish-macro": publish_macro,
         "publish-collection": publish_collection,
         "publish-collection-collapse": publish_collection_collapse,
-        // "publish-banner": publish_banner,
+        "publish-banner": publish_banner,
         "publish-comment": publish_comment,
         "publish-visible": publish_visible,
         "publish-authors": publish_authors,
@@ -232,6 +233,9 @@ export default {
             if (mount_id) _query = { mount: mount_id };
             return _query;
         },
+        isSuperAuthor() {
+            return User.isSuperAuthor();
+        }
     },
     methods: {
         // 初始化

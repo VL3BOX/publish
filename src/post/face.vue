@@ -49,8 +49,12 @@
                 <el-form-item label="数据">
                     <face-attachment :body="post.body_type" @update:data="handleFaceChange" />
                     <div class="u-attachment" v-for="item in faceAttachments" :key="item.id">
-                        <span class="u-attachment-text">文件名: <b>{{ item.name }}</b> 唯一标识符：<b>{{ item.file }}</b></span>
-                        <el-button type="primary" icon="el-icon-delete" circle @click="removeFile(item.id)" size="mini" />
+                        <i class="u-main el-icon-collection-tag" v-show="item.file === faceData.file" title="主数据"></i>
+                        <span class="u-attachment-text">文件名: <b>{{ item.name }}</b></span>
+                        <span class="u-attachment-key">唯一标识符：<b>{{ item.file }}</b></span>
+                        <span class="u-attachment-remark"><el-input v-model="item.describe" placeholder="备注" size="mini"></el-input></span>
+                        <el-button class="u-btn" type="primary" icon="el-icon-delete" circle plain @click="removeFile(item.id)" size="mini" title="移除" />
+                        <el-button class="u-btn" type="primary" icon="el-icon-check" circle plain @click="setMain(item)" size="mini" title="设为主数据" />
                     </div>
                 </el-form-item>
 
@@ -63,7 +67,7 @@
                 </el-form-item>
                 <!-- TODO: 关联作品 -->
                 <!-- <el-form-item label="关联作品"></el-form-item> -->
-                <!-- <publish-banner v-model="post.banner"></publish-banner> -->
+                <publish-banner v-model="post.banner" v-if="isSuperAuthor"></publish-banner>
             </div>
 
             <!-- 按钮 -->
@@ -84,8 +88,10 @@ import publishOriginal from "@/components/publish_original.vue";
 import publishClient from "@/components/publish_client.vue";
 import faceAttachment from "@/components/face_attachment.vue";
 import UploadAlbum from "@jx3box/jx3box-editor/src/UploadAlbum.vue";
-// import publishBanner from "@/components/publish_banner.vue";
+import publishBanner from "@/components/publish_banner.vue";
 import { bodyMap } from "@jx3box/jx3box-facedat/assets/data/index.json";
+import User from "@jx3box/jx3box-common/js/user.js";
+import cloneDeep from 'lodash/cloneDeep';
 export default {
     name: "face",
     components: {
@@ -95,7 +101,7 @@ export default {
         publishClient,
         faceAttachment,
         UploadAlbum,
-        // publishBanner,
+        publishBanner,
     },
     data() {
         return {
@@ -129,6 +135,7 @@ export default {
             bodyMap,
             promise: true,
             faceAttachments: [],
+            faceData: ""
         };
     },
     computed: {
@@ -138,6 +145,9 @@ export default {
         client() {
             return this.$store.state.client;
         },
+        isSuperAuthor() {
+            return User.isSuperAuthor();
+        }
     },
     mounted() {
         this.init();
@@ -168,7 +178,12 @@ export default {
                                 id: item.id,
                                 file: item.uuid,
                                 name: item.name,
+                                describe: item.describe || "",
                             }
+                        });
+
+                        this.faceData = this.faceAttachments.find((item) => {
+                            return item.file == this.post.file;
                         });
                     }
                     this.loading = false;
@@ -182,7 +197,17 @@ export default {
                 name: name,
                 data: json,
                 body_type: object["nRoleType"],
+                describe: "",
             });
+            if (!this.faceData) {
+                this.faceData = {
+                    id: id,
+                    file: uuid,
+                    name: name,
+                    data: json,
+                    body_type: object["nRoleType"],
+                };
+            }
         },
         validator(data) {
             // 必填字段 title file
@@ -208,7 +233,13 @@ export default {
                 //data: this.post.data,
                 images: this.post.images.map((item) => item.url || item),
             };
-            let faceAttachmentIds = this.faceAttachments.map((item) => item.id);
+            let faceAttachmentIds = this.faceAttachments.map((item) => {
+                return {
+                    id: item.id,
+                    describe: item.describe,
+                }
+            });
+
             if (this.faceAttachments.length > 0) {
                 // 如果第一个附件有data，证明这个附件是新上传的，那么更新face使用这个data
                 // 如果第一个附件没有data，那么表示第一个附件是以前的，是通过init()获取的，那么更新face使用原来的data
@@ -218,6 +249,7 @@ export default {
                 data.body_type = this.faceAttachments[0].body_type
                 data.file = this.faceAttachments[0].file
             }
+
             data.attachments = faceAttachmentIds;
             if (!this.validator(data)) {
                 this.processing = false;
@@ -258,7 +290,19 @@ export default {
                 newQueue.push(this.faceAttachments[i])
             }
             this.faceAttachments = newQueue
+            if (this.faceData.id == id) {
+                this.faceData = ""
+            }
         },
+        // 设置主要文件
+        setMain(item) {
+            this.faceData = cloneDeep(item);
+            this.$notify({
+                title: "设置成功",
+                type: "success",
+                duration: 2000,
+            });
+        }
     },
 };
 </script>
