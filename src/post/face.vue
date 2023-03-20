@@ -28,12 +28,19 @@
                         <!-- <el-radio label="1">盒币</el-radio> -->
                         <el-radio label="2">金箔</el-radio>
                     </el-radio-group>
-                    <el-input-number class="u-price" v-model="post.price_count" v-if="post.price_type != '0'" size="small"
-                        :max="3000" :min="0"></el-input-number>
+                    <el-input-number
+                        class="u-price"
+                        v-model="post.price_count"
+                        v-if="post.price_type != '0'"
+                        size="small"
+                        :max="3000"
+                        :min="0"
+                    ></el-input-number>
                     <div class="u-tip-box" v-if="post.price_type != '0' && post.price_count > 0">
                         <div class="u-warning">
-                            <el-checkbox v-model="promise"
-                                disabled>我承诺该上传属于自己的原创作品或已得到原作者授权，且相关信息中不带有非授权的元素（比如贴图、字体）等，若违反法律规定我将承担全部责任，魔盒有权下架作品。</el-checkbox>
+                            <el-checkbox v-model="promise" disabled
+                                >我承诺该上传属于自己的原创作品或已得到原作者授权，且相关信息中不带有非授权的元素（比如贴图、字体）等，若违反法律规定我将承担全部责任，魔盒有权下架作品。</el-checkbox
+                            >
                         </div>
                     </div>
                 </el-form-item>
@@ -49,12 +56,33 @@
                 <el-form-item label="数据">
                     <face-attachment :body="post.body_type" @update:data="handleFaceChange" />
                     <div class="u-attachment" v-for="item in faceAttachments" :key="item.id">
-                        <i class="u-main el-icon-collection-tag" v-show="item.file === faceData.file" title="主数据"></i>
-                        <span class="u-attachment-text">文件名: <b>{{ item.name }}</b></span>
-                        <span class="u-attachment-key">唯一标识符：<b>{{ item.file }}</b></span>
-                        <span class="u-attachment-remark"><el-input v-model="item.describe" placeholder="备注" size="mini"></el-input></span>
-                        <el-button class="u-btn" type="primary" icon="el-icon-delete" circle plain @click="removeFile(item.id)" size="mini" title="移除" />
-                        <el-button class="u-btn" type="primary" icon="el-icon-check" circle plain @click="setMain(item)" size="mini" title="设为主数据" />
+                        <el-button
+                            class="u-main"
+                            :type="item.file === faceData.file ? 'warning' : ''"
+                            icon="el-icon-star-off"
+                            circle
+                            :plain="item.file === faceData.file ? false : true"
+                            @click="setMain(item)"
+                            size="mini"
+                            title="设为主数据"
+                        />
+                        <span class="u-attachment-text"
+                            >文件名: <b>{{ item.name }}</b></span
+                        >
+                        <!-- <span class="u-attachment-key">唯一标识符：<b>{{ item.file }}</b></span> -->
+                        <span class="u-attachment-remark"
+                            ><el-input v-model="item.describe" placeholder="备注" size="mini"></el-input
+                        ></span>
+                        <el-button
+                            class="u-btn"
+                            type="info"
+                            icon="el-icon-delete"
+                            circle
+                            plain
+                            @click="removeFile(item.id)"
+                            size="mini"
+                            title="移除"
+                        />
                     </div>
                 </el-form-item>
 
@@ -91,7 +119,7 @@ import UploadAlbum from "@jx3box/jx3box-editor/src/UploadAlbum.vue";
 import publishBanner from "@/components/publish_banner.vue";
 import { bodyMap } from "@jx3box/jx3box-facedat/assets/data/index.json";
 import User from "@jx3box/jx3box-common/js/user.js";
-import cloneDeep from 'lodash/cloneDeep';
+import cloneDeep from "lodash/cloneDeep";
 export default {
     name: "face",
     components: {
@@ -135,7 +163,7 @@ export default {
             bodyMap,
             promise: true,
             faceAttachments: [],
-            faceData: ""
+            faceData: "",
         };
     },
     computed: {
@@ -147,7 +175,7 @@ export default {
         },
         isSuperAuthor() {
             return User.isSuperAuthor();
-        }
+        },
     },
     mounted() {
         this.init();
@@ -179,7 +207,7 @@ export default {
                                 file: item.uuid,
                                 name: item.name,
                                 describe: item.describe || "",
-                            }
+                            };
                         });
 
                         this.faceData = this.faceAttachments.find((item) => {
@@ -237,17 +265,17 @@ export default {
                 return {
                     id: item.id,
                     describe: item.describe,
-                }
+                };
             });
 
             if (this.faceAttachments.length > 0) {
                 // 如果第一个附件有data，证明这个附件是新上传的，那么更新face使用这个data
                 // 如果第一个附件没有data，那么表示第一个附件是以前的，是通过init()获取的，那么更新face使用原来的data
                 if (this.faceAttachments[0].data) {
-                    data.data = this.faceAttachments[0].data
+                    data.data = this.faceAttachments[0].data;
                 }
-                data.body_type = this.faceAttachments[0].body_type
-                data.file = this.faceAttachments[0].file
+                data.body_type = this.faceAttachments[0].body_type;
+                data.file = this.faceAttachments[0].file;
             }
 
             data.attachments = faceAttachmentIds;
@@ -256,16 +284,18 @@ export default {
                 return;
             }
             if (this.id) {
-                updateFace(this.id, data).then((res) => {
-                    this.$message.success("修改成功");
-                    this.processing = false;
-                    // 跳转
-                    setTimeout(() => {
-                        location.href = `/face/${this.id}`;
-                    }, 500);
-                }).finally(() => {
-                    this.processing = false;
-                });
+                updateFace(this.id, data)
+                    .then((res) => {
+                        this.$message.success("修改成功");
+                        this.processing = false;
+                        // 跳转
+                        setTimeout(() => {
+                            location.href = `/face/${this.id}`;
+                        }, 500);
+                    })
+                    .finally(() => {
+                        this.processing = false;
+                    });
             } else {
                 addFace(data).then((res) => {
                     this.$message({
@@ -285,13 +315,13 @@ export default {
             let newQueue = [];
             for (let i = 0; i < this.faceAttachments.length; i++) {
                 if (this.faceAttachments[i].id == id) {
-                    continue
+                    continue;
                 }
-                newQueue.push(this.faceAttachments[i])
+                newQueue.push(this.faceAttachments[i]);
             }
-            this.faceAttachments = newQueue
+            this.faceAttachments = newQueue;
             if (this.faceData.id == id) {
-                this.faceData = ""
+                this.faceData = "";
             }
         },
         // 设置主要文件
@@ -302,7 +332,7 @@ export default {
                 type: "success",
                 duration: 2000,
             });
-        }
+        },
     },
 };
 </script>
