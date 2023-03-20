@@ -207,6 +207,7 @@ export default {
                                 file: item.uuid,
                                 name: item.name,
                                 describe: item.describe || "",
+                                data: item.data || "",
                             };
                         });
 
@@ -265,17 +266,18 @@ export default {
                 return {
                     id: item.id,
                     describe: item.describe,
+                    data: item.data
                 };
             });
 
-            if (this.faceAttachments.length > 0) {
+            if (this.faceData) {
                 // 如果第一个附件有data，证明这个附件是新上传的，那么更新face使用这个data
                 // 如果第一个附件没有data，那么表示第一个附件是以前的，是通过init()获取的，那么更新face使用原来的data
-                if (this.faceAttachments[0].data) {
-                    data.data = this.faceAttachments[0].data;
+                if (this.faceData.data) {
+                    data.data = JSON.stringify(this.faceData.data);
                 }
-                data.body_type = this.faceAttachments[0].body_type;
-                data.file = this.faceAttachments[0].file;
+                data.body_type = this.faceData.body_type;
+                data.file = this.faceData.file;
             }
 
             data.attachments = faceAttachmentIds;

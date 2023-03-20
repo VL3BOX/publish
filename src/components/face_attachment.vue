@@ -46,6 +46,7 @@ export default {
             formdata.append("jx3dat", file);
             formdata.append("body", this.body);
             formdata.append("describe", this.describe);
+            formdata.append("data", this.data.json);
             uploadFile(formdata).then((res) => {
                 this.data.uuid = res.data.data.uuid;
                 this.data.id = res.data.data.id
@@ -103,9 +104,9 @@ export default {
                         message: "数据读取成功，开始上传",
                         type: "success",
                     }), 0);
+                    vm.data.json = json;
                     vm.uploadData(file);
                     vm.data.object = object;
-                    vm.data.json = json;
                 }
             };
             fr.onerror = function (e) {
