@@ -236,6 +236,7 @@ export default {
                     data: json,
                     body_type: object["nRoleType"],
                 };
+                this.post.body_type = object["nRoleType"];
             }
         },
         validator(data) {
@@ -276,7 +277,7 @@ export default {
                 if (this.faceData.data) {
                     data.data = JSON.stringify(this.faceData.data);
                 }
-                data.body_type = this.faceData.body_type;
+                data.body_type = this.faceData.body_type || this.post.body_type
                 data.file = this.faceData.file;
             }
 
