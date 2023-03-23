@@ -185,14 +185,25 @@ export default {
         },
         data: function () {
             if (this.id) {
-                return [this.id, this.post];
+                return [this.id, {...this.post, topics: this.topics}];
             } else {
-                return [this.post];
+                return [{...this.post, topics: this.topics}];
             }
         },
         isSuperAuthor() {
             return User.isSuperAuthor();
-        }
+        },
+        topics: function () {
+            let topics = [];
+            if (this.post?.post_meta?.fb_boss) {
+                topics = topics.concat(this.post.post_meta.fb_boss);
+            }
+            if (this.post?.post_meta?.fb_level) {
+                topics = topics.concat(this.post.post_meta.fb_level);
+            }
+            let _topics = new Set(topics);
+            return Array.from(_topics);
+        },
     },
     methods: {
         // 初始化
