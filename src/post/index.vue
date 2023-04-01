@@ -52,6 +52,12 @@
                         <span>剑三茶馆</span>
                     </router-link>
                 </el-col>
+                <el-col :span="4">
+                    <router-link to="/pvp-skill">
+                        <img svg-inline src="../assets/img/channel/post.svg" />
+                        <span>竞技技巧</span>
+                    </router-link>
+                </el-col>
             </el-row>
 
             <el-divider content-position="left">PVA</el-divider>
