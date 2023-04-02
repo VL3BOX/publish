@@ -47,12 +47,6 @@
                 <publish-authors :id="id" :uid="post.post_author"></publish-authors>
             </div>
 
-            <!-- 临时 -->
-            <div class="m-publish-extend">
-                <el-divider content-position="left">临时</el-divider>
-                <publish-at-authors></publish-at-authors>
-            </div>
-
             <!-- 其它 -->
             <div class="m-publish-other" v-if="isSuperAuthor">
                 <publish-banner v-model="post.post_banner"></publish-banner>
@@ -97,11 +91,9 @@ import publish_comment from "@/components/publish_comment";
 import publish_visible from "@/components/publish_visible";
 import publish_authors from "@/components/publish_authors";
 import publish_revision from '@/components/publish_revision.vue'
-import publish_at_authors from '@/components/publish_at_authors.vue'
 
 // 数据逻辑
 import { push, pull } from "@/service/cms.js";
-import { syncRedis } from "@/service/macro.js";
 import { appendToCollection } from "@/service/collection.js";
 import { AutoSaveMixin } from "@/utils/autoSaveMixin";
 import { cmsMetaMixin } from "@/utils/cmsMetaMixin";
@@ -126,7 +118,6 @@ export default {
         "publish-visible": publish_visible,
         "publish-authors": publish_authors,
         'publish-revision' : publish_revision,
-        'publish-at-authors': publish_at_authors
     },
     data: function () {
         return {
@@ -150,6 +141,7 @@ export default {
                 post_subtype: "通用",
                 // 自定义字段
                 post_meta: {
+                    talent: "",
                     data: [
                         {
                             name: "",
@@ -232,10 +224,6 @@ export default {
             return push(...this.data)
                 .then((res) => {
                     let result = res.data.data;
-                    syncRedis(result).catch((err) => {
-                        console.log("[Redis同步作业失败]", err);
-                    });
-                    this.atUser(result.ID)
                     return result;
                 })
                 .then((result) => {
@@ -295,19 +283,6 @@ export default {
                 post_title: result.post_title,
             });
         },
-    },
-    created: function () {
-        // this.init().then((data) => {
-        //     if (!data) return;
-
-        //     // 迁移兼容
-        //     if (!this.post.zlp && data.meta_1) {
-        //         this.post.zlp = data.meta_1;
-        //     }
-        //     if (!this.post.lang && data.meta_4) {
-        //         this.post.lang = data.meta_4;
-        //     }
-        // });
     },
 };
 </script>

@@ -146,7 +146,7 @@ const routes = [
     },
     // 竞技技巧
     {
-        path: "/pvp-skill/:id?",
+        path: "/pvp/:id?",
         component: pvp_skill,
     },
 

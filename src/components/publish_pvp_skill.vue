@@ -8,7 +8,7 @@
                 <div class="m-macro-talent-simulator">
                     <div class="qx-container"></div>
                 </div>
-                <el-input v-model="talent" placeholder="奇穴方案编码" @change="checkTalent(item)">
+                <el-input v-model="pvpData.talent" placeholder="奇穴方案编码" @change="checkTalent(pvpData.talent)">
                     <template slot="prepend">
                         <a class="u-get" target="_blank" href="/app/talent">
                             <i class="el-icon-warning"></i>
@@ -22,7 +22,7 @@
                 <div class="m-macro-talent-simulator">
                     <div class="qx-container"></div>
                 </div>
-                <el-input v-model="talent" placeholder="镇派方案编码" @change="checkTalent(item)">
+                <el-input v-model="pvpData.talent" placeholder="镇派方案编码" @change="checkTalent(pvpData.talent)">
                     <template slot="prepend">
                         <a class="u-get" target="_blank" href="/app/talent2">
                             <i class="el-icon-warning"></i>
@@ -41,9 +41,9 @@
             </div>
 
             <el-tabs class="tabs-sort" v-model="activeIndex" type="card" closable @tab-remove="removeCombo">
-                <el-tab-pane v-for="(item, i) in combos.data" :key="i" :name="i + 1 + ''">
+                <el-tab-pane v-for="(item, i) in pvpData.data" :key="i" :name="i + 1 + ''" :class="`tab-content${i+1}`">
                     <span slot="label" class="u-tab-box">
-                        <span class="u-tab-name" :title="item.name">{{ "连招" + zh_num[i] + " - " + item.name }}</span>
+                        <span class="u-tab-name" :title="item.name">{{ "连招" + zhNum[i] + " - " + item.name }}</span>
                     </span>
                     <el-form-item label="连招名称" class="m-macro-desc">
                         <el-input
@@ -56,15 +56,17 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item label="技能连招">
-                        <div v-if="item.sq" class="u-skills">
-                            <span v-for="skill in item.sq" :key="skill" class="u-skill">
-                                <img
-                                    class="u-skill-icon"
-                                    :src="iconLink(skill.IconID)"
-                                    :alt="skill.IconID"
-                                    :title="skill.Name"
-                                />
-                            </span>
+                        <div class="u-skills">
+                            <template v-if="item.sq">
+                                <span v-for="(skill, index) in item.sq" :key="skill.SkillID + '' + index" class="u-skill">
+                                    <img
+                                        class="u-skill-icon"
+                                        :src="iconLink(skill.IconID)"
+                                        :alt="skill.IconID"
+                                        :title="skill.Name"
+                                    />
+                                </span>
+                            </template>
                         </div>
                         <el-button type="primary" size="medium" @click="addSkill" icon="el-icon-plus">新增技能</el-button>
                     </el-form-item>
@@ -100,13 +102,14 @@ import User from "@jx3box/jx3box-common/js/user";
 import { sterilizer } from "sterilizer/index.js";
 import { __iconPath } from "@jx3box/jx3box-common/data/jx3box.json";
 import isEmptyMeta from "@/utils/isEmptyMeta.js";
-import cloneDeep from "lodash/cloneDeep";
+import {cloneDeep,pick} from "lodash";
 import SkillDialog from "@/components/skill_dialog.vue";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 
 import Sortable from "sortablejs";
 // META空模板
 const default_meta = {
+    talent: "",
     combo: [
         {
             name: "",
@@ -124,13 +127,11 @@ export default {
     data: function () {
         return {
             maxlength: 20,
-            combos: this.data,
+            pvpData: this.data,
             activeIndex: "1",
             nickname: User.getInfo().name,
 
-            talent: "",
-
-            zh_num: ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十"],
+            zhNum: ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十"],
             showSkillDialog: false,
         };
     },
@@ -144,41 +145,48 @@ export default {
             deep: true,
             handler: function (newval) {
                 if (!newval || isEmptyMeta(newval)) {
-                    this.combos = cloneDeep(default_meta);
+                    this.pvpData = cloneDeep(default_meta);
                 } else {
-                    this.combos = newval;
+                    this.pvpData = newval;
                 }
             },
         },
-        combos: {
+        pvpData: {
             deep: true,
             handler: function (newval) {
                 this.$emit("update", newval);
             },
         },
+        activeIndex: {
+            immediate: true,
+            handler() {
+                this.$nextTick(() => {
+                    this.initSkillSort();
+                });
+            }
+        }
     },
     methods: {
         // 添加连招
         addCombo: function () {
-            if (this.combos.data.length > 7) {
+            if (this.pvpData.data.length > 7) {
                 this.$alert("已经达到添加上限", "消息", {
                     confirmButtonText: "确定",
                 });
                 return;
             }
 
-            let index = this.combos.data.length + 1 + "";
-            this.combos.data.push({
+            let index = this.pvpData.data.length + 1 + "";
+            this.pvpData.data.push({
                 name: "",
-                sq: "",
+                sq: [],
                 desc: "",
             });
             this.activeIndex = index;
         },
         // 删除宏
         removeCombo: function (name) {
-            console.log(name);
-            if (this.combos.data.length < 2) {
+            if (this.pvpData.data.length < 2) {
                 this.$alert("必须保留1个宏", "消息", {
                     confirmButtonText: "确定",
                 });
@@ -191,7 +199,7 @@ export default {
                     if (action == "confirm") {
                         // 删除
                         let i = ~~name - 1;
-                        this.combos.data.splice(i, 1);
+                        this.pvpData.data.splice(i, 1);
                         // 调整focus位置
                         this.activeIndex = "1";
                     }
@@ -201,7 +209,7 @@ export default {
 
         // 检查版本名
         check: function () {
-            this.combos.data.forEach((item, i) => {
+            this.pvpData.data.forEach((item, i) => {
                 if (!item.name) {
                     item.name = "未标题-" + i;
                 }
@@ -220,7 +228,7 @@ export default {
         },
         checkTalent: function (data) {
             try {
-                JSON.parse(data.talent);
+                JSON.parse(data);
             } catch (e) {
                 this.$notify.error({
                     title: "错误",
@@ -235,11 +243,29 @@ export default {
         },
         onSubmit(skill) {
             this.showSkillDialog = false;
-            const sq = (this.combos.data[this.activeIndex - 1].sq?.push(
-                skill
-            ) || [skill]);
+            const _skill = pick(skill, ["SkillID", "Name", "IconID"])
+            const sq = (this.pvpData.data[this.activeIndex - 1].sq?.push(
+                _skill
+            ) || [_skill]);
         },
         iconLink,
+        initSkillSort() {
+            const el = document.querySelector(`.tabs-sort .tab-content${this.activeIndex} .u-skills`);
+            if (!el) return
+            const _this = this;
+            const sortSkills = Sortable.create(el, {
+                animation: 200,
+                onEnd({ newIndex, oldIndex }) {
+                    const data = cloneDeep(_this.pvpData.data[_this.activeIndex - 1].sq);
+                    const currRow = cloneDeep(data.splice(oldIndex, 1)[0]);
+                    data.splice(newIndex, 0, currRow);
+                    _this.pvpData.data[_this.activeIndex - 1].sq = [];
+                    _this.$nextTick(function () {
+                        _this.$set(_this.pvpData.data[_this.activeIndex - 1], "sq", data);
+                    });
+                },
+            });
+        },
     },
     mounted: function () {
         let el = document.querySelector(".tabs-sort .el-tabs__nav");
@@ -248,13 +274,12 @@ export default {
             animation: 200,
             filter: ".el-icon-close",
             onEnd({ newIndex, oldIndex }) {
-                const data = cloneDeep(_this.combos.data);
+                const data = cloneDeep(_this.pvpData.data);
                 const currRow = cloneDeep(data.splice(oldIndex, 1)[0]);
                 data.splice(newIndex, 0, currRow);
-                console.log(data);
-                _this.combos.data = [];
+                _this.pvpData.data = [];
                 _this.$nextTick(function () {
-                    _this.$set(_this.combos, "data", data);
+                    _this.$set(_this.pvpData, "data", data);
                 });
             },
         });
