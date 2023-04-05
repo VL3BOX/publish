@@ -3,14 +3,16 @@
         <el-divider content-position="left">技巧分享</el-divider>
 
         <div class="m-macro-box">
+            <div class="m-macro-talent m-macro-item">
+                <h5 class="u-title">技巧概述</h5>
+                <el-input v-model="pvpData.content" placeholder="输入技巧概述" type="textarea" :row="3">
+                </el-input>
+            </div>
             <div class="m-macro-talent m-macro-item" v-if="client != 'origin'">
                 <h5 class="u-title">奇穴方案</h5>
-                <div class="m-macro-talent-simulator">
-                    <div class="qx-container"></div>
-                </div>
                 <el-input v-model="pvpData.talent" placeholder="奇穴方案编码" @change="checkTalent(pvpData.talent)">
                     <template slot="prepend">
-                        <a class="u-get" target="_blank" href="/app/talent">
+                        <a class="u-get" target="_blank" href="/macro/talent">
                             <i class="el-icon-warning"></i>
                             获取编码
                         </a>
@@ -24,7 +26,7 @@
                 </div>
                 <el-input v-model="pvpData.talent" placeholder="镇派方案编码" @change="checkTalent(pvpData.talent)">
                     <template slot="prepend">
-                        <a class="u-get" target="_blank" href="/app/talent2">
+                        <a class="u-get" target="_blank" href="/macro/talent2">
                             <i class="el-icon-warning"></i>
                             获取编码
                         </a>
@@ -110,6 +112,7 @@ import Sortable from "sortablejs";
 // META空模板
 const default_meta = {
     talent: "",
+    content: "",
     combo: [
         {
             name: "",

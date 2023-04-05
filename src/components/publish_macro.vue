@@ -100,7 +100,7 @@
                             @change="checkTalent(item)"
                         >
                             <template slot="prepend">
-                                <a class="u-get" target="_blank" href="/app/talent2">
+                                <a class="u-get" target="_blank" href="/macro/talent2">
                                     <i class="el-icon-warning"></i>
                                     获取编码
                                 </a>
@@ -110,7 +110,7 @@
                     <div class="m-macro-macro">
                         <h5 class="u-title">
                             宏内容
-                            <a class="u-icon-links" href="/app/macroeditor" target="_blank">
+                            <a class="u-icon-links" href="/macro/macroeditor" target="_blank">
                                 <i class="el-icon-question"></i>
                                 智能中文宏编辑器
                             </a>

@@ -24,20 +24,9 @@
                 <publish-xf v-model="post.post_subtype" :client="post.client"></publish-xf>
             </div>
 
-            <!-- 宏区域 -->
+            <!-- 技能区域 -->
             <publish-pvp-skill v-model="post.post_meta" :client="post.client">
             </publish-pvp-skill>
-
-            <!-- 正文 -->
-            <div class="m-publish-content">
-                <el-divider content-position="left">正文</el-divider>
-                <el-radio-group class="m-publish-editormode" size="small" v-model="post.post_mode" >
-                    <el-radio-button label="tinymce">可视化编辑器</el-radio-button>
-                    <el-radio-button label="markdown">Markdown</el-radio-button>
-                </el-radio-group>
-                <Markdown v-model="post.post_content" :editable="true" :readOnly="false" v-show="post.post_mode == 'markdown'"></Markdown>
-                <Tinymce v-model="post.post_content" :attachmentEnable="true" :resourceEnable="true" v-show="!post.post_mode || post.post_mode == 'tinymce'" />
-            </div>
 
             <!-- 扩展 -->
             <div class="m-publish-extend">
@@ -103,12 +92,9 @@ export default {
     name: "pvp_skill",
     mixins: [AutoSaveMixin, cmsMetaMixin, atAuthorMixin],
     components: {
-        Tinymce,
-        Markdown,
         "publish-header": publish_header,
         "publish-title": publish_title,
         "publish-original": publish_original,
-        // "publish-client": publish_client,
         "publish-lang": publish_lang,
         "publish-zlp": publish_zlp,
         "publish-xf": publish_xf,
@@ -142,6 +128,7 @@ export default {
                 // 自定义字段
                 post_meta: {
                     talent: "",
+                    content: "",
                     data: [
                         {
                             name: "",
