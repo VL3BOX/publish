@@ -253,7 +253,11 @@ export default {
             let result = true;
             data.forEach((item, index) => {
                 if (!item.name) {
-                    this.$message.error(`${index+1}号位 宏名称不能为空`);
+                    this.$notify({
+                        title: "提醒",
+                        message: `第${index + 1}个宏没有填写名称`,
+                        type: "warning",
+                    });
                     result = false;
                 }
             });
