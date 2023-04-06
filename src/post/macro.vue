@@ -247,10 +247,28 @@ export default {
                 this.autoSave();
             });
         },
+        // 宏数据验证
+        checkMacro: function () {
+            let data = this.post.post_meta.data;
+            let result = true;
+            data.forEach((item, index) => {
+                if (!item.name) {
+                    this.$message.error(`${index+1}号位 宏名称不能为空`);
+                    result = false;
+                }
+            });
+            return result;
+        },
         // 发布
         publish: function (status, skip) {
             this.post.post_status = status;
             this.processing = true;
+
+            // 验证
+            if (!this.checkMacro()) {
+                this.processing = false;
+                return;
+            }
 
             // 补充心法id
             this.build();
