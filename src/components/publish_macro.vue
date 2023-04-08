@@ -241,7 +241,7 @@ export default {
     },
     computed: {
         maxlength : function (){
-            return 20 - this.nickname.length - 1
+            return 20 - this.nickname?.length - 1
         }
     },
     methods: {
