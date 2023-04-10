@@ -269,7 +269,6 @@ export default {
         },
         // 删除宏
         removeMacro: function (name) {
-            console.log(name)
             if (this.macros.data.length < 2) {
                 this.$alert("必须保留1个宏", "消息", {
                     confirmButtonText: "确定",
