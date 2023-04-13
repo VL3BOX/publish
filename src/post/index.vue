@@ -29,6 +29,12 @@
                     </router-link>
                 </el-col>
                 <el-col :span="4">
+                    <router-link to="/pvp">
+                        <img svg-inline class="u-icon" :src="getAppIcon('pvp')" />
+                        <span>竞技技巧</span>
+                    </router-link>
+                </el-col>
+                <el-col :span="4">
                     <router-link to="/fb">
                         <img svg-inline src="../assets/img/channel/fb.svg" />
                         <span>副本攻略</span>
@@ -50,12 +56,6 @@
                     <router-link to="/bbs">
                         <img svg-inline src="../assets/img/channel/post.svg" />
                         <span>剑三茶馆</span>
-                    </router-link>
-                </el-col>
-                <el-col :span="4">
-                    <router-link to="/pvp">
-                        <img svg-inline src="../assets/img/channel/post.svg" />
-                        <span>竞技技巧</span>
                     </router-link>
                 </el-col>
             </el-row>
@@ -167,6 +167,7 @@
 
 <script>
 import User from "@jx3box/jx3box-common/js/user";
+import { getAppIcon } from "@jx3box/jx3box-common/js/utils.js";
 export default {
     name: "index",
     props: [],
@@ -176,8 +177,9 @@ export default {
         };
     },
     computed: {},
-    methods: {},
-    mounted: function () {},
+    methods: {
+        getAppIcon
+    },
 };
 </script>
 
