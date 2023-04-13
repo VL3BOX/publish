@@ -239,7 +239,7 @@ export default {
                 });
                 // 跳转
                 setTimeout(() => {
-                    location.href = getLink(result.post_type, result.ID);
+                    location.href = '/pvp/?subtype=' + this.post.post_subtype
                 }, 500);
             } else {
                 // 提醒
