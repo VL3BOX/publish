@@ -60,6 +60,7 @@
             <div class="m-publish-extend">
                 <el-divider content-position="left">设置</el-divider>
                 <publish-comment v-model="post.comment"></publish-comment>
+                <publish-gift v-model="post.allow_gift"></publish-gift>
                 <publish-visible v-model="post.visible"></publish-visible>
                 <publish-authors :id="id" :uid="post.post_author"></publish-authors>
             </div>
@@ -109,6 +110,7 @@ import publish_collection_collapse from "@/components/publish_collection_collaps
 import publish_excerpt from "@/components/publish_excerpt";
 import publish_banner from "@/components/publish_banner";
 import publish_comment from "@/components/publish_comment";
+import publish_gift from "@/components/publish_gift";
 import publish_visible from "@/components/publish_visible";
 import publish_subtype from "@/components/publish_subtype";
 import publish_tags from "@/components/publish_tags";
@@ -141,6 +143,7 @@ export default {
         "publish-excerpt": publish_excerpt,
         "publish-banner": publish_banner,
         "publish-comment": publish_comment,
+        "publish-gift": publish_gift,
         "publish-visible": publish_visible,
         "publish-subtype": publish_subtype,
         "publish-tags": publish_tags,
@@ -218,6 +221,8 @@ export default {
 
                 // 评论开关（0开启|默认，1关闭）
                 comment: 0,
+                // 礼物开关（0关闭|默认，1开启）
+                allow_gift: 1,
 
                 // 阅读权限（0公开，1仅自己，2亲友，3密码，4付费，5粉丝）
                 visible: 0,
