@@ -109,7 +109,6 @@ export default {
     },
     filters: {
         revisionName(val) {
-            console.log(val)
             return `版本${val.version}`;
         },
         formatDate: function(gmt) {

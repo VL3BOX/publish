@@ -174,6 +174,8 @@ export const AutoSaveMixin = {
                     type: "success",
                     message: "历史版本生成成功",
                 });
+                // 更新md5
+                sessionStorage.setItem(`${this.post.post_type}_${this.post.ID}`, JSON.stringify(this.post));
             });
         },
 
