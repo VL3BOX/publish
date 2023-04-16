@@ -67,9 +67,7 @@
                                         :alt="skill.IconID"
                                         :title="skill.Name"
                                     />
-                                    <div class="u-mask" title="移除" @click="removeSkill(index)">
-                                        <i class="el-icon-delete"></i>
-                                    </div>
+                                    <i class="el-icon-circle-close u-remove-icon" title="移除" @click="removeSkill(index)"></i>
                                 </span>
                             </template>
                         </div>
@@ -340,25 +338,20 @@ export default {
                 transform: rotate(90deg);
             }
 
-            .u-mask {
-                .pa;
-                .lt(0);
-                .size(48px, 48px);
-                background-color: rgba(0, 0, 0, 0.5);
-                .r(6px);
-                .none;
-                .pointer;
+            &:hover {
+                cursor: move;
             }
 
-            &:hover {
-                .u-mask {
-                    .flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: #fff;
-                    i:hover {
-                        color: @pink;
-                    }
+            .u-remove-icon {
+                .pa;
+                right: -10px;
+                top: -10px;
+                font-size: 16px;
+                cursor: pointer;
+                // .none;
+
+                &:hover {
+                    color: @pink;
                 }
             }
         }
