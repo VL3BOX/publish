@@ -23,7 +23,7 @@
             </div>
 
             <!-- 技能区域 -->
-            <publish-pvp-skill v-model="post.post_meta" :client="post.client" :subtype="post.post_subtype"> </publish-pvp-skill>
+            <publish-pvp v-model="post.post_meta" :client="post.client" :subtype="post.post_subtype"> </publish-pvp>
 
             <!-- 扩展 -->
             <div class="m-publish-extend">
@@ -59,22 +59,17 @@
 <script>
 // 公共模块
 import lodash from "lodash";
-import { getLink } from "@jx3box/jx3box-common/js/utils";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import User from "@jx3box/jx3box-common/js/user.js";
 
 // 本地模块
-import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
-import Markdown from "@jx3box/jx3box-editor/src/Markdown";
 import publish_header from "@/components/publish_header.vue";
 import publish_title from "@/components/publish_title.vue";
 import publish_original from "@/components/publish_original.vue";
 import publish_client from "@/components/publish_client.vue";
 import publish_zlp from "@/components/publish_zlp";
 import publish_xf from "@/components/publish_xf";
-import publish_pvp_skill from "@/components/publish_pvp_skill";
-import publish_collection from "@/components/publish_collection";
-import publish_collection_collapse from "@/components/publish_collection_collapse";
+import publish_pvp from "@/components/publish_pvp";
 import publish_banner from "@/components/publish_banner";
 import publish_comment from "@/components/publish_comment";
 import publish_visible from "@/components/publish_visible";
@@ -82,7 +77,7 @@ import publish_authors from "@/components/publish_authors";
 import publish_revision from "@/components/publish_revision.vue";
 
 // 数据逻辑
-import { push, pull } from "@/service/cms.js";
+import { push } from "@/service/cms.js";
 import { appendToCollection } from "@/service/collection.js";
 import { AutoSaveMixin } from "@/utils/autoSaveMixin";
 import { cmsMetaMixin } from "@/utils/cmsMetaMixin";
@@ -97,7 +92,7 @@ export default {
         "publish-original": publish_original,
         "publish-zlp": publish_zlp,
         "publish-xf": publish_xf,
-        "publish-pvp-skill": publish_pvp_skill,
+        "publish-pvp": publish_pvp,
         "publish-banner": publish_banner,
         "publish-comment": publish_comment,
         "publish-visible": publish_visible,
@@ -287,5 +282,5 @@ export default {
 </script>
 
 <style lang="less">
-@import "../assets/css/macro.less";
+@import "../assets/css/pvp.less";
 </style>

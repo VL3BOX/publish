@@ -28,7 +28,7 @@ const share = () => import("../post/share.vue");
 const notice = () => import("../post/notice.vue");
 const feedback = () => import("../views/feedback.vue");
 const face = () => import("../post/face.vue");
-const pvp_skill = () => import("../post/pvp_skill.vue");
+const pvp = () => import("../post/pvp.vue");
 
 // WIKI
 const wiki = () => import("../views/wiki.vue");
@@ -147,7 +147,7 @@ const routes = [
     // 竞技技巧
     {
         path: "/pvp/:id?",
-        component: pvp_skill,
+        component: pvp,
     },
 
     // 百科=====================

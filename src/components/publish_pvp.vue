@@ -1,5 +1,5 @@
 <template>
-    <div class="m-publish-pvp-skill m-publish-macro">
+    <div class="m-publish-pvp m-publish-macro">
         <el-divider content-position="left">技巧分享</el-divider>
 
         <div class="m-macro-box">
@@ -123,7 +123,7 @@ const default_meta = {
     ],
 };
 export default {
-    name: "publishPvpSkill",
+    name: "publishPvp",
     props: ["data", "client", 'subtype'],
     components: {
         SkillDialog,
@@ -294,67 +294,3 @@ export default {
     },
 };
 </script>
-
-<style lang="less" scoped>
-/deep/.el-tabs__item {
-    display: inline-flex;
-    align-items: center;
-}
-.tabs-sort {
-    .u-tab-box {
-        display: inline-flex;
-        align-items: center;
-        .u-tab-name {
-            display: inline-block;
-            max-width: 100px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            cursor: move;
-        }
-    }
-}
-.m-publish-pvp-skill {
-    .u-skills {
-        .flex;
-        gap: 30px;
-
-        .u-skill-close {
-            .pa;
-            right: -10px;
-            top: -10px;
-            font-size: 16px;
-            cursor: pointer;
-            // .none;
-        }
-
-        .u-skill {
-            .pr;
-            &:not(:last-of-type)::after {
-                content: "▲";
-                .pa;
-                right: -25px;
-                top: 5px;
-                transform: rotate(90deg);
-            }
-
-            &:hover {
-                cursor: move;
-            }
-
-            .u-remove-icon {
-                .pa;
-                right: -10px;
-                top: -10px;
-                font-size: 16px;
-                cursor: pointer;
-                // .none;
-
-                &:hover {
-                    color: @pink;
-                }
-            }
-        }
-    }
-}
-</style>

@@ -6,7 +6,7 @@
                 <img src="../assets/img/skillset.png" class="u-title-img" alt="" />
             </div>
             <div class="m-skills" v-if="kungfusSkills[kungfu]">
-                <div class="m-skill" v-for="(skill, index) in kungfusSkills[kungfu]" :key="index" @click="selectSkill(skill)">
+                <div class="m-skill" v-for="(skill, index) in formatSkill(kungfusSkills[kungfu])" :key="index" @click="selectSkill(skill)">
                     <div class="u-skill" v-if="skill && skill.IconID">
                         <img
                             class="u-skill-icon"
@@ -19,7 +19,7 @@
             </div>
         </div>
         <!-- 奇穴技能 -->
-        <div class="m-martial-skill">
+        <div class="m-martial-skill" v-if="talentSkills && talentSkills.length">
             <div class="u-title">
                 <span class="u-title-name">奇穴技能</span>
                 <img src="../assets/img/skillset.png" class="u-title-img" alt="" />
@@ -172,83 +172,14 @@ export default {
         },
         selectSkill(skill) {
             this.$emit('selectSkill', skill);
+        },
+        formatSkill(arr) {
+            return arr.filter(item => item?.SkillID)
         }
     },
 };
 </script>
 
 <style lang="less">
-.m-pvp-martial {
-    display: flex;
-    background: #1a2b22;
-    padding: 20px;
-    border-radius: 8px;
-    flex-direction: column;
-    .m-martial-skills {
-        flex: 1;
-    }
-    .m-martial-skill {
-        .u-title {
-            // 竖体显示
-            writing-mode: tb-rl;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .u-title-name {
-            z-index: 1;
-            color: #fff;
-            font-size: 12px;
-        }
-        .u-title-img {
-            width: 24px;
-            height: 71px;
-            position: absolute;
-        }
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        // border: 1px solid rgb(40,107,113);
-        padding: 4px 0;
-        position: relative;
 
-        .u-name {
-            display: block;
-            color: #fff;
-            font-size: 12px;
-            text-align: center;
-            overflow: hidden;
-            white-space: nowrap;
-            width: 48px;
-        }
-    }
-    .m-skills {
-        display: flex;
-        gap: 20px;
-        flex-wrap: wrap;
-        align-items: center;
-    }
-
-    .m-skill {
-        position: relative;
-        display: flex;
-        justify-content: center;
-        cursor: pointer;
-
-        .u-skill-icon {
-            box-sizing: border-box;
-            border: 2px solid #1a2b22;
-        }
-
-        .u-skill.active {
-            .u-name {
-                color: #a5ffd0;
-                text-shadow: 0 0 3px #2ffbb2;
-            }
-        }
-    }
-
-}
 </style>
