@@ -67,7 +67,7 @@
                                         :alt="skill.IconID"
                                         :title="skill.Name"
                                     />
-                                    <i class="el-icon-circle-close u-remove-icon" title="移除" @click="removeSkill(index)"></i>
+                                    <i class="u-remove-icon" title="移除" @click="removeSkill(index)"><i class="el-icon-close"></i></i>
                                 </span>
                             </template>
                         </div>
@@ -344,14 +344,22 @@ export default {
 
             .u-remove-icon {
                 .pa;
-                right: -10px;
-                top: -10px;
-                font-size: 16px;
+                right: -4px;
+                top: -4px;
                 cursor: pointer;
                 // .none;
 
+                background-color:#c00;
+                .size(12px);
+                .r(50%);
+                .db;
+                i{
+                    color:#fff;
+                    .fz(12px);
+                    .db;
+                }
                 &:hover {
-                    color: @pink;
+                    background-color:#f00;
                 }
             }
         }
