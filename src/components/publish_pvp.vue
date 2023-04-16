@@ -67,7 +67,7 @@
                                         :alt="skill.IconID"
                                         :title="skill.Name"
                                     />
-                                    <i class="el-icon-circle-close u-remove-icon" title="移除" @click="removeSkill(index)"></i>
+                                    <i class="u-remove-icon" title="移除" @click="removeSkill(index)"><i class="el-icon-close"></i></i>
                                 </span>
                             </template>
                         </div>
