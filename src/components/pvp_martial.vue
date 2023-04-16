@@ -134,7 +134,7 @@ export default {
             return this.talentSkillIds.map((SkillID) => {
                 const currentSkill = this.data.find((d) => d.SkillID == SkillID);
                 return currentSkill;
-            }).filter(Boolean);
+            }).filter(item => item && item.IsPassiveSkill == 0);
         },
         commonSkills() {
             return this.commonIds.map((SkillID) => {
