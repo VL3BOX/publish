@@ -15,9 +15,7 @@
                 <!-- 原创 -->
                 <publish-original v-model="post.original"></publish-original>
                 <!-- 客户端 -->
-                <!-- <publish-client v-model="post.client" :forbidAll="true"></publish-client> -->
-                <!-- 语言：简体/繁体 -->
-                <publish-lang v-model="post.lang"></publish-lang>
+                <publish-client v-model="post.client" :forbidAll="true"></publish-client>
                 <!-- 资料片 -->
                 <publish-zlp v-model="post.zlp" :client="post.client"></publish-zlp>
                 <!-- 心法 -->
@@ -25,8 +23,7 @@
             </div>
 
             <!-- 技能区域 -->
-            <publish-pvp-skill v-model="post.post_meta" :client="post.client">
-            </publish-pvp-skill>
+            <publish-pvp-skill v-model="post.post_meta" :client="post.client" :subtype="post.post_subtype"> </publish-pvp-skill>
 
             <!-- 扩展 -->
             <div class="m-publish-extend">
@@ -47,8 +44,12 @@
                     <el-button type="primary" @click="useDraft" :disabled="processing">使用此版本</el-button>
                 </template>
                 <template v-else>
-                    <el-button type="primary" @click="publish('publish', true)" :disabled="processing">发 &nbsp;&nbsp; 布</el-button>
-                    <el-button type="plain" @click="publish('draft', false)" :disabled="processing">保存为草稿</el-button>
+                    <el-button type="primary" @click="publish('publish', true)" :disabled="processing"
+                        >发 &nbsp;&nbsp; 布</el-button
+                    >
+                    <el-button type="plain" @click="publish('draft', false)" :disabled="processing"
+                        >保存为草稿</el-button
+                    >
                 </template>
             </div>
         </el-form>
@@ -69,7 +70,6 @@ import publish_header from "@/components/publish_header.vue";
 import publish_title from "@/components/publish_title.vue";
 import publish_original from "@/components/publish_original.vue";
 import publish_client from "@/components/publish_client.vue";
-import publish_lang from "@/components/publish_lang";
 import publish_zlp from "@/components/publish_zlp";
 import publish_xf from "@/components/publish_xf";
 import publish_pvp_skill from "@/components/publish_pvp_skill";
@@ -79,7 +79,7 @@ import publish_banner from "@/components/publish_banner";
 import publish_comment from "@/components/publish_comment";
 import publish_visible from "@/components/publish_visible";
 import publish_authors from "@/components/publish_authors";
-import publish_revision from '@/components/publish_revision.vue'
+import publish_revision from "@/components/publish_revision.vue";
 
 // 数据逻辑
 import { push, pull } from "@/service/cms.js";
@@ -95,7 +95,6 @@ export default {
         "publish-header": publish_header,
         "publish-title": publish_title,
         "publish-original": publish_original,
-        "publish-lang": publish_lang,
         "publish-zlp": publish_zlp,
         "publish-xf": publish_xf,
         "publish-pvp-skill": publish_pvp_skill,
@@ -103,7 +102,8 @@ export default {
         "publish-comment": publish_comment,
         "publish-visible": publish_visible,
         "publish-authors": publish_authors,
-        'publish-revision' : publish_revision,
+        "publish-revision": publish_revision,
+        "publish-client": publish_client,
     },
     data: function () {
         return {
@@ -190,12 +190,23 @@ export default {
         },
         isSuperAuthor() {
             return User.isSuperAuthor();
-        }
+        },
+    },
+    watch: {
+        '$route.query': {
+            handler: function (val) {
+                if (val?.subtype) {
+                    this.post.post_subtype = val.subtype;
+                }
+            },
+            deep: true,
+            immediate: true,
+        },
     },
     methods: {
         // 初始化
-        init: function() {
-            sessionStorage.removeItem("atAuthor")
+        init: function () {
+            sessionStorage.removeItem("atAuthor");
             // 尝试加载
             return this.loadData().then(() => {
                 // 加载成功后执行自动保存逻辑（含本地草稿、本地缓存、云端历史版本）
@@ -226,8 +237,7 @@ export default {
         },
         // 搜索扩展
         build: function () {
-            this.post.meta_2 =
-                ~~lodash.get(xfmap[this.post.post_subtype], "id") || 0;
+            this.post.meta_2 = ~~lodash.get(xfmap[this.post.post_subtype], "id") || 0;
         },
         // 完成
         done: function (skip, result) {
@@ -239,7 +249,7 @@ export default {
                 });
                 // 跳转
                 setTimeout(() => {
-                    location.href = '/pvp/?subtype=' + this.post.post_subtype
+                    location.href = "/pvp/?subtype=" + this.post.post_subtype;
                 }, 500);
             } else {
                 // 提醒

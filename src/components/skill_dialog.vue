@@ -1,72 +1,110 @@
 <template>
-    <el-dialog class="c-large-dialog" :visible="modelValue" @close="close" title="技能库" append-to-body custom-class="m-skill-dialog">
-        <div class="m-database-search">
-            <el-radio-group class="u-client" v-model="client" @change="search">
-                <el-radio-button label="std">重制</el-radio-button>
-                <el-radio-button label="origin">缘起</el-radio-button>
-            </el-radio-group>
-            <el-input
-                class="u-input"
-                placeholder="请输入 ID 或 名称"
-                v-model="query"
-                @keyup.enter.native="search"
-            >
-                <template slot="prepend">ID ／名称</template>
-            </el-input>
+    <el-dialog
+        class="c-large-dialog"
+        :visible="modelValue"
+        @close="close"
+        title="技能库"
+        append-to-body
+        custom-class="m-skill-dialog"
+    >
+        <el-tabs v-model="activeName" type="card" class="m-skill-tabs">
+            <el-tab-pane label="门派武学" name="special">
+                <template #label>
+                    <div class="u-tab-label">
+                        <i class="el-icon-s-order"></i>
+                        <b>门派武学</b>
+                    </div>
+                </template>
+            </el-tab-pane>
+            <el-tab-pane label="全部技能" name="all">
+                <template #label>
+                    <div class="u-tab-label">
+                        <i class="el-icon-menu"></i>
+                        <b>全部技能</b>
+                    </div>
+                </template>
+            </el-tab-pane>
+        </el-tabs>
+        <div class="m-select-content">
+            <div v-show="activeName === 'all'">
+                <div class="m-database-search">
+                    <el-radio-group class="u-client" v-model="client" @change="search">
+                        <el-radio-button label="std">重制</el-radio-button>
+                        <el-radio-button label="origin">缘起</el-radio-button>
+                    </el-radio-group>
+                    <el-input
+                        class="u-input"
+                        placeholder="请输入 ID 或 名称"
+                        v-model="query"
+                        @keyup.enter.native="search"
+                    >
+                        <template slot="prepend">ID ／名称</template>
+                    </el-input>
+                </div>
+
+                <div v-if="total && done" class="m-resource-count">
+                    <i class="el-icon-s-data"></i> 共找到 <b>{{ total }}</b> 条记录
+                </div>
+                <ul class="m-resource-list">
+                    <li v-for="(o, i) in skill" class="u-item" :key="i" @click="selectSkill(o, i)" ref="skill">
+                        <span class="u-id">ID:{{ o.SkillID }}</span>
+                        <img class="u-pic" :title="'IconID:' + o.IconID" :src="iconURL(o.IconID)" />
+                        <span class="u-primary">
+                            <span class="u-name">
+                                {{ o.Name }}
+                                <em v-if="o.SkillName">({{ o.SkillName }})</em>
+                            </span>
+                            <span class="u-content">
+                                {{ filterRaw(o.Desc) }}
+                            </span>
+                        </span>
+                    </li>
+                </ul>
+                <el-alert v-if="!skill.length && done" title="没有找到相关条目" type="info" show-icon></el-alert>
+
+                <template v-if="multipage">
+                    <!-- 下一页 -->
+                    <el-button
+                        class="m-archive-more"
+                        :class="{ show: hasNextPage }"
+                        type="primary"
+                        icon="el-icon-arrow-down"
+                        @click="appendPage"
+                        >加载更多</el-button
+                    >
+                    <!-- 分页 -->
+                    <el-pagination
+                        class="m-archive-pages"
+                        background
+                        layout="total, prev, pager, next,jumper"
+                        :hide-on-single-page="true"
+                        :page-size="per"
+                        :total="total"
+                        :current-page.sync="page"
+                        @current-change="changePage"
+                    ></el-pagination>
+                </template>
+
+                <div class="m-database-tip" v-show="isBlank">❤ 请输入搜索条件查询</div>
+            </div>
+            <pvp-martial v-show="activeName === 'special'" :subtype="subtype" @selectSkill="selectSkill"></pvp-martial>
         </div>
 
-        <div v-if="total && done" class="m-resource-count">
-            <i class="el-icon-s-data"></i> 共找到 <b>{{ total }}</b> 条记录
+        <!-- 已选技能 -->
+        <el-divider>已选技能</el-divider>
+        <div class="m-selected-skills">
+            <ul class="m-skills-list">
+                <li v-for="(skill, index) in selected" :key="index" class="m-skill">
+                    <div class="u-skill" v-if="skill && skill.IconID">
+                        <img class="u-skill-icon" :src="iconURL(skill.IconID)" :alt="skill.IconID" />
+                        <span class="u-name" :title="skill.Name">{{ skill.Name }}</span>
+                    </div>
+                    <div class="u-mask" @click="removeSelected(index)">
+                        <i class="el-icon-delete"></i>
+                    </div>
+                </li>
+            </ul>
         </div>
-        <ul class="m-resource-list">
-            <li
-                v-for="(o, i) in skill"
-                class="u-item"
-                :key="i"
-                :class="{ on: !!o.isSelected }"
-                @click="selectSkill(o, i)"
-                ref="skill"
-            >
-                <span class="u-id">ID:{{ o.SkillID }}</span>
-                <img class="u-pic" :title="'IconID:' + o.IconID" :src="iconURL(o.IconID)" />
-                <span class="u-primary">
-                    <span class="u-name">
-                        {{ o.Name }}
-                        <em v-if="o.SkillName">({{ o.SkillName }})</em>
-                    </span>
-                    <span class="u-content">
-                        {{ filterRaw(o.Desc) }}
-                    </span>
-                </span>
-            </li>
-        </ul>
-        <el-alert v-if="!skill.length && done" title="没有找到相关条目" type="info" show-icon></el-alert>
-
-        <template v-if="multipage">
-            <!-- 下一页 -->
-            <el-button
-                class="m-archive-more"
-                :class="{ show: hasNextPage }"
-                type="primary"
-                icon="el-icon-arrow-down"
-                @click="appendPage"
-                >加载更多</el-button
-            >
-            <!-- 分页 -->
-            <el-pagination
-                class="m-archive-pages"
-                background
-                layout="total, prev, pager, next,jumper"
-                :hide-on-single-page="true"
-                :page-size="per"
-                :total="total"
-                :current-page.sync="page"
-                @current-change="changePage"
-            ></el-pagination>
-        </template>
-
-        <div class="m-database-tip" v-show="isBlank">❤ 请输入搜索条件查询</div>
-
         <!-- 插入按钮 -->
         <span slot="footer" class="dialog-footer">
             <el-button @click="close">取 消</el-button>
@@ -80,12 +118,20 @@
 <script>
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 import { getSkill } from "@/service/node";
+import pvp_martialVue from "./pvp_martial.vue";
 export default {
     name: "skillDialog",
+    components: {
+        "pvp-martial": pvp_martialVue,
+    },
     props: {
         modelValue: {
             type: Boolean,
             default: false,
+        },
+        subtype: {
+            type: String,
+            default: "通用",
         },
     },
     model: {
@@ -102,6 +148,9 @@ export default {
             total: 1,
             pages: 1,
             query: "",
+
+            activeName: "special",
+            selected: [],
         };
     },
     computed: {
@@ -111,10 +160,10 @@ export default {
         multipage: function () {
             return this.done && this.pages > 1;
         },
-        isBlank: function() {
+        isBlank: function () {
             return !this.query && !this.skill["length"];
         },
-        buttonTXT: function() {
+        buttonTXT: function () {
             return "确 定";
         },
     },
@@ -146,20 +195,16 @@ export default {
                     this.loading = false;
                 });
         },
-        selectSkill: function(o, i) {
-            this.skill.forEach((item) => {
-                item.isSelected = false;
-            });
-            o.isSelected = true;
+        selectSkill: function (o) {
+            this.selected.push(o);
+        },
+        removeSelected: function (index) {
+            this.selected.splice(index, 1);
         },
         submit() {
-            const selected = this.skill.filter((item) => item.isSelected);
-            if (!selected.length) {
-                this.$message.error("请选择一个技能");
-                return;
-            }
-            this.$emit("submit", selected[0]);
+            this.$emit("submit", this.selected);
             this.close();
+            this.selected = [];
         },
         close() {
             this.$emit("update:modelValue", false);
@@ -174,10 +219,10 @@ export default {
             this.page = 1;
             this.getData();
         },
-        appendPage: function() {
+        appendPage: function () {
             this.getData(++this.page, true);
         },
-        changePage: function(i) {
+        changePage: function (i) {
             this.getData(i);
         },
         transformData: function (data) {
@@ -192,6 +237,17 @@ export default {
 
 <style lang="less">
 .m-skill-dialog {
+    .m-skill-tabs {
+        .el-tabs__item {
+            background-color: #fafbfc;
+            border-bottom: 1px solid #e4e7ed !important;
+            &.is-active {
+                border-bottom: none !important;
+                background-color: #fff;
+                font-weight: bold;
+            }
+        }
+    }
     .m-database-search {
         position: sticky;
         z-index: 100;
@@ -374,30 +430,96 @@ export default {
             }
         }
     }
+    .m-select-content {
+        height: calc(100% - 200px);
+        overflow: auto;
+    }
+    // 已选数据
+    .m-selected-skills {
+        height: 70px;
+        border: 1px solid #ddd;
+        padding: 10px;
+        .scrollbar();
+        overflow-y: auto;
+        .m-skills-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            .flex;
+            flex-wrap: wrap;
+        }
+        .m-skill {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            .pr;
+
+            .u-skill-icon {
+                .size(48px, 48px);
+            }
+
+            .u-name {
+                display: block;
+                font-size: 12px;
+                text-align: center;
+                overflow: hidden;
+                white-space: nowrap;
+                width: 48px;
+            }
+
+            .u-mask {
+                .pa;
+                .lt(0);
+                .size(48px, 48px);
+                background-color: rgba(0, 0, 0, 0.5);
+                .r(6px);
+                .none;
+                .pointer;
+            }
+
+            &:hover {
+                .u-mask {
+                    .flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #fff;
+                    i:hover {
+                        color: @pink;
+                    }
+                }
+            }
+        }
+
+        .u-skill {
+            .flex;
+            flex-direction: column;
+            margin-right: 10px;
+        }
+    }
 }
 .c-large-dialog .el-dialog {
-        .w(60%);
-        height: 70%;
-        .el-dialog__body {
-            height: calc(100% - 54px - 70px);
-            overflow-y: auto;
-            box-sizing: border-box;
-            padding: 10px 20px 30px 20px;
-            // padding: 0;
-            .scrollbar();
-        }
+    .w(60%);
+    height: 70%;
+    .el-dialog__body {
+        height: calc(100% - 54px - 70px);
+        overflow-y: auto;
+        box-sizing: border-box;
+        padding: 10px 20px 30px 20px;
+        // padding: 0;
+        .scrollbar();
     }
-    @media screen and (max-width: @notebook) {
-        .c-large-dialog .el-dialog {
-            .w(90%);
-        }
+}
+@media screen and (max-width: @notebook) {
+    .c-large-dialog .el-dialog {
+        .w(90%);
     }
-    @media screen and (max-width: @ipad-y) {
-        .c-large-dialog .el-dialog {
-            margin: 0 !important;
-            .size(100%);
-            max-height: none;
-            .h(100%);
-        }
+}
+@media screen and (max-width: @ipad-y) {
+    .c-large-dialog .el-dialog {
+        margin: 0 !important;
+        .size(100%);
+        max-height: none;
+        .h(100%);
     }
+}
 </style>

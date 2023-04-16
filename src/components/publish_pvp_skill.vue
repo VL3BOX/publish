@@ -5,7 +5,7 @@
         <div class="m-macro-box">
             <div class="m-macro-talent m-macro-item">
                 <h5 class="u-title">技巧概述</h5>
-                <el-input v-model="pvpData.content" placeholder="输入技巧概述" type="textarea" :row="3">
+                <el-input v-model="pvpData.content" placeholder="输入技巧概述" type="textarea" :rows="5">
                 </el-input>
             </div>
             <div class="m-macro-talent m-macro-item" v-if="client != 'origin'">
@@ -50,7 +50,7 @@
                     <el-form-item label="连招名称" class="m-macro-desc">
                         <el-input
                             v-model="item.name"
-                            placeholder="每个宏名称请使用自己名下唯一命名"
+                            placeholder="请输入连招名称"
                             :minlength="1"
                             :maxlength="maxlength"
                             show-word-limit
@@ -67,6 +67,9 @@
                                         :alt="skill.IconID"
                                         :title="skill.Name"
                                     />
+                                    <div class="u-mask" title="移除" @click="removeSkill(index)">
+                                        <i class="el-icon-delete"></i>
+                                    </div>
                                 </span>
                             </template>
                         </div>
@@ -76,7 +79,7 @@
                         <el-input
                             v-model="item.desc"
                             type="textarea"
-                            placeholder="对连招的简单说明，可不填"
+                            placeholder="连招简要说明（选填）"
                         ></el-input>
                     </el-form-item>
                     <div class="m-macro-op">
@@ -95,7 +98,7 @@
         </div>
         <slot></slot>
 
-        <skillDialog v-model="showSkillDialog" @submit="onSubmit"></skillDialog>
+        <skillDialog v-model="showSkillDialog" @submit="onSubmit" :subtype="subtype"></skillDialog>
     </div>
 </template>
 
@@ -123,7 +126,7 @@ const default_meta = {
 };
 export default {
     name: "publishPvpSkill",
-    props: ["data", "client"],
+    props: ["data", "client", 'subtype'],
     components: {
         SkillDialog,
     },
@@ -244,12 +247,16 @@ export default {
         addSkill() {
             this.showSkillDialog = true;
         },
+        // 移除技能
+        removeSkill(index) {
+            this.pvpData.data[this.activeIndex - 1].sq.splice(index, 1);
+        },
         onSubmit(skill) {
             this.showSkillDialog = false;
-            const _skill = pick(skill, ["SkillID", "Name", "IconID"])
+            const _skill = skill.map(item => pick(item, ["SkillID", "Name", "IconID"]));
             const sq = (this.pvpData.data[this.activeIndex - 1].sq?.push(
-                _skill
-            ) || [_skill]);
+                ..._skill
+            ) || _skill);
         },
         iconLink,
         initSkillSort() {
@@ -314,6 +321,15 @@ export default {
         .flex;
         gap: 30px;
 
+        .u-skill-close {
+            .pa;
+            right: -10px;
+            top: -10px;
+            font-size: 16px;
+            cursor: pointer;
+            // .none;
+        }
+
         .u-skill {
             .pr;
             &:not(:last-of-type)::after {
@@ -322,6 +338,28 @@ export default {
                 right: -25px;
                 top: 5px;
                 transform: rotate(90deg);
+            }
+
+            .u-mask {
+                .pa;
+                .lt(0);
+                .size(48px, 48px);
+                background-color: rgba(0, 0, 0, 0.5);
+                .r(6px);
+                .none;
+                .pointer;
+            }
+
+            &:hover {
+                .u-mask {
+                    .flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #fff;
+                    i:hover {
+                        color: @pink;
+                    }
+                }
             }
         }
     }
