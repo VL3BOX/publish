@@ -21,6 +21,9 @@ Vue.use(handleSessionStorage)
 
 handleSessionStorage();
 
+import Contextmenu from "vue-contextmenujs"
+Vue.use(Contextmenu);
+
 // 数据与路由
 import router from "./router";
 import store from "./store";

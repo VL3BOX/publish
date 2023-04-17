@@ -123,6 +123,7 @@ export default {
                 // 自定义字段
                 post_meta: {
                     talent: "",
+                    talent_desc: "", // 奇穴讲解
                     content: "",
                     data: [
                         {

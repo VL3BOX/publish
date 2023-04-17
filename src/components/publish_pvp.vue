@@ -5,8 +5,7 @@
         <div class="m-macro-box">
             <div class="m-macro-talent m-macro-item">
                 <h5 class="u-title">技巧概述</h5>
-                <el-input v-model="pvpData.content" placeholder="输入技巧概述" type="textarea" :rows="5">
-                </el-input>
+                <el-input v-model="pvpData.content" placeholder="输入技巧概述" type="textarea" :rows="5"> </el-input>
             </div>
             <div class="m-macro-talent m-macro-item" v-if="client != 'origin'">
                 <h5 class="u-title">奇穴方案</h5>
@@ -33,6 +32,12 @@
                     </template>
                 </el-input>
             </div>
+
+            <div class="m-macro-talent m-macro-item">
+                <h5 class="u-title">{{ client === "std" ? "奇穴" : "镇派" }}讲解</h5>
+                <el-input v-model="pvpData.talent_desc" placeholder="输入内容（选填）" type="textarea" :rows="4">
+                </el-input>
+            </div>
         </div>
 
         <div class="m-macro-box">
@@ -43,7 +48,12 @@
             </div>
 
             <el-tabs class="tabs-sort" v-model="activeIndex" type="card" closable @tab-remove="removeCombo">
-                <el-tab-pane v-for="(item, i) in pvpData.data" :key="i" :name="i + 1 + ''" :class="`tab-content${i+1}`">
+                <el-tab-pane
+                    v-for="(item, i) in pvpData.data"
+                    :key="i"
+                    :name="i + 1 + ''"
+                    :class="`tab-content${i + 1}`"
+                >
                     <span slot="label" class="u-tab-box">
                         <span class="u-tab-name" :title="item.name">{{ "连招" + zhNum[i] + " - " + item.name }}</span>
                     </span>
@@ -54,31 +64,40 @@
                             :minlength="1"
                             :maxlength="maxlength"
                             show-word-limit
-                            @change="checkDataName(item)">
+                            @change="checkDataName(item)"
+                        >
                         </el-input>
                     </el-form-item>
                     <el-form-item label="技能连招">
                         <div class="u-skills">
                             <template v-if="item.sq">
-                                <span v-for="(skill, index) in item.sq" :key="skill.SkillID + '' + index" class="u-skill">
+                                <span
+                                    v-for="(skill, index) in item.sq"
+                                    :key="skill.SkillID + '' + index"
+                                    class="u-skill"
+                                    @contextmenu.prevent="(event) => onContextmenu(event, skill)"
+                                >
                                     <img
                                         class="u-skill-icon"
                                         :src="iconLink(skill.IconID)"
                                         :alt="skill.IconID"
                                         :title="skill.Name"
                                     />
-                                    <i class="u-remove-icon" title="移除" @click="removeSkill(index)"><i class="el-icon-close"></i></i>
+                                    <i class="u-gcd-icon" v-show="skill.WithoutGcd">
+                                        <i class="el-icon-time"></i>
+                                    </i>
+                                    <i class="u-remove-icon" title="移除" @click="removeSkill(index)"
+                                        ><i class="el-icon-close"></i
+                                    ></i>
                                 </span>
                             </template>
                         </div>
-                        <el-button type="primary" size="medium" @click="addSkill" icon="el-icon-plus">新增技能</el-button>
+                        <el-button type="primary" size="medium" @click="addSkill" icon="el-icon-plus"
+                            >新增技能</el-button
+                        >
                     </el-form-item>
                     <el-form-item label="连招说明" class="m-macro-desc">
-                        <el-input
-                            v-model="item.desc"
-                            type="textarea"
-                            placeholder="连招简要说明（选填）"
-                        ></el-input>
+                        <el-input v-model="item.desc" type="textarea" placeholder="连招简要说明（选填）"></el-input>
                     </el-form-item>
                     <div class="m-macro-op">
                         <el-button
@@ -105,7 +124,7 @@ import User from "@jx3box/jx3box-common/js/user";
 import { sterilizer } from "sterilizer/index.js";
 import { __iconPath } from "@jx3box/jx3box-common/data/jx3box.json";
 import isEmptyMeta from "@/utils/isEmptyMeta.js";
-import {cloneDeep,pick} from "lodash";
+import { cloneDeep, pick } from "lodash";
 import SkillDialog from "@/components/skill_dialog.vue";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 
@@ -113,6 +132,7 @@ import Sortable from "sortablejs";
 // META空模板
 const default_meta = {
     talent: "",
+    talent_desc: "",
     content: "",
     combo: [
         {
@@ -124,7 +144,7 @@ const default_meta = {
 };
 export default {
     name: "publishPvp",
-    props: ["data", "client", 'subtype'],
+    props: ["data", "client", "subtype"],
     components: {
         SkillDialog,
     },
@@ -167,8 +187,8 @@ export default {
                 this.$nextTick(() => {
                     this.initSkillSort();
                 });
-            }
-        }
+            },
+        },
     },
     methods: {
         // 添加连招
@@ -210,7 +230,6 @@ export default {
                 },
             });
         },
-
         // 检查版本名
         check: function () {
             this.pvpData.data.forEach((item, i) => {
@@ -240,7 +259,6 @@ export default {
                 });
             }
         },
-
         // 新增技能
         addSkill() {
             this.showSkillDialog = true;
@@ -251,15 +269,14 @@ export default {
         },
         onSubmit(skill) {
             this.showSkillDialog = false;
-            const _skill = skill.map(item => pick(item, ["SkillID", "Name", "IconID"]));
-            const sq = (this.pvpData.data[this.activeIndex - 1].sq?.push(
-                ..._skill
-            ) || _skill);
+            const _skill = skill.map((item) => pick(item, ["SkillID", "Name", "IconID"]));
+            const sq = this.pvpData.data[this.activeIndex - 1].sq?.push(..._skill) || _skill;
         },
         iconLink,
+        // 初始化技能排序
         initSkillSort() {
             const el = document.querySelector(`.tabs-sort .tab-content${this.activeIndex} .u-skills`);
-            if (!el) return
+            if (!el) return;
             const _this = this;
             const sortSkills = Sortable.create(el, {
                 animation: 200,
@@ -273,6 +290,25 @@ export default {
                     });
                 },
             });
+        },
+        onContextmenu(event, skill) {
+            // console.log(skill)
+            this.$contextmenu({
+                items: [
+                    {
+                        label: !skill?.WithoutGcd ? "设置为无GCD技能" : "取消无GCD技能",
+                        onClick: () => {
+                            this.$set(skill, "WithoutGcd", !skill.WithoutGcd);
+                        },
+                        icon: !skill?.WithoutGcd ? "el-icon-check" : "el-icon-close"
+                    },
+                ],
+                event,
+                customClass: "custom-class",
+                zIndex: 3,
+                minWidth: 230,
+            });
+            return false;
         },
     },
     mounted: function () {
