@@ -13,6 +13,9 @@
                 <publish-client v-model="post.client" :forbidAll="true"></publish-client>
                 <!-- 原创 -->
                 <publish-original v-model="post.original"></publish-original>
+                <el-form-item label="首发" prop="is_fr">
+                    <el-switch v-model="post.is_fr" active-color="#13ce66" :active-value="1" :inactive-value="0"></el-switch>
+                </el-form-item>
                 <template v-if="!post.original">
                     <el-form-item label="原作者名称" prop="author_name">
                         <el-input v-model="post.author_name" placeholder="输入原作者名称"></el-input>
@@ -136,6 +139,7 @@ export default {
             post: {
                 // 用户信息
                 original: 1, // 是否原创
+                is_fr: 1, // 是否首发
                 author_name: "", // 原作者名称
                 author_link: "", // 原作者链接
                 // 作品信息
