@@ -124,12 +124,12 @@
                         <span>剑三小册</span>
                     </router-link>
                 </el-col>
-                <el-col :span="4">
+                <!-- <el-col :span="4">
                     <router-link to="/item_plan">
                         <i class="el-icon-folder"></i>
                         <span>物品清单</span>
                     </router-link>
-                </el-col>
+                </el-col> -->
                 <el-col :span="4">
                     <router-link to="/question">
                         <i class="el-icon-s-opportunity"></i>
