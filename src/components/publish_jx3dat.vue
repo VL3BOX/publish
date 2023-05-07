@@ -301,11 +301,11 @@ export default {
             },
         },
         // 重置tab面板
-        data_type(nVal) {
-            if (nVal !== 'lanren') {
-                this.jx3dats = lodash.cloneDeep(default_meta);
-            }
-        }
+        // data_type(nVal) {
+        //     if (nVal !== 'lanren') {
+        //         this.jx3dats = lodash.cloneDeep(default_meta);
+        //     }
+        // }
     },
     computed: {
         data_type: function () {
