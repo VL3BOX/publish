@@ -24,7 +24,7 @@
 					<el-radio-button label="1">道具清单</el-radio-button>
 					<el-radio-button label="2">装备清单</el-radio-button>
 				</el-radio-group>
-				<el-button class="u-add-plan" size="medium" icon="el-icon-plus" @click="addRelation">新增清单</el-button>
+				<el-button class="u-add-plan" size="medium" icon="el-icon-plus" @click="addRelation">新增分组</el-button>
 			</el-form-item>
 			<!-- 制作清单 -->
 			<el-form-item label="清单">
