@@ -85,6 +85,7 @@
 import { getLink } from "@jx3box/jx3box-common/js/utils";
 import tool_types from "@/assets/data/tool.json";
 import User from "@jx3box/jx3box-common/js/user.js";
+import {omit} from 'lodash'
 
 // 本地模块
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
@@ -188,7 +189,7 @@ export default {
             },
 
             // 选项
-            tool_types,
+            tool_types : User.isEditor() ? tool_types : omit(tool_types,['4'])
         };
     },
     computed: {

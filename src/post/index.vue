@@ -58,6 +58,12 @@
                         <span>剑三茶馆</span>
                     </router-link>
                 </el-col>
+                <el-col :span="4">
+                    <router-link to="/collection">
+                        <i class="el-icon-notebook-1"></i>
+                        <span>剑三小册</span>
+                    </router-link>
+                </el-col>
             </el-row>
 
             <el-divider content-position="left">PVA</el-divider>
@@ -97,16 +103,6 @@
                     </router-link>
                 </el-col>
                 <el-col :span="4">
-                    <router-link to="/blueprint" class="disabled">
-                        <img svg-inline src="../assets/img/channel/house.svg" />
-                        <span>家园蓝图</span>
-                    </router-link>
-                </el-col>
-            </el-row>
-
-            <el-divider content-position="left">其它</el-divider>
-            <el-row :gutter="20">
-                <el-col :span="4">
                     <router-link to="/joke">
                         <img svg-inline src="../assets/img/channel/joke.svg" />
                         <span>剑三骚话</span>
@@ -118,12 +114,10 @@
                         <span>剑三表情</span>
                     </router-link>
                 </el-col>
-                <el-col :span="4">
-                    <router-link to="/collection">
-                        <i class="el-icon-notebook-1"></i>
-                        <span>剑三小册</span>
-                    </router-link>
-                </el-col>
+            </el-row>
+
+            <el-divider content-position="left">其它</el-divider>
+            <el-row :gutter="20">
                 <!-- <el-col :span="4">
                     <router-link to="/item_plan">
                         <i class="el-icon-folder"></i>
