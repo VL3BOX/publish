@@ -114,16 +114,6 @@
                         <span>剑三表情</span>
                     </router-link>
                 </el-col>
-            </el-row>
-
-            <el-divider content-position="left">其它</el-divider>
-            <el-row :gutter="20">
-                <!-- <el-col :span="4">
-                    <router-link to="/item_plan">
-                        <i class="el-icon-folder"></i>
-                        <span>物品清单</span>
-                    </router-link>
-                </el-col> -->
                 <el-col :span="4">
                     <router-link to="/question">
                         <i class="el-icon-s-opportunity"></i>
@@ -136,13 +126,23 @@
                         <span>剑三试卷</span>
                     </router-link>
                 </el-col>
+            </el-row>
+
+            <!-- <el-divider content-position="left">其它</el-divider>
+            <el-row :gutter="20">
+                <el-col :span="4">
+                    <router-link to="/item_plan">
+                        <i class="el-icon-folder"></i>
+                        <span>物品清单</span>
+                    </router-link>
+                </el-col>
                 <el-col :span="4">
                     <router-link to="/namespace">
                         <i class="el-icon-postcard"></i>
                         <span>剑三铭牌</span>
                     </router-link>
                 </el-col>
-            </el-row>
+            </el-row> -->
 
             <template v-if="isAdmin">
                 <el-divider content-position="left">管理</el-divider>
