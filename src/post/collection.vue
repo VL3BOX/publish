@@ -180,7 +180,9 @@ export default {
     props: [],
     data() {
         // 作品类型加载
-        let source_types = Object.assign({ custom: "自定义", face: "捏脸" }, __postType, __wikiType);
+        let source_types = Object.assign({ custom: "自定义" }, __postType, __wikiType, { face: "捏脸" });
+        delete source_types.jx3dat;
+        delete source_types.notice;
 
         return {
             source_types: source_types,
