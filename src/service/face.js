@@ -52,6 +52,14 @@ export function getFaceList(params) {
 }
 
 /**
+ * 获取所有捏脸列表
+ * @param {*} params
+ */
+export function getAllFaceList(params) {
+    return $next().get("/api/face", { params });
+}
+
+/**
  * 上架一个捏脸数据
  * @param {*} id
  */

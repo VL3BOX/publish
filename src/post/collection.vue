@@ -152,12 +152,7 @@
                 </div>-->
             </div>
             <div class="m-publish-collection-publish">
-                <el-button
-                    class="u-button"
-                    type="primary"
-                    @click="submit"
-                    :loading="processing"
-                    :disabled="processing"
+                <el-button class="u-button" type="primary" @click="submit" :loading="processing" :disabled="processing"
                     >发 &nbsp;&nbsp; 布</el-button
                 >
             </div>
@@ -176,8 +171,8 @@ import draggable from "vuedraggable";
 // 本地依赖
 import { get_legal_tags, get_collection, submit_collection } from "../service/collection";
 import { get_posts_by_type } from "../service/post";
+import { getAllFaceList } from "@/service/face";
 import { getLink } from "@jx3box/jx3box-common/js/utils";
-import qs from "qs";
 import lodash from "lodash";
 
 export default {
@@ -185,7 +180,7 @@ export default {
     props: [],
     data() {
         // 作品类型加载
-        let source_types = Object.assign({ custom: "自定义" }, __postType, __wikiType);
+        let source_types = Object.assign({ custom: "自定义", face: "捏脸" }, __postType, __wikiType);
 
         return {
             source_types: source_types,
@@ -245,15 +240,31 @@ export default {
         },
         search_handle(queryString, item) {
             if (queryString === null) item.id = queryString = "";
-            get_posts_by_type(item.type, {
-                public: 1,
-                keyword: queryString,
-            }).then((res) => {
-                res = res.data;
-                if (res.code === 200) {
-                    item.posts = res.data.posts;
-                }
-            });
+            if (item.type === 'face') {
+                getAllFaceList({
+                    title: queryString,
+
+                }).then(res => {
+                    item.posts = res.data.data.list?.reduce((acc, cur) => {
+                        acc[cur.id] = {
+                            id: cur.id,
+                            title: cur.title,
+                            type: 'face'
+                        }
+                        return acc
+                    }, {}) || {};
+                })
+            } else {
+                get_posts_by_type(item.type, {
+                    public: 1,
+                    keyword: queryString,
+                }).then((res) => {
+                    res = res.data;
+                    if (res.code === 200) {
+                        item.posts = res.data.posts;
+                    }
+                });
+            }
         },
         init: function () {
             get_collection(this.id).then((res) => {
@@ -292,6 +303,10 @@ export default {
             // 去除多余字段
             for (let i in collection.posts) delete collection.posts[i].posts;
             collection.posts = JSON.stringify(collection.posts);
+
+            console.log(collection)
+
+            // return
 
             this.processing = true;
             submit_collection(collection)
