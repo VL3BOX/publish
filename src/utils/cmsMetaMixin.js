@@ -1,9 +1,22 @@
 export const cmsMetaMixin = {
     data: function() {
-        return {};
+        return {
+            hasRead: 0
+        };
     },
-
-    methods: {},
+    mounted: function() {
+        this.initExtend();
+    },
+    methods: {
+        initExtend() {
+            // 从localStorage中获取hasRead
+            this.hasRead = ~~localStorage.getItem("jx3box_has_read") || 0;
+        },
+        setHasRead() {
+            // 设置hasRead
+            localStorage.setItem("jx3box_has_read", this.hasRead);
+        }
+    },
     created: function() {
         // 根据访问域名设置默认客户端版本
         this.post.client = this.$store.state.client;
