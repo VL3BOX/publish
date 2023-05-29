@@ -8,7 +8,9 @@
                 :inactive-value="1"
             ></el-switch>
         </el-form-item>
-        <slot></slot>
+        <div class="m-comment-extend">
+            <slot></slot>
+        </div>
     </div>
 </template>
 <script>
@@ -42,3 +44,14 @@ export default {
     components: {},
 };
 </script>
+
+<style lang="less" scoped>
+.m-publish-comment {
+    .flex;
+    align-items: center;
+    gap: 20px;
+}
+.m-comment-extend {
+    margin-bottom: 22px;
+}
+</style>

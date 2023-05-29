@@ -49,7 +49,9 @@
             <!-- 扩展 -->
             <div class="m-publish-extend">
                 <el-divider content-position="left">设置</el-divider>
-                <publish-comment v-model="post.comment"></publish-comment>
+                <publish-comment v-model="post.comment">
+                    <el-checkbox v-model="post.comment_visible" :true-label="1" :false-label="0">仅自己可见</el-checkbox>
+                </publish-comment>
                 <publish-gift v-model="post.allow_gift"></publish-gift>
                 <publish-visible v-model="post.visible"></publish-visible>
                 <publish-authors :id="id" :uid="post.post_author"></publish-authors>
@@ -181,6 +183,8 @@ export default {
 
                 // 评论开关（0开启|默认，1关闭）
                 comment: 0,
+                // 评论是否自己可见（0否|默认，1是）
+                comment_visible: 0,
                 // 礼物开关（0关闭|默认，1开启）
                 allow_gift: 1,
 
