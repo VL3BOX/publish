@@ -115,19 +115,12 @@ export default {
             },
             app: {
                 face: { path: "/bucket/face", name: "捏脸数据", count: 0 },
-                blueprint: { path: "/bucket/blueprint", name: "家园蓝图", count: 0 },
+                // blueprint: { path: "/bucket/blueprint", name: "家园蓝图", count: 0 },
                 joke: { path: "/bucket/joke", name: "剑三骚话", count: 0 },
                 emotion: { path: "/bucket/emotion", name: "剑三表情", count: 0 },
                 collection: {
                     path: "/bucket/collection",
                     name: "剑三小册",
-                    count: 0,
-                },
-
-                // TODO:remove
-                namespace: {
-                    path: "/bucket/namespace",
-                    name: "剑三铭牌",
                     count: 0,
                 },
                 // item_plan: {
@@ -150,6 +143,12 @@ export default {
                 //     name: "日历记录",
                 //     count: 0,
                 // },
+                // TODO:remove
+                namespace: {
+                    path: "/bucket/namespace",
+                    name: "剑三铭牌",
+                    count: 0,
+                },
             },
             comment: {
                 comment_cms: {
