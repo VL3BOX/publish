@@ -88,7 +88,7 @@
                                         class="u-item-value"
                                         placeholder="请输入完整网页链接（需以HTTP或HTTPS开头）"
                                         v-else
-                                        v-model="item.url"
+                                        v-model.trim="item.url"
                                     ></el-input>
                                 </el-col>
                                 <el-col :span="12" class="u-collection-url" v-if="item.url">
