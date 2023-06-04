@@ -261,6 +261,7 @@ export default {
                 .then((res) => {
                     let result = res.data.data;
                     this.atUser(result.ID);
+                    this.setHasRead();
                     return result;
                 })
                 .then((result) => {

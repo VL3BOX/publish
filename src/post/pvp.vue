@@ -227,6 +227,7 @@ export default {
             return push(...this.data)
                 .then((res) => {
                     let result = res.data.data;
+                    this.setHasRead();
                     return result;
                 })
                 .then((result) => {

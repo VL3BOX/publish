@@ -296,7 +296,8 @@ export default {
                     syncRedis(result).catch((err) => {
                         console.log("[Redis同步作业失败]", err);
                     });
-                    this.atUser(result.ID)
+                    this.atUser(result.ID);
+                    this.setHasRead();
                     return result;
                 })
                 .then((result) => {
