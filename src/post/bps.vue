@@ -110,7 +110,6 @@ import Markdown from "@jx3box/jx3box-editor/src/Markdown";
 import publish_header from "@/components/publish_header.vue";
 import publish_title from "@/components/publish_title.vue";
 import publish_original from "@/components/publish_original.vue";
-import publish_client from "@/components/publish_client.vue";
 import publish_zlp from "@/components/publish_zlp";
 import publish_xf from "@/components/publish_xf";
 import publish_collection from "@/components/publish_collection";
