@@ -2,13 +2,6 @@ import { $helper, $cms } from "@jx3box/jx3box-common/js/https.js";
 
 const qs = require("qs");
 
-function get_legal_tags() {
-    return $helper()({
-        method: "GET",
-        url: `/api/post/collection/legal_tags`,
-    });
-}
-
 function get_collection(collection_id) {
     return $helper()({
         method: "GET",
@@ -51,4 +44,4 @@ function appendToCollection(data) {
     });
 }
 
-export { get_legal_tags, get_collection, get_my_collections, submit_collection, remove_collection, appendToCollection };
+export { get_collection, get_my_collections, submit_collection, remove_collection, appendToCollection };
