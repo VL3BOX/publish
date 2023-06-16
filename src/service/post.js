@@ -1,4 +1,4 @@
-import { $helper } from "@jx3box/jx3box-common/js/https.js";
+import { $helper, $cms } from "@jx3box/jx3box-common/js/https.js";
 
 // 获取我的文章总数
 function get_my_post_total() {

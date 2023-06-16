@@ -115,7 +115,7 @@ export default {
             return {
                 page: this.page,
                 keyword: this.search,
-                limit: this.per,
+                per: this.per,
             };
         },
         publishLink: function () {
@@ -135,11 +135,8 @@ export default {
             this.loading = true;
             get_my_collections(this.params)
                 .then((res) => {
-                    res = res.data;
-                    if (res.code === 200) {
-                        this.data = res.data.data;
-                        this.total = res.data.total;
-                    }
+                    this.data = res.data.data.list;
+                    this.total = res.data.data.total;
                 })
                 .finally(() => {
                     this.loading = false;
@@ -157,6 +154,7 @@ export default {
                             type: "success",
                             message: `删除成功`,
                         });
+                        this.loadPosts();
                     });
                 },
             });

@@ -137,7 +137,7 @@ import header from "@/components/publish_header.vue";
 import draggable from "vuedraggable";
 
 // 本地依赖
-import { get_collection, submit_collection } from "../service/collection";
+import { get_collection, createCollection, updateCollection } from "../service/collection";
 import { get_posts_by_type } from "../service/post";
 import { getAllFaceList } from "@/service/face";
 import { getLink } from "@jx3box/jx3box-common/js/utils";
@@ -228,22 +228,19 @@ export default {
         },
         init: function () {
             get_collection(this.id).then((res) => {
-                res = res.data;
-                if (res.code === 200) {
-                    let collection = res.data.collection;
-                    if (collection) {
-                        for (let i in collection.posts) {
-                            let item = collection.posts[i];
-                            collection.posts[i].posts =
-                                item.type === "custom" ? null : [{ id: item.id, title: item.title }];
-                        }
-                        this.collection = collection;
-                    } else {
-                        this.$message({
-                            message: "该剑三小册已被删除或无权限访问",
-                            type: "warning",
-                        });
+                let collection = res.data.data;
+                if (collection) {
+                    for (let i in collection.posts) {
+                        let item = collection.posts[i];
+                        collection.posts[i].posts =
+                            item.type === "custom" ? null : [{ id: item.id, title: item.title }];
                     }
+                    this.collection = collection;
+                } else {
+                    this.$message({
+                        message: "该剑三小册已被删除或无权限访问",
+                        type: "warning",
+                    });
                 }
             });
         },
@@ -260,39 +257,62 @@ export default {
                 collection.posts = [];
             }
 
+            console.log(collection)
+            // 校验posts
+            let message = "";
+            for (const i in collection.posts) {
+                const item = collection.posts[i];
+                if (!item.type) {
+                    message = "文章类型不能为空哦";
+                    break;
+                }
+                if (!item.id) {
+                    message = "请选择对应的文章";
+                    break;
+                }
+                if (!item.title) {
+                    message = "请填写自定义链接的标题";
+                    break;
+                }
+                if (!item.url) {
+                    message = "请填写正确的小册文章链接（http或https开头）";
+                    break;
+                }
+            }
+            if (message) {
+                this.$message({
+                    message: message,
+                    type: "warning",
+                });
+                return
+            }
+
             // 去除多余字段
             for (let i in collection.posts) delete collection.posts[i].posts;
             collection.posts = JSON.stringify(collection.posts);
 
-            console.log(collection)
-
-            // return
-
             this.processing = true;
-            submit_collection(collection)
-                .then((data) => {
-                    data = data.data;
-                    if (data.code === 200) {
-                        this.$message({
-                            message: data.message,
-                            type: "success",
-                        });
-                        let collection_id = lodash.get(data, "data.collection.id");
-                        let id = this.id || collection_id;
-                        setTimeout(() => {
-                            location.href = getLink("collection", id);
-                        }, 500);
-                    } else {
-                        this.$message({
-                            message: `${data.message}`,
-                            type: "warning",
-                        });
-                    }
-                })
-                .finally(() => {
-                    this.processing = false;
+            let fn = ''
+            if (this.id) {
+                collection = lodash.pick(collection, ["title", "public", "image", "description", "mark", "posts"]);
+                fn = updateCollection(this.id, collection);
+            } else {
+                collection = lodash.omit(collection, ["id", 'tags']);
+                fn = createCollection(collection)
+            }
+            fn.then((res) => {
+                this.$message({
+                    message: this.id ? '更新成功' : '创建成功',
+                    type: "success",
                 });
-            // });
+                let id = this.id || res.data.data.id;
+                setTimeout(() => {
+                    location.href = getLink("collection", id);
+                }, 500);
+            })
+            .finally(() => {
+                this.processing = false;
+            });
         },
     },
     watch: {

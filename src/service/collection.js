@@ -3,39 +3,31 @@ import { $helper, $cms } from "@jx3box/jx3box-common/js/https.js";
 const qs = require("qs");
 
 function get_collection(collection_id) {
-    return $helper()({
+    return $cms()({
         method: "GET",
-        url: `/api/post/collection/${collection_id}`,
+        url: `/api/cms/post/collection/${collection_id}`,
     });
 }
 
 function get_my_collections(params) {
-    return $helper()({
+    return $cms()({
         method: "GET",
-        url: `/api/my/post/collections`,
+        url: `/api/cms/post/collection/mine`,
         params: params,
     });
 }
 
-function submit_collection(collection) {
-    return $helper()({
-        method: "POST",
-        url: `/api/post/collection`,
-        data: qs.stringify({
-            action: collection.id ? "update" : "create",
-            collection: collection,
-        }),
-    });
+
+function createCollection(data){
+    return $cms().post(`/api/cms/post/collection`, data);
+}
+
+function updateCollection(id, data){
+    return $cms().put(`/api/cms/post/collection/${id}`, data);
 }
 
 function remove_collection(collection_id) {
-    if (collection_id) {
-        return $helper()({
-            method: "PUT",
-            url: `/api/post/collection/remove`,
-            data: qs.stringify({ id: collection_id }),
-        });
-    } else return null;
+    return $cms().delete(`/api/cms/post/collection/${collection_id}`);
 }
 
 function appendToCollection(data) {
@@ -44,4 +36,4 @@ function appendToCollection(data) {
     });
 }
 
-export { get_collection, get_my_collections, submit_collection, remove_collection, appendToCollection };
+export { get_collection, get_my_collections, remove_collection, appendToCollection, createCollection, updateCollection };

@@ -198,6 +198,7 @@ export default {
         },
         loadHelperCount() {
             get_my_post_total().then((res) => {
+                console.log(res)
                 res = res.data;
                 if (res.code === 200) {
                     let count = res.data;

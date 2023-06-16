@@ -84,7 +84,7 @@ export default {
                 keyword,
             };
             get_my_collections(params).then((res) => {
-                this.collections = res.data.data.data;
+                this.collections = res.data.data.list;
 
                 if (this.isInit) {
                     this.copyCollections = cloneDeep(this.collections);
@@ -100,7 +100,7 @@ export default {
                     keyword,
                 };
                 get_my_collections(params).then((res) => {
-                    this.collections = res.data.data.data;
+                    this.collections = res.data.data.list;
                     this.loading = false;
                 });
             } else {
