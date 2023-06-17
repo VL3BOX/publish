@@ -1,6 +1,4 @@
-import { $helper, $cms } from "@jx3box/jx3box-common/js/https.js";
-
-const qs = require("qs");
+import { $cms } from "@jx3box/jx3box-common/js/https.js";
 
 function get_collection(collection_id) {
     return $cms()({
