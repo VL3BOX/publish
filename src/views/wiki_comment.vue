@@ -27,7 +27,7 @@
                     <a
                         class="u-title"
                         target="_blank"
-                        :href="comment.link"
+                        :href="comment.type + comment.link"
                     >{{ comment.title || "无标题" }}</a>
                     <span v-if="comment.checked == 0" class="u-mark pending">⌛ 等待审核</span>
                     <span v-if="comment.checked == 1" class="u-mark">✔ 审核通过</span>
