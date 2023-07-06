@@ -21,6 +21,9 @@
 
                 <!-- 主题 -->
                 <publish-tags v-model="post.topics" :options="topics" label="主题"></publish-tags>
+
+                <!-- 标签 -->
+                <publish-topic-bucket v-model="buckets"></publish-topic-bucket>
             </div>
 
             <!-- 正文 -->
@@ -130,6 +133,7 @@ import publish_authors from "@/components/publish_authors";
 import publish_revision from "@/components/publish_revision.vue";
 import publish_at_authors from "@/components/publish_at_authors.vue";
 import publish_tags from "@/components/publish_tags";
+import publish_topic_bucket from "@/components/publish_topic_bucket.vue";
 
 // 数据逻辑
 import { push } from "@/service/cms.js";
@@ -137,6 +141,7 @@ import { appendToCollection } from "@/service/collection.js";
 import { AutoSaveMixin } from "@/utils/autoSaveMixin";
 import { cmsMetaMixin } from "@/utils/cmsMetaMixin";
 import { atAuthorMixin } from "@/utils/atAuthorMixin";
+import cloneDeep from "lodash/cloneDeep";
 
 export default {
     name: "bbs",
@@ -160,6 +165,7 @@ export default {
         "publish-revision": publish_revision,
         "publish-at-authors": publish_at_authors,
         "publish-tags": publish_tags,
+        "publish-topic-bucket": publish_topic_bucket,
     },
     data: function () {
         return {
@@ -221,6 +227,7 @@ export default {
             // 选项
             bbs_types,
             topics: bbs,
+            buckets: [],
         };
     },
     computed: {
@@ -228,10 +235,11 @@ export default {
             return this.isRevision ? ~~this.post.post_id : ~~this.post.ID;
         },
         data: function () {
+            const topics = [...new Set([...this.post.topics, ...this.buckets])];
             if (this.id) {
-                return [this.id, this.post];
+                return [this.id, { ...this.post, topics }];
             } else {
-                return [this.post];
+                return [{ ...this.post, topics }];
             }
         },
         isSuperAuthor() {
@@ -246,12 +254,25 @@ export default {
             return this.loadData().then(() => {
                 // 加载成功后执行自动保存逻辑（含本地草稿、本地缓存、云端历史版本）
                 this.autoSave();
+
+                // 不在topics的类型，就分配到buckets
+                this.buckets = this.post.topics.filter((topic) => {
+                    return !this.topics.some((item) => {
+                        return item == topic;
+                    });
+                });
+                this.post.topics = this.post.topics.filter((topic) => {
+                    return this.topics.some((item) => {
+                        return item == topic;
+                    });
+                });
             });
         },
         // 发布
         publish: function (status, skip) {
             this.post.post_status = status;
             this.processing = true;
+
             return push(...this.data)
                 .then((res) => {
                     let result = res.data.data;

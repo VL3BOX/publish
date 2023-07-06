@@ -21,4 +21,11 @@ function get_posts_by_type(type, params) {
     });
 }
 
-export { get_my_post_total, get_posts_by_type };
+// 获取topic bucket
+function get_topic_bucket(params) {
+    return $cms().get("/api/cms/post/topic/bucket", {
+        params
+    });
+}
+
+export { get_my_post_total, get_posts_by_type, get_topic_bucket };
