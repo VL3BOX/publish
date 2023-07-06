@@ -2,7 +2,7 @@
     <div class="m-publish-topic-bucket">
         <el-form-item :label="label">
             <el-popover popper-class="m-topic-bucket__pop" placement="bottom-start">
-                <el-button icon="el-icon-plus" size="mini" trigger="click" slot="reference"></el-button>
+                <el-button icon="el-icon-plus" size="small" trigger="click" slot="reference"></el-button>
                 <div class="m-topic_bucket__content">
                     <el-input v-model="search" placeholder="输入关键词" prefix-icon="el-icon-search" size="small" @keypress.enter.native="onSearch">
                     </el-input>
