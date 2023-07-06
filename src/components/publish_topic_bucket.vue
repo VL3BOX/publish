@@ -15,7 +15,7 @@
                 </div>
             </el-popover>
             <div class="m-topic-bucket__selected">
-                <el-tag v-for="item in selected" :key="item" closable @close="onClose(item)">{{item}}</el-tag>
+                <el-tag class="m-selected-item" v-for="item in selected" :key="item" closable @close="onClose(item)">{{item}}</el-tag>
             </div>
         </el-form-item>
     </div>
@@ -30,7 +30,7 @@ export default {
     props: {
         label: {
             type: String,
-            default: "更多标签",
+            default: "更多主题",
         },
         type: {
             type: String,
@@ -78,6 +78,9 @@ export default {
             }
         }
     },
+    mounted() {
+        this.loadTopicBucket();
+    },
     methods: {
         loadTopicBucket() {
             get_topic_bucket(this.params).then((res) => {
@@ -102,6 +105,9 @@ export default {
     }
     .m-topic-bucket__selected {
         margin-left: 20px;
+        .flex;
+        align-items: center;
+        gap: 10px;
     }
 }
 .m-topic-bucket__pop {

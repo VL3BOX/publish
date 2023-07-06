@@ -141,7 +141,6 @@ import { appendToCollection } from "@/service/collection.js";
 import { AutoSaveMixin } from "@/utils/autoSaveMixin";
 import { cmsMetaMixin } from "@/utils/cmsMetaMixin";
 import { atAuthorMixin } from "@/utils/atAuthorMixin";
-import cloneDeep from "lodash/cloneDeep";
 
 export default {
     name: "bbs",
