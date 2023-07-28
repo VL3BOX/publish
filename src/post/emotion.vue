@@ -80,7 +80,7 @@
                 <!-- 上传 -->
                 <div class="m-publish-emotion-bulk">
                     <h1 class="u-title">上传表情</h1>
-                    <UploadImages
+                    <UploadEmotion
                         @insert="updateFileList"
                         text="批量上传图片"
                         :onlyImage="true"
@@ -174,6 +174,7 @@ import { __imgPath, __cdn } from "@jx3box/jx3box-common/data/jx3box.json";
 // 本地模块
 import publish_header from "@/components/publish_header.vue";
 import UploadImages from "@jx3box/jx3box-editor/src/Upload.vue";
+import UploadEmotion from "@/components/upload_emotion.vue";
 
 // 数据逻辑
 import {
@@ -186,8 +187,9 @@ import {
 export default {
     name: "emotion",
     components: {
-        UploadImages,
+        // UploadImages,
         "publish-header": publish_header,
+        UploadEmotion,
     },
     data: function () {
         return {
@@ -203,26 +205,8 @@ export default {
                 "image/png, image/jpeg, image/gif, image/bmp, image/webp",
 
             // 图片列表
-            list: [
-                // {
-                //     desc: "test",
-                //     url: "https://console.cnyixun.com/2019/09/logo.png",
-                //     original: 0,
-                //     author: "",
-                // },
-                // {
-                //     desc: "test",
-                //     url: "https://console.cnyixun.com/2019/09/logo.png",
-                //     original: 0,
-                //     author: "",
-                // },
-            ],
-            data: {
-                // desc: "test",
-                // url: "https://console.cnyixun.com/2019/09/logo.png",
-                // original: 0,
-                // author: "111",
-            },
+            list: [],
+            data: {},
 
             // 预览
             dialogImageUrl: "",
