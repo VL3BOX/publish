@@ -22,8 +22,8 @@ function deleteEmotion(id) {
 }
 
 // 通用 - 上传文件
-function uploadEmotion(formdata) {
-    return $cms().post(`/api/cms/upload`, formdata);
+function uploadEmotion(formdata, category = "emotions") {
+    return $next().post(`/api/${category}/upload`, formdata);
 }
 
 // 骚话栏目接口

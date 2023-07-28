@@ -169,7 +169,7 @@
 // 公共模块
 import { getLink, getThumbnail } from "@jx3box/jx3box-common/js/utils";
 import schoolmap from "@jx3box/jx3box-data/data/xf/schoolid.json";
-import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
+import { __imgPath, __cdn } from "@jx3box/jx3box-common/data/jx3box.json";
 
 // 本地模块
 import publish_header from "@/components/publish_header.vue";
@@ -326,7 +326,7 @@ export default {
             let formdata = new FormData();
             formdata.append("file", this.fileInput.files[0]);
             uploadEmotion(formdata).then((res) => {
-                this.data.url = res.data.data[0];
+                this.data.url = __cdn + res.data.data[0];
                 this.$message({
                     message: "上传成功",
                     type: "success",
