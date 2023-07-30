@@ -257,7 +257,6 @@ export default {
                 collection.posts = [];
             }
 
-            console.log(collection)
             // 校验posts
             let message = "";
             for (const i in collection.posts) {
@@ -274,11 +273,15 @@ export default {
                     message = "请填写自定义链接的标题";
                     break;
                 }
-                if (!item.url) {
+                if (item.type === 'custom' && !item.url) {
                     message = "请填写正确的小册文章链接（http或https开头）";
                     break;
                 }
             }
+            // 更新sort字段
+            collection.posts.forEach((item, index) => {
+                item.sort = index;
+            });
             if (message) {
                 this.$message({
                     message: message,
