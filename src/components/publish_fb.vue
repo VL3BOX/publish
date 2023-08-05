@@ -105,9 +105,11 @@ export default {
             },
         },
         "fbdata.fb_zlp": function (val) {
+            this.isIndeterminate = false;
             val && this.$emit("updateMeta", { key: "zlp", val: val });
         },
         "fbdata.fb_name": function (val) {
+            this.isIndeterminate = false;
             val && this.$emit("updateMeta", { key: "post_subtype", val: val });
         },
     },
