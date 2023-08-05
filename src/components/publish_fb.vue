@@ -11,7 +11,7 @@
                 @change="zlpChange(zlp)"
             >
                 {{ zlp }}
-                <span class="u-level">{{ fbmap[zlp]["level"]}}</span>
+                <span class="u-level">{{ fbmap[zlp]["level"] }}</span>
             </el-radio>
         </el-form-item>
 
@@ -32,9 +32,14 @@
 
         <!-- 选择BOSS -->
         <el-form-item label="首领名称" v-if="boss_list">
-            <el-checkbox-group v-model="fbdata.fb_boss">
-                <el-checkbox-button v-for="(boss, i) in boss_list" :label="boss" :key="i">{{ boss }}</el-checkbox-button>
-            </el-checkbox-group>
+            <div class="u-boss-list">
+                <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">
+                    全部
+                </el-checkbox>
+                <el-checkbox-group v-model="fbdata.fb_boss" @change="handleCheckedBossesChange">
+                    <el-checkbox v-for="(boss, i) in boss_list" :label="boss" :key="i">{{ boss }}</el-checkbox>
+                </el-checkbox-group>
+            </div>
         </el-form-item>
 
         <!-- 选择难度模式 -->
@@ -57,7 +62,7 @@ import isEmptyMeta from "@/utils/isEmptyMeta.js";
 import fbmap_std from "@jx3box/jx3box-data/data/fb/fb_map.json";
 import fbmap_origin from "@jx3box/jx3box-data/data/fb/fb_map_origin.json";
 import { __ossMirror, __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
-import Bus from '@/store/bus.js'
+import Bus from "@/store/bus.js";
 // META空模板
 const default_meta = {
     fb_zlp: "",
@@ -71,6 +76,8 @@ export default {
     components: {},
     data: function () {
         return {
+            isIndeterminate: false,
+            checkAll: false,
             fbdata: this.data,
             // fbmap,
         };
@@ -98,15 +105,15 @@ export default {
             },
         },
         "fbdata.fb_zlp": function (val) {
-            val && this.$emit("updateMeta", { key: 'zlp', val: val });
+            val && this.$emit("updateMeta", { key: "zlp", val: val });
         },
         "fbdata.fb_name": function (val) {
-            val && this.$emit("updateMeta", { key: 'post_subtype', val: val });
+            val && this.$emit("updateMeta", { key: "post_subtype", val: val });
         },
     },
     computed: {
-        fbmap : function (){
-            return this.client == 'origin' ? fbmap_origin : fbmap_std  
+        fbmap: function () {
+            return this.client == "origin" ? fbmap_origin : fbmap_std;
         },
         zlp_list: function () {
             return Object.keys(this.fbmap);
@@ -129,6 +136,15 @@ export default {
         },
     },
     methods: {
+        handleCheckAllChange(val) {
+            this.fbdata.fb_boss = val ? this.boss_list : [];
+            this.isIndeterminate = false;
+        },
+        handleCheckedBossesChange(value) {
+            let checkedCount = value.length;
+            this.checkAll = checkedCount === this.boss_list.length;
+            this.isIndeterminate = checkedCount > 0 && checkedCount < this.boss_list.length;
+        },
         // 设置默认资料片和副本
         setDefaultOption: function () {
             this.fbdata.fb_name = this.default_fb;
@@ -152,15 +168,20 @@ export default {
             return __imgPath + url + "?v=" + Date.now();
         },
     },
-    created: function () {
-        
-    },
+    created: function () {},
     mounted: function () {
         this.setDefaultOption();
         // 当切换客户端版本时
-        Bus.$on('changeClient',(client) => {
+        Bus.$on("changeClient", (client) => {
             this.setDefaultOption();
-        })
+        });
     },
 };
 </script>
+<style lang="less">
+.u-boss-list {
+    .flex;
+    align-items: flex-start;
+    gap: 30px;
+}
+</style>
