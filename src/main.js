@@ -15,6 +15,9 @@ Vue.use(JX3BOX_UI);
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 
+import reporter from "@jx3box/jx3box-common/js/reporter";
+reporter.install(Vue);
+
 // 监听 sessionStorage 变化
 import handleSessionStorage from '@/utils/handleSessionStorage.js'
 Vue.use(handleSessionStorage)

@@ -27,6 +27,7 @@ const bbs = () => import("../post/bbs.vue");
 const share = () => import("../post/share.vue");
 const notice = () => import("../post/notice.vue");
 const feedback = () => import("../views/feedback.vue");
+const body = () => import("../post/body.vue");
 const face = () => import("../post/face.vue");
 const pvp = () => import("../post/pvp.vue");
 
@@ -59,6 +60,7 @@ const bucket_collection = () => import("../bucket/collection.vue");
 
 const bucket_calendar = () => import("../bucket/calendar.vue");
 const bucket_face = () => import("../bucket/face.vue");
+const bucket_body = () => import("../bucket/body.vue");
 
 Vue.use(VueRouter);
 
@@ -191,6 +193,15 @@ const routes = [
     {
         path: "/bucket/face",
         component: bucket_face,
+    },
+    // 体型分享
+    {
+        path: "/body/:id?",
+        component: body,
+    }, 
+    {
+        path: "/bucket/body",
+        component: bucket_body,
     },
     // 家园发布
     // {

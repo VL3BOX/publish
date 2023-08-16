@@ -1,7 +1,7 @@
 <template>
     <div class="m-paid_attachment">
-        <input class="u-data-input" type="file" id="face_file" @change="processFile" accept=".jx3dat, .dat, .ini"/>
-        <el-button type="primary" @click="selectData" icon="el-icon-upload2">上传脸型数据</el-button>
+        <input class="u-data-input" type="file" id="face_file" @change="processFile" accept=".jx3dat, .dat, .ini" />
+        <el-button type="primary" @click="selectData" icon="el-icon-upload2">{{ `上传${name}数据` }}</el-button>
         <span class="u-data-ready" v-show="data.uuid">
             <i class="el-icon-success"></i>
             已上传
@@ -10,35 +10,56 @@
 </template>
 
 <script>
-import { uploadFile } from "@/service/face.js";
+import { uploadFaceFile } from "@/service/face.js";
+import { uploadBodyFile } from "@/service/body.js";
 import { parseFace } from "@jx3box/jx3box-facedat/src/faceParser.js";
 export default {
-    name: 'paid_attachment',
+    name: "paid_attachment",
     props: {
         body: {
             type: Number,
-            default: 2
+            default: 2,
         },
         describe: {
             type: String,
-            default: '',
-        }
+            default: "",
+        },
+        type: {
+            type: String,
+            default: "face",
+        },
     },
     data() {
         return {
             data: {
-                id: '',
-                uuid: '',
-                object: '',
-                json: '',
-                name: '',
-            }
-        }
+                id: "",
+                uuid: "",
+                object: "",
+                json: "",
+                name: "",
+            },
+        };
+    },
+    computed: {
+        name() {
+            const data = {
+                face: "脸型",
+                body: "体型",
+            };
+            return data[this.type];
+        },
     },
     methods: {
         selectData() {
             let fileInput = document.getElementById("face_file");
             fileInput.dispatchEvent(new MouseEvent("click"));
+        },
+        uploadFile(formdata) {
+            const data = {
+                face: uploadFaceFile,
+                body: uploadBodyFile,
+            };
+            return data[this.type](formdata);
         },
         uploadData(file) {
             // 上传源文件
@@ -47,10 +68,10 @@ export default {
             formdata.append("body", this.body);
             formdata.append("describe", this.describe);
             formdata.append("data", this.data.json);
-            uploadFile(formdata).then((res) => {
+            this.uploadFile(formdata).then((res) => {
                 this.data.uuid = res.data.data.uuid;
-                this.data.id = res.data.data.id
-                this.data.name = res.data.data.name
+                this.data.id = res.data.data.id;
+                this.data.name = res.data.data.name;
                 this.$message({
                     message: "数据上传成功",
                     type: "success",
@@ -61,7 +82,7 @@ export default {
         processFile(e) {
             let file = e.target.files[0];
             // 大于64kb
-            if(file && file.size > 65536) {
+            if (file && file.size > 65536) {
                 this.$message({
                     message: "文件过大，限 64KB 以内",
                     type: "error",
@@ -82,13 +103,12 @@ export default {
             let fr = new FileReader();
             fr.onload = function (e) {
                 console.log("读取成功...开始执行分析...");
-                let json = '';
-                let object = '';
+                let json = "";
+                let object = "";
                 try {
                     object = parseFace(e.target.result);
                     json = JSON.stringify(object);
-                }
-                catch(ex) {
+                } catch (ex) {
                     console.log(ex);
                     vm.$notify.error({
                         title: "错误",
@@ -99,11 +119,15 @@ export default {
 
                 // 解析成功开始上传
                 if (object && json) {
-                    setTimeout(() => vm.$notify({
-                        title: "成功",
-                        message: "数据读取成功，开始上传",
-                        type: "success",
-                    }), 0);
+                    setTimeout(
+                        () =>
+                            vm.$notify({
+                                title: "成功",
+                                message: "数据读取成功，开始上传",
+                                type: "success",
+                            }),
+                        0
+                    );
                     vm.data.json = json;
                     vm.uploadData(file);
                     vm.data.object = object;
@@ -119,16 +143,16 @@ export default {
         },
         clearData() {
             this.data = {
-                id: '',
-                uuid: '',
+                id: "",
+                uuid: "",
                 object: null,
-                json: '',
-                name: '',
-            }
+                json: "",
+                name: "",
+            };
             this.$emit("update:data", this.data);
         },
-    }
-}
+    },
+};
 </script>
 
 <style lang="less" scoped>

@@ -115,6 +115,7 @@ export default {
             },
             app: {
                 face: { path: "/bucket/face", name: "捏脸数据", count: 0 },
+                body: { path: "/bucket/body", name: "体型数据", count: 0 },
                 // blueprint: { path: "/bucket/blueprint", name: "家园蓝图", count: 0 },
                 joke: { path: "/bucket/joke", name: "剑三骚话", count: 0 },
                 emotion: { path: "/bucket/emotion", name: "剑三表情", count: 0 },
@@ -223,11 +224,13 @@ export default {
         },
         loadNextCount() {
             getNextStat().then((res) => {
-                let data = res.data.data;
+                let data = res.data.data; 
+                console.log(data)
                 this.comment.comment_cms.count = data.comment;
                 this.app.exam_question.count = data.question;
                 this.app.exam_paper.count = data.paper;
                 this.app.face.count = data.face;
+                this.app.body.count = data.body;
             });
         },
         init: function () {

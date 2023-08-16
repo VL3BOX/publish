@@ -103,6 +103,12 @@
                     </router-link>
                 </el-col>
                 <el-col :span="4">
+                    <router-link to="/body">
+                        <img svg-inline src="../assets/img/channel/body.svg" />
+                        <span>体型数据</span>
+                    </router-link>
+                </el-col>
+                <el-col :span="4">
                     <router-link to="/joke">
                         <img svg-inline src="../assets/img/channel/joke.svg" />
                         <span>剑三骚话</span>
@@ -172,7 +178,7 @@ export default {
     },
     computed: {},
     methods: {
-        getAppIcon
+        getAppIcon,
     },
 };
 </script>
