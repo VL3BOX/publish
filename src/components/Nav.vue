@@ -224,8 +224,7 @@ export default {
         },
         loadNextCount() {
             getNextStat().then((res) => {
-                let data = res.data.data; 
-                console.log(data)
+                let data = res.data.data;  
                 this.comment.comment_cms.count = data.comment;
                 this.app.exam_question.count = data.question;
                 this.app.exam_paper.count = data.paper;

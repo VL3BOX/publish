@@ -236,6 +236,7 @@ export default {
                 body_type: object["nRoleType"],
                 describe: "",
             });
+            console.log(console.log(this.post));
             if (!this.bodyData) {
                 this.bodyData = {
                     id: id,
@@ -293,7 +294,7 @@ export default {
             if (!this.validator(data)) {
                 this.processing = false;
                 return;
-            }
+            } 
             if (this.id) {
                 updateBody(this.id, data)
                     .then((res) => {
