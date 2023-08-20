@@ -224,12 +224,12 @@ export default {
         },
         loadNextCount() {
             getNextStat().then((res) => {
-                let { comment, question, paper, face, body } = res.data.data;
+                let { comment, question, paper, face, pvxbody } = res.data.data;
                 this.comment.comment_cms.count = comment;
                 this.app.exam_question.count = question;
                 this.app.exam_paper.count = paper;
                 this.app.face.count = face;
-                if (body) this.app.body.count = body;
+                this.app.body.count = pvxbody;
             });
         },
         init: function () {
