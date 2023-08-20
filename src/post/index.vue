@@ -102,12 +102,12 @@
                         <span>捏脸数据</span>
                     </router-link>
                 </el-col>
-                <el-col :span="4">
+                <!-- <el-col :span="4">
                     <router-link to="/body">
                         <img svg-inline src="../assets/img/channel/body.svg" />
                         <span>体型数据</span>
                     </router-link>
-                </el-col>
+                </el-col> -->
                 <el-col :span="4">
                     <router-link to="/joke">
                         <img svg-inline src="../assets/img/channel/joke.svg" />

@@ -7,14 +7,19 @@
             <!-- 标题 -->
             <publish-title v-model="post.title"></publish-title>
             <!-- 信息 -->
-            <div class="m-publish-info">
+            <div class="m-publish-info"> 
                 <el-divider content-position="left">信息</el-divider>
                 <!-- 客户端 -->
                 <publish-client v-model="post.client" :forbidAll="true"></publish-client>
                 <!-- 原创 -->
                 <publish-original v-model="post.original"></publish-original>
                 <el-form-item label="首发" prop="is_fr">
-                    <el-switch v-model="post.is_fr" active-color="#13ce66" :active-value="1" :inactive-value="0"></el-switch>
+                    <el-switch
+                        v-model="post.is_fr"
+                        active-color="#13ce66"
+                        :active-value="1"
+                        :inactive-value="0"
+                    ></el-switch>
                 </el-form-item>
                 <template v-if="!post.original">
                     <el-form-item label="原作者名称" prop="author_name">
@@ -51,7 +56,7 @@
                 <el-form-item label="体型">
                     <el-radio-group v-model="post.body_type">
                         <el-radio :label="~~body_type" v-for="(body_label, body_type) in bodyMap" :key="body_type">{{
-                            body_label
+                            body_label.label
                         }}</el-radio>
                     </el-radio-group>
                 </el-form-item>
@@ -271,7 +276,7 @@ export default {
                 return {
                     id: item.id,
                     describe: item.describe,
-                    data: item.data
+                    data: item.data,
                 };
             });
 
@@ -281,7 +286,7 @@ export default {
                 if (this.faceData.data) {
                     data.data = JSON.stringify(this.faceData.data);
                 }
-                data.body_type = this.faceData.body_type || this.post.body_type
+                data.body_type = this.faceData.body_type || this.post.body_type;
                 data.file = this.faceData.file;
             }
 
