@@ -13,6 +13,7 @@
 import { uploadFaceFile } from "@/service/face.js";
 import { uploadBodyFile } from "@/service/body.js";
 import { parseFace } from "@jx3box/jx3box-facedat/src/faceParser.js";
+import { load } from "@jx3box/jx3box-facedat/src/bodyParser.js";
 export default {
     name: "paid_attachment",
     props: {
@@ -106,7 +107,9 @@ export default {
                 let json = "";
                 let object = "";
                 try {
-                    object = parseFace(e.target.result);
+                    object = this.type == "face" ? parseFace(e.target.result) : load(e.target.result);
+
+                    console.log(object, e.target.result);
                     json = JSON.stringify(object);
                 } catch (ex) {
                     console.log(ex);

@@ -7,7 +7,7 @@
             <!-- 标题 -->
             <publish-title v-model="post.title"></publish-title>
             <!-- 信息 -->
-            <div class="m-publish-info"> 
+            <div class="m-publish-info">
                 <el-divider content-position="left">信息</el-divider>
                 <!-- 客户端 -->
                 <publish-client v-model="post.client" :forbidAll="true"></publish-client>
@@ -46,23 +46,23 @@
                     ></el-input-number>
                     <div class="u-tip-box" v-if="post.price_type != '0' && post.price_count > 0">
                         <div class="u-warning">
-                            <el-checkbox v-model="promise" disabled
-                                >我承诺该上传属于自己的原创作品或已得到原作者授权，且相关信息中不带有非授权的元素（比如贴图、字体）等，若违反法律规定我将承担全部责任，魔盒有权下架作品。</el-checkbox
-                            >
+                            <el-checkbox v-model="promise" disabled>
+                                我承诺该上传属于自己的原创作品或已得到原作者授权，且相关信息中不带有非授权的元素（比如贴图、字体）等，若违反法律规定我将承担全部责任，魔盒有权下架作品。
+                            </el-checkbox>
                         </div>
                     </div>
                 </el-form-item>
 
                 <el-form-item label="体型">
                     <el-radio-group v-model="post.body_type">
-                        <el-radio :label="~~body_type" v-for="(body_label, body_type) in bodyMap" :key="body_type">{{
-                            body_label.label
-                        }}</el-radio>
+                        <el-radio :label="~~body_type" v-for="(body_label, body_type) in bodyMap" :key="body_type">
+                            {{ body_label.label }}
+                        </el-radio>
                     </el-radio-group>
                 </el-form-item>
 
                 <el-form-item label="数据">
-                    <face-attachment :body="post.body_type" @update:data="handleFaceChange" />
+                    <face-attachment :body="post.body_type" type="face" @update:data="handleFaceChange" />
                     <div class="u-attachment" v-for="item in faceAttachments" :key="item.id">
                         <el-button
                             class="u-main"
@@ -74,13 +74,13 @@
                             size="mini"
                             title="设为主数据"
                         />
-                        <span class="u-attachment-text"
-                            >文件名: <b>{{ item.name }}</b></span
-                        >
+                        <span class="u-attachment-text">
+                            文件名: <b>{{ item.name }}</b>
+                        </span>
                         <!-- <span class="u-attachment-key">唯一标识符：<b>{{ item.file }}</b></span> -->
-                        <span class="u-attachment-remark"
-                            ><el-input v-model="item.describe" placeholder="备注" size="mini"></el-input
-                        ></span>
+                        <span class="u-attachment-remark">
+                            <el-input v-model="item.describe" placeholder="备注" size="mini"></el-input>
+                        </span>
                         <el-button
                             class="u-btn"
                             type="info"

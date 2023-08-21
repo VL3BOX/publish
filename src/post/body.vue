@@ -51,18 +51,18 @@
                     ></el-input-number>
                     <div class="u-tip-box" v-if="post.price_type != '0' && post.price_count > 0">
                         <div class="u-warning">
-                            <el-checkbox v-model="promise" disabled
-                                >我承诺该上传属于自己的原创作品或已得到原作者授权，且相关信息中不带有非授权的元素（比如贴图、字体）等，若违反法律规定我将承担全部责任，魔盒有权下架作品。</el-checkbox
-                            >
+                            <el-checkbox v-model="promise" disabled>
+                                我承诺该上传属于自己的原创作品或已得到原作者授权，且相关信息中不带有非授权的元素（比如贴图、字体）等，若违反法律规定我将承担全部责任，魔盒有权下架作品。
+                            </el-checkbox>
                         </div>
                     </div>
                 </el-form-item>
 
                 <el-form-item label="体型">
                     <el-radio-group v-model="post.body_type">
-                        <el-radio :label="~~body_type" v-for="(body_label, body_type) in bodyMap" :key="body_type">{{
-                            body_label
-                        }}</el-radio>
+                        <el-radio :label="~~body_type" v-for="(body_label, body_type) in bodyMap" :key="body_type">
+                            {{ body_label.label }}
+                        </el-radio>
                     </el-radio-group>
                 </el-form-item>
 
@@ -236,7 +236,6 @@ export default {
                 body_type: object["nRoleType"],
                 describe: "",
             });
-            console.log(console.log(this.post));
             if (!this.bodyData) {
                 this.bodyData = {
                     id: id,
@@ -294,7 +293,7 @@ export default {
             if (!this.validator(data)) {
                 this.processing = false;
                 return;
-            } 
+            }
             if (this.id) {
                 updateBody(this.id, data)
                     .then((res) => {
