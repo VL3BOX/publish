@@ -107,7 +107,7 @@ export default {
                 let json = "";
                 let object = "";
                 try {
-                    object = this.type == "face" ? parseFace(e.target.result) : load(e.target.result);
+                    object = vm.type == "face" ? parseFace(e.target.result) : load(e.target.result);
 
                     console.log(object, e.target.result);
                     json = JSON.stringify(object);
