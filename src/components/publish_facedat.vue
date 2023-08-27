@@ -33,7 +33,7 @@
 import lodash from "lodash";
 import isEmptyMeta from "@/utils/isEmptyMeta.js";
 import UploadAlbum from "@jx3box/jx3box-editor/src/UploadAlbum.vue";
-import { parseFace } from "@jx3box/jx3box-facedat/src/faceParser.js";
+import { load as parseFace } from "@jx3box/jx3box-facedat/src/DataRouter.js";
 import { uploadFacedata } from "@/service/share.js";
 import {bodyMap} from '@jx3box/jx3box-facedat/assets/data/index.json'
 // META空模板
@@ -125,7 +125,7 @@ export default {
             fr.onload = function (e) {
                 console.log("读取成功...开始执行分析...");
                 try {
-                    vm.object = parseFace(e.target.result);
+                    vm.object = parseFace(e.target.result)?.data;
                     vm.json = JSON.stringify(vm.object);
                 }
                 catch(ex) {

@@ -12,8 +12,7 @@
 <script>
 import { uploadFaceFile } from "@/service/face.js";
 import { uploadBodyFile } from "@/service/body.js";
-import { parseFace } from "@jx3box/jx3box-facedat/src/faceParser.js";
-import { load } from "@jx3box/jx3box-facedat/src/bodyParser.js";
+import { load } from "@jx3box/jx3box-facedat/src/DataRouter.js";
 export default {
     name: "paid_attachment",
     props: {
@@ -107,10 +106,29 @@ export default {
                 let json = "";
                 let object = "";
                 try {
-                    object = vm.type == "face" ? parseFace(e.target.result) : load(e.target.result);
-
-                    console.log(object, e.target.result);
-                    json = JSON.stringify(object);
+                    const result = load(e.target.result);
+                    if (!result)
+                        return vm.$notify.error({
+                            title: "错误",
+                            message: "数据类型解析失败",
+                        });
+                    if (vm.type === "body" && result.type.startsWith("face")) {
+                        return vm.$notify.error({
+                            title: "错误",
+                            message: "请导入体型数据",
+                        });
+                    }
+                    if (vm.type === "face" && result.type === "body") {
+                        return vm.$notify.error({
+                            title: "错误",
+                            message: "请导入脸型数据",
+                        });
+                    }
+                    object = result.data;
+                    console.log(object);
+                    if (object) {
+                        json = JSON.stringify(object);
+                    }
                 } catch (ex) {
                     console.log(ex);
                     vm.$notify.error({
