@@ -60,7 +60,9 @@
                         </el-radio>
                     </el-radio-group>
                 </el-form-item>
-
+                <el-form-item label="可新建">
+                    <el-switch v-model="post.is_unlimited" :active-value="1" :inactive-value="0"> </el-switch>
+                </el-form-item>
                 <el-form-item label="数据">
                     <face-attachment :body="post.body_type" type="face" @update:data="handleFaceChange" />
                     <div class="u-attachment" v-for="item in faceAttachments" :key="item.id">
@@ -163,6 +165,7 @@ export default {
                 // 价格
                 price_type: "0", // 价格类型 0:免费 1:盒币 2:金箔
                 price_count: 0, // 数量
+                is_unlimited: 0, // 可新建
             },
 
             loading: false,
