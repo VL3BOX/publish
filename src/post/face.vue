@@ -9,6 +9,38 @@
             <!-- 信息 -->
             <div class="m-publish-info">
                 <el-divider content-position="left">信息</el-divider>
+                <el-form-item label="数据">
+                    <face-attachment :body="post.body_type" type="face" @update:data="handleFaceChange" />
+                    <div class="u-attachment" v-for="item in faceAttachments" :key="item.id">
+                        <el-button
+                            class="u-main"
+                            :type="item.file === faceData.file ? 'warning' : ''"
+                            icon="el-icon-star-off"
+                            circle
+                            :plain="item.file === faceData.file ? false : true"
+                            @click="setMain(item)"
+                            size="mini"
+                            title="设为主数据"
+                        />
+                        <span class="u-attachment-text">
+                            文件名: <b>{{ item.name }}</b>
+                        </span>
+                        <!-- <span class="u-attachment-key">唯一标识符：<b>{{ item.file }}</b></span> -->
+                        <span class="u-attachment-remark">
+                            <el-input v-model="item.describe" placeholder="备注" size="mini"></el-input>
+                        </span>
+                        <el-button
+                            class="u-btn"
+                            type="info"
+                            icon="el-icon-delete"
+                            circle
+                            plain
+                            @click="removeFile(item.id)"
+                            size="mini"
+                            title="移除"
+                        />
+                    </div>
+                </el-form-item>
                 <!-- 客户端 -->
                 <publish-client v-model="post.client" :forbidAll="true"></publish-client>
                 <!-- 原创 -->
@@ -63,38 +95,6 @@
                 <el-form-item label="可新建">
                     <el-switch v-model="post.is_unlimited" :active-value="1" :inactive-value="0"> </el-switch>
                 </el-form-item>
-                <el-form-item label="数据">
-                    <face-attachment :body="post.body_type" type="face" @update:data="handleFaceChange" />
-                    <div class="u-attachment" v-for="item in faceAttachments" :key="item.id">
-                        <el-button
-                            class="u-main"
-                            :type="item.file === faceData.file ? 'warning' : ''"
-                            icon="el-icon-star-off"
-                            circle
-                            :plain="item.file === faceData.file ? false : true"
-                            @click="setMain(item)"
-                            size="mini"
-                            title="设为主数据"
-                        />
-                        <span class="u-attachment-text">
-                            文件名: <b>{{ item.name }}</b>
-                        </span>
-                        <!-- <span class="u-attachment-key">唯一标识符：<b>{{ item.file }}</b></span> -->
-                        <span class="u-attachment-remark">
-                            <el-input v-model="item.describe" placeholder="备注" size="mini"></el-input>
-                        </span>
-                        <el-button
-                            class="u-btn"
-                            type="info"
-                            icon="el-icon-delete"
-                            circle
-                            plain
-                            @click="removeFile(item.id)"
-                            size="mini"
-                            title="移除"
-                        />
-                    </div>
-                </el-form-item>
 
                 <el-form-item label="描述">
                     <el-input v-model="post.remark" placeholder="请填写描述" type="textarea" :rows="3"></el-input>
@@ -128,227 +128,233 @@ import faceAttachment from "@/components/face_attachment.vue";
 import UploadAlbum from "@jx3box/jx3box-editor/src/UploadAlbum.vue";
 import publishBanner from "@/components/publish_banner.vue";
 import { bodyMap } from "@jx3box/jx3box-facedat/assets/data/index.json";
+import { DecalDatabase } from "@jx3box/jx3box-facedat/src/DecalDatabase";
 import User from "@jx3box/jx3box-common/js/user.js";
 import cloneDeep from "lodash/cloneDeep";
 export default {
-    name: "face",
-    components: {
-        publishHeader,
-        publishTitle,
-        publishOriginal,
-        publishClient,
-        faceAttachment,
-        UploadAlbum,
-        publishBanner,
-    },
-    data() {
-        return {
-            post: {
-                // 用户信息
-                original: 1, // 是否原创
-                is_fr: 1, // 是否首发
-                author_name: "", // 原作者名称
-                author_link: "", // 原作者链接
-                // 作品信息
-                title: "", // 标题
-                remark: "", // 描述
-                banner: "", // 海报图
-                // 数据信息
-                client: "std", // 客户端
-                body_type: 1, // 体型
-                data: "", // 解析lua的json数据
-                file: "", // 关联的附件表uuid
-                // 作者扩展
-                cover: "", // 封面
-                images: [], // 图片列表
-                related: [], // 相关作品
-                // 价格
-                price_type: "0", // 价格类型 0:免费 1:盒币 2:金箔
-                price_count: 0, // 数量
-                is_unlimited: 0, // 可新建
-            },
+  name: "face",
+  components: {
+    publishHeader,
+    publishTitle,
+    publishOriginal,
+    publishClient,
+    faceAttachment,
+    UploadAlbum,
+    publishBanner,
+  },
+  data() {
+    return {
+      post: {
+        // 用户信息
+        original: 1, // 是否原创
+        is_fr: 1, // 是否首发
+        author_name: "", // 原作者名称
+        author_link: "", // 原作者链接
+        // 作品信息
+        title: "", // 标题
+        remark: "", // 描述
+        banner: "", // 海报图
+        // 数据信息
+        client: "std", // 客户端
+        body_type: 1, // 体型
+        data: "", // 解析lua的json数据
+        file: "", // 关联的附件表uuid
+        // 作者扩展
+        cover: "", // 封面
+        images: [], // 图片列表
+        related: [], // 相关作品
+        // 价格
+        price_type: "0", // 价格类型 0:免费 1:盒币 2:金箔
+        price_count: 0, // 数量
+        is_unlimited: 0, // 可新建
+      },
 
-            loading: false,
-            processing: false,
-            postId: "", // 帖子id
-            postType: "face", // 帖子类型
-            bodyMap,
-            promise: true,
-            faceAttachments: [],
-            faceData: "",
+      loading: false,
+      processing: false,
+      postId: "", // 帖子id
+      postType: "face", // 帖子类型
+      bodyMap,
+      promise: true,
+      faceAttachments: [],
+      faceData: "",
+
+      decalDb: null,
+    };
+  },
+  computed: {
+    id() {
+      return this.$route.params.id;
+    },
+    client() {
+      return this.$store.state.client;
+    },
+    isSuperAuthor() {
+      return User.isSuperAuthor();
+    },
+  },
+  mounted() {
+    this.init();
+  },
+  methods: {
+    init() {
+      if (this.id) {
+        this.getData();
+      } else {
+        this.post.client = this.client;
+      }
+      this.decalDb = new DecalDatabase(this.client);
+    },
+    getData() {
+      this.loading = true;
+      getFace(this.id).then((res) => {
+        this.post = res.data.data;
+        this.post.images = this.post.images.map((item) => {
+          return {
+            name: item,
+            url: item,
+          };
+        });
+        getAttachmentOfPost(this.id).then((res) => {
+          let result = res.data;
+          if (result && result.data) {
+            this.faceAttachments = result.data.map((item) => {
+              return {
+                id: item.id,
+                file: item.uuid,
+                name: item.name,
+                describe: item.describe || "",
+                data: item.data || "",
+              };
+            });
+
+            this.faceData = this.faceAttachments.find((item) => {
+              return item.file == this.post.file;
+            });
+          }
+          this.loading = false;
+        });
+      });
+    },
+    handleFaceChange({ object = null, json = "", uuid = "", id = "", name = "" }) {
+      this.faceAttachments.push({
+        id: id,
+        file: uuid,
+        name: name,
+        data: json,
+        body_type: object["nRoleType"],
+        describe: "",
+      });
+      if (true || !this.faceData) {
+        this.faceData = {
+          id: id,
+          file: uuid,
+          name: name,
+          data: json,
+          body_type: object["nRoleType"],
         };
+        this.post.body_type = object["nRoleType"];
+        this.decalDb.setBodyType(this.post.body_type);
+        this.post.is_unlimited = ~~this.decalDb.canUseInCreate(object);
+      }
     },
-    computed: {
-        id() {
-            return this.$route.params.id;
-        },
-        client() {
-            return this.$store.state.client;
-        },
-        isSuperAuthor() {
-            return User.isSuperAuthor();
-        },
+    validator(data) {
+      // 必填字段 title file
+      const required = ["title", "file"];
+      const requiredMsg = ["请填写标题", "请上传数据"];
+      let message;
+      for (let i = 0; i < required.length; i++) {
+        if (!data[required[i]]) {
+          message = requiredMsg[i];
+          break;
+        }
+      }
+      if (message) {
+        this.$message.warning(message);
+        return false;
+      }
+      return true;
     },
-    mounted() {
-        this.init();
-    },
-    methods: {
-        init() {
-            if (this.id) {
-                this.getData();
-            } else {
-                this.post.client = this.client;
-            }
-        },
-        getData() {
-            this.loading = true;
-            getFace(this.id).then((res) => {
-                this.post = res.data.data;
-                this.post.images = this.post.images.map((item) => {
-                    return {
-                        name: item,
-                        url: item,
-                    };
-                });
-                getAttachmentOfPost(this.id).then((res) => {
-                    let result = res.data;
-                    if (result && result.data) {
-                        this.faceAttachments = result.data.map((item) => {
-                            return {
-                                id: item.id,
-                                file: item.uuid,
-                                name: item.name,
-                                describe: item.describe || "",
-                                data: item.data || "",
-                            };
-                        });
+    publish() {
+      this.processing = true;
+      const data = {
+        ...this.post,
+        //data: this.post.data,
+        images: this.post.images.map((item) => item.url || item),
+      };
+      let faceAttachmentIds = this.faceAttachments.map((item) => {
+        return {
+          id: item.id,
+          describe: item.describe,
+          data: item.data,
+        };
+      });
 
-                        this.faceData = this.faceAttachments.find((item) => {
-                            return item.file == this.post.file;
-                        });
-                    }
-                    this.loading = false;
-                });
-            });
-        },
-        handleFaceChange({ object = null, json = "", uuid = "", id = "", name = "" }) {
-            this.faceAttachments.push({
-                id: id,
-                file: uuid,
-                name: name,
-                data: json,
-                body_type: object["nRoleType"],
-                describe: "",
-            });
-            if (!this.faceData) {
-                this.faceData = {
-                    id: id,
-                    file: uuid,
-                    name: name,
-                    data: json,
-                    body_type: object["nRoleType"],
-                };
-                this.post.body_type = object["nRoleType"];
-            }
-        },
-        validator(data) {
-            // 必填字段 title file
-            const required = ["title", "file"];
-            const requiredMsg = ["请填写标题", "请上传数据"];
-            let message;
-            for (let i = 0; i < required.length; i++) {
-                if (!data[required[i]]) {
-                    message = requiredMsg[i];
-                    break;
-                }
-            }
-            if (message) {
-                this.$message.warning(message);
-                return false;
-            }
-            return true;
-        },
-        publish() {
-            this.processing = true;
-            const data = {
-                ...this.post,
-                //data: this.post.data,
-                images: this.post.images.map((item) => item.url || item),
-            };
-            let faceAttachmentIds = this.faceAttachments.map((item) => {
-                return {
-                    id: item.id,
-                    describe: item.describe,
-                    data: item.data,
-                };
-            });
+      if (this.faceData) {
+        // 如果第一个附件有data，证明这个附件是新上传的，那么更新face使用这个data
+        // 如果第一个附件没有data，那么表示第一个附件是以前的，是通过init()获取的，那么更新face使用原来的data
+        if (this.faceData.data) {
+          data.data = JSON.stringify(this.faceData.data);
+        }
+        data.body_type = this.faceData.body_type || this.post.body_type;
+        data.file = this.faceData.file;
+      }
 
-            if (this.faceData) {
-                // 如果第一个附件有data，证明这个附件是新上传的，那么更新face使用这个data
-                // 如果第一个附件没有data，那么表示第一个附件是以前的，是通过init()获取的，那么更新face使用原来的data
-                if (this.faceData.data) {
-                    data.data = JSON.stringify(this.faceData.data);
-                }
-                data.body_type = this.faceData.body_type || this.post.body_type;
-                data.file = this.faceData.file;
-            }
-
-            data.attachments = faceAttachmentIds;
-            if (!this.validator(data)) {
-                this.processing = false;
-                return;
-            }
-            if (this.id) {
-                updateFace(this.id, data)
-                    .then((res) => {
-                        this.$message.success("修改成功");
-                        this.processing = false;
-                        // 跳转
-                        setTimeout(() => {
-                            location.href = `/face/${this.id}`;
-                        }, 500);
-                    })
-                    .finally(() => {
-                        this.processing = false;
-                    });
-            } else {
-                addFace(data).then((res) => {
-                    this.$message({
-                        message: "发布成功",
-                        type: "success",
-                    });
-                    this.processing = false;
-                    // 跳转
-                    setTimeout(() => {
-                        location.href = `/face/${res.data.data.id}`;
-                    }, 500);
-                });
-            }
-        },
-        // 移除文件标识
-        removeFile(id) {
-            let newQueue = [];
-            for (let i = 0; i < this.faceAttachments.length; i++) {
-                if (this.faceAttachments[i].id == id) {
-                    continue;
-                }
-                newQueue.push(this.faceAttachments[i]);
-            }
-            this.faceAttachments = newQueue;
-            if (this.faceData.id == id) {
-                this.faceData = "";
-            }
-        },
-        // 设置主要文件
-        setMain(item) {
-            this.faceData = cloneDeep(item);
-            this.$notify({
-                title: "设置成功",
-                type: "success",
-                duration: 2000,
-            });
-        },
+      data.attachments = faceAttachmentIds;
+      if (!this.validator(data)) {
+        this.processing = false;
+        return;
+      }
+      if (this.id) {
+        updateFace(this.id, data)
+          .then((res) => {
+            this.$message.success("修改成功");
+            this.processing = false;
+            // 跳转
+            setTimeout(() => {
+              location.href = `/face/${this.id}`;
+            }, 500);
+          })
+          .finally(() => {
+            this.processing = false;
+          });
+      } else {
+        addFace(data).then((res) => {
+          this.$message({
+            message: "发布成功",
+            type: "success",
+          });
+          this.processing = false;
+          // 跳转
+          setTimeout(() => {
+            location.href = `/face/${res.data.data.id}`;
+          }, 500);
+        });
+      }
     },
+    // 移除文件标识
+    removeFile(id) {
+      let newQueue = [];
+      for (let i = 0; i < this.faceAttachments.length; i++) {
+        if (this.faceAttachments[i].id == id) {
+          continue;
+        }
+        newQueue.push(this.faceAttachments[i]);
+      }
+      this.faceAttachments = newQueue;
+      if (this.faceData.id == id) {
+        this.faceData = "";
+      }
+    },
+    // 设置主要文件
+    setMain(item) {
+      this.faceData = cloneDeep(item);
+      this.$notify({
+        title: "设置成功",
+        type: "success",
+        duration: 2000,
+      });
+    },
+  },
 };
 </script>
 
