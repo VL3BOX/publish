@@ -17,7 +17,7 @@
                 <!-- 客户端 -->
                 <publish-client v-model="post.client"></publish-client>
                 <!-- 类型 -->
-                <publish-subtype v-model="post.post_subtype" :options="bbs_types"></publish-subtype>
+                <!-- <publish-subtype v-model="post.post_subtype" :options="bbs_types"></publish-subtype> -->
 
                 <!-- 主题 -->
                 <publish-tags v-model="post.topics" :options="topics" label="主题"></publish-tags>
@@ -128,7 +128,7 @@ import publish_banner from "@/components/publish_banner";
 import publish_comment from "@/components/publish_comment";
 import publish_gift from "@/components/publish_gift";
 import publish_visible from "@/components/publish_visible";
-import publish_subtype from "@/components/publish_subtype";
+// import publish_subtype from "@/components/publish_subtype";
 import publish_authors from "@/components/publish_authors";
 import publish_revision from "@/components/publish_revision.vue";
 import publish_at_authors from "@/components/publish_at_authors.vue";
@@ -159,7 +159,7 @@ export default {
         "publish-comment": publish_comment,
         "publish-gift": publish_gift,
         "publish-visible": publish_visible,
-        "publish-subtype": publish_subtype,
+        // "publish-subtype": publish_subtype,
         "publish-authors": publish_authors,
         "publish-revision": publish_revision,
         "publish-at-authors": publish_at_authors,
@@ -185,7 +185,7 @@ export default {
                 // 标题
                 post_title: "",
                 // 子类型：心法、副本名等
-                post_subtype: "1",
+                post_subtype: "",
                 // 自定义字段
                 post_meta: {},
                 // 内容
