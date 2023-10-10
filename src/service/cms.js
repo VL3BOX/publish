@@ -31,4 +31,11 @@ function getMyPosts(params) {
     });
 }
 
-export { pull, push, del, getMyPostsCount, getMyPosts };
+// 获取全部列表
+function getAllPosts(params){
+    return $cms().get(`/api/cms/posts`, {
+        params
+    });
+}
+
+export { pull, push, del, getMyPostsCount, getMyPosts, getAllPosts };

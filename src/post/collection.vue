@@ -81,7 +81,12 @@
                                                 :key="post.id"
                                                 :value="post.id"
                                                 :label="post.title"
-                                            ></el-option>
+                                            >
+                                                <div>
+                                                    <el-tag size="small">{{  showPostType(post.post_type) }}</el-tag>
+                                                    {{ post.title }}
+                                                </div>
+                                            </el-option>
                                         </template>
                                     </el-select>
                                     <el-input
@@ -139,6 +144,7 @@ import draggable from "vuedraggable";
 // 本地依赖
 import { get_collection, createCollection, updateCollection } from "../service/collection";
 import { get_posts_by_type } from "../service/post";
+import { getMyPosts, getAllPosts } from "@/service/cms";
 import { getAllFaceList } from "@/service/face";
 import { getLink } from "@jx3box/jx3box-common/js/utils";
 import lodash from "lodash";
@@ -148,7 +154,7 @@ export default {
     props: [],
     data() {
         // 作品类型加载
-        let source_types = Object.assign({ custom: "自定义" }, __postType, __wikiType, { face: "捏脸" });
+        let source_types = Object.assign({ mine: "我的作品", all: '全部作品', custom: "自定义" }, __postType, __wikiType, { face: "捏脸" });
         delete source_types.jx3dat;
         delete source_types.notice;
 
@@ -188,6 +194,7 @@ export default {
         title_fill(post_id, item) {
             let post = item.posts[post_id];
             item.title = post && post.title ? post.title : "";
+            item.post_type = post && post.post_type ? post.post_type : "";
         },
         add_posts_item() {
             this.collection.posts.push({
@@ -196,6 +203,7 @@ export default {
                 id: "",
                 url: "",
                 posts: null,
+                post_type: "",
             });
         },
         search_handle(queryString, item) {
@@ -210,6 +218,34 @@ export default {
                             id: cur.id,
                             title: cur.title,
                             type: 'face'
+                        }
+                        return acc
+                    }, {}) || {};
+                })
+            } else if (item.type === 'mine') {
+                getMyPosts({
+                    title: queryString,
+                }).then(res => {
+                    item.posts = res.data.data.list?.reduce((acc, cur) => {
+                        acc[cur.ID] = {
+                            id: cur.ID,
+                            title: cur.post_title,
+                            post_type: cur.post_type
+                        }
+                        return acc
+                    }, {}) || {};
+                })
+            } else if (item.type === 'all') {
+                const params = {};
+                if (queryString) {
+                    params.title = queryString;
+                }
+                getAllPosts(params).then(res => {
+                    item.posts = res.data.data.list?.reduce((acc, cur) => {
+                        acc[cur.ID] = {
+                            id: cur.ID,
+                            title: cur.post_title,
+                            post_type: cur.post_type
                         }
                         return acc
                     }, {}) || {};
@@ -233,7 +269,7 @@ export default {
                     for (let i in collection.posts) {
                         let item = collection.posts[i];
                         collection.posts[i].posts =
-                            item.type === "custom" ? null : [{ id: item.id, title: item.title }];
+                            item.type === "custom" ? null : [{ id: item.id, title: item.title, post_type: item.post_type }];
                     }
                     this.collection = collection;
                 } else {
@@ -317,12 +353,23 @@ export default {
                 this.processing = false;
             });
         },
+
+        showPostType: function (type){
+            return __postType[type]
+        }
     },
     watch: {
         id: {
             immediate: true,
             handler: function (val) {
                 val && this.init();
+                if (!val) {
+                    this.source_types = {
+                        mine: '我的作品',
+                        all: '全部作品',
+                        custom: '自定义',
+                    }
+                }
             },
         },
     },
