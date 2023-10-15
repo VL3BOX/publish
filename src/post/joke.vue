@@ -32,10 +32,10 @@
 
             <!-- <el-form-item label="标签">
                 <div style="display: flex;margin-top:5px;">
-                    <el-tag 
+                    <el-tag
                         v-for="tag in post.tags"
-                        :key="tag" 
-                        closable 
+                        :key="tag"
+                        closable
                         :disable-transitions="false"
                         @close="handleClose(tag)"
                     >{{ tag }}</el-tag>
@@ -108,8 +108,8 @@ export default {
         },
     },
     methods: {
-        handleEmotionSelect(key) {
-            this.insertVariable(key);
+        handleEmotionSelect(obj) {
+            this.insertVariable(obj.key);
         },
         // handleClose(tag) {
         //     this.post.tags = this.post.tags.filter(t => t !== tag)
