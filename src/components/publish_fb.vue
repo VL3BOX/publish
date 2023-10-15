@@ -25,7 +25,7 @@
                 v-model="fbdata.fb_name"
                 @change="subtypeChange(key)"
             >
-                <img :src="fb.icon | thumbnail(fb.icon)" :alt="key" />
+                <img :src="fb.icon | thumbnail(fb.icon)" :alt="key" onerror="this.src='https://img.jx3box.com/image/fb_map_thumbnail/undefined.png'"/>
                 <span>{{ key }}</span>
             </el-radio>
         </el-form-item>
