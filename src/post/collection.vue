@@ -83,7 +83,7 @@
                                                 :label="post.title"
                                             >
                                                 <div>
-                                                    <el-tag size="small">{{  showPostType(post.post_type) }}</el-tag>
+                                                    <el-tag size="small" v-if="post.post_type">{{  showPostType(post.post_type) }}</el-tag>
                                                     {{ post.title }}
                                                 </div>
                                             </el-option>
