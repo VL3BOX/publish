@@ -9,6 +9,37 @@
             <!-- 信息 -->
             <div class="m-publish-info">
                 <el-divider content-position="left">信息</el-divider>
+                <el-form-item label="数据">
+                    <face-attachment :body="post.body_type" type="body" @update:data="handleBodyChange" />
+                    <div class="u-attachment" v-for="item in bodyAttachments" :key="item.id">
+                        <el-button
+                            class="u-main"
+                            :type="item.file === bodyData.file ? 'warning' : ''"
+                            icon="el-icon-star-off"
+                            circle
+                            :plain="item.file === bodyData.file ? false : true"
+                            @click="setMain(item)"
+                            size="mini"
+                            title="设为主数据"
+                        />
+                        <span class="u-attachment-text"
+                            >文件名: <b>{{ item.name }}</b></span
+                        >
+                        <span class="u-attachment-remark"
+                            ><el-input v-model="item.describe" placeholder="备注" size="mini"></el-input
+                        ></span>
+                        <el-button
+                            class="u-btn"
+                            type="info"
+                            icon="el-icon-delete"
+                            circle
+                            plain
+                            @click="removeFile(item.id)"
+                            size="mini"
+                            title="移除"
+                        />
+                    </div>
+                </el-form-item>
                 <!-- 客户端 -->
                 <el-form-item label="版本">
                     <el-radio-group v-model="post.client">
@@ -64,38 +95,6 @@
                             {{ body_label.label }}
                         </el-radio>
                     </el-radio-group>
-                </el-form-item>
-
-                <el-form-item label="数据">
-                    <face-attachment :body="post.body_type" type="body" @update:data="handleBodyChange" />
-                    <div class="u-attachment" v-for="item in bodyAttachments" :key="item.id">
-                        <el-button
-                            class="u-main"
-                            :type="item.file === bodyData.file ? 'warning' : ''"
-                            icon="el-icon-star-off"
-                            circle
-                            :plain="item.file === bodyData.file ? false : true"
-                            @click="setMain(item)"
-                            size="mini"
-                            title="设为主数据"
-                        />
-                        <span class="u-attachment-text"
-                            >文件名: <b>{{ item.name }}</b></span
-                        >
-                        <span class="u-attachment-remark"
-                            ><el-input v-model="item.describe" placeholder="备注" size="mini"></el-input
-                        ></span>
-                        <el-button
-                            class="u-btn"
-                            type="info"
-                            icon="el-icon-delete"
-                            circle
-                            plain
-                            @click="removeFile(item.id)"
-                            size="mini"
-                            title="移除"
-                        />
-                    </div>
                 </el-form-item>
 
                 <el-form-item label="描述">
