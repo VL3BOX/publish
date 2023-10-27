@@ -66,11 +66,11 @@
                     </el-form-item>
                 </template>
 
-                <el-form-item label="价格">
+                <el-form-item label="是否收费">
                     <el-radio-group v-model="post.price_type">
                         <el-radio label="0">免费</el-radio>
                         <!-- <el-radio label="1">盒币</el-radio> -->
-                        <el-radio label="2">金箔</el-radio>
+                        <el-radio label="2">收费(金箔)</el-radio>
                     </el-radio-group>
                     <el-input-number
                         class="u-price"
