@@ -336,7 +336,7 @@ export default {
                         this.processing = false;
                         // 跳转
                         setTimeout(() => {
-                            // location.href = getLink("face", this.id);
+                            location.href = getLink("face", this.id);
                         }, 500);
                     })
                     .finally(() => {
@@ -351,7 +351,7 @@ export default {
                     this.processing = false;
                     // 跳转
                     setTimeout(() => {
-                        // location.href = getLink("face", res.data.data.id);
+                        location.href = getLink("face", res.data.data.id);
                     }, 500);
                 });
             }
