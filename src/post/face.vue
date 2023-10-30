@@ -65,7 +65,7 @@
                 <!-- 客户端 -->
                 <publish-client v-if="faceData" v-model="post.client" :forbidAll="true"></publish-client>
                 <!-- 画风 -->
-                <el-form-item label="画风" v-if="post.client === 'std'">
+                <el-form-item label="画风" v-if="faceData && post.client === 'std'">
                     <el-radio-group v-model="post.is_new_face">
                         <el-radio :label="1">写实</el-radio>
                         <el-radio :label="0">写意</el-radio>
