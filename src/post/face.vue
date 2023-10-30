@@ -336,7 +336,7 @@ export default {
                         this.processing = false;
                         // 跳转
                         setTimeout(() => {
-                            location.href = getLink("face", this.id);
+                            // location.href = getLink("face", this.id);
                         }, 500);
                     })
                     .finally(() => {
@@ -351,7 +351,7 @@ export default {
                     this.processing = false;
                     // 跳转
                     setTimeout(() => {
-                        location.href = getLink("face", res.data.data.id);
+                        // location.href = getLink("face", res.data.data.id);
                     }, 500);
                 });
             }
@@ -397,7 +397,7 @@ export default {
             this.post.body_type = object["nRoleType"];
             this.decalDb.setBodyType(this.post.body_type);
             this.post.is_unlimited = ~~this.decalDb.canUseInCreate(object);
-            this.post.game_price = ~~this.decalDb.getTotalPrice(object);
+            this.post.game_price = ~~this.decalDb.getTotalPrice(object, object.bNewFace);
         },
     },
 };
