@@ -60,6 +60,7 @@ module.exports = {
         },
         disableHostCheck: true
     },
+    outputDir: process.env["BUILD_MODE"] == "preview" ? path.resolve(__dirname, pkg.name) : 'dist', // 指定构建输出的目录
 
     //webpack配置
     configureWebpack: (config) => {
@@ -104,6 +105,8 @@ module.exports = {
     publicPath:
         //FOR Localhost => development
         (process.env.NODE_ENV === 'development' && '/') ||
+
+        process.env.BUILD_MODE == "preview" && `/${pkg.name}/` ||
 
         //BY origin
         (process.env.STATIC_PATH === "origin" && `${JX3BOX.__staticPath["origin"]}${pkg.name}/`) ||
