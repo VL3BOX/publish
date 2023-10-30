@@ -144,7 +144,6 @@ export default {
                 //     name: "日历记录",
                 //     count: 0,
                 // },
-                // TODO:remove
                 namespace: {
                     path: "/bucket/namespace",
                     name: "剑三铭牌",
