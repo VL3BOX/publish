@@ -102,7 +102,7 @@
                             <i class="el-icon-warning-outline" style="margin-left: 2px;color: #c00;"></i>
                         </el-tooltip>
                     </template>
-                    <el-radio-group v-model="post.price_type" :disabled="!isSuperAuthor">
+                    <el-radio-group v-model="post.price_type" :disabled="!isSuperAuthor" @change="changePriceType">
                         <el-radio label="0">否</el-radio>
                         <!-- <el-radio label="1">盒币</el-radio> -->
                         <el-radio label="2">收费(金箔)</el-radio>
@@ -225,7 +225,6 @@ export default {
     },
     async mounted() {
         this.init();
-        this.isSuperAuthor = await User.isSuperAuthor();
     },
     methods: {
         init() {
@@ -245,6 +244,13 @@ export default {
                         name: item,
                         url: item,
                     };
+                });
+                User.isSuperAuthor().then(res => {
+                    this.isSuperAuthor = res;
+                    if (this.isSuperAuthor === false) {
+                        this.post.price_type = "0";
+                        this.post.price_count = 0;
+                    }
                 });
                 getAttachmentOfPost(this.id).then((res) => {
                     let result = res.data;
@@ -402,8 +408,14 @@ export default {
             this.post.body_type = object["nRoleType"];
             this.decalDb.setBodyType(this.post.body_type);
             this.post.is_unlimited = ~~this.decalDb.canUseInCreate(object);
-            this.post.game_price = ~~this.decalDb.getTotalPrice(object);
+            this.post.game_price = ~~this.decalDb.getTotalPrice(object, object.bNewFace);
         },
+        // 是否收费选项变更时
+        changePriceType(val) {
+            if (Number(val) === 0) {
+                this.post.price_count = 0;
+            }
+        }
     },
 };
 </script>
