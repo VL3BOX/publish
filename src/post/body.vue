@@ -67,7 +67,13 @@
                 </template>
 
                 <el-form-item label="是否收费">
-                    <el-radio-group v-model="post.price_type">
+                    <template #label>
+                        <span>是否收费</span>
+                        <el-tooltip content="仅签约作者可以发布收费作品">
+                            <i class="el-icon-warning-outline" style="margin-left: 2px;color: #c00;"></i>
+                        </el-tooltip>
+                    </template>
+                    <el-radio-group v-model="post.price_type" :disabled="!isSuperAuthor">
                         <el-radio label="0">免费</el-radio>
                         <!-- <el-radio label="1">盒币</el-radio> -->
                         <el-radio label="2">收费(金箔)</el-radio>
@@ -171,6 +177,8 @@ export default {
             promise: true,
             bodyAttachments: [],
             bodyData: "",
+
+            isSuperAuthor: false,
         };
     },
     computed: {
@@ -180,12 +188,11 @@ export default {
         client() {
             return this.$store.state.client;
         },
-        isSuperAuthor() {
-            return User.isSuperAuthor();
-        },
     },
-    mounted() {
+    async mounted() {
         this.init();
+
+        this.isSuperAuthor = await User.isSuperAuthor();
     },
     methods: {
         init() {
