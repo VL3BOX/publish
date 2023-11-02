@@ -99,7 +99,7 @@
                     <el-radio-group v-model="post.price_type">
                         <el-radio label="0">否</el-radio>
                         <!-- <el-radio label="1">盒币</el-radio> -->
-                        <el-radio label="2">收费(金箔)</el-radio>
+                        <el-radio v-if="isSuperAuthor" label="2">收费(金箔)</el-radio>
                     </el-radio-group>
                     <el-input-number
                         class="u-price"
@@ -199,6 +199,7 @@ export default {
             editDetail: false,
             loading: false,
             processing: false,
+            isSuperAuthor: false,
             postId: "", // 帖子id
             postType: "face", // 帖子类型
             promise: true,
@@ -214,10 +215,7 @@ export default {
         },
         client() {
             return this.$store.state.client;
-        },
-        isSuperAuthor() {
-            return User.isSuperAuthor();
-        },
+        }
     },
     mounted() {
         this.init();
@@ -230,6 +228,10 @@ export default {
                 this.post.client = this.client;
             }
             this.decalDb = new DecalDatabase(this.client);
+            User.isSuperAuthor().then(res => {
+                console.log(res);
+                this.isSuperAuthor = res;
+            });
         },
         getData() {
             this.loading = true;
