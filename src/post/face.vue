@@ -96,7 +96,7 @@
                 </template>
 
                 <el-form-item label="是否收费">
-                    <el-radio-group v-model="post.price_type">
+                    <el-radio-group v-model="post.price_type" @change="changePriceType">
                         <el-radio label="0">否</el-radio>
                         <!-- <el-radio label="1">盒币</el-radio> -->
                         <el-radio v-if="isSuperAuthor" label="2">收费(金箔)</el-radio>
@@ -230,7 +230,8 @@ export default {
             this.decalDb = new DecalDatabase(this.client);
             User.isSuperAuthor().then(res => {
                 console.log(res);
-                this.isSuperAuthor = res;
+                // this.isSuperAuthor = res;
+                this.isSuperAuthor = true
             });
         },
         getData() {
@@ -401,6 +402,12 @@ export default {
             this.post.is_unlimited = ~~this.decalDb.canUseInCreate(object);
             this.post.game_price = ~~this.decalDb.getTotalPrice(object, object.bNewFace);
         },
+        // 是否收费选项变更时
+        changePriceType(val) {
+            if (Number(val) === 0) {
+                this.post.price_count = 0;
+            }
+        }
     },
 };
 </script>
