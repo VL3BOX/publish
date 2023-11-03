@@ -229,9 +229,7 @@ export default {
             }
             this.decalDb = new DecalDatabase(this.client);
             User.isSuperAuthor().then(res => {
-                console.log(res);
-                // this.isSuperAuthor = res;
-                this.isSuperAuthor = true
+                this.isSuperAuthor = res;
             });
         },
         getData() {
