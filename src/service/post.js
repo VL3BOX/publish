@@ -23,7 +23,7 @@ function get_posts_by_type(type, params) {
 
 // 获取topic bucket
 function get_topic_bucket(params) {
-    return $cms().get("/api/cms/post/topic/bucket", {
+    return $cms().get("/api/cms/topic/bucket", {
         params
     });
 }
