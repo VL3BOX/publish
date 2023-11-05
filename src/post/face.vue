@@ -57,15 +57,14 @@
                             :label="~~body_type"
                             v-for="(body_info, body_type) in options.bodyMap"
                             :key="body_type"
+                            >{{ body_info.label }}</el-radio
                         >
-                            {{ body_info.label }}
-                        </el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <!-- 客户端 -->
                 <publish-client v-if="faceData" v-model="post.client" :forbidAll="true"></publish-client>
                 <!-- 画风 -->
-                <el-form-item label="画风" v-if="post.client === 'std'">
+                <el-form-item label="画风" v-if="faceData && post.client === 'std'">
                     <el-radio-group v-model="post.is_new_face">
                         <el-radio :label="1">写实</el-radio>
                         <el-radio :label="0">写意</el-radio>
@@ -77,7 +76,6 @@
                 </el-form-item>
 
                 <!-- 原创 -->
-                <publish-original v-model="post.original"></publish-original>
                 <el-form-item label="首发" prop="is_fr">
                     <el-switch
                         v-model="post.is_fr"
@@ -86,6 +84,7 @@
                         :inactive-value="0"
                     ></el-switch>
                 </el-form-item>
+                <publish-original v-model="post.original"></publish-original>
                 <template v-if="!post.original">
                     <el-form-item label="原作者名称" prop="author_name">
                         <el-input v-model="post.author_name" placeholder="输入原作者名称"></el-input>
@@ -97,15 +96,15 @@
 
                 <el-form-item>
                     <template #label>
-                        <span>是否收费</span>
-                        <el-tooltip content="仅签约作者可以发布收费作品">
-                            <i class="el-icon-warning-outline" style="margin-left: 2px;color: #c00;"></i>
+                        <span>价格</span>
+                        <el-tooltip content="仅签约作者可以发布收费作品；1金箔=1分CNY">
+                            <i class="el-icon-warning-outline" style="margin-left: 2px; color: #c00"></i>
                         </el-tooltip>
                     </template>
                     <el-radio-group v-model="post.price_type" :disabled="!isSuperAuthor" @change="changePriceType">
-                        <el-radio label="0">否</el-radio>
+                        <el-radio label="0">免费</el-radio>
                         <!-- <el-radio label="1">盒币</el-radio> -->
-                        <el-radio label="2">收费(金箔)</el-radio>
+                        <el-radio v-if="isSuperAuthor" label="2">收费(金箔)</el-radio>
                     </el-radio-group>
                     <el-input-number
                         class="u-price"
@@ -205,6 +204,7 @@ export default {
             editDetail: false,
             loading: false,
             processing: false,
+            isSuperAuthor: false,
             postId: "", // 帖子id
             postType: "face", // 帖子类型
             promise: true,
@@ -212,7 +212,6 @@ export default {
             faceData: "",
 
             decalDb: null,
-            isSuperAuthor: false
         };
     },
     computed: {
@@ -234,6 +233,9 @@ export default {
                 this.post.client = this.client;
             }
             this.decalDb = new DecalDatabase(this.client);
+            User.isSuperAuthor().then((res) => {
+                this.isSuperAuthor = res;
+            });
         },
         getData() {
             this.loading = true;
@@ -245,7 +247,7 @@ export default {
                         url: item,
                     };
                 });
-                User.isSuperAuthor().then(res => {
+                User.isSuperAuthor().then((res) => {
                     this.isSuperAuthor = res;
                     if (this.isSuperAuthor === false) {
                         this.post.price_type = "0";
@@ -406,7 +408,7 @@ export default {
             this.post.client = majorMap[object.nMajorVersion];
             this.post.is_new_face = object.bNewFace ? 1 : 0;
             this.post.body_type = object["nRoleType"];
-            this.decalDb = new DecalDatabase(this.post.client,  object.bNewFace);
+            this.decalDb = new DecalDatabase(this.post.client, object.bNewFace);
             this.decalDb.setBodyType(this.post.body_type);
             this.post.is_unlimited = ~~this.decalDb.canUseInCreate(object);
             this.post.game_price = ~~this.decalDb.getTotalPrice(object, object.bNewFace);
@@ -416,7 +418,7 @@ export default {
             if (Number(val) === 0) {
                 this.post.price_count = 0;
             }
-        }
+        },
     },
 };
 </script>
