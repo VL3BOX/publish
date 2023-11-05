@@ -18,6 +18,8 @@
                 <publish-client v-model="post.client"></publish-client>
                 <!-- 类型 -->
                 <publish-subtype v-model="post.post_subtype" :options="tool_types"></publish-subtype>
+                <!-- 资源 -->
+                <publish-tool-source v-if="post.post_subtype==1" v-model="post.post_meta"></publish-tool-source>
             </div>
 
             <!-- 正文 -->
@@ -111,6 +113,7 @@ import publish_subtype from "@/components/publish_subtype";
 import publish_authors from "@/components/publish_authors";
 import publish_revision from '@/components/publish_revision.vue'
 import publish_at_authors from '@/components/publish_at_authors.vue'
+import publish_tool_source from "@/components/publish_tool_source.vue";
 
 // 数据逻辑
 import { push, pull } from "@/service/cms.js";
@@ -139,7 +142,8 @@ export default {
         "publish-subtype": publish_subtype,
         "publish-authors": publish_authors,
         'publish-revision' : publish_revision,
-        'publish-at-authors': publish_at_authors
+        'publish-at-authors': publish_at_authors,
+        "publish-tool-source": publish_tool_source,
     },
     data: function () {
         return {
@@ -162,7 +166,16 @@ export default {
                 // 子类型：心法、副本名等
                 post_subtype: "1",
                 // 自定义字段
-                post_meta: {},
+                post_meta: {
+                    data: [
+                        {
+                            name: "",
+                            mode: "0",
+                            file: "",
+                            remark: "",
+                        }
+                    ],
+                },
                 // 内容
                 post_content: "",
                 // 编辑模式(会影响文章详情页渲染规则)
@@ -291,3 +304,7 @@ export default {
     },
 };
 </script>
+
+<style lang="less">
+@import "../assets/css/macro.less";
+</style>

@@ -38,4 +38,9 @@ function getAllPosts(params){
     });
 }
 
-export { pull, push, del, getMyPostsCount, getMyPosts, getAllPosts };
+// 通用上传
+function upload(formData) {
+    return $cms().post(`/api/cms/upload`, formData);
+}
+
+export { pull, push, del, getMyPostsCount, getMyPosts, getAllPosts, upload };
