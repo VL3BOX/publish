@@ -80,18 +80,6 @@
                         <span>通识百科</span>
                     </router-link>
                 </el-col>
-                <el-col :span="4">
-                    <router-link to="/question">
-                        <i class="el-icon-s-opportunity"></i>
-                        <span>剑三题目</span>
-                    </router-link>
-                </el-col>
-                <el-col :span="4">
-                    <router-link to="/paper">
-                        <img svg-inline src="../assets/img/channel/100.svg" />
-                        <span>剑三试卷</span>
-                    </router-link>
-                </el-col>
                 <!-- <el-col :span="4">
                     <router-link to="/item_plan">
                         <i class="el-icon-folder"></i>
@@ -112,6 +100,18 @@
                     <router-link to="/body">
                         <img svg-inline src="../assets/img/channel/body.svg" />
                         <span>体型数据</span>
+                    </router-link>
+                </el-col>
+                <el-col :span="4">
+                    <router-link to="/question">
+                        <i class="el-icon-s-opportunity"></i>
+                        <span>剑三题目</span>
+                    </router-link>
+                </el-col>
+                <el-col :span="4">
+                    <router-link to="/paper">
+                        <img svg-inline src="../assets/img/channel/100.svg" />
+                        <span>剑三试卷</span>
                     </router-link>
                 </el-col>
             </el-row>

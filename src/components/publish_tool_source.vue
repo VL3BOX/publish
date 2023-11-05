@@ -64,12 +64,12 @@
                         </div>
                     </div>
                     <div class="m-source-file m-macro-item" v-if="item.mode == 0">
-                        <h5 class="u-title">文件地址</h5>
-                        <el-input v-model="item.file" placeholder="输入文件地址"></el-input>
+                        <h5 class="u-title">文件</h5>
+                        <el-input v-model="item.file" placeholder="输入文件地址（例如网盘地址）"></el-input>
                     </div>
                     <div class="m-source-remark m-macro-item">
                         <h5 class="u-title">备注</h5>
-                        <el-input v-model="item.remark" placeholder="输入备注" :rows="3" type="textarea"></el-input>
+                        <el-input v-model="item.remark" placeholder="输入备注（例如网盘密码）" :rows="3" type="textarea"></el-input>
                     </div>
                 </el-tab-pane>
             </el-tabs>
