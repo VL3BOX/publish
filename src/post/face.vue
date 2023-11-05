@@ -406,6 +406,7 @@ export default {
             this.post.client = majorMap[object.nMajorVersion];
             this.post.is_new_face = object.bNewFace ? 1 : 0;
             this.post.body_type = object["nRoleType"];
+            this.decalDb = new DecalDatabase(this.post.client,  object.bNewFace);
             this.decalDb.setBodyType(this.post.body_type);
             this.post.is_unlimited = ~~this.decalDb.canUseInCreate(object);
             this.post.game_price = ~~this.decalDb.getTotalPrice(object, object.bNewFace);
