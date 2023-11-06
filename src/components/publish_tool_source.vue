@@ -33,25 +33,19 @@
                     <div class="m-source-file m-macro-item" v-if="item.mode == 1">
                         <h5 class="u-title">文件</h5>
                         <div class="m-raw-file">
-                            <div class="u-warning">
+                            <!-- <div class="u-warning">
                                 <i class="el-icon-warning-outline"></i>
-                                当前数据文件将作为
-                                <b>{{ item.name || i + 1 + "号位" }} </b
-                                >的文件上传。
-                            </div>
+                                当前文件将作为
+                                <b> {{ item.name || i + 1 + "号位" }} </b>的文件上传。
+                            </div> -->
                             <input
                                 class="u-data-input"
                                 type="file"
                                 :id="'tool_' + i"
                                 @change="(e) => uploadSource(e, i)"
                             />
-                            <el-button
-                                type="primary"
-                                icon="el-icon-s-promotion"
-                                plain
-                                size="small"
-                                @click="selectSource(i)"
-                                >上传数据文件</el-button
+                            <el-button type="primary" icon="el-icon-s-promotion" @click="selectSource(i)"
+                                >上传文件</el-button
                             >
                             <span class="u-data-remark">{{ files[i] && files[i].name }}</span>
                             <div class="u-file" v-if="item.file">
@@ -59,7 +53,9 @@
                                 <span class="u-file__value"
                                     ><i class="el-icon-document"></i>{{ item.name || i + 1 + "号位" }}</span
                                 >
-                                <i class="el-icon-download u-file__download" @click="onDownload(item)"></i>
+                                <a :href="item.file" target="_blank"
+                                    ><i class="el-icon-download u-file__download"></i
+                                ></a>
                             </div>
                         </div>
                     </div>
@@ -69,7 +65,12 @@
                     </div>
                     <div class="m-source-remark m-macro-item">
                         <h5 class="u-title">备注</h5>
-                        <el-input v-model="item.remark" placeholder="输入备注（例如网盘密码）" :rows="3" type="textarea"></el-input>
+                        <el-input
+                            v-model="item.remark"
+                            placeholder="输入备注（例如网盘密码）"
+                            :rows="3"
+                            type="textarea"
+                        ></el-input>
                     </div>
                 </el-tab-pane>
             </el-tabs>
