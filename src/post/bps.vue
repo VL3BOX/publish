@@ -59,7 +59,10 @@
             <div class="m-publish-extend">
                 <el-divider content-position="left">设置</el-divider>
                 <publish-comment v-model="post.comment">
-                    <el-checkbox v-model="post.comment_visible" :true-label="1" :false-label="0">仅自己可见</el-checkbox></publish-comment>
+                    <el-checkbox v-model="post.comment_visible" :true-label="1" :false-label="0"
+                        >仅自己可见</el-checkbox
+                    ></publish-comment
+                >
                 <publish-gift v-model="post.allow_gift"></publish-gift>
                 <publish-visible v-model="post.visible"></publish-visible>
                 <publish-authors :id="id" :uid="post.post_author"></publish-authors>
@@ -77,7 +80,9 @@
             </div>
 
             <div class="m-publish-doc">
-                <el-checkbox v-model="hasRead" :true-label="1" :false-label="0">我已阅读并了解<a href="/notice/119" @click.stop target="_blank">《创作发布规范》</a></el-checkbox>
+                <el-checkbox v-model="hasRead" :true-label="1" :false-label="0"
+                    >我已阅读并了解<a href="/notice/119" @click.stop target="_blank">《创作发布规范》</a></el-checkbox
+                >
             </div>
 
             <!-- 按钮 -->
@@ -240,7 +245,7 @@ export default {
         },
         isSuperAuthor() {
             return User.isSuperAuthor();
-        }
+        },
     },
     methods: {
         // 初始化
@@ -317,6 +322,15 @@ export default {
         },
     },
     created: function () {
+        const tags = this.$route.query.tags;
+        const topics = this.$route.query.topics;
+        if (tags) {
+            this.post.tags = tags.split(',');
+        }
+        if (topics) {
+            this.post.topics = topics.split(',');
+        }
+        console.log(this.post.tags, this.post.topics);
         this.init().then((data) => {
             if (!data) return;
             if (!this.post.tags || !this.post.tags.length) {
