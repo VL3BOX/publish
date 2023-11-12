@@ -241,6 +241,11 @@ export default {
             this.loading = true;
             getFace(this.id).then((res) => {
                 this.post = res.data.data;
+
+                if (this.isOldPost(this.post.updated_at)) {
+                    this.showWarning();
+                }
+
                 this.post.images = this.post.images.map((item) => {
                     return {
                         name: item,
@@ -419,10 +424,43 @@ export default {
                 this.post.price_count = 0;
             }
         },
+        // 指定时间范围
+        isOldPost(datetime) {
+            return new Date(datetime) < new Date("2023-11-13 00:00:00");
+        },
+        // 警告
+        showWarning() {
+            this.$confirm(
+                "为保护原创作者的权益，避免他人盗卖作品盈利，我们已修改了相关规则，目前仅签约作者可使用作品收费功能。<br/><br/><span style='color:#f00;font-weight:bold;'>若您不是【签约作者】，继续编辑此作品，将会使作品变为【免费】。</span>",
+                "注意",
+                {
+                    distinguishCancelAndClose: true,
+                    confirmButtonText: "放弃修改",
+                    // confirmButtonClass: "u-btn-ok",
+                    cancelButtonText: "我已阅读并知晓",
+                    // cancelButtonClass: "u-btn-cancel",
+                    dangerouslyUseHTMLString: true,
+                    callback: (action) => {
+                        if (action == "confirm") {
+                            window.location.href = location.origin + getLink("face", this.id);
+                        }
+                    },
+                }
+            ).catch((action) => {});
+        },
     },
 };
 </script>
 
 <style lang="less">
 @import "~@/assets/css/face.less";
+// .el-message-box{
+//     .u-btn-ok{
+//         background-color:#fff;
+//         border:1px solid #eee;
+//     }
+//     .u-btn-cancel{
+//         background-color:#c00;
+//     }
+// }
 </style>
