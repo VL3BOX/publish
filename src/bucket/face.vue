@@ -32,6 +32,7 @@
                     </div>
 
                     <el-button-group class="u-action">
+                        <el-button size="mini" icon="el-icon-delete" @click="del(item.id)" title="删除"></el-button>
                         <el-button size="mini" icon="el-icon-edit" @click="edit(item.id)" title="编辑"></el-button>
                         <el-button
                             v-if="item.status == 1"
@@ -72,7 +73,7 @@
 </template>
 
 <script>
-import { getFaceList, faceOnline, faceOffline } from "@/service/face.js";
+import { getFaceList, faceOnline, faceOffline, delFace } from "@/service/face.js";
 export default {
     name: "face",
     props: [],
@@ -142,6 +143,18 @@ export default {
             }).then(() => {
                 faceOffline(id).then((res) => {
                     this.$message.success("下架成功");
+                    this.loadPosts();
+                });
+            });
+        },
+        del(id) {
+            this.$confirm("此操作将彻底删除该数据, 是否继续?", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+            }).then(() => {
+                delFace(id).then((res) => {
+                    this.$message.success("删除成功");
                     this.loadPosts();
                 });
             });
