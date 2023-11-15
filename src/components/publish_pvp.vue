@@ -9,14 +9,15 @@
             </div>
             <div class="m-macro-talent m-macro-item" v-if="client != 'origin'">
                 <h5 class="u-title">奇穴方案</h5>
-                <el-input v-model="pvpData.talent" placeholder="奇穴方案编码" @change="checkTalent(pvpData.talent)">
+                <!-- <el-input v-model="pvpData.talent" placeholder="奇穴方案编码" @change="checkTalent(pvpData.talent)">
                     <template slot="prepend">
                         <a class="u-get" target="_blank" href="/macro/talent">
                             <i class="el-icon-warning"></i>
                             获取编码
                         </a>
                     </template>
-                </el-input>
+                </el-input> -->
+                <publish-qixue v-model="pvpData.talent" :subtype="subtype"></publish-qixue>
             </div>
             <div class="m-macro-talent m-macro-item" v-if="client === 'origin'">
                 <h5 class="u-title">镇派方案</h5>
@@ -97,7 +98,7 @@
                         >
                     </el-form-item>
                     <el-form-item label="连招说明" class="m-macro-desc">
-                        <el-input v-model="item.desc" type="textarea" maxlength="200" show-word-limit placeholder="连招简要说明（选填）"></el-input>
+                        <el-input v-model="item.desc" type="textarea" maxlength="200" :rows="3"  show-word-limit placeholder="连招简要说明（选填）"></el-input>
                     </el-form-item>
                     <div class="m-macro-op">
                         <el-button
@@ -129,6 +130,7 @@ import SkillDialog from "@/components/skill_dialog.vue";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 
 import Sortable from "sortablejs";
+import publish_qixue from "./publish_qixue.vue";
 // META空模板
 const default_meta = {
     talent: "",
@@ -147,6 +149,7 @@ export default {
     props: ["data", "client", "subtype"],
     components: {
         SkillDialog,
+        "publish-qixue":publish_qixue,
     },
     data: function () {
         return {

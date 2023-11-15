@@ -43,4 +43,9 @@ function upload(formData) {
     return $cms().post(`/api/cms/upload`, formData);
 }
 
-export { pull, push, del, getMyPostsCount, getMyPosts, getAllPosts, upload };
+// 面包屑
+function getBreadCrumb(key) {
+    return $cms().get(`/api/cms/breadcrumb/${key}`);
+}
+
+export { pull, push, del, getMyPostsCount, getMyPosts, getAllPosts, upload, getBreadCrumb };

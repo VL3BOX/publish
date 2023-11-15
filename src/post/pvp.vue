@@ -20,16 +20,32 @@
                 <publish-zlp v-model="post.zlp" :client="post.client"></publish-zlp>
                 <!-- 心法 -->
                 <publish-xf v-model="post.post_subtype" :client="post.client"></publish-xf>
+                <!-- 其他 -->
+                <publish-extend v-model="post"></publish-extend>
             </div>
 
             <!-- 技能区域 -->
             <publish-pvp v-model="post.post_meta" :client="post.client" :subtype="post.post_subtype"> </publish-pvp>
 
+            <!-- 正文 -->
+            <div class="m-publish-content">
+                <el-divider content-position="left">正文</el-divider>
+                <el-radio-group class="m-publish-editormode" size="small" v-model="post.post_mode" >
+                    <el-radio-button label="tinymce">可视化编辑器</el-radio-button>
+                    <el-radio-button label="markdown">Markdown</el-radio-button>
+                </el-radio-group>
+                <Markdown v-model="post.post_content" :editable="true" :readOnly="false" v-show="post.post_mode == 'markdown'"></Markdown>
+                <Tinymce v-model="post.post_content" :attachmentEnable="true" :resourceEnable="true" v-show="!post.post_mode || post.post_mode == 'tinymce'" />
+            </div>
+
             <!-- 扩展 -->
             <div class="m-publish-extend">
                 <el-divider content-position="left">设置</el-divider>
                 <publish-comment v-model="post.comment">
-                    <el-checkbox v-model="post.comment_visible" :true-label="1" :false-label="0">仅自己可见</el-checkbox></publish-comment>
+                    <el-checkbox v-model="post.comment_visible" :true-label="1" :false-label="0"
+                        >仅自己可见</el-checkbox
+                    ></publish-comment
+                >
                 <publish-visible v-model="post.visible"></publish-visible>
                 <publish-authors :id="id" :uid="post.post_author"></publish-authors>
             </div>
@@ -40,7 +56,9 @@
             </div>
 
             <div class="m-publish-doc">
-                <el-checkbox v-model="hasRead" :true-label="1" :false-label="0">我已阅读并了解<a href="/notice/119" @click.stop target="_blank">《创作发布规范》</a></el-checkbox>
+                <el-checkbox v-model="hasRead" :true-label="1" :false-label="0"
+                    >我已阅读并了解<a href="/notice/119" @click.stop target="_blank">《创作发布规范》</a></el-checkbox
+                >
             </div>
 
             <!-- 按钮 -->
@@ -66,6 +84,8 @@
 import lodash from "lodash";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import User from "@jx3box/jx3box-common/js/user.js";
+import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
+import Markdown from "@jx3box/jx3box-editor/src/Markdown";
 
 // 本地模块
 import publish_header from "@/components/publish_header.vue";
@@ -80,6 +100,7 @@ import publish_comment from "@/components/publish_comment";
 import publish_visible from "@/components/publish_visible";
 import publish_authors from "@/components/publish_authors";
 import publish_revision from "@/components/publish_revision.vue";
+import publish_extend from "@/components/publish_extend.vue";
 
 // 数据逻辑
 import { push } from "@/service/cms.js";
@@ -92,6 +113,8 @@ export default {
     name: "pvp_skill",
     mixins: [AutoSaveMixin, cmsMetaMixin, atAuthorMixin],
     components: {
+        Tinymce,
+        Markdown,
         "publish-header": publish_header,
         "publish-title": publish_title,
         "publish-original": publish_original,
@@ -104,6 +127,7 @@ export default {
         "publish-authors": publish_authors,
         "publish-revision": publish_revision,
         "publish-client": publish_client,
+        "publish-extend": publish_extend,
     },
     data: function () {
         return {
@@ -171,6 +195,9 @@ export default {
 
                 // 阅读权限（0公开，1仅自己，2亲友，3密码，4付费，5粉丝）
                 visible: 0,
+
+                // 是否包含视频
+                include_video: 0,
             },
         };
     },
@@ -196,7 +223,7 @@ export default {
         },
     },
     watch: {
-        '$route.query': {
+        "$route.query": {
             handler: function (val) {
                 if (val?.subtype) {
                     this.post.post_subtype = val.subtype;
@@ -223,6 +250,12 @@ export default {
 
             // 补充心法id
             this.build();
+
+            this.post.post_meta.talent_desc = this.post.post_meta?.talent_desc?.replace(/\n{2,}/g, "\n") || "";
+            this.post.post_meta.content = this.post.post_meta?.content?.replace(/\n{2,}/g, "\n") || "";
+            this.post.post_meta?.data.forEach((item) => {
+                item.desc = item.desc.replace(/\n{2,}/g, "\n") || "";
+            });
 
             return push(...this.data)
                 .then((res) => {
@@ -253,7 +286,7 @@ export default {
                 });
                 // 跳转
                 setTimeout(() => {
-                    location.href = "/pvp/?subtype=" + this.post.post_subtype;
+                    location.href = "/pvp/" + result?.ID;
                 }, 500);
             } else {
                 // 提醒
