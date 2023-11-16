@@ -1,9 +1,7 @@
 <template>
     <div class="m-publish-extend">
-        <el-divider content-position="left">其他</el-divider>
-
-        <el-form-item label="内含视频">
-            <el-checkbox v-model="post.include_video" :true-label="1" :false-label="0">是</el-checkbox>
+        <el-form-item label="其它">
+            <el-checkbox v-model="post.include_video" :true-label="1" :false-label="0">内含视频</el-checkbox>
         </el-form-item>
     </div>
 </template>
