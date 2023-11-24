@@ -63,4 +63,12 @@ function getChangelog(params){
     return $cms().get(`/api/cms/pve/skill/changelog`, {params});
 }
 
-export { pull, push, del, getMyPostsCount, getMyPosts, getAllPosts, upload, getBreadCrumb, getPostMeta, setPostMeta, getChangelog };
+function getHasteRecommend(mount, client = 'std'){
+    return $cms().get(`/api/cms/app/pz/haste/${mount}`, {
+        params: {
+            client
+        }
+    })
+}
+
+export { pull, push, del, getMyPostsCount, getMyPosts, getAllPosts, upload, getBreadCrumb, getPostMeta, setPostMeta, getChangelog, getHasteRecommend };

@@ -32,6 +32,9 @@
                         <i class="el-icon-warning-outline"></i> 展示你推荐的配装（不超过8个，非必选）
                     </span>
                 </publish-pz>
+                <template #pre-prepend v-if="pz_query && pz_query.mount">
+                    <pz-haste :client="post.client" :mount="pz_query.mount"></pz-haste>
+                </template>
             </publish-macro>
 
             <!-- 正文 -->
@@ -124,6 +127,7 @@ import publish_authors from "@/components/publish_authors";
 import publish_pz from "@/components/publish_pz";
 import publish_revision from '@/components/publish_revision.vue'
 import publish_at_authors from '@/components/publish_at_authors.vue'
+import pz_haste from "@/components/pz_haste.vue";
 
 // 数据逻辑
 import { push, pull } from "@/service/cms.js";
@@ -156,7 +160,8 @@ export default {
         "publish-authors": publish_authors,
         "publish-pz": publish_pz,
         'publish-revision' : publish_revision,
-        'publish-at-authors': publish_at_authors
+        'publish-at-authors': publish_at_authors,
+        'pz-haste': pz_haste,
     },
     data: function () {
         return {
