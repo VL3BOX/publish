@@ -55,7 +55,7 @@ function getPostMeta(id, key){
 
 // 设置post_meta
 function setPostMeta(id, key, value){
-    return $cms().post(`/api/cms/manage/post/${id}/meta/${key}`, { val: value });
+    return $cms().post(`/api/cms/post/${id}/meta/${key}`, { val: value });
 }
 
 // 获取技改历史

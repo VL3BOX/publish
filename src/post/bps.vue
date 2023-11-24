@@ -23,7 +23,7 @@
                 <!-- 主题 -->
                 <publish-tags v-model="post.topics" :options="topics" label="主题"></publish-tags>
                 <!-- 技改历史 -->
-                <publish-changelog v-if="isEditor && isChangelog" :post="post" ref="changelog"></publish-changelog>
+                <publish-changelog v-if="isChangelog" :post="post" ref="changelog"></publish-changelog>
                 <!-- 心法 -->
                 <publish-xf v-model="post.post_subtype" :client="post.client"></publish-xf>
             </div>
@@ -250,9 +250,6 @@ export default {
         isSuperAuthor() {
             return User.isSuperAuthor();
         },
-        isEditor() {
-            return User.isEditor();
-        },
         isChangelog() {
             return this.post?.topics?.some((item) => {
                 return item.includes("技改");
@@ -279,12 +276,10 @@ export default {
                     this.atUser(result.ID);
                     this.setHasRead();
 
-                    if (this.isEditor) {
-                        if (this.isChangelog) {
-                            this.$refs.changelog?.setPostMeta(result.ID || this.id);
-                        } else {
-                            setPostMeta(result.ID || this.id, "link_changelog", "");
-                        }
+                    if (this.isChangelog) {
+                        this.$refs.changelog?.setPostMeta(result.ID || this.id);
+                    } else {
+                        setPostMeta(result.ID || this.id, "link_changelog", "");
                     }
 
                     return result;
