@@ -63,10 +63,10 @@
 <script>
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import { getSkills, getTalents } from "@/service/raw";
-import kungfumap_std from "@/assets/data/martial/kungfu_std.json";
-import kungfumap_origin from "@/assets/data/martial/kungfu_origin.json";
+import kungfumap_std from "@jx3box/jx3box-data/data/martial/kungfu_std.json";
+import kungfumap_origin from "@jx3box/jx3box-data/data/martial/kungfu_origin.json";
 import { flattenDeep, uniqBy } from "lodash";
-import kungfus from "@/assets/data/martial/kungfuid.json";
+import kungfus from "@jx3box/jx3box-data/data/martial/kungfuid.json";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "pvp_martial",
