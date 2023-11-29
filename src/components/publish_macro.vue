@@ -150,7 +150,9 @@
                         <el-row>
                             <el-col :span="8" class="u-speed">
                                 <el-input v-model="item.speed" placeholder="填写推荐的急速阈值">
-                                    <template slot="prepend">急速阈值</template>
+                                    <template slot="prepend">急速阈值
+                                        <slot name="pre-prepend"></slot>
+                                    </template>
                                 </el-input>
                             </el-col>
                             <el-col :span="8"></el-col>

@@ -22,6 +22,8 @@
                 <publish-tags v-model="post.tags" :options="prefer" label="类型"></publish-tags>
                 <!-- 主题 -->
                 <publish-tags v-model="post.topics" :options="topics" label="主题"></publish-tags>
+                <!-- 技改历史 -->
+                <publish-changelog v-if="isChangelog" :post="post" ref="changelog"></publish-changelog>
                 <!-- 心法 -->
                 <publish-xf v-model="post.post_subtype" :client="post.client"></publish-xf>
             </div>
@@ -127,9 +129,10 @@ import publish_tags from "@/components/publish_tags";
 import publish_authors from "@/components/publish_authors";
 import publish_revision from "@/components/publish_revision.vue";
 import publish_at_authors from "@/components/publish_at_authors.vue";
+import publish_changelog from "@/components/publish_changelog.vue";
 
 // 数据逻辑
-import { push, pull } from "@/service/cms.js";
+import { push, pull, setPostMeta } from "@/service/cms.js";
 import { appendToCollection } from "@/service/collection.js";
 import { AutoSaveMixin } from "@/utils/autoSaveMixin";
 import { cmsMetaMixin } from "@/utils/cmsMetaMixin";
@@ -157,6 +160,7 @@ export default {
         "publish-authors": publish_authors,
         "publish-revision": publish_revision,
         "publish-at-authors": publish_at_authors,
+        "publish-changelog": publish_changelog,
     },
     data: function () {
         return {
@@ -246,6 +250,11 @@ export default {
         isSuperAuthor() {
             return User.isSuperAuthor();
         },
+        isChangelog() {
+            return this.post?.topics?.some((item) => {
+                return item.includes("技改");
+            });
+        },
     },
     methods: {
         // 初始化
@@ -266,6 +275,13 @@ export default {
                     let result = res.data.data;
                     this.atUser(result.ID);
                     this.setHasRead();
+
+                    if (this.isChangelog) {
+                        this.$refs.changelog?.setPostMeta(result.ID || this.id);
+                    } else {
+                        setPostMeta(result.ID || this.id, "link_changelog", "");
+                    }
+
                     return result;
                 })
                 .then((result) => {
@@ -325,12 +341,11 @@ export default {
         const tags = this.$route.query.tags;
         const topics = this.$route.query.topics;
         if (tags) {
-            this.post.tags = tags.split(',');
+            this.post.tags = tags.split(",");
         }
         if (topics) {
-            this.post.topics = topics.split(',');
+            this.post.topics = topics.split(",");
         }
-        console.log(this.post.tags, this.post.topics);
         this.init().then((data) => {
             if (!data) return;
             if (!this.post.tags || !this.post.tags.length) {

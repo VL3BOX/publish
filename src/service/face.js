@@ -1,5 +1,10 @@
 import { $next } from "@jx3box/jx3box-common/js/https";
 
+
+export function delFace(id) {
+    return $next().delete(`/api/face/${id}`);
+}
+
 /**
  * 上传付费附件
  * @param {*} data

@@ -43,4 +43,32 @@ function upload(formData) {
     return $cms().post(`/api/cms/upload`, formData);
 }
 
-export { pull, push, del, getMyPostsCount, getMyPosts, getAllPosts, upload };
+// 面包屑
+function getBreadCrumb(key) {
+    return $cms().get(`/api/cms/breadcrumb/${key}`);
+}
+
+// 获取post_meta
+function getPostMeta(id, key){
+    return $cms().get(`/api/cms/post/${id}/meta/${key}`);
+}
+
+// 设置post_meta
+function setPostMeta(id, key, value){
+    return $cms().post(`/api/cms/post/${id}/meta/${key}`, { val: value });
+}
+
+// 获取技改历史
+function getChangelog(params){
+    return $cms().get(`/api/cms/pve/skill/changelog`, {params});
+}
+
+function getHasteRecommend(mount, client = 'std'){
+    return $cms().get(`/api/cms/app/pz/haste/${mount}`, {
+        params: {
+            client
+        }
+    })
+}
+
+export { pull, push, del, getMyPostsCount, getMyPosts, getAllPosts, upload, getBreadCrumb, getPostMeta, setPostMeta, getChangelog, getHasteRecommend };
