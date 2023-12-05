@@ -40,12 +40,12 @@
                         <span>副本攻略</span>
                     </router-link>
                 </el-col>
-                <el-col :span="4">
+                <!-- <el-col :span="4">
                     <router-link to="/jx3dat">
                         <img svg-inline src="../assets/img/channel/jx3dat.svg" />
                         <span>插件数据</span>
                     </router-link>
-                </el-col>
+                </el-col> -->
                 <el-col :span="4">
                     <router-link to="/tool">
                         <img svg-inline src="../assets/img/channel/tool.svg" />
