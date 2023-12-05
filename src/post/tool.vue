@@ -19,7 +19,7 @@
                 <!-- 类型 -->
                 <publish-subtype v-model="post.post_subtype" :options="tool_types"></publish-subtype>
                 <!-- 资源 -->
-                <publish-tool-source v-model="post.post_meta"></publish-tool-source>
+                <publish-tool-source v-if="post.post_subtype == 1 || post.post_subtype ==2" v-model="post.post_meta"></publish-tool-source>
             </div>
 
             <!-- 正文 -->
