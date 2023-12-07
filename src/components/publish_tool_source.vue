@@ -122,6 +122,13 @@ export default {
                     this.data = lodash.cloneDeep(default_meta);
                 } else {
                     this.data = val;
+
+                    if (val?.down) {
+                        this.data.data.map(item => {
+                            item.mode = '1';
+                            item.file = val.down || '';
+                        })
+                    }
                 }
             },
         },
