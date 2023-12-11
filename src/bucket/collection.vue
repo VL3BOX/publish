@@ -146,18 +146,24 @@ export default {
             location.href = "./#/collection/" + id;
         },
         post_del(id) {
-            this.$alert("确定要删除这篇小册吗？", "确认信息", {
+            this.$confirm("确定要删除这篇小册吗？", "确认信息", {
                 confirmButtonText: "确定",
-                callback: (action) => {
-                    remove_collection(id).then((res) => {
-                        this.$message({
-                            type: "success",
-                            message: `删除成功`,
+                cancelButtonText: "取消",
+                type: "warning",
+                beforeClose: (action, instance, done) => {
+                    if (action === "confirm") {
+                        remove_collection(id).then((res) => {
+                            this.$message({
+                                type: "success",
+                                message: `删除成功`,
+                            });
+                            this.loadPosts();
                         });
-                        this.loadPosts();
-                    });
+                    } else {
+                        done();
+                    }
                 },
-            });
+            }).catch(() => {});
         },
     },
     filters: {

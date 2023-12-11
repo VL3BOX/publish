@@ -1,12 +1,5 @@
 import { $cms } from "@jx3box/jx3box-common/js/https.js";
 
-function get_collection(collection_id) {
-    return $cms()({
-        method: "GET",
-        url: `/api/cms/post/collection/${collection_id}`,
-    });
-}
-
 function get_my_collections(params) {
     return $cms()({
         method: "GET",
@@ -34,4 +27,11 @@ function appendToCollection(data) {
     });
 }
 
-export { get_collection, get_my_collections, remove_collection, appendToCollection, createCollection, updateCollection };
+function getCollectionRaw(collection_id) {
+    return $cms()({
+        method: "GET",
+        url: `/api/cms/post/collection/${collection_id}/raw`,
+    });
+}
+
+export { get_my_collections, remove_collection, appendToCollection, createCollection, updateCollection, getCollectionRaw };

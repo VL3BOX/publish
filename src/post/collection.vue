@@ -22,6 +22,9 @@
                     <el-divider content-position="left">可见性</el-divider>
                     <el-radio v-model.number="collection.public" :label="this.public.PUBLIC">公开</el-radio>
                     <el-radio v-model.number="collection.public" :label="this.public.PRIVATE">私有</el-radio>
+                    <el-tooltip content="私有仅使该小册不出现在公开小册大厅中" placement="top">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
                 </div>
                 <div class="m-publish-primary-block m-publish-collection-posts">
                     <el-divider content-position="left">内容</el-divider>
@@ -74,6 +77,7 @@
                                                 title_fill(post_id, item);
                                             }
                                         "
+                                        :disabled="!item.type"
                                     >
                                         <template v-for="post in item.posts">
                                             <el-option
@@ -142,7 +146,7 @@ import header from "@/components/publish_header.vue";
 import draggable from "vuedraggable";
 
 // 本地依赖
-import { get_collection, createCollection, updateCollection } from "../service/collection";
+import { createCollection, updateCollection, getCollectionRaw } from "../service/collection";
 import { get_posts_by_type } from "../service/post";
 import { getMyPosts, getAllPosts } from "@/service/cms";
 import { getAllFaceList } from "@/service/face";
@@ -263,7 +267,7 @@ export default {
             }
         },
         init: function () {
-            get_collection(this.id).then((res) => {
+            getCollectionRaw(this.id).then((res) => {
                 let collection = res.data.data;
                 if (collection) {
                     for (let i in collection.posts) {
