@@ -158,7 +158,7 @@ export default {
     props: [],
     data() {
         // 作品类型加载
-        let source_types = Object.assign({ mine: "我的作品", all: '全部作品', custom: "自定义" }, __postType, __wikiType, { face: "捏脸" });
+        let source_types = Object.assign({ mine: "我的作品", all: '全部作品', custom: "自定义" });
         delete source_types.jx3dat;
         delete source_types.notice;
 
