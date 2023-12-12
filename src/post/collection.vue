@@ -274,6 +274,10 @@ export default {
                         let item = collection.posts[i];
                         collection.posts[i].posts =
                             item.type === "custom" ? null : [{ id: item.id, title: item.title, post_type: item.post_type }];
+                        if (!['mine','all','custom'].includes(item.type)) {
+                            item.type = 'all';
+                            item.post_type = item.type;
+                        }
                     }
                     this.collection = collection;
                 } else {
