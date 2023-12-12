@@ -255,13 +255,6 @@ export default {
         id: function () {
             return this.isRevision ? ~~this.post.post_id : ~~this.post.ID;
         },
-        data: function () {
-            if (this.id) {
-                return [this.id, this.post];
-            } else {
-                return [this.post];
-            }
-        },
         pz_query: function () {
             let mount_id = xfmap[this.post.post_subtype]?.id;
             let _query = {};
@@ -312,7 +305,16 @@ export default {
             // 补充心法id
             this.build();
 
-            return push(...this.data)
+            const data = this.buildExtend(lodash.cloneDeep(this.post));
+            let _post = []
+
+            if (this.id) {
+                _post = [this.id, data];
+            } else {
+                _post = [data];
+            }
+
+            return push(..._post)
                 .then((res) => {
                     let result = res.data.data;
                     syncRedis(result).catch((err) => {
@@ -334,6 +336,14 @@ export default {
         // 搜索扩展
         build: function () {
             this.post.meta_2 = ~~lodash.get(xfmap[this.post.post_subtype], "id") || 0;
+        },
+        // 扩展内容
+        buildExtend: function (data){
+            // 包含 “自用”，修改visible为1
+            if (data.post_title?.indexOf("自用") > -1) {
+                data.visible = 1;
+            }
+            return data;
         },
         // 完成
         done: function (skip, result) {
