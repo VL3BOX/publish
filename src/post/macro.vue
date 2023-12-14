@@ -340,7 +340,7 @@ export default {
         // 扩展内容
         buildExtend: function (data){
             // 包含 “自用”，修改visible为1
-            if (data.post_title?.indexOf("自用") > -1) {
+            if (!data.post_title || data.post_title?.indexOf("自用") > -1 || data.post_meta?.data?.every(item => !item.macro)) {
                 data.visible = 1;
             }
             return data;
