@@ -27,7 +27,7 @@
                     </el-tooltip>
                 </div>
                 <div class="m-publish-primary-block m-publish-collection-posts">
-                    <el-divider content-position="left">内容</el-divider>
+                    <el-divider content-position="left">内容 <el-checkbox v-model="onlyMine" style="margin-left: 12px;">仅从自己作品中</el-checkbox></el-divider>
                     <draggable
                         class="m-list-style"
                         tag="ul"
@@ -44,12 +44,6 @@
                                         class="u-item-key"
                                         v-model="item.type"
                                         placeholder="请选择作品类型"
-                                        @change="
-                                            () => {
-                                                search_handle(null, item);
-                                                item.url = item.title = '';
-                                            }
-                                        "
                                     >
                                         <el-option
                                             v-for="(type, k) in source_types"
@@ -78,6 +72,13 @@
                                             }
                                         "
                                         :disabled="!item.type"
+                                        @visible-change="
+                                            (visible) => {
+                                                if (visible) {
+                                                    search_handle(null, item);
+                                                }
+                                            }
+                                        "
                                     >
                                         <template v-for="post in item.posts">
                                             <el-option
@@ -158,7 +159,7 @@ export default {
     props: [],
     data() {
         // 作品类型加载
-        let source_types = Object.assign({ mine: "我的作品", all: '全部作品', custom: "自定义" });
+        let source_types = Object.assign({ custom: "自定义" }, __postType);
         delete source_types.jx3dat;
         delete source_types.notice;
 
@@ -179,6 +180,8 @@ export default {
             legal_tags: null,
             show_description: true,
             processing: false,
+
+            onlyMine: false,
         };
     },
     computed: {
@@ -212,39 +215,28 @@ export default {
         },
         search_handle(queryString, item) {
             if (queryString === null) item.id = queryString = "";
-            if (item.type === 'face') {
-                getAllFaceList({
-                    title: queryString,
+            // if (item.type === 'face') {
+            //     getAllFaceList({
+            //         title: queryString,
 
-                }).then(res => {
-                    item.posts = res.data.data.list?.reduce((acc, cur) => {
-                        acc[cur.id] = {
-                            id: cur.id,
-                            title: cur.title,
-                            type: 'face'
-                        }
-                        return acc
-                    }, {}) || {};
-                })
-            } else if (item.type === 'mine') {
-                getMyPosts({
-                    title: queryString,
-                }).then(res => {
-                    item.posts = res.data.data.list?.reduce((acc, cur) => {
-                        acc[cur.ID] = {
-                            id: cur.ID,
-                            title: cur.post_title,
-                            post_type: cur.post_type
-                        }
-                        return acc
-                    }, {}) || {};
-                })
-            } else if (item.type === 'all') {
+            //     }).then(res => {
+            //         item.posts = res.data.data.list?.reduce((acc, cur) => {
+            //             acc[cur.id] = {
+            //                 id: cur.id,
+            //                 title: cur.title,
+            //                 type: 'face'
+            //             }
+            //             return acc
+            //         }, {}) || {};
+            //     })
+            // }
+            if (this.onlyMine) {
                 const params = {};
                 if (queryString) {
                     params.title = queryString;
                 }
-                getAllPosts(params).then(res => {
+                item.type !== 'custom' && (params.type = item.type);
+                getMyPosts(params).then(res => {
                     item.posts = res.data.data.list?.reduce((acc, cur) => {
                         acc[cur.ID] = {
                             id: cur.ID,
@@ -255,15 +247,21 @@ export default {
                     }, {}) || {};
                 })
             } else {
-                get_posts_by_type(item.type, {
-                    public: 1,
-                    keyword: queryString,
-                }).then((res) => {
-                    res = res.data;
-                    if (res.code === 200) {
-                        item.posts = res.data.posts;
-                    }
-                });
+                const params = {};
+                if (queryString) {
+                    params.title = queryString;
+                }
+                item.type !== 'custom' && (params.type = item.type);
+                getAllPosts(params).then(res => {
+                    item.posts = res.data.data.list?.reduce((acc, cur) => {
+                        acc[cur.ID] = {
+                            id: cur.ID,
+                            title: cur.post_title,
+                            post_type: cur.post_type
+                        }
+                        return acc
+                    }, {}) || {};
+                })
             }
         },
         init: function () {
@@ -274,10 +272,10 @@ export default {
                         let item = collection.posts[i];
                         collection.posts[i].posts =
                             item.type === "custom" ? null : [{ id: item.id, title: item.title, post_type: item.post_type }];
-                        if (!['mine','all','custom'].includes(item.type)) {
-                            item.type = 'all';
-                            item.post_type = item.type;
-                        }
+                        // if (!['mine','all','custom'].includes(item.type)) {
+                        //     item.type = 'all';
+                        //     item.post_type = item.post_type;
+                        // }
                     }
                     this.collection = collection;
                 } else {
@@ -371,13 +369,13 @@ export default {
             immediate: true,
             handler: function (val) {
                 val && this.init();
-                if (!val) {
-                    this.source_types = {
-                        mine: '我的作品',
-                        all: '全部作品',
-                        custom: '自定义',
-                    }
-                }
+                // if (!val) {
+                //     this.source_types = {
+                //         mine: '我的作品',
+                //         all: '全部作品',
+                //         custom: '自定义',
+                //     }
+                // }
             },
         },
     },
