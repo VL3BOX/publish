@@ -181,7 +181,7 @@ export default {
             show_description: true,
             processing: false,
 
-            onlyMine: false,
+            onlyMine: true,
         };
     },
     computed: {
