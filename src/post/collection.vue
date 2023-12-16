@@ -134,7 +134,7 @@
 
                 <!-- 其它 -->
                 <div class="m-publish-other">
-                    <publish-banner v-model="collection.image" :size="[128,168]"></publish-banner>
+                    <publish-banner v-model="collection.image" :size="[128,168]" info=""></publish-banner>
                 </div>
             </div>
             <div class="m-publish-collection-publish">
@@ -402,3 +402,10 @@ export default {
 <style scoped lang="less">
 @import "../assets/css/collection.less";
 </style>
+
+<style lang="less">
+.m-publish-collection {
+    .u-tip {
+        display: none !important;
+    }
+}</style>
