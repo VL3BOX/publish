@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-banner">
         <el-divider content-position="left">海报</el-divider>
-        <uploadImage v-model="banner" info="非必选。首页海报尺寸1600*280（推荐3200*560支持高分屏），最大30M。" :max-size="30"></uploadImage>
+        <uploadImage v-model="banner" info="非必选。首页海报尺寸1600*280（推荐3200*560支持高分屏），最大30M。" :max-size="30" :size="size"></uploadImage>
     </div>
 </template>
 
@@ -13,7 +13,7 @@ export default {
     components: {
         uploadImage
     },
-    props: ["data"],
+    props: ["data", "size"],
     data() {
         return {
             banner: this.data,

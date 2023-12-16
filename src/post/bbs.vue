@@ -17,13 +17,13 @@
                 <!-- 客户端 -->
                 <publish-client v-model="post.client"></publish-client>
                 <!-- 类型 -->
-                <!-- <publish-subtype v-model="post.post_subtype" :options="bbs_types"></publish-subtype> -->
+                <publish-subtype v-model="post.post_subtype" :options="bbs_types"></publish-subtype>
 
                 <!-- 主题 -->
                 <publish-tags v-model="post.topics" :options="topics" label="主题"></publish-tags>
 
                 <!-- 标签 -->
-                <publish-topic-bucket v-model="buckets"></publish-topic-bucket>
+                <!-- <publish-topic-bucket v-model="buckets"></publish-topic-bucket> -->
             </div>
 
             <!-- 正文 -->
@@ -128,15 +128,15 @@ import publish_banner from "@/components/publish_banner";
 import publish_comment from "@/components/publish_comment";
 import publish_gift from "@/components/publish_gift";
 import publish_visible from "@/components/publish_visible";
-// import publish_subtype from "@/components/publish_subtype";
+import publish_subtype from "@/components/publish_subtype";
 import publish_authors from "@/components/publish_authors";
 import publish_revision from "@/components/publish_revision.vue";
 import publish_at_authors from "@/components/publish_at_authors.vue";
 import publish_tags from "@/components/publish_tags";
-import publish_topic_bucket from "@/components/publish_topic_bucket.vue";
+// import publish_topic_bucket from "@/components/publish_topic_bucket.vue";
 
 // 数据逻辑
-import { push } from "@/service/cms.js";
+import { push, getTopicBucket } from "@/service/cms.js";
 import { appendToCollection } from "@/service/collection.js";
 import { AutoSaveMixin } from "@/utils/autoSaveMixin";
 import { cmsMetaMixin } from "@/utils/cmsMetaMixin";
@@ -159,12 +159,12 @@ export default {
         "publish-comment": publish_comment,
         "publish-gift": publish_gift,
         "publish-visible": publish_visible,
-        // "publish-subtype": publish_subtype,
+        "publish-subtype": publish_subtype,
         "publish-authors": publish_authors,
         "publish-revision": publish_revision,
         "publish-at-authors": publish_at_authors,
         "publish-tags": publish_tags,
-        "publish-topic-bucket": publish_topic_bucket,
+        // "publish-topic-bucket": publish_topic_bucket,
     },
     data: function () {
         return {
@@ -225,7 +225,7 @@ export default {
 
             // 选项
             bbs_types,
-            topics: bbs,
+            topics: [],
             buckets: [],
         };
     },
@@ -244,6 +244,9 @@ export default {
         isSuperAuthor() {
             return User.isSuperAuthor();
         },
+    },
+    mounted() {
+        this.getTopicBucket();
     },
     methods: {
         // 初始化
@@ -332,6 +335,12 @@ export default {
                 post_title: result.post_title,
             });
         },
+        getTopicBucket() {
+            getTopicBucket({ type: 'bbs' }).then((res) => {
+                const data = res.data.data?.map(item => item.name) || [];
+                this.topics = [...data];
+            });
+        }
     },
 };
 </script>

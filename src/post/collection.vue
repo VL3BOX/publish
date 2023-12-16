@@ -27,7 +27,12 @@
                     </el-tooltip>
                 </div>
                 <div class="m-publish-primary-block m-publish-collection-posts">
-                    <el-divider content-position="left">内容 <el-checkbox v-model="onlyMine" style="margin-left: 12px;">仅从自己作品中</el-checkbox></el-divider>
+                    <el-divider content-position="left"
+                        >内容
+                        <el-checkbox v-model="onlyMine" style="margin-left: 12px"
+                            >仅从自己作品中</el-checkbox
+                        ></el-divider
+                    >
                     <draggable
                         class="m-list-style"
                         tag="ul"
@@ -40,11 +45,7 @@
                             <i class="u-delete el-icon-close" @click="collection.posts.splice(key, 1)"></i>
                             <el-row class="m-posts-item" :gutter="10">
                                 <el-col :span="4" class="u-collection-type">
-                                    <el-select
-                                        class="u-item-key"
-                                        v-model="item.type"
-                                        placeholder="请选择作品类型"
-                                    >
+                                    <el-select class="u-item-key" v-model="item.type" placeholder="请选择作品类型">
                                         <el-option
                                             v-for="(type, k) in source_types"
                                             :label="type"
@@ -88,7 +89,9 @@
                                                 :label="post.title"
                                             >
                                                 <div>
-                                                    <el-tag size="small" v-if="post.post_type">{{  showPostType(post.post_type) }}</el-tag>
+                                                    <el-tag size="small" v-if="post.post_type">{{
+                                                        showPostType(post.post_type)
+                                                    }}</el-tag>
                                                     {{ post.title }}
                                                 </div>
                                             </el-option>
@@ -128,6 +131,11 @@
                         :height="300"
                     />
                 </div>
+
+                <!-- 其它 -->
+                <div class="m-publish-other">
+                    <publish-banner v-model="collection.image" :size="[128,168]"></publish-banner>
+                </div>
             </div>
             <div class="m-publish-collection-publish">
                 <el-button class="u-button" type="primary" @click="submit" :loading="processing" :disabled="processing"
@@ -143,14 +151,14 @@ import { __Root, __postType, __wikiType, __appType } from "@jx3box/jx3box-common
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 import CollectionPublic from "@jx3box/jx3box-editor/service/enum/CollectionPublic";
 import header from "@/components/publish_header.vue";
-// import publish_banner from "@/components/publish_banner.vue";
+import publish_banner from "@/components/publish_banner.vue";
 import draggable from "vuedraggable";
 
 // 本地依赖
 import { createCollection, updateCollection, getCollectionRaw } from "../service/collection";
-import { get_posts_by_type } from "../service/post";
+// import { get_posts_by_type } from "../service/post";
 import { getMyPosts, getAllPosts } from "@/service/cms";
-import { getAllFaceList } from "@/service/face";
+// import { getAllFaceList } from "@/service/face";
 import { getLink } from "@jx3box/jx3box-common/js/utils";
 import lodash from "lodash";
 
@@ -235,33 +243,35 @@ export default {
                 if (queryString) {
                     params.title = queryString;
                 }
-                item.type !== 'custom' && (params.type = item.type);
-                getMyPosts(params).then(res => {
-                    item.posts = res.data.data.list?.reduce((acc, cur) => {
-                        acc[cur.ID] = {
-                            id: cur.ID,
-                            title: cur.post_title,
-                            post_type: cur.post_type
-                        }
-                        return acc
-                    }, {}) || {};
-                })
+                item.type !== "custom" && (params.type = item.type);
+                getMyPosts(params).then((res) => {
+                    item.posts =
+                        res.data.data.list?.reduce((acc, cur) => {
+                            acc[cur.ID] = {
+                                id: cur.ID,
+                                title: cur.post_title,
+                                post_type: cur.post_type,
+                            };
+                            return acc;
+                        }, {}) || {};
+                });
             } else {
                 const params = {};
                 if (queryString) {
                     params.title = queryString;
                 }
-                item.type !== 'custom' && (params.type = item.type);
-                getAllPosts(params).then(res => {
-                    item.posts = res.data.data.list?.reduce((acc, cur) => {
-                        acc[cur.ID] = {
-                            id: cur.ID,
-                            title: cur.post_title,
-                            post_type: cur.post_type
-                        }
-                        return acc
-                    }, {}) || {};
-                })
+                item.type !== "custom" && (params.type = item.type);
+                getAllPosts(params).then((res) => {
+                    item.posts =
+                        res.data.data.list?.reduce((acc, cur) => {
+                            acc[cur.ID] = {
+                                id: cur.ID,
+                                title: cur.post_title,
+                                post_type: cur.post_type,
+                            };
+                            return acc;
+                        }, {}) || {};
+                });
             }
         },
         init: function () {
@@ -271,7 +281,9 @@ export default {
                     for (let i in collection.posts) {
                         let item = collection.posts[i];
                         collection.posts[i].posts =
-                            item.type === "custom" ? null : [{ id: item.id, title: item.title, post_type: item.post_type }];
+                            item.type === "custom"
+                                ? null
+                                : [{ id: item.id, title: item.title, post_type: item.post_type }];
                         // if (!['mine','all','custom'].includes(item.type)) {
                         //     item.type = 'all';
                         //     item.post_type = item.post_type;
@@ -315,7 +327,7 @@ export default {
                     message = "请填写自定义链接的标题";
                     break;
                 }
-                if (item.type === 'custom' && !item.url) {
+                if (item.type === "custom" && !item.url) {
                     message = "请填写正确的小册文章链接（http或https开头）";
                     break;
                 }
@@ -329,7 +341,7 @@ export default {
                     message: message,
                     type: "warning",
                 });
-                return
+                return;
             }
 
             // 去除多余字段
@@ -337,32 +349,31 @@ export default {
             collection.posts = JSON.stringify(collection.posts);
 
             this.processing = true;
-            let fn = ''
+            let fn = "";
             if (this.id) {
                 collection = lodash.pick(collection, ["title", "public", "image", "description", "mark", "posts"]);
                 fn = updateCollection(this.id, collection);
             } else {
-                collection = lodash.omit(collection, ["id", 'tags']);
-                fn = createCollection(collection)
+                collection = lodash.omit(collection, ["id", "tags"]);
+                fn = createCollection(collection);
             }
             fn.then((res) => {
                 this.$message({
-                    message: this.id ? '更新成功' : '创建成功',
+                    message: this.id ? "更新成功" : "创建成功",
                     type: "success",
                 });
                 let id = this.id || res.data.data.id;
                 setTimeout(() => {
                     location.href = getLink("collection", id);
                 }, 500);
-            })
-            .finally(() => {
+            }).finally(() => {
                 this.processing = false;
             });
         },
 
-        showPostType: function (type){
-            return __postType[type]
-        }
+        showPostType: function (type) {
+            return __postType[type];
+        },
     },
     watch: {
         id: {
@@ -383,7 +394,7 @@ export default {
         Tinymce,
         draggable,
         "publish-header": header,
-        // "publish-banner": publish_banner,
+        "publish-banner": publish_banner,
     },
 };
 </script>
