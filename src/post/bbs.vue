@@ -258,16 +258,16 @@ export default {
                 this.autoSave();
 
                 // 不在topics的类型，就分配到buckets
-                this.buckets = this.post.topics.filter((topic) => {
-                    return !this.topics.some((item) => {
-                        return item == topic;
-                    });
-                });
-                this.post.topics = this.post.topics.filter((topic) => {
-                    return this.topics.some((item) => {
-                        return item == topic;
-                    });
-                });
+                // this.buckets = this.post.topics.filter((topic) => {
+                //     return !this.topics.some((item) => {
+                //         return item == topic;
+                //     });
+                // });
+                // this.post.topics = this.post.topics.filter((topic) => {
+                //     return this.topics.some((item) => {
+                //         return item == topic;
+                //     });
+                // });
             });
         },
         // 发布
