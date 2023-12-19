@@ -299,11 +299,6 @@ export default {
             });
         },
         submit: function () {
-            // this.$confirm("确定提交剑三小册信息？", "提示", {
-            //     type: "info",
-            // }).then(() => {
-            // 标题长度限制
-            // this.collection.title = this.collection.title.slice(0,40);
 
             let collection = JSON.parse(JSON.stringify(this.collection));
 
@@ -319,17 +314,20 @@ export default {
                     message = "文章类型不能为空哦";
                     break;
                 }
-                if (!item.id) {
-                    message = "请选择对应的文章";
-                    break;
-                }
-                if (!item.title) {
-                    message = "请填写自定义链接的标题";
-                    break;
-                }
-                if (item.type === "custom" && !item.url) {
-                    message = "请填写正确的小册文章链接（http或https开头）";
-                    break;
+                if (item.type === 'custom') {
+                    if (!item.url) {
+                        message = "请填写正确的小册文章链接（http或https开头）";
+                        break;
+                    }
+                    if (!item.title) {
+                        message = "请填写自定义链接的标题";
+                        break;
+                    }
+                } else {
+                    if (!item.id) {
+                        message = "请选择对应的文章";
+                        break;
+                    }
                 }
             }
             // 更新sort字段
