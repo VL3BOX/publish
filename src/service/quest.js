@@ -1,9 +1,9 @@
-import { $helper } from "@jx3box/jx3box-common/js/https.js";
+import { $node } from "@jx3box/jx3box-common/js/https.js";
 
 function get_list(params) {
-    return $helper()({
+    return $node()({
         method: "GET",
-        url: `/api/quests`,
+        url: `/quests`,
         params: params,
     });
 }

@@ -1,30 +1,19 @@
-import { $helper } from "@jx3box/jx3box-common/js/https.js";
+import { $node } from "@jx3box/jx3box-common/js/https.js";
 
 // 物品搜索
 function search_items(keyword, length, fields, is_equip = null) {
 	let params = { keyword: keyword, limit: length, fields: fields };
 	if (is_equip !== null) params.is_equip = is_equip ? 1 : 0;
 
-	return $helper()({
-		method: "GET",
-		url: `/api/item/search`,
-		params: params,
-	});
+	return $node().get(`/item/search`, {
+        params
+    })
 }
 
 // 物品搜索
 function searchItems(params) {
-	return $helper()
-		.get(`/api/item/search`, { params })
-		.then((res) => {
-			return res.data.data;
-		});
-}
-
-// 物品id搜索
-function searchItemsID(params) {
-	return $helper()
-		.get(`/api/items`, { params })
+	return $node()
+		.get(`/item/search`, { params })
 		.then((res) => {
 			return res.data.data;
 		});
@@ -33,6 +22,6 @@ function searchItemsID(params) {
 // 获取物品
 function get_item(item_id) {
 	if (!item_id) return;
-	return $helper().get(`api/item/${item_id}`);
+	return $node().get(`/item/id/${item_id}`);
 }
-export { search_items, get_item, searchItems, searchItemsID };
+export { search_items, get_item, searchItems };

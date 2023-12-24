@@ -34,13 +34,13 @@
                     </div>
 
                     <el-button-group class="u-action">
-                        <!-- <el-button
+                        <el-button
                             size="mini"
                             icon="el-icon-edit"
                             :disabled="post.checked != 0"
                             title="编辑"
-                            @click="post_edit('achievement', post)"
-                        ></el-button>-->
+                            @click="post_edit(post)"
+                        ></el-button>
                         <el-button size="mini" icon="el-icon-delete" title="删除" @click="post_del(post)"></el-button>
                     </el-button-group>
                 </li>
@@ -61,11 +61,10 @@
 </template>
 
 <script>
-import { getTypeLabel } from "@jx3box/jx3box-common/js/utils";
+import { getTypeLabel,getLink } from "@jx3box/jx3box-common/js/utils";
 import { __wikiType } from "@jx3box/jx3box-common/data/jx3box.json";
 import dateFormat from "@/utils/dateFormat";
-import { get_posts, remove_post } from "@/service/wiki";
-import {getLink} from '@jx3box/jx3box-common/js/utils'
+import { wiki } from "@jx3box/jx3box-common/js/wiki_v2";
 export default {
     name: "wiki",
     props: [],
@@ -101,21 +100,17 @@ export default {
         post_page_change(i = 1) {
             this.post_page = i;
             this.loading = true;
-            get_posts({
+            wiki.mine({
                 type: this.type,
-                keyword: this.achievement_post.keyword,
+                _search: this.achievement_post.keyword,
                 page: i,
-                limit: this.length,
+                per: this.length,
             })
                 .then(
-                    (data) => {
-                        data = data.data;
-                        this.achievement_post.data = data.code === 200 ? data.data.data : false;
-                        this.achievement_post.total = data.code === 200 ? data.data.total : 0;
+                    (res) => {
+                        this.achievement_post.data = res.data.data.list || []
+                        this.achievement_post.total = res.data.data.total || 0
                     },
-                    () => {
-                        this.achievement_post.data = false;
-                    }
                 )
                 .finally(() => {
                     this.loading = false;
@@ -124,44 +119,29 @@ export default {
         search_post() {
             this.post_page_change(1);
         },
-        post_edit(type, post) {
-            switch (type) {
-                case "achievement":
-                    this.$message("即将开放");
-                    break;
-            }
+        post_edit(post) {
+            this.$router.push({
+                path: `/${this.type}/${post.id}`
+            });
         },
         post_del(post) {
-            this.$alert("确定要删除吗？", "确认信息", {
+            this.$confirm(`确认删除吗？`, "提示", {
                 confirmButtonText: "确定",
-                callback: (action) => {
-                    if (action == "confirm") {
-                        remove_post(post.type, post.id).then(
-                            (data) => {
-                                data = data.data;
-                                if (data.code === 200) {
-                                    this.$notify({
-                                        title: "删除成功",
-                                        type: "success",
-                                    });
-                                    this.post_page_change(this.post_page);
-                                } else {
-                                    this.$notify({
-                                        title: "删除失败",
-                                        type: "error",
-                                    });
-                                }
-                            },
-                            () => {
-                                this.$notify({
-                                    title: "删除失败",
-                                    type: "error",
-                                });
-                            }
-                        );
+                cancelButtonText: "取消",
+                type: "warning",
+                beforeClose: (action, instance, done) => {
+                    if (action === "confirm") {
+                        wiki.delete(post.id).then(() => {
+                            this.$message.success('删除成功');
+                            this.post_page_change();
+                            done();
+                        })
+                    } else {
+                        done();
                     }
                 },
-            });
+            })
+                .catch(() => {});
         },
         getLink : function (post){
             return getLink(post?.type,post?.source_id) + '/' + post?.id
