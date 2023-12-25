@@ -131,7 +131,7 @@ export default {
                 type: "warning",
                 beforeClose: (action, instance, done) => {
                     if (action === "confirm") {
-                        wiki.delete(post.id).then(() => {
+                        wiki.remove(post.id).then(() => {
                             this.$message.success('删除成功');
                             this.post_page_change();
                             done();

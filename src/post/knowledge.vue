@@ -21,11 +21,7 @@
                     <template v-if="action == 'new'">
                         <!-- 创建词条 -->
                         <div class="u-create-source">
-                            <el-select
-                                class="u-source-type"
-                                placeholder="选择通识类型"
-                                v-model="knowledge.type"
-                            >
+                            <el-select class="u-source-type" placeholder="选择通识类型" v-model="knowledge.type">
                                 <el-option
                                     v-for="type in types"
                                     :key="type.name"
@@ -56,9 +52,14 @@
                             clearable
                             @change="selectSource"
                         >
-                            <el-option v-for="item in options.sources" :key="item.id" :label="item.name" :value="item.id">
+                            <el-option
+                                v-for="item in options.sources"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id"
+                            >
                                 <div class="u-option">
-                                    <span class="u-type" v-text="item.label"></span>
+                                    <span class="u-type">{{ showType(item.type) }}</span>
                                     <span class="u-name" v-text="item.name"></span>
                                 </div>
                             </el-option>
@@ -129,7 +130,7 @@ import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 
 // 本地依赖
 // import { WikiPost } from "@jx3box/jx3box-common/js/helper";
-import { wiki } from "@jx3box/jx3box-common/js/wiki";
+import { wiki } from "@jx3box/jx3box-common/js/wiki_v2";
 import User from "@jx3box/jx3box-common/js/user";
 import { get_menus, get_list, create_knowledge } from "../service/knowledge";
 
@@ -167,6 +168,7 @@ export default {
                 source_id: "",
                 remark: "",
                 tags: [],
+                client: ""
             },
 
             // 杂项
@@ -174,73 +176,68 @@ export default {
             // 标签
             inputVisible: false,
             inputValue: "",
-
         };
     },
     computed: {
-        source_id: function() {
-            return this.post?.source_id;
-        },
-        client: function (){
+        client: function () {
             return this.$store.state.client;
-        }
+        },
     },
     methods: {
         // 加载指定通识
-        loadData: function(id) {
-            if(!id) return
-            // WikiPost.newest("knowledge", id, 0)
-            wiki.get({ type: "knowledge", id }, { supply: 0 })
-            .then((res) => {
+        loadData: function (id) {
+            if (!id) return;
+            wiki.get({ type: "knowledge", id }, { client: 'all' }).then((res) => {
                 // 设置通识
                 let source = res.data?.data?.source;
                 this.currentSource = source?.name;
-                this.post.source_id = source?.id
+                this.post.source_id = source?.id;
 
                 // 设置初始文章内容（基于最新审核版本）
                 let post = res.data?.data?.post;
-                this.post.content = post?.content || '';
-                this.post.tags = post?.tags || [];
+                this.post.remark = post?.remark;
+                this.post.content = post?.content || "";
+                this.post.tags = post?.tags?.split(",") || [];
             });
         },
         // 加载可选类型
-        loadTypes: function() {
+        loadTypes: function () {
             get_menus().then((res) => {
-                this.types = res.data.data.menus;
+                this.types = res.data.data;
             });
         },
         // 加载通识列表
         loadSources(keyword = "") {
             this.options.loading = true;
             get_list({
-                keyword: keyword,
-                include_pending: 1,
-                limit: 10,
-            }).then((res) => {
-                this.options.sources = res.data.data.data;
-            }).finally(() => {
-                this.options.loading = false;
+                _search: keyword,
+                per: 10,
             })
+                .then((res) => {
+                    this.options.sources = res.data.data.list;
+                })
+                .finally(() => {
+                    this.options.loading = false;
+                });
         },
         // 模式切换
-        resetSource : function (){
-            if(this.action == 'new'){
-
+        resetSource: function () {
+            if (this.action == "new") {
                 // 重置通识
-                this.post.source_id = ''
-                this.currentSource = ''
+                this.post.source_id = "";
+                this.currentSource = "";
 
                 // 重置内容
-                this.post.content = ''
-                this.post.tags = []
-                this.post.remark = ''
+                this.post.content = "";
+                this.post.tags = [];
+                this.post.remark = "";
             }
         },
 
         // 发布流程
         // ======================
-        handleSubmit: function() {
-            if (this.action == 'new' && !this.post.source_id) {
+        handleSubmit: function () {
+            if (this.action == "new" && !this.post.source_id) {
                 this.createSource().then(() => {
                     // 当通识已存在时，后端会自动识别为同一条词条
                     this.createPost();
@@ -256,7 +253,6 @@ export default {
             return create_knowledge({
                 type: this.knowledge.type,
                 name: this.knowledge.name,
-                client: "all",
             })
                 .then((res) => {
                     this.post.source_id = res.data.data.id;
@@ -271,8 +267,8 @@ export default {
         },
 
         // 2.维护已有通识
-        selectSource : function (source_id){
-            this.loadData(source_id)
+        selectSource: function (source_id) {
+            this.loadData(source_id);
         },
 
         // 3.校验字段
@@ -284,43 +280,28 @@ export default {
             return result;
         },
         // 4.发布作品
-        createPost: function() {
+        createPost: function () {
             // 表单校验
             if (!this.validate()) return;
             this.processing = true;
-            /* WikiPost.save({
-                type: "knowledge",
-                source_id: this.post.source_id,
-                user_nickname: User.getInfo().name,
-                content: this.post.content,
-                remark: this.post.remark,
-                tags: this.post.tags,
-                client : 'all'
-            }) */
             const data = {
                 source_id: String(this.post.source_id),
                 user_nickname: User.getInfo().name,
                 content: this.post.content,
                 remark: this.post.remark,
-                tags: this.post.tags,
-            }
-            wiki.post({ type: 'knowledge', data: data, client: 'all' }, {})
-                .then((res) => {
-                    res = res.data;
-                    if (res.code === 200) {
+                tags: this.post.tags.join(","),
+            };
+            wiki.post({ type: "knowledge", ...data, client: "all" })
+                .then(() => {
                         this.$message({ message: "提交成功，请等待审核", type: "success" });
-                        // setTimeout(() => {
-                        //     this.$router.push({ name: "wiki_post", params: { type: "knowledge" } });
-                        // }, 500);
-                    } else {
-                        this.$message({ message: `${res.message}`, type: "warning" });
-                    }
+                        setTimeout(() => {
+                            this.$router.push({ name: "wiki_post", params: { type: "knowledge" } });
+                        }, 500);
                 })
                 .finally(() => {
                     this.processing = false;
                 });
         },
-
 
         // 标签
         // =========================
@@ -338,21 +319,25 @@ export default {
                 this.$refs.saveTagInput.$refs.input.focus();
             });
         },
-
+        showType(val) {
+            return this.types.find((item) => {
+                return item.name == val;
+            }).label;
+        },
     },
     watch: {
         // 根据路由判定进入的模式
-        '$route.params.source_id': {
+        "$route.params.source_id": {
             immediate: true,
-            handler: function(val) {
+            handler: function (val) {
                 // 编辑模式
                 if (val) {
                     this.action = "update";
                     this.isEditMode = true;
-                    this.post.source_id = ~~val
-                    this.loadData(val)
+                    this.post.source_id = ~~val;
+                    this.loadData(val);
 
-                // 创建模式
+                    // 创建模式
                 } else {
                     this.action = "new";
                     // 获取类型
@@ -363,17 +348,13 @@ export default {
             },
         },
         // 创建模式切换action
-        action : {
-            handler : function (){
-                if(!this.isEditMode){
-                    this.resetSource()
+        action: {
+            handler: function () {
+                if (!this.isEditMode) {
+                    this.resetSource();
                 }
-            }
+            },
         },
-        // 加载内容（维护已有）
-        source_id : function (val){
-            this.loadData(val);
-        }
     },
     components: {
         "publish-header": header,
