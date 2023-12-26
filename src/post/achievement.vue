@@ -102,7 +102,7 @@ export default {
             return this.$store.state.client;
         },
         id: function () {
-            return this.$route.params.achievement_id;
+            return this.$route.query?.post_id;
         },
     },
     methods: {
@@ -193,7 +193,53 @@ export default {
                 this.loading = false;
             });
         },
-        loadData: function () {
+        loadData: function (client) {
+            if (!this.post.source_id) return;
+            this.loading = true;
+            return wiki
+                .get({ type: "achievement", id: this.post.source_id,}, { client: client })
+                .then((res) => {
+                    let data = res.data;
+                    // 数据填充
+                    let post = data.data.post;
+                    let achievement = data.data.source;
+
+                    if (post) {
+                        this.post.source_id = parseInt(post.source_id);
+                        this.post.level = post.level || 1;
+                        this.post.remark = post.remark || "";
+                        let content = post.content;
+                        content = content.replace(/(<p>)?\s*◆成就难度 [★]+\s*(<\/p>)?/gi, "");
+                        content = content.replace(/(<p>)?\s*◆花费时长 [★]+\s*(<\/p>)?/gi, "");
+                        content = content.replace(/(<p>)?\s*◆成就攻略\s*(<\/p>)?/gi, "");
+                        this.post.content = content;
+                    } else {
+                        this.post.source_id = this.post.source_id ? parseInt(this.post.source_id) : "";
+                        this.post.level = 0;
+                        this.post.remark = "";
+                        this.post.content = "";
+                    }
+
+                    if (achievement) {
+                        // 将选择项恢复至下拉框
+                        let exist = false;
+                        this.options.sources = this.options.sources || [];
+                        for (let index in this.options.sources) {
+                            if (this.options.sources[index].ID == achievement.ID) {
+                                exist = true;
+                                break;
+                            }
+                        }
+                        if (!exist) this.options.sources.push(achievement);
+                    }
+
+                    return post;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
+        loadDataByPostId: function () {
             this.loading = true;
             return wiki
                 .getById(this.id)
@@ -242,14 +288,30 @@ export default {
     created() {
         // 初始化搜索列表
         this.search_handle("");
+
+        // 获取成就ID并通过watch获取攻略
+        let id = this.$route.params.achievement_id;
+        this.post.source_id = id ? parseInt(id) : null;
     },
     watch: {
-        id: {
-            handler: function (val) {
-                if (!val) return;
-                this.loadData();
+        "post.source_id": {
+            handler: function(val) {
+                if (this.id) {
+                    this.loadDataByPostId();
+                    return;
+                }
+
+                if(this.client == 'std'){
+                    this.loadData('std')
+                }else{
+                    this.loadData('origin').then((post) => {
+                        console.log('兼容获取')
+                        if(!post){
+                            this.loadData('std')
+                        }
+                    })
+                }
             },
-            immediate: true,
         },
     },
     components: {

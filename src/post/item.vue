@@ -92,7 +92,7 @@ export default {
             return this.$store.state.client
         },
         id : function (){
-            return this.$route.params.source_id
+            return this.$route.query?.post_id
         }
     },
     methods: {
@@ -180,6 +180,45 @@ export default {
             });
         },
         loadData: function(client) {
+            if (!this.post.source_id) return;
+            this.loading = true;
+            return wiki.get({ type: "item", id: this.post.source_id }, { client })
+                .then((res) => {
+                    let data = res.data;
+                    // 数据填充
+                    let post = data.data.post;
+                    let item = data.data.source;
+
+                    if (post) {
+                        this.post.source_id = post.source_id;
+                        this.post.level = post.level || 1;
+                        this.post.remark = post.remark || "";
+                        this.post.content = post.content;
+                    } else {
+                        this.post.source_id = this.post.source_id ? this.post.source_id : "";
+                        this.post.level = 0;
+                        this.post.remark = "";
+                        this.post.content = "";
+                    }
+
+                    if (item) {
+                        // 将选择项恢复至下拉框
+                        if (this.compatible) {
+                            // 兼容模式下，客户端为正式服的物品，不放入下拉框
+                            if (client !== 'std') this.options.sources = uniqBy([this.options.sources, item], "id");
+                        } else {
+                            // 非兼容模式下的物品直接放入下拉框
+                            this.options.sources = uniqBy([this.options.sources, item], "id");
+                        }
+                    }
+
+                    return post;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
+        loadDataByPostId: function() {
             this.loading = true;
             return wiki.getById(this.id)
                 .then((res) => {
@@ -216,19 +255,35 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
-        },
+        }
     },
     created() {
         // 初始化搜索列表
         this.search_handle("");
+
+        // 获取物品ID并通过watch获取攻略
+        let id = this.$route.params.source_id;
+        this.post.source_id = id ? id : null;
     },
     watch: {
-        "id": {
-            handler: function(val) {
-                if (!val) return;
-                this.loadData();
+        "post.source_id": {
+            handler: function() {
+                if (this.id) {
+                    this.loadDataByPostId();
+                    return;
+                }
+                if(this.client == 'std'){
+                    this.loadData('std')
+                }else{
+                    this.loadData('origin').then((post) => {
+                        this.compatible = true
+                        console.log('兼容获取')
+                        if(!post){
+                            this.loadData('std')
+                        }
+                    })
+                }
             },
-            immediate: true,
         },
     },
     components: {

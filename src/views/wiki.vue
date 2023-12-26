@@ -1,7 +1,7 @@
 <template>
     <div class="m-dashboard m-dashboard-work m-dashboard-wiki" v-loading="loading">
         <div class="m-dashboard-work-header">
-            <h2 class="u-title">{{ typeLable }}百科</h2>
+            <h2 class="u-title">{{ typeLabel }}百科</h2>
             <a :href="publishLink" class="u-publish el-button el-button--primary el-button--small"><i class="el-icon-document"></i> 发布作品</a>
         </div>
 
@@ -65,6 +65,10 @@ import { getTypeLabel,getLink } from "@jx3box/jx3box-common/js/utils";
 import { __wikiType } from "@jx3box/jx3box-common/data/jx3box.json";
 import dateFormat from "@/utils/dateFormat";
 import { wiki } from "@jx3box/jx3box-common/js/wiki_v2";
+const wikiTypes = {
+    ...__wikiType,
+    skill: "技能",
+}
 export default {
     name: "wiki",
     props: [],
@@ -86,8 +90,8 @@ export default {
         type: function() {
             return this.$route.params.type;
         },
-        typeLable: function() {
-            return __wikiType[this.type];
+        typeLabel: function() {
+            return wikiTypes[this.type];
         },
         publishLink: function() {
             return "./#/" + this.type;
@@ -95,7 +99,7 @@ export default {
     },
     methods: {
         getTypeLabel: function(val) {
-            return val ? __wikiType[val] : "未知";
+            return val ? wikiTypes[val] : "未知";
         },
         post_page_change(i = 1) {
             this.post_page = i;
@@ -121,7 +125,7 @@ export default {
         },
         post_edit(post) {
             this.$router.push({
-                path: `/${this.type}/${post.id}`
+                path: `/${this.type}/${post.source_id}?post_id=${post.id}`
             });
         },
         post_del(post) {

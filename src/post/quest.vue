@@ -77,6 +77,7 @@ import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 import { wiki } from "@jx3box/jx3box-common/js/wiki_v2";
 import User from "@jx3box/jx3box-common/js/user";
 import { get_list } from "../service/quest";
+import { pick } from "lodash";
 
 export default {
     name: "quest",
@@ -106,7 +107,7 @@ export default {
             return this.$store.state.client;
         },
         id() {
-            return this.$route.params.source_id;
+            return this.$route.query?.post_id;
         },
     },
     methods: {
@@ -148,23 +149,42 @@ export default {
                 content: this.post.content,
                 remark: this.post.remark,
             };
-            wiki.post({ type: "quest", ...data, client: this.client }, {})
-                .then((data) => {
-                    data = data.data;
-                    this.$message({
-                        message: "提交成功，请等待审核",
-                        type: "success",
-                    });
-                    setTimeout(() => {
-                        this.$router.push({
-                            name: "wiki_post",
-                            params: { type: "quest" },
+
+            if (this.id) {
+                const _data = pick(data, ["level", "content", "remark"]);
+                wiki.update(this.id, { ..._data, client: this.client })
+                    .then((data) => {
+                        data = data.data;
+                        this.$message({
+                            message: "提交成功，请等待审核",
+                            type: "success",
                         });
-                    }, 500);
-                })
-                .finally(() => {
-                    this.processing = false;
-                });
+                        setTimeout(() => {
+                            this.$router.push({ name: "wiki_post", params: { type: "quest" } });
+                        }, 500);
+                    })
+                    .finally(() => {
+                        this.processing = false;
+                    });
+            } else {
+                wiki.post({ type: "quest", ...data, client: this.client }, {})
+                    .then((data) => {
+                        data = data.data;
+                        this.$message({
+                            message: "提交成功，请等待审核",
+                            type: "success",
+                        });
+                        setTimeout(() => {
+                            this.$router.push({
+                                name: "wiki_post",
+                                params: { type: "quest" },
+                            });
+                        }, 500);
+                    })
+                    .finally(() => {
+                        this.processing = false;
+                    });
+            }
         },
         // 任务搜索
         search_handle(keyword = "") {
@@ -178,6 +198,52 @@ export default {
             });
         },
         loadData: function (client) {
+            this.loading = true;
+            wiki.get({ type: 'quest', id: this.post.source_id }, { client: client })
+                .then((res) => {
+                    let data = res.data;
+                    // 数据填充
+                    let post = data.data.post;
+                    let source = data.data.source;
+
+                    if (post) {
+                        this.post.source_id = parseInt(post.source_id);
+                        this.post.level = post.level || 1;
+                        this.post.remark = post.remark;
+                        let content = post.content;
+                        content = content.replace(/(<p>)?\s*◆任务难度 [★]+\s*(<\/p>)?/gi, "");
+                        content = content.replace(/(<p>)?\s*◆花费时长 [★]+\s*(<\/p>)?/gi, "");
+                        content = content.replace(/(<p>)?\s*◆任务攻略\s*(<\/p>)?/gi, "");
+                        this.post.content = content;
+                    } else {
+                        this.post.source_id = this.post.source_id ? parseInt(this.post.source_id) : "";
+                        this.post.level = 0;
+                        this.post.remark = "";
+                        this.post.content = "";
+                    }
+
+                    if (source) {
+                        // 将选择项恢复至下拉框
+                        let exist = false;
+                        this.options.sources = this.options.sources || [];
+                        for (let index in this.options.sources) {
+                            if (this.options.sources[index].id == source.QuestID) {
+                                exist = true;
+                                break;
+                            }
+                        }
+                        if (!exist) {
+                            source.id = source?.QuestID;
+                            source.name = source?.QuestName;
+                            this.options.sources.push(source);
+                        }
+                    }
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
+        loadDataByPostId: function () {
             this.loading = true;
             wiki.getById(this.id)
                 .then((res) => {
@@ -207,14 +273,14 @@ export default {
                         let exist = false;
                         this.options.sources = this.options.sources || [];
                         for (let index in this.options.sources) {
-                            if (this.options.sources[index].id == source.id) {
+                            if (this.options.sources[index].id == source.QuestID) {
                                 exist = true;
                                 break;
                             }
                         }
                         if (!exist) {
                             source.id = source?.QuestID;
-                            source.Name = source?.QuestName;
+                            source.name = source?.QuestName;
                             this.options.sources.push(source);
                         }
                     }
@@ -227,14 +293,30 @@ export default {
     created() {
         // 初始化搜索列表
         this.search_handle("");
+
+        // 获取任务ID并通过watch获取攻略
+        let id = this.$route.params.source_id;
+        this.post.source_id = id ? parseInt(id) : null;
     },
     watch: {
-        "id": {
-            handler(val) {
-                if (!val) return;
-                this.loadData();
+        "post.source_id": {
+            handler: function(val) {
+                if (this.id) {
+                    this.loadDataByPostId();
+                    return;
+                }
+
+                if(this.client == 'std'){
+                    this.loadData('std')
+                }else{
+                    this.loadData('origin').then((post) => {
+                        console.log('兼容获取')
+                        if(!post){
+                            this.loadData('std')
+                        }
+                    })
+                }
             },
-            immediate: true,
         },
     },
     components: {

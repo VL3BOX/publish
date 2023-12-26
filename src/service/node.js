@@ -11,4 +11,10 @@ function getSkill(query, params) {
     });
 }
 
-export { getSkill };
+function getSkillList(params) {
+    return $node().get(`/skill`, {
+        params: params,
+    })
+}
+
+export { getSkill, getSkillList };

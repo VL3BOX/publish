@@ -8,12 +8,14 @@
         <el-form class="m-publish-post">
             <div class="m-publish-source">
                 <el-divider content-position="left">选择技能 *</el-divider>
-                <el-select
-                    class="u-source-id"
-                    v-model="post.source_id"
-                    :disabled="!!post.id"
-                >
-                    <el-option v-for="item in options.sources" :key="item.SkillID" :label="item.Name" :value="item.SkillID">
+                <el-select class="u-source-id" v-model="post.source_id" :disabled="!!post.id" filterable
+                    remote :remote-method="search_handle" :loading="options.loading">
+                    <el-option
+                        v-for="item in options.sources"
+                        :key="item.SkillID"
+                        :label="item.Name"
+                        :value="item.SkillID"
+                    >
                         <div class="m-selector-item">
                             <img class="u-icon" :src="icon_url_filter(item.IconID)" :alt="item.Name" />
                             <span class="u-name" v-text="item.Name"></span>
@@ -59,9 +61,10 @@ import header from "@/components/publish_header.vue";
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 
 // 本地依赖
-import { wiki } from "@jx3box/jx3box-common/js/wiki";
+import { wiki } from "@jx3box/jx3box-common/js/wiki_v2";
 import User from "@jx3box/jx3box-common/js/user";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
+import { getSkillList } from "@/service/node"
 export default {
     name: "skill",
     data() {
@@ -88,9 +91,9 @@ export default {
         client: function () {
             return this.$store.state.client;
         },
-        id: function (){
-            return this.$route.params.id;
-        }
+        id: function () {
+            return this.$route.query?.post_id;
+        },
     },
     methods: {
         toPublish: function () {
@@ -122,42 +125,60 @@ export default {
                 content: this.post.content,
                 remark: this.post.remark,
             };
-            wiki.post({ type: "skill", data: data, client: this.client }, {})
-                .then((data) => {
-                    data = data.data;
-                    if (data.code === 200) {
+            if (this.id) {
+                const _data = pick(data, ["level", "content", "remark"]);
+                wiki.update(this.id, { ..._data, client: this.client })
+                    .then((data) => {
+                        data = data.data;
                         this.$message({
                             message: "提交成功，请等待审核",
                             type: "success",
                         });
-                        // setTimeout(() => {
-                        //     this.$router.push({ name: "wiki_post", params: { type: "achievement" } });
-                        // }, 500);
-                    } else {
+                        setTimeout(() => {
+                            this.$router.push({ name: "wiki_post", params: { type: "skill" } });
+                        }, 500);
+                    })
+                    .finally(() => {
+                        this.processing = false;
+                    });
+            } else {
+                wiki.post({ type: "skill", ...data, client: this.client })
+                    .then((data) => {
+                        data = data.data;
                         this.$message({
-                            message: `${data.message}`,
-                            type: "warning",
+                            message: "提交成功，请等待审核",
+                            type: "success",
                         });
-                    }
-                })
-                .finally(() => {
-                    this.processing = false;
-                });
+                        setTimeout(() => {
+                            this.$router.push({ name: "wiki_post", params: { type: "skill" } });
+                        }, 500);
+                    })
+                    .finally(() => {
+                        this.processing = false;
+                    });
+            }
         },
         icon_url_filter(icon_id) {
             return iconLink(icon_id);
         },
+        // 技能搜索
+        search_handle(keyword = "") {
+            this.loading = true;
+            getSkillList({ Name: keyword }).then((res) => {
+                this.options.sources = res.data.list;
+                this.loading = false;
+            });
+        },
         loadData: function (client) {
+            if (!this.post.source_id) return;
             this.loading = true;
             return wiki
-                .get({ type: "skill", id: this.post.source_id }, { supply: 0, client })
+                .get({ type: "skill", id: this.post.source_id }, { client })
                 .then((res) => {
                     let data = res.data;
                     // 数据填充
                     let post = data.data.post;
                     let skill = data.data.source;
-
-                    console.log(post, skill)
 
                     if (post) {
                         this.post.source_id = parseInt(post.source_id);
@@ -174,7 +195,46 @@ export default {
                         let exist = false;
                         this.options.sources = this.options.sources || [];
                         for (let index in this.options.sources) {
-                            if (this.options.sources[index].ID == skill.ID) {
+                            if (this.options.sources[index].SkillID == skill.SkillID) {
+                                exist = true;
+                                break;
+                            }
+                        }
+                        if (!exist) this.options.sources.push(skill);
+                    }
+
+                    return post;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
+        loadDataByPostId: function () {
+            this.loading = true;
+            return wiki
+                .getById(this.id)
+                .then((res) => {
+                    let data = res.data;
+                    // 数据填充
+                    let post = data.data.post;
+                    let skill = data.data.source;
+
+                    if (post) {
+                        this.post.source_id = parseInt(post.source_id);
+                        this.post.remark = post.remark;
+                        this.post.content = post.content;
+                    } else {
+                        this.post.source_id = this.post.source_id ? parseInt(this.post.source_id) : "";
+                        this.post.remark = "";
+                        this.post.content = "";
+                    }
+
+                    if (skill) {
+                        // 将选择项恢复至下拉框
+                        let exist = false;
+                        this.options.sources = this.options.sources || [];
+                        for (let index in this.options.sources) {
+                            if (this.options.sources[index].SkillID == skill.SkillID) {
                                 exist = true;
                                 break;
                             }
@@ -190,6 +250,7 @@ export default {
         },
     },
     created() {
+        this.search_handle();
         // 获取成就ID并通过watch获取攻略
         let id = this.$route.params.id;
         this.post.source_id = id ? parseInt(id) : null;
@@ -197,7 +258,11 @@ export default {
     watch: {
         "post.source_id": {
             handler: function (val) {
-                if (!val) return;
+
+                if (this.id) {
+                    this.loadDataByPostId();
+                    return;
+                }
 
                 if (this.client == "std") {
                     this.loadData("std");
