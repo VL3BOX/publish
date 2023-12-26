@@ -134,7 +134,7 @@ export default {
         },
         params: function () {
             return {
-                type: this.$route.params.type,
+                type: this.type,
                 page: this.page,
                 per: this.per,
                 title: this.search,
@@ -147,6 +147,13 @@ export default {
         },
     },
     watch: {
+        type: {
+            deep: true,
+            immediate: true,
+            handler: function (newval) {
+                this.page = 1;
+            },
+        },
         params: {
             deep: true,
             immediate: true,
