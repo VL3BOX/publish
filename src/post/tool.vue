@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-box" v-loading="loading">
         <!-- 头部 -->
-        <publish-header name="教程工具">
+        <publish-header name="工具资源">
             <publish-revision :enable="true" :post-id="id"></publish-revision>
         </publish-header>
 
@@ -212,7 +212,7 @@ export default {
             },
 
             // 选项
-            tool_types : User.isEditor() ? tool_types : omit(tool_types,['4'])
+            tool_types,// : User.isEditor() ? tool_types : omit(tool_types,['4'])
         };
     },
     computed: {
