@@ -249,7 +249,7 @@ export default {
     mounted() {
         this.getTopicBucket();
         const id = this.$route.params.id;
-        id && this.loadCommentConfig('bbs', id);
+        id && this.loadCommentConfig('post', id);
     },
     methods: {
         // 初始化

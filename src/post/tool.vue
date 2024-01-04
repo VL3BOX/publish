@@ -232,7 +232,7 @@ export default {
     },
     mounted() {
         const id = this.$route.params.id;
-        id && this.loadCommentConfig('tool', id);
+        id && this.loadCommentConfig('post', id);
     },
     methods: {
         // 初始化
