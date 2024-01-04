@@ -15,7 +15,7 @@
                 <!-- 原创 -->
                 <publish-original v-model="post.original"></publish-original>
                 <!-- 客户端 -->
-                <publish-client v-model="post.client" :forbidAll="true"></publish-client>
+                <publish-client v-model="post.client" :forbidAll="true" :showMobile="true"></publish-client>
                 <!-- 资料片 -->
                 <publish-zlp v-model="post.zlp" :client="post.client"></publish-zlp>
                 <!-- 心法 -->

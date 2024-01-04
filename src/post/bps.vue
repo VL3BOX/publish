@@ -15,7 +15,7 @@
                 <!-- 原创 -->
                 <publish-original v-model="post.original"></publish-original>
                 <!-- 客户端 -->
-                <!-- <publish-client v-model="post.client"></publish-client> -->
+                <publish-client v-model="post.client" :showMobile="true"></publish-client>
                 <!-- 资料片 -->
                 <publish-zlp v-model="post.zlp" :client="post.client"></publish-zlp>
                 <!-- 类型 -->
@@ -119,6 +119,7 @@ import Markdown from "@jx3box/jx3box-editor/src/Markdown";
 import publish_header from "@/components/publish_header.vue";
 import publish_title from "@/components/publish_title.vue";
 import publish_original from "@/components/publish_original.vue";
+import publish_client from "@/components/publish_client.vue";
 import publish_zlp from "@/components/publish_zlp";
 import publish_xf from "@/components/publish_xf";
 import publish_collection from "@/components/publish_collection";
@@ -149,7 +150,7 @@ export default {
         "publish-header": publish_header,
         "publish-title": publish_title,
         "publish-original": publish_original,
-        // "publish-client": publish_client,
+        "publish-client": publish_client,
         "publish-zlp": publish_zlp,
         "publish-xf": publish_xf,
         "publish-collection": publish_collection,
