@@ -289,7 +289,7 @@ export default {
                     this.afterPublish(result).finally(() => {
                         this.done(skip, result);
                     });
-                    this.setCommentConfig('bbs', result.ID);
+                    this.setCommentConfig('post', result.ID);
                 })
                 .finally(() => {
                     this.processing = false;

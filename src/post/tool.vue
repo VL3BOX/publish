@@ -260,7 +260,7 @@ export default {
                         this.done(skip, result);
                     });
 
-                    this.setCommentConfig('tool', result.ID);
+                    this.setCommentConfig('post', result.ID);
                 })
                 .finally(() => {
                     this.processing = false;

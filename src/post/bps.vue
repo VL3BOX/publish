@@ -296,7 +296,7 @@ export default {
                     this.afterPublish(result).finally(() => {
                         this.done(skip, result);
                     });
-                    this.setCommentConfig('bps', result.ID);
+                    this.setCommentConfig('post', result.ID);
                 })
                 .finally(() => {
                     this.processing = false;

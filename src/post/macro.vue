@@ -335,7 +335,7 @@ export default {
                         this.done(skip, result);
                     });
 
-                    this.setCommentConfig('macro', result.ID);
+                    this.setCommentConfig('post', result.ID);
                 })
                 .finally(() => {
                     this.processing = false;
