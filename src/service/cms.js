@@ -71,4 +71,9 @@ function getHasteRecommend(mount, client = 'std'){
     })
 }
 
-export { pull, push, del, getMyPostsCount, getMyPosts, getAllPosts, upload, getBreadCrumb, getPostMeta, setPostMeta, getChangelog, getHasteRecommend };
+// 获取自定义主题
+function getTopicBucket(params) {
+    return $cms().get(`/api/cms/topic/bucket`, { params });
+}
+
+export { pull, push, del, getMyPostsCount, getMyPosts, getAllPosts, upload, getBreadCrumb, getPostMeta, setPostMeta, getChangelog, getHasteRecommend, getTopicBucket };

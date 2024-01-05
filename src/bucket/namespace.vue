@@ -109,13 +109,9 @@ export default {
     computed: {
         params: function () {
             return {
-                user_id: this.uid,
                 page: this.page,
-                limit: this.per,
+                per: this.per,
             };
-        },
-        uid: function () {
-            return this.$store.state.uid;
         },
         publishLink: function () {
             return "./#/" + "namespace";
@@ -133,7 +129,7 @@ export default {
             this.loading = true;
             getNamespace(this.params)
                 .then((res) => {
-                    this.list = res.data.data.data;
+                    this.list = res.data.data.list;
                     this.total = res.data.data.total;
                 })
                 .finally(() => {

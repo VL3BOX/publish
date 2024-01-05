@@ -42,7 +42,7 @@
             <el-form class="m-publish-namespace-form" :rules="rules" :model="form">
                 <el-form-item label="关键词" prop="key">
                     <el-input v-model="form.key" placeholder="全局唯一关键词"></el-input>
-                    <el-alert v-if="!available" title="已有关键词，请重新输入" type="error" show-icon />
+                    <el-alert style="margin-top: 5px;" v-if="!available" title="已有关键词，请重新输入" type="error" show-icon />
                 </el-form-item>
                 <el-form-item label="链接" prop="link">
                     <el-input v-model="form.link" placeholder="请输入跳转地址">
@@ -121,7 +121,7 @@ export default {
                 key: this.form.key,
                 desc: this.form.desc,
                 link: "https://" + this.form.link,
-                source_type: "custom",
+                // source_type: "custom",
             };
         },
         isEditMode: function () {

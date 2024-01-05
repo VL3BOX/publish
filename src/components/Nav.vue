@@ -92,8 +92,7 @@ export default {
                 bps: { path: "/cms/bps", name: "职业攻略", count: 0 },
                 pvp: { path: "/cms/pvp", name: "竞技攻略", count: 0 },
                 fb: { path: "/cms/fb", name: "副本攻略", count: 0 },
-                jx3dat: { path: "/cms/jx3dat", name: "插件数据", count: 0 },
-                tool: { path: "/cms/tool", name: "教程工具", count: 0 },
+                tool: { path: "/cms/tool", name: "工具资源", count: 0 },
                 bbs: { path: "/cms/bbs", name: "茶馆交流", count: 0 },
             },
             ads: {
@@ -119,16 +118,6 @@ export default {
                 // blueprint: { path: "/bucket/blueprint", name: "家园蓝图", count: 0 },
                 joke: { path: "/bucket/joke", name: "剑三骚话", count: 0 },
                 emotion: { path: "/bucket/emotion", name: "剑三表情", count: 0 },
-                collection: {
-                    path: "/bucket/collection",
-                    name: "剑三小册",
-                    count: 0,
-                },
-                // item_plan: {
-                //     path: "/bucket/item_plan",
-                //     name: "物品清单",
-                //     count: 0,
-                // },
                 exam_question: {
                     path: "/bucket/question",
                     name: "剑三题目",
@@ -139,11 +128,21 @@ export default {
                     name: "剑三试卷",
                     count: 0,
                 },
+                // item_plan: {
+                //     path: "/bucket/item_plan",
+                //     name: "物品清单",
+                //     count: 0,
+                // },
                 // calendar: {
                 //     path: "/bucket/calendar",
                 //     name: "日历记录",
                 //     count: 0,
                 // },
+                collection: {
+                    path: "/bucket/collection",
+                    name: "剑三小册",
+                    count: 0,
+                },
                 namespace: {
                     path: "/bucket/namespace",
                     name: "剑三铭牌",

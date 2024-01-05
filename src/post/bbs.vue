@@ -17,13 +17,13 @@
                 <!-- 客户端 -->
                 <publish-client v-model="post.client"></publish-client>
                 <!-- 类型 -->
-                <!-- <publish-subtype v-model="post.post_subtype" :options="bbs_types"></publish-subtype> -->
+                <publish-subtype v-model="post.post_subtype" :options="bbs_types"></publish-subtype>
 
                 <!-- 主题 -->
                 <publish-tags v-model="post.topics" :options="topics" label="主题"></publish-tags>
 
                 <!-- 标签 -->
-                <publish-topic-bucket v-model="buckets"></publish-topic-bucket>
+                <!-- <publish-topic-bucket v-model="buckets"></publish-topic-bucket> -->
             </div>
 
             <!-- 正文 -->
@@ -63,10 +63,11 @@
             <div class="m-publish-extend">
                 <el-divider content-position="left">设置</el-divider>
                 <publish-comment v-model="post.comment">
-                    <el-checkbox v-model="post.comment_visible" :true-label="1" :false-label="0"
-                        >仅自己可见</el-checkbox
-                    ></publish-comment
-                >
+                    <el-checkbox v-model="visible_for_self" :true-label="1" :false-label="0"
+                        >仅自己可见</el-checkbox>
+                    <el-checkbox v-model="open_white_list" :true-label="1" :false-label="0"
+                        >开启评论过滤</el-checkbox>
+                </publish-comment>
                 <publish-gift v-model="post.allow_gift"></publish-gift>
                 <publish-visible v-model="post.visible"></publish-visible>
                 <publish-authors :id="id" :uid="post.post_author"></publish-authors>
@@ -128,15 +129,15 @@ import publish_banner from "@/components/publish_banner";
 import publish_comment from "@/components/publish_comment";
 import publish_gift from "@/components/publish_gift";
 import publish_visible from "@/components/publish_visible";
-// import publish_subtype from "@/components/publish_subtype";
+import publish_subtype from "@/components/publish_subtype";
 import publish_authors from "@/components/publish_authors";
 import publish_revision from "@/components/publish_revision.vue";
 import publish_at_authors from "@/components/publish_at_authors.vue";
 import publish_tags from "@/components/publish_tags";
-import publish_topic_bucket from "@/components/publish_topic_bucket.vue";
+// import publish_topic_bucket from "@/components/publish_topic_bucket.vue";
 
 // 数据逻辑
-import { push } from "@/service/cms.js";
+import { push, getTopicBucket } from "@/service/cms.js";
 import { appendToCollection } from "@/service/collection.js";
 import { AutoSaveMixin } from "@/utils/autoSaveMixin";
 import { cmsMetaMixin } from "@/utils/cmsMetaMixin";
@@ -159,12 +160,12 @@ export default {
         "publish-comment": publish_comment,
         "publish-gift": publish_gift,
         "publish-visible": publish_visible,
-        // "publish-subtype": publish_subtype,
+        "publish-subtype": publish_subtype,
         "publish-authors": publish_authors,
         "publish-revision": publish_revision,
         "publish-at-authors": publish_at_authors,
         "publish-tags": publish_tags,
-        "publish-topic-bucket": publish_topic_bucket,
+        // "publish-topic-bucket": publish_topic_bucket,
     },
     data: function () {
         return {
@@ -225,7 +226,7 @@ export default {
 
             // 选项
             bbs_types,
-            topics: bbs,
+            topics: [],
             buckets: [],
         };
     },
@@ -245,6 +246,11 @@ export default {
             return User.isSuperAuthor();
         },
     },
+    mounted() {
+        this.getTopicBucket();
+        const id = this.$route.params.id;
+        id && this.loadCommentConfig('post', id);
+    },
     methods: {
         // 初始化
         init: function () {
@@ -255,16 +261,16 @@ export default {
                 this.autoSave();
 
                 // 不在topics的类型，就分配到buckets
-                this.buckets = this.post.topics.filter((topic) => {
-                    return !this.topics.some((item) => {
-                        return item == topic;
-                    });
-                });
-                this.post.topics = this.post.topics.filter((topic) => {
-                    return this.topics.some((item) => {
-                        return item == topic;
-                    });
-                });
+                // this.buckets = this.post.topics.filter((topic) => {
+                //     return !this.topics.some((item) => {
+                //         return item == topic;
+                //     });
+                // });
+                // this.post.topics = this.post.topics.filter((topic) => {
+                //     return this.topics.some((item) => {
+                //         return item == topic;
+                //     });
+                // });
             });
         },
         // 发布
@@ -283,6 +289,7 @@ export default {
                     this.afterPublish(result).finally(() => {
                         this.done(skip, result);
                     });
+                    this.setCommentConfig('post', result.ID);
                 })
                 .finally(() => {
                     this.processing = false;
@@ -332,6 +339,12 @@ export default {
                 post_title: result.post_title,
             });
         },
+        getTopicBucket() {
+            getTopicBucket({ type: 'bbs' }).then((res) => {
+                const data = res.data.data?.map(item => item.name) || [];
+                this.topics = [...data];
+            });
+        }
     },
 };
 </script>

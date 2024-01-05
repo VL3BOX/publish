@@ -1,11 +1,8 @@
-import { $helper } from '@jx3box/jx3box-common/js/https.js'
 import { $cms } from '@jx3box/jx3box-common/js/https'
 
 function getNamespace(params) {
-  return $helper()({
-    method: 'GET',
-    url: `/api/my/namespaces`,
-    params: params,
+  return $cms().get('/api/cms/namespace/mine', {
+    params,
   })
 }
 
@@ -18,14 +15,14 @@ function updateNamespace(id, data) {
 }
 
 function getNamespaceById(id) {
-  return $cms().get(`/api/cms/namespace/${id}`)
+  return $cms().get(`/api/cms/namespace/${id}/raw`)
 }
 function getNamespaceByKey(key) {
-  return $cms().get(`/api/cms/namespace-key`, {
+  return $cms().get(`/api/cms/namespace/key`, {
     params: {
       key,
     },
-  })
+  });
 }
 
 export { getNamespace, getNamespaceByKey, getNamespaceById, createNamespace, updateNamespace }

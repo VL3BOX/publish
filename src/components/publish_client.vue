@@ -5,6 +5,7 @@
                 <el-radio label="std">重制</el-radio>
                 <el-radio label="origin">缘起</el-radio>
                 <el-radio label="all" v-if="!forbidAll">双端</el-radio>
+                <el-radio label="wujie" v-if="showMobile">无界</el-radio>
             </el-radio-group>
         </el-form-item>
         <slot></slot>
@@ -14,7 +15,7 @@
 import Bus from '@/store/bus.js'
 export default {
     name: "publish_client",
-    props: ["data",'forbidAll'],
+    props: ["data",'forbidAll','showMobile'],
     data: function () {
         return {
             client: this.data,

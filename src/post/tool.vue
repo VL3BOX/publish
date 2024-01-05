@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-box" v-loading="loading">
         <!-- 头部 -->
-        <publish-header name="教程工具">
+        <publish-header name="工具资源">
             <publish-revision :enable="true" :post-id="id"></publish-revision>
         </publish-header>
 
@@ -52,7 +52,9 @@
             <div class="m-publish-extend">
                 <el-divider content-position="left">设置</el-divider>
                 <publish-comment v-model="post.comment">
-                    <el-checkbox v-model="post.comment_visible" :true-label="1" :false-label="0">仅自己可见</el-checkbox>
+                    <el-checkbox v-model="visible_for_self" :true-label="1" :false-label="0">仅自己可见</el-checkbox>
+                    <el-checkbox v-model="open_white_list" :true-label="1" :false-label="0"
+                        >开启评论过滤</el-checkbox>
                 </publish-comment>
                 <publish-gift v-model="post.allow_gift"></publish-gift>
                 <publish-visible v-model="post.visible"></publish-visible>
@@ -210,7 +212,7 @@ export default {
             },
 
             // 选项
-            tool_types : User.isEditor() ? tool_types : omit(tool_types,['4'])
+            tool_types,// : User.isEditor() ? tool_types : omit(tool_types,['4'])
         };
     },
     computed: {
@@ -227,6 +229,10 @@ export default {
         isSuperAuthor() {
             return User.isSuperAuthor();
         }
+    },
+    mounted() {
+        const id = this.$route.params.id;
+        id && this.loadCommentConfig('post', id);
     },
     methods: {
         // 初始化
@@ -253,6 +259,8 @@ export default {
                     this.afterPublish(result).finally(() => {
                         this.done(skip, result);
                     });
+
+                    this.setCommentConfig('post', result.ID);
                 })
                 .finally(() => {
                     this.processing = false;

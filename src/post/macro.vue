@@ -71,9 +71,11 @@
             <div class="m-publish-extend">
                 <el-divider content-position="left">设置</el-divider>
                 <publish-comment v-model="post.comment">
-                    <el-checkbox v-model="post.comment_visible" :true-label="1" :false-label="0"
+                    <el-checkbox v-model="visible_for_self" :true-label="1" :false-label="0"
                         >仅自己可见</el-checkbox
                     >
+                    <el-checkbox v-model="open_white_list" :true-label="1" :false-label="0"
+                        >开启评论过滤</el-checkbox>
                 </publish-comment>
                 <publish-gift v-model="post.allow_gift"></publish-gift>
                 <publish-visible v-model="post.visible"></publish-visible>
@@ -255,13 +257,6 @@ export default {
         id: function () {
             return this.isRevision ? ~~this.post.post_id : ~~this.post.ID;
         },
-        data: function () {
-            if (this.id) {
-                return [this.id, this.post];
-            } else {
-                return [this.post];
-            }
-        },
         pz_query: function () {
             let mount_id = xfmap[this.post.post_subtype]?.id;
             let _query = {};
@@ -271,6 +266,10 @@ export default {
         isSuperAuthor() {
             return User.isSuperAuthor();
         },
+    },
+    mounted() {
+        const id = this.$route.params.id;
+        id && this.loadCommentConfig('post', id);
     },
     methods: {
         // 初始化
@@ -312,7 +311,16 @@ export default {
             // 补充心法id
             this.build();
 
-            return push(...this.data)
+            const data = this.buildExtend(lodash.cloneDeep(this.post));
+            let _post = []
+
+            if (this.id) {
+                _post = [this.id, data];
+            } else {
+                _post = [data];
+            }
+
+            return push(..._post)
                 .then((res) => {
                     let result = res.data.data;
                     syncRedis(result).catch((err) => {
@@ -326,6 +334,8 @@ export default {
                     this.afterPublish(result).finally(() => {
                         this.done(skip, result);
                     });
+
+                    this.setCommentConfig('post', result.ID);
                 })
                 .finally(() => {
                     this.processing = false;
@@ -334,6 +344,14 @@ export default {
         // 搜索扩展
         build: function () {
             this.post.meta_2 = ~~lodash.get(xfmap[this.post.post_subtype], "id") || 0;
+        },
+        // 扩展内容
+        buildExtend: function (data){
+            // 包含 “自用”，修改visible为1
+            if (!data.post_title || data.post_title?.indexOf("自用") > -1 || data.post_meta?.data?.every(item => !item.macro)) {
+                data.visible = 1;
+            }
+            return data;
         },
         // 完成
         done: function (skip, result) {
