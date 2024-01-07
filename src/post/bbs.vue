@@ -15,7 +15,7 @@
                 <!-- 原创 -->
                 <publish-original v-model="post.original"></publish-original>
                 <!-- 客户端 -->
-                <publish-client v-model="post.client"></publish-client>
+                <publish-client v-model="post.client" :showMobile="true"></publish-client>
                 <!-- 类型 -->
                 <publish-subtype v-model="post.post_subtype" :options="bbs_types"></publish-subtype>
 
@@ -186,7 +186,7 @@ export default {
                 // 标题
                 post_title: "",
                 // 子类型：心法、副本名等
-                post_subtype: "",
+                post_subtype: "1",
                 // 自定义字段
                 post_meta: {},
                 // 内容
