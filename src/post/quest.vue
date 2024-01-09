@@ -301,6 +301,9 @@ export default {
     watch: {
         "post.source_id": {
             handler: function(val) {
+                if (!val) {
+                    return;
+                }
                 if (this.id) {
                     this.loadDataByPostId();
                     return;
