@@ -37,7 +37,7 @@
                         <el-button
                             size="mini"
                             icon="el-icon-edit"
-                            :disabled="post.checked != 0"
+                            :disabled="post.checked == 1 || post.checked == 3"
                             title="编辑"
                             @click="post_edit(post)"
                         ></el-button>
