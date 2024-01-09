@@ -15,7 +15,7 @@ function updateNamespace(id, data) {
 }
 
 function getNamespaceById(id) {
-  return $cms().get(`/api/cms/namespace/${id}`)
+  return $cms().get(`/api/cms/namespace/${id}/raw`)
 }
 function getNamespaceByKey(key) {
   return $cms().get(`/api/cms/namespace/key`, {

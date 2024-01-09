@@ -15,7 +15,7 @@
                 <!-- 原创 -->
                 <publish-original v-model="post.original"></publish-original>
                 <!-- 客户端 -->
-                <publish-client v-model="post.client"></publish-client>
+                <publish-client v-model="post.client" :showMobile="true"></publish-client>
                 <!-- 类型 -->
                 <publish-subtype v-model="post.post_subtype" :options="bbs_types"></publish-subtype>
 
@@ -63,10 +63,11 @@
             <div class="m-publish-extend">
                 <el-divider content-position="left">设置</el-divider>
                 <publish-comment v-model="post.comment">
-                    <el-checkbox v-model="post.comment_visible" :true-label="1" :false-label="0"
-                        >仅自己可见</el-checkbox
-                    ></publish-comment
-                >
+                    <el-checkbox v-model="visible_for_self" :true-label="1" :false-label="0"
+                        >仅自己可见</el-checkbox>
+                    <el-checkbox v-model="open_white_list" :true-label="1" :false-label="0"
+                        >开启评论过滤</el-checkbox>
+                </publish-comment>
                 <publish-gift v-model="post.allow_gift"></publish-gift>
                 <publish-visible v-model="post.visible"></publish-visible>
                 <publish-authors :id="id" :uid="post.post_author"></publish-authors>
@@ -247,6 +248,8 @@ export default {
     },
     mounted() {
         this.getTopicBucket();
+        const id = this.$route.params.id;
+        id && this.loadCommentConfig('post', id);
     },
     methods: {
         // 初始化
@@ -286,6 +289,7 @@ export default {
                     this.afterPublish(result).finally(() => {
                         this.done(skip, result);
                     });
+                    this.setCommentConfig('post', result.ID);
                 })
                 .finally(() => {
                     this.processing = false;

@@ -16,20 +16,20 @@
         <div class="m-dashboard-box">
             <ul class="m-dashboard-box-list" v-if="data && data.length">
                 <li v-for="(item, i) in data" :key="i">
-                    <i class="u-icon">
-                        <img
+                    <i class="u-icon el-icon-chat-line-square">
+                        <!-- <img
                             v-if="item.PostInfo.post_status == 'publish'"
                             svg-inline
                             src="../assets/img/works/repo.svg"
                         />
-                        <img v-else svg-inline src="../assets/img/works/draft.svg" />
+                        <img v-else svg-inline src="../assets/img/works/draft.svg" /> -->
                     </i>
                     <a
                         class="u-title"
                         target="_blank"
-                        :href="postLink(item.PostInfo.post_type, item.postID)"
-                    >{{ item.PostInfo.post_title || "无标题" }}</a>
-                    <span class="u-desc">{{item.content || '未知'}}</span>
+                        :href="postLink(item.category, item.postID)"
+                    >{{item.content || '未知'}}</a>
+                    <!-- <span class="u-desc">{{item.content || '未知'}}</span> -->
                     <div class="u-desc">
                         <time class="u-desc-subitem">
                             <i class="el-icon-finished"></i>

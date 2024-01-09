@@ -32,7 +32,7 @@
                     </div>
 
                     <el-button-group class="u-action">
-                        <el-button size="mini" icon="el-icon-delete" @click="del(item.id)" title="删除"></el-button>
+                        <!-- <el-button size="mini" icon="el-icon-delete" @click="del(item.id)" :disabled="item.price_type != 0" title="删除"></el-button> -->
                         <el-button size="mini" icon="el-icon-edit" @click="edit(item.id)" title="编辑"></el-button>
                         <el-button
                             v-if="item.status == 1"

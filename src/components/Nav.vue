@@ -92,7 +92,7 @@ export default {
                 bps: { path: "/cms/bps", name: "职业攻略", count: 0 },
                 pvp: { path: "/cms/pvp", name: "竞技攻略", count: 0 },
                 fb: { path: "/cms/fb", name: "副本攻略", count: 0 },
-                tool: { path: "/cms/tool", name: "教程工具", count: 0 },
+                tool: { path: "/cms/tool", name: "工具资源", count: 0 },
                 bbs: { path: "/cms/bbs", name: "茶馆交流", count: 0 },
             },
             ads: {

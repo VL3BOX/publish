@@ -15,7 +15,7 @@
                 <!-- 原创 -->
                 <publish-original v-model="post.original"></publish-original>
                 <!-- 客户端 -->
-                <!-- <publish-client v-model="post.client"></publish-client> -->
+                <publish-client v-model="post.client" :showMobile="true" :forbid-all="true"></publish-client>
                 <!-- 资料片 -->
                 <publish-zlp v-model="post.zlp" :client="post.client"></publish-zlp>
                 <!-- 类型 -->
@@ -61,10 +61,12 @@
             <div class="m-publish-extend">
                 <el-divider content-position="left">设置</el-divider>
                 <publish-comment v-model="post.comment">
-                    <el-checkbox v-model="post.comment_visible" :true-label="1" :false-label="0"
+                    <el-checkbox v-model="visible_for_self" :true-label="1" :false-label="0"
                         >仅自己可见</el-checkbox
-                    ></publish-comment
-                >
+                    >
+                    <el-checkbox v-model="open_white_list" :true-label="1" :false-label="0"
+                        >开启评论过滤</el-checkbox>
+                </publish-comment>
                 <publish-gift v-model="post.allow_gift"></publish-gift>
                 <publish-visible v-model="post.visible"></publish-visible>
                 <publish-authors :id="id" :uid="post.post_author"></publish-authors>
@@ -117,6 +119,7 @@ import Markdown from "@jx3box/jx3box-editor/src/Markdown";
 import publish_header from "@/components/publish_header.vue";
 import publish_title from "@/components/publish_title.vue";
 import publish_original from "@/components/publish_original.vue";
+import publish_client from "@/components/publish_client.vue";
 import publish_zlp from "@/components/publish_zlp";
 import publish_xf from "@/components/publish_xf";
 import publish_collection from "@/components/publish_collection";
@@ -147,7 +150,7 @@ export default {
         "publish-header": publish_header,
         "publish-title": publish_title,
         "publish-original": publish_original,
-        // "publish-client": publish_client,
+        "publish-client": publish_client,
         "publish-zlp": publish_zlp,
         "publish-xf": publish_xf,
         "publish-collection": publish_collection,
@@ -256,6 +259,10 @@ export default {
             });
         },
     },
+    mounted() {
+        const id = this.$route.params.id;
+        id && this.loadCommentConfig('post', id);
+    },
     methods: {
         // 初始化
         init: function () {
@@ -282,12 +289,14 @@ export default {
                         setPostMeta(result.ID || this.id, "link_changelog", "");
                     }
 
+
                     return result;
                 })
                 .then((result) => {
                     this.afterPublish(result).finally(() => {
                         this.done(skip, result);
                     });
+                    this.setCommentConfig('post', result.ID);
                 })
                 .finally(() => {
                     this.processing = false;

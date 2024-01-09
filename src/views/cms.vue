@@ -20,7 +20,7 @@
         </el-input>
 
         <div class="m-dashboard-work-filter">
-            <clientBy class="u-client" @filter="filter" />
+            <clientBy class="u-client" @filter="filter" :showWujie="showWujie" />
             <orderBy class="u-order" @filter="filter" />
         </div>
 
@@ -134,7 +134,7 @@ export default {
         },
         params: function () {
             return {
-                type: this.$route.params.type,
+                type: this.type,
                 page: this.page,
                 per: this.per,
                 title: this.search,
@@ -145,8 +145,18 @@ export default {
         publishLink: function () {
             return "./#/" + this.type;
         },
+        showWujie: function () {
+            return ["bps", "pvp", "bbs"].includes(this.type);
+        },
     },
     watch: {
+        type: {
+            deep: true,
+            immediate: true,
+            handler: function (newval) {
+                this.page = 1;
+            },
+        },
         params: {
             deep: true,
             immediate: true,

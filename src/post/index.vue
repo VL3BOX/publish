@@ -49,7 +49,7 @@
                 <el-col :span="4">
                     <router-link to="/tool">
                         <img svg-inline src="../assets/img/channel/tool.svg" />
-                        <span>教程工具</span>
+                        <span>工具资源</span>
                     </router-link>
                 </el-col>
             </el-row>
