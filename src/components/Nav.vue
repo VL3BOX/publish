@@ -160,7 +160,7 @@ export default {
                     name: "通用评论",
                     count: 0,
                 },
-                comment_wiki: {
+                wiki_comment: {
                     path: "/comment/wiki",
                     name: "百科评论",
                     count: 0,
@@ -181,7 +181,7 @@ export default {
                 Bus.$emit("toggleLeftSide", false);
             }
         },
-        loadCmsCount: function () {
+        loadMyCount: function () {
             getMyPostsCount().then((res) => {
                 let count = res.data.data;
                 for (let key in count) {
@@ -196,6 +196,9 @@ export default {
                     }
                     if (this.app[key]) {
                         this.app[key]["count"] = count[key];
+                    }
+                    if (this.wiki[key]) {
+                        this.wiki[key]["count"] = count[key];
                     }
                 }
             });
@@ -236,8 +239,8 @@ export default {
             });
         },
         init: function () {
-            this.loadCmsCount();
-            this.loadHelperCount();
+            this.loadMyCount();
+            // this.loadHelperCount();
             this.loadNextCount();
         },
     },
