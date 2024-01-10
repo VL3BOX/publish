@@ -134,7 +134,11 @@
 
                 <!-- 其它 -->
                 <div class="m-publish-other">
-                    <publish-banner v-model="collection.image" :size="[128,168]" info=""></publish-banner>
+                    <publish-banner
+                        v-model="collection.image"
+                        :size="[128, 168]"
+                        info="小册的封面尺寸为 372 * 532 ，支持JPG,PNG上传"
+                    ></publish-banner>
                 </div>
             </div>
             <div class="m-publish-collection-publish">
@@ -299,7 +303,6 @@ export default {
             });
         },
         submit: function () {
-
             let collection = JSON.parse(JSON.stringify(this.collection));
 
             if (!collection.posts) {
@@ -314,7 +317,7 @@ export default {
                     message = "文章类型不能为空哦";
                     break;
                 }
-                if (item.type === 'custom') {
+                if (item.type === "custom") {
                     if (!item.url) {
                         message = "请填写正确的小册文章链接（http或https开头）";
                         break;
@@ -400,10 +403,3 @@ export default {
 <style scoped lang="less">
 @import "../assets/css/collection.less";
 </style>
-
-<style lang="less">
-.m-publish-collection {
-    .u-tip {
-        display: none !important;
-    }
-}</style>
