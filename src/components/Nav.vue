@@ -111,6 +111,11 @@ export default {
                     name: "通识百科",
                     count: 0,
                 },
+                skill: {
+                    path: "/wiki/skill",
+                    name: "技能百科",
+                    count: 0,
+                },
             },
             app: {
                 face: { path: "/bucket/face", name: "捏脸数据", count: 0 },

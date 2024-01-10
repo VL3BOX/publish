@@ -20,7 +20,7 @@
         </el-input>
 
         <div class="m-dashboard-work-filter">
-            <clientBy class="u-client" @filter="filter" />
+            <clientBy class="u-client" @filter="filter" :showWujie="showWujie" />
             <orderBy class="u-order" @filter="filter" />
         </div>
 
@@ -144,6 +144,9 @@ export default {
         },
         publishLink: function () {
             return "./#/" + this.type;
+        },
+        showWujie: function () {
+            return ["bps", "pvp", "bbs"].includes(this.type);
         },
     },
     watch: {

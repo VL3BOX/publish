@@ -55,14 +55,13 @@ import header from "@/components/publish_header.vue";
 import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 
 // 本地依赖
-// import { WikiPost } from "@jx3box/jx3box-common/js/helper";
-import { wiki } from "@jx3box/jx3box-common/js/wiki";
+import { wiki } from "@jx3box/jx3box-common/js/wiki_v2";
 
 import User from "@jx3box/jx3box-common/js/user";
 import { search_items } from "../service/item";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 
-import uniqBy from 'lodash/uniqBy';
+import {uniqBy,pick} from 'lodash';
 export default {
     name: "item",
     data() {
@@ -91,6 +90,9 @@ export default {
     computed : {
         client : function (){
             return this.$store.state.client
+        },
+        id : function (){
+            return this.$route.query?.post_id
         }
     },
     methods: {
@@ -132,18 +134,11 @@ export default {
                 content: this.post.content,
                 remark: this.post.remark,
             }
-            wiki.post({ type: 'item', data: data, client: this.client }, {})
-            /* WikiPost.save({
-                type: "item",
-                source_id: this.post.source_id,
-                level: this.post.level,
-                user_nickname: User.getInfo().name,
-                content: this.post.content,
-                remark: this.post.remark,
-            }) */
-                .then((data) => {
-                    data = data.data;
-                    if (data.code === 200) {
+            if (this.id) {
+                const _data = pick(data, ["level", "content", "remark"]);
+                wiki.update(this.id, { ..._data, client: this.client })
+                    .then((data) => {
+                        data = data.data;
                         this.$message({
                             message: "提交成功，请等待审核",
                             type: "success",
@@ -151,16 +146,26 @@ export default {
                         setTimeout(() => {
                             this.$router.push({ name: "wiki_post", params: { type: "item" } });
                         }, 500);
-                    } else {
+                    })
+                    .finally(() => {
+                        this.processing = false;
+                    });
+            } else{
+                wiki.post({ type: 'item', ...data, client: this.client })
+                    .then((data) => {
+                        data = data.data;
                         this.$message({
-                            message: `${data.message}`,
-                            type: "warning",
+                            message: "提交成功，请等待审核",
+                            type: "success",
                         });
-                    }
-                })
-                .finally(() => {
-                    this.processing = false;
-                });
+                        setTimeout(() => {
+                            this.$router.push({ name: "wiki_post", params: { type: "item" } });
+                        }, 500);
+                    })
+                    .finally(() => {
+                        this.processing = false;
+                    });
+            }
         },
         icon_url_filter(icon_id) {
             return iconLink(icon_id);
@@ -175,8 +180,9 @@ export default {
             });
         },
         loadData: function(client) {
+            if (!this.post.source_id) return;
             this.loading = true;
-            return wiki.get({ type: 'item', id: this.post.source_id }, { supply: 0, client })
+            return wiki.get({ type: "item", id: this.post.source_id }, { client })
                 .then((res) => {
                     let data = res.data;
                     // 数据填充
@@ -186,7 +192,7 @@ export default {
                     if (post) {
                         this.post.source_id = post.source_id;
                         this.post.level = post.level || 1;
-                        this.post.remark = "";
+                        this.post.remark = post.remark || "";
                         this.post.content = post.content;
                     } else {
                         this.post.source_id = this.post.source_id ? this.post.source_id : "";
@@ -212,19 +218,60 @@ export default {
                     this.loading = false;
                 });
         },
+        loadDataByPostId: function() {
+            this.loading = true;
+            return wiki.getById(this.id)
+                .then((res) => {
+                    let data = res.data;
+                    // 数据填充
+                    let post = data.data.post;
+                    let item = data.data.source;
+
+                    if (post) {
+                        this.post.source_id = post.source_id;
+                        this.post.level = post.level || 1;
+                        this.post.remark = post.remark || "";
+                        this.post.content = post.content;
+                    } else {
+                        this.post.source_id = this.post.source_id ? this.post.source_id : "";
+                        this.post.level = 0;
+                        this.post.remark = "";
+                        this.post.content = "";
+                    }
+
+                    if (item) {
+                        // 将选择项恢复至下拉框
+                        if (this.compatible) {
+                            // 兼容模式下，客户端为正式服的物品，不放入下拉框
+                            if (client !== 'std') this.options.sources = uniqBy([this.options.sources, item], "id");
+                        } else {
+                            // 非兼容模式下的物品直接放入下拉框
+                            this.options.sources = uniqBy([this.options.sources, item], "id");
+                        }
+                    }
+
+                    return post;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        }
     },
     created() {
         // 初始化搜索列表
         this.search_handle("");
+
         // 获取物品ID并通过watch获取攻略
         let id = this.$route.params.source_id;
         this.post.source_id = id ? id : null;
     },
     watch: {
         "post.source_id": {
-            handler: function(val) {
-                if (!val) return;
-
+            handler: function() {
+                if (this.id) {
+                    this.loadDataByPostId();
+                    return;
+                }
                 if(this.client == 'std'){
                     this.loadData('std')
                 }else{

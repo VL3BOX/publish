@@ -1,27 +1,22 @@
-import { $helper } from "@jx3box/jx3box-common/js/https.js";
-import qs from "qs";
+import { $cms } from "@jx3box/jx3box-common/js/https.js";
 
 function get_menus() {
-    return $helper()({
+    return $cms()({
         method: "GET",
-        url: `/api/knowledge/menus`,
+        url: `/api/cms/helper/knowledge/types`,
     });
 }
 
 function get_list(params) {
-    return $helper()({
+    return $cms()({
         method: "GET",
-        url: `/api/knowledges`,
+        url: `/api/cms/helper/knowledge`,
         params: params,
     });
 }
 
-function create_knowledge(params) {
-    return $helper()({
-        method: "POST",
-        url: `/api/knowledge`,
-        data: qs.stringify({ knowledge: params }),
-    });
+function create_knowledge(data) {
+    return $cms().post(`/api/cms/helper/knowledge`, data);
 }
 
 export { get_menus, get_list, create_knowledge };

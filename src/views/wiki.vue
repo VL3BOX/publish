@@ -1,11 +1,18 @@
 <template>
     <div class="m-dashboard m-dashboard-work m-dashboard-wiki" v-loading="loading">
         <div class="m-dashboard-work-header">
-            <h2 class="u-title">{{ typeLable }}百科</h2>
-            <a :href="publishLink" class="u-publish el-button el-button--primary el-button--small"><i class="el-icon-document"></i> 发布作品</a>
+            <h2 class="u-title">{{ typeLabel }}百科</h2>
+            <a :href="publishLink" class="u-publish el-button el-button--primary el-button--small"
+                ><i class="el-icon-document"></i> 发布作品</a
+            >
         </div>
 
-        <el-input class="m-dashboard-work-search u-source-search" placeholder="请输入搜索内容" v-model="achievement_post.keyword" @change="search_post">
+        <el-input
+            class="m-dashboard-work-search u-source-search"
+            placeholder="请输入搜索内容"
+            v-model="achievement_post.keyword"
+            @change="search_post"
+        >
             <template slot="prepend">关键词</template>
             <el-button slot="append" icon="el-icon-search" @click="search_post"></el-button>
         </el-input>
@@ -14,13 +21,21 @@
             <ul class="m-dashboard-box-list" v-if="achievement_post.data && achievement_post.data.length">
                 <li class="u-wiki" v-for="(post, key) in achievement_post.data" :key="key">
                     <span class="u-tab" v-text="getTypeLabel(post.type)"></span>
-                    <a class="u-title" target="_blank" :href="getLink(post)">{{ post.title || "无标题" }}</a>
-                    <span v-if="post.checked == 0" class="u-mark pending">⌛ 等待审核</span>
-                    <span v-if="post.checked == 1" class="u-mark">✔ 审核通过</span>
-                    <span v-if="post.checked == 2" class="u-mark reject">❌ 审核驳回</span>
-                    <span v-if="post.checked == 3" class="u-mark hold">🔐 等待验证</span>
+                    <div class="u-header">
+                        <a class="u-title" target="_blank" :href="getLink(post)">
+                            {{ post.title || "无标题" }}
+                        </a>
+                        <span v-if="post.checked == 0" class="u-mark pending">⌛ 等待审核</span>
+                        <span v-if="post.checked == 1" class="u-mark">✔ 审核通过</span>
+                        <span v-if="post.checked == 2" class="u-mark reject">❌ 审核驳回</span>
+                        <span v-if="post.checked == 3" class="u-mark hold">🔐 等待验证</span>
+                    </div>
                     <div class="u-desc">
-                        <span v-if="post.checked == 2 && post.check_remark" class="u-check_remark" v-html="`驳回理由：${post.check_remark}`"></span>
+                        <span
+                            v-if="post.checked == 2 && post.check_remark"
+                            class="u-check_remark"
+                            v-html="`驳回理由：${post.check_remark}`"
+                        ></span>
                         <time class="u-desc-subitem">
                             <i class="el-icon-finished"></i>
                             发布 :
@@ -34,18 +49,25 @@
                     </div>
 
                     <el-button-group class="u-action">
-                        <!-- <el-button
+                        <el-button
                             size="mini"
                             icon="el-icon-edit"
-                            :disabled="post.checked != 0"
+                            :disabled="post.checked == 1 || post.checked == 3"
                             title="编辑"
-                            @click="post_edit('achievement', post)"
-                        ></el-button>-->
+                            @click="post_edit(post)"
+                        ></el-button>
                         <el-button size="mini" icon="el-icon-delete" title="删除" @click="post_del(post)"></el-button>
                     </el-button-group>
                 </li>
             </ul>
-            <el-alert v-else class="m-dashboard-box-null" title="没有找到相关条目" type="info" center show-icon></el-alert>
+            <el-alert
+                v-else
+                class="m-dashboard-box-null"
+                title="没有找到相关条目"
+                type="info"
+                center
+                show-icon
+            ></el-alert>
             <el-pagination
                 class="m-dashboard-box-pages"
                 background
@@ -61,15 +83,18 @@
 </template>
 
 <script>
-import { getTypeLabel } from "@jx3box/jx3box-common/js/utils";
+import { getTypeLabel, getLink } from "@jx3box/jx3box-common/js/utils";
 import { __wikiType } from "@jx3box/jx3box-common/data/jx3box.json";
 import dateFormat from "@/utils/dateFormat";
-import { get_posts, remove_post } from "@/service/wiki";
-import {getLink} from '@jx3box/jx3box-common/js/utils'
+import { wiki } from "@jx3box/jx3box-common/js/wiki_v2";
+const wikiTypes = {
+    ...__wikiType,
+    skill: "技能",
+};
 export default {
     name: "wiki",
     props: [],
-    data: function() {
+    data: function () {
         return {
             loading: false,
 
@@ -84,39 +109,33 @@ export default {
         };
     },
     computed: {
-        type: function() {
+        type: function () {
             return this.$route.params.type;
         },
-        typeLable: function() {
-            return __wikiType[this.type];
+        typeLabel: function () {
+            return wikiTypes[this.type];
         },
-        publishLink: function() {
+        publishLink: function () {
             return "./#/" + this.type;
         },
     },
     methods: {
-        getTypeLabel: function(val) {
-            return val ? __wikiType[val] : "未知";
+        getTypeLabel: function (val) {
+            return val ? wikiTypes[val] : "未知";
         },
         post_page_change(i = 1) {
             this.post_page = i;
             this.loading = true;
-            get_posts({
+            wiki.mine({
                 type: this.type,
-                keyword: this.achievement_post.keyword,
+                _search: this.achievement_post.keyword,
                 page: i,
-                limit: this.length,
+                per: this.length,
             })
-                .then(
-                    (data) => {
-                        data = data.data;
-                        this.achievement_post.data = data.code === 200 ? data.data.data : false;
-                        this.achievement_post.total = data.code === 200 ? data.data.total : 0;
-                    },
-                    () => {
-                        this.achievement_post.data = false;
-                    }
-                )
+                .then((res) => {
+                    this.achievement_post.data = res.data.data.list || [];
+                    this.achievement_post.total = res.data.data.total || 0;
+                })
                 .finally(() => {
                     this.loading = false;
                 });
@@ -124,51 +143,35 @@ export default {
         search_post() {
             this.post_page_change(1);
         },
-        post_edit(type, post) {
-            switch (type) {
-                case "achievement":
-                    this.$message("即将开放");
-                    break;
-            }
-        },
-        post_del(post) {
-            this.$alert("确定要删除吗？", "确认信息", {
-                confirmButtonText: "确定",
-                callback: (action) => {
-                    if (action == "confirm") {
-                        remove_post(post.type, post.id).then(
-                            (data) => {
-                                data = data.data;
-                                if (data.code === 200) {
-                                    this.$notify({
-                                        title: "删除成功",
-                                        type: "success",
-                                    });
-                                    this.post_page_change(this.post_page);
-                                } else {
-                                    this.$notify({
-                                        title: "删除失败",
-                                        type: "error",
-                                    });
-                                }
-                            },
-                            () => {
-                                this.$notify({
-                                    title: "删除失败",
-                                    type: "error",
-                                });
-                            }
-                        );
-                    }
-                },
+        post_edit(post) {
+            this.$router.push({
+                path: `/${this.type}/${post.source_id}?post_id=${post.id}`,
             });
         },
-        getLink : function (post){
-            return getLink(post?.type,post?.source_id) + '/' + post?.id
-        }
+        post_del(post) {
+            this.$confirm(`确认删除吗？`, "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+                beforeClose: (action, instance, done) => {
+                    if (action === "confirm") {
+                        wiki.remove(post.id).then(() => {
+                            this.$message.success("删除成功");
+                            this.post_page_change();
+                            done();
+                        });
+                    } else {
+                        done();
+                    }
+                },
+            }).catch(() => {});
+        },
+        getLink: function (post) {
+            return getLink(post?.type, post?.source_id) + "/" + post?.id;
+        },
     },
     filters: {
-        dateFormat: function(val) {
+        dateFormat: function (val) {
             return dateFormat(new Date(val));
         },
     },
