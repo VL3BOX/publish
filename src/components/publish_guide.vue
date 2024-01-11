@@ -16,8 +16,7 @@
             >
                 <el-option v-for="item in prev" :key="item.ID" :value="item.ID" :label="item.post_title" :disabled="disabledItem(item)">
                     <div class="u-post-select__item">
-                        <el-tag size="mini" v-if="item.post_type">{{ showPostType(item.post_type) }}</el-tag>
-                        <el-tag size="mini" class="u-visible" :type="item.visible != 0 && 'info'">{{ item.visible != 0 && '非公开'}}</el-tag>
+                        <el-tag size="mini" v-if="item.post_type" :type=" item.visible != 0 ? 'warning' : ''">{{ showPostType(item.post_type) }}</el-tag>
                         {{ item.post_title }}
                     </div></el-option
                 >
