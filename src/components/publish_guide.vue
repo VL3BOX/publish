@@ -1,7 +1,8 @@
 <template>
     <!-- 前后引导 -->
     <div class="m-publish-guide">
-        <label class="el-form-item__label">前后引导</label>
+        <label class="el-form-item__label">前后引导
+        </label>
         <div class="u-condition u-prev" key="prev">
             <span class="u-prepend el-input-group__prepend">上一篇</span>
             <el-select
@@ -13,9 +14,10 @@
                 v-model="data.prev_post"
                 clearable
             >
-                <el-option v-for="item in prev" :key="item.ID" :value="item.ID" :label="item.post_title">
-                    <div>
-                        <el-tag size="small" v-if="item.post_type">{{ showPostType(item.post_type) }}</el-tag>
+                <el-option v-for="item in prev" :key="item.ID" :value="item.ID" :label="item.post_title" :disabled="disabledItem(item)">
+                    <div class="u-post-select__item">
+                        <el-tag size="mini" v-if="item.post_type">{{ showPostType(item.post_type) }}</el-tag>
+                        <el-tag size="mini" class="u-visible" :type="item.visible != 0 && 'info'">{{ item.visible != 0 && '非公开'}}</el-tag>
                         {{ item.post_title }}
                     </div></el-option
                 >
@@ -32,14 +34,18 @@
                 v-model="data.next_post"
                 clearable
             >
-                <el-option v-for="item in next" :key="item.ID" :value="item.ID" :label="item.post_title">
-                    <div>
-                        <el-tag size="small" v-if="item.post_type">{{ showPostType(item.post_type) }}</el-tag>
+                <el-option v-for="item in next" :key="item.ID" :value="item.ID" :label="item.post_title" :disabled="disabledItem(item)">
+                    <div class="u-post-select__item">
+                        <el-tag size="mini" v-if="item.post_type">{{ showPostType(item.post_type) }}</el-tag>
+                        <el-tag size="mini" class="u-visible" :type="item.visible != 0 && 'info'">{{ item.visible != 0 && '非公开'}}</el-tag>
                         {{ item.post_title }}
                     </div></el-option
                 >
             </el-select>
         </div>
+        <el-tooltip content="只可选择公开的文章">
+            <i class="el-icon-question" style="margin-left: 10px;"></i>
+        </el-tooltip>
     </div>
 </template>
 
@@ -123,6 +129,9 @@ export default {
                 this.next = cloneDeep(list);
             });
         },
+        disabledItem(item) {
+            return item.visible != 0 || item.ID == this.data.ID;
+        }
     },
 };
 </script>
@@ -169,6 +178,13 @@ export default {
     .u-prev {
         margin-right: 20px;
     }
+}
+
+.u-post-select__item {
+    .flex;
+    align-items: center;
+    gap: 5px;
+    .pr;
 }
 
 @media screen and (max-width: @phone) {
