@@ -70,6 +70,7 @@
                 </publish-comment>
                 <publish-gift v-model="post.allow_gift"></publish-gift>
                 <publish-visible v-model="post.visible"></publish-visible>
+                <publish-guide :data="post"></publish-guide>
                 <publish-authors :id="id" :uid="post.post_author"></publish-authors>
             </div>
 
@@ -135,6 +136,7 @@ import publish_revision from "@/components/publish_revision.vue";
 import publish_at_authors from "@/components/publish_at_authors.vue";
 import publish_tags from "@/components/publish_tags";
 // import publish_topic_bucket from "@/components/publish_topic_bucket.vue";
+import publish_guide from "@/components/publish_guide.vue";
 
 // 数据逻辑
 import { push, getTopicBucket } from "@/service/cms.js";
@@ -166,6 +168,7 @@ export default {
         "publish-at-authors": publish_at_authors,
         "publish-tags": publish_tags,
         // "publish-topic-bucket": publish_topic_bucket,
+        "publish-guide": publish_guide,
     },
     data: function () {
         return {
@@ -222,6 +225,10 @@ export default {
 
                 // 阅读权限（0公开，1仅自己，2亲友，3密码，4付费，5粉丝）
                 visible: 0,
+
+                // 上下篇
+                prev_post: "",
+                next_post: "",
             },
 
             // 选项

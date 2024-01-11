@@ -23,12 +23,22 @@
             <!-- 正文 -->
             <div class="m-publish-content">
                 <el-divider content-position="left">正文</el-divider>
-                <el-radio-group class="m-publish-editormode" size="small" v-model="post.post_mode" >
+                <el-radio-group class="m-publish-editormode" size="small" v-model="post.post_mode">
                     <el-radio-button label="tinymce">可视化编辑器</el-radio-button>
                     <el-radio-button label="markdown">Markdown</el-radio-button>
                 </el-radio-group>
-                <Markdown v-model="post.post_content" :editable="true" :readOnly="false" v-show="post.post_mode == 'markdown'"></Markdown>
-                <Tinymce v-model="post.post_content" :attachmentEnable="true" :resourceEnable="true" v-show="!post.post_mode || post.post_mode == 'tinymce'" />
+                <Markdown
+                    v-model="post.post_content"
+                    :editable="true"
+                    :readOnly="false"
+                    v-show="post.post_mode == 'markdown'"
+                ></Markdown>
+                <Tinymce
+                    v-model="post.post_content"
+                    :attachmentEnable="true"
+                    :resourceEnable="true"
+                    v-show="!post.post_mode || post.post_mode == 'tinymce'"
+                />
             </div>
 
             <!-- 附加 -->
@@ -44,11 +54,11 @@
                 <el-divider content-position="left">设置</el-divider>
                 <publish-comment v-model="post.comment">
                     <el-checkbox v-model="visible_for_self" :true-label="1" :false-label="0">仅自己可见</el-checkbox>
-                    <el-checkbox v-model="open_white_list" :true-label="1" :false-label="0"
-                        >开启评论过滤</el-checkbox>
+                    <el-checkbox v-model="open_white_list" :true-label="1" :false-label="0">开启评论过滤</el-checkbox>
                 </publish-comment>
                 <publish-gift v-model="post.allow_gift"></publish-gift>
                 <publish-visible v-model="post.visible"></publish-visible>
+                <publish-guide :data="post"></publish-guide>
                 <publish-authors :id="id" :uid="post.post_author"></publish-authors>
             </div>
 
@@ -64,7 +74,9 @@
             </div>
 
             <div class="m-publish-doc">
-                <el-checkbox v-model="hasRead" :true-label="1" :false-label="0">我已阅读并了解<a href="/notice/119" @click.stop target="_blank">《创作发布规范》</a></el-checkbox>
+                <el-checkbox v-model="hasRead" :true-label="1" :false-label="0"
+                    >我已阅读并了解<a href="/notice/119" @click.stop target="_blank">《创作发布规范》</a></el-checkbox
+                >
             </div>
 
             <!-- 按钮 -->
@@ -73,8 +85,12 @@
                     <el-button type="primary" @click="useDraft" :disabled="processing">使用此版本</el-button>
                 </template>
                 <template v-else>
-                    <el-button type="primary" @click="publish('publish', true)" :disabled="processing || !hasRead">发 &nbsp;&nbsp; 布</el-button>
-                    <el-button type="plain" @click="publish('draft', false)" :disabled="processing || !hasRead">保存为草稿</el-button>
+                    <el-button type="primary" @click="publish('publish', true)" :disabled="processing || !hasRead"
+                        >发 &nbsp;&nbsp; 布</el-button
+                    >
+                    <el-button type="plain" @click="publish('draft', false)" :disabled="processing || !hasRead"
+                        >保存为草稿</el-button
+                    >
                 </template>
             </div>
         </el-form>
@@ -101,8 +117,9 @@ import publish_comment from "@/components/publish_comment";
 import publish_gift from "@/components/publish_gift";
 import publish_visible from "@/components/publish_visible";
 import publish_authors from "@/components/publish_authors";
-import publish_revision from '@/components/publish_revision.vue'
-import publish_at_authors from '@/components/publish_at_authors.vue'
+import publish_revision from "@/components/publish_revision.vue";
+import publish_at_authors from "@/components/publish_at_authors.vue";
+import publish_guide from "@/components/publish_guide.vue";
 
 // 数据逻辑
 import { push, pull } from "@/service/cms.js";
@@ -110,7 +127,6 @@ import { appendToCollection } from "@/service/collection.js";
 import { AutoSaveMixin } from "@/utils/autoSaveMixin";
 import { cmsMetaMixin } from "@/utils/cmsMetaMixin";
 import { atAuthorMixin } from "@/utils/atAuthorMixin";
-
 
 export default {
     name: "fb",
@@ -130,8 +146,9 @@ export default {
         "publish-gift": publish_gift,
         "publish-visible": publish_visible,
         "publish-authors": publish_authors,
-        'publish-revision' : publish_revision,
-        'publish-at-authors': publish_at_authors
+        "publish-revision": publish_revision,
+        "publish-at-authors": publish_at_authors,
+        "publish-guide": publish_guide,
     },
     data: function () {
         return {
@@ -180,7 +197,7 @@ export default {
                 post_banner: "",
                 // 小册
                 post_collection: "",
-                collection_collapse : 0,
+                collection_collapse: 0,
 
                 // 评论开关（0开启|默认，1关闭）
                 comment: 0,
@@ -200,9 +217,9 @@ export default {
         },
         data: function () {
             if (this.id) {
-                return [this.id, {...this.post, topics: this.topics}];
+                return [this.id, { ...this.post, topics: this.topics }];
             } else {
-                return [{...this.post, topics: this.topics}];
+                return [{ ...this.post, topics: this.topics }];
             }
         },
         isSuperAuthor() {
@@ -222,12 +239,12 @@ export default {
     },
     mounted() {
         const id = this.$route.params.id;
-        id && this.loadCommentConfig('post', id);
+        id && this.loadCommentConfig("post", id);
     },
     methods: {
         // 初始化
-        init: function() {
-            sessionStorage.removeItem("atAuthor")
+        init: function () {
+            sessionStorage.removeItem("atAuthor");
             // 尝试加载
             return this.loadData().then(() => {
                 // 加载成功后执行自动保存逻辑（含本地草稿、本地缓存、云端历史版本）
@@ -243,14 +260,14 @@ export default {
                     let result = res.data.data;
                     this.atUser(result.ID);
                     this.setHasRead();
-                    return result
+                    return result;
                 })
                 .then((result) => {
                     this.afterPublish(result).finally(() => {
                         this.done(skip, result);
-                    })
+                    });
 
-                    this.setCommentConfig('post', result.ID);
+                    this.setCommentConfig("post", result.ID);
                 })
                 .finally(() => {
                     this.processing = false;
@@ -292,21 +309,21 @@ export default {
         },
         // 跳转前操作
         afterPublish: function (result) {
-            if(!~~result.post_collection) return new Promise((resolve,reject)=>{
-                resolve(true)
-            })
+            if (!~~result.post_collection)
+                return new Promise((resolve, reject) => {
+                    resolve(true);
+                });
             return appendToCollection({
                 post_type: result.post_type,
                 post_id: result.ID,
                 post_collection: result.post_collection,
                 post_title: result.post_title,
-            })
+            });
         },
     },
     created: function () {
         // this.init().then((data) => {
         //     if (!data) return;
-
         //     // 迁移兼容
         //     if (!this.post.zlp && data.post_meta.fb_zlp) {
         //         this.post.zlp = data.post_meta.fb_zlp;

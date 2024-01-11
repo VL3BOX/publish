@@ -63,7 +63,11 @@ export const AutoSaveMixin = {
                 let revision_id = this.$route.query.id;
                 return getRevision(post_id, revision_id)
                     .then((res) => {
-                        this.post = res.data.data;
+                        this.post = {
+                            ...res.data.data,
+                            prev_post: res.data.prev_post || '',
+                            next_post: res.data.next_post || '',
+                        };
                     })
                     .finally(() => {
                         this.loading = false;
@@ -75,7 +79,11 @@ export const AutoSaveMixin = {
                 if (post_id) {
                     return pull(this.$route.params.id)
                         .then((res) => {
-                            this.post = res.data.data;
+                            this.post = {
+                                ...res.data.data,
+                                prev_post: res.data.prev_post || '',
+                                next_post: res.data.next_post || '',
+                            };
                         })
                         .finally(() => {
                             this.loading = false;

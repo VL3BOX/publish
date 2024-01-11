@@ -71,14 +71,12 @@
             <div class="m-publish-extend">
                 <el-divider content-position="left">设置</el-divider>
                 <publish-comment v-model="post.comment">
-                    <el-checkbox v-model="visible_for_self" :true-label="1" :false-label="0"
-                        >仅自己可见</el-checkbox
-                    >
-                    <el-checkbox v-model="open_white_list" :true-label="1" :false-label="0"
-                        >开启评论过滤</el-checkbox>
+                    <el-checkbox v-model="visible_for_self" :true-label="1" :false-label="0">仅自己可见</el-checkbox>
+                    <el-checkbox v-model="open_white_list" :true-label="1" :false-label="0">开启评论过滤</el-checkbox>
                 </publish-comment>
                 <publish-gift v-model="post.allow_gift"></publish-gift>
                 <publish-visible v-model="post.visible"></publish-visible>
+                <publish-guide :data="post"></publish-guide>
                 <publish-authors :id="id" :uid="post.post_author"></publish-authors>
             </div>
 
@@ -146,6 +144,7 @@ import publish_pz from "@/components/publish_pz";
 import publish_revision from "@/components/publish_revision.vue";
 import publish_at_authors from "@/components/publish_at_authors.vue";
 import pz_haste from "@/components/pz_haste.vue";
+import publish_guide from "@/components/publish_guide.vue";
 
 // 数据逻辑
 import { push, pull, getBreadCrumb } from "@/service/cms.js";
@@ -180,6 +179,7 @@ export default {
         "publish-revision": publish_revision,
         "publish-at-authors": publish_at_authors,
         "pz-haste": pz_haste,
+        "publish-guide": publish_guide,
     },
     data: function () {
         return {
@@ -269,7 +269,7 @@ export default {
     },
     mounted() {
         const id = this.$route.params.id;
-        id && this.loadCommentConfig('post', id);
+        id && this.loadCommentConfig("post", id);
     },
     methods: {
         // 初始化
@@ -312,7 +312,7 @@ export default {
             this.build();
 
             const data = this.buildExtend(lodash.cloneDeep(this.post));
-            let _post = []
+            let _post = [];
 
             if (this.id) {
                 _post = [this.id, data];
@@ -335,7 +335,7 @@ export default {
                         this.done(skip, result);
                     });
 
-                    this.setCommentConfig('post', result.ID);
+                    this.setCommentConfig("post", result.ID);
                 })
                 .finally(() => {
                     this.processing = false;
@@ -346,9 +346,13 @@ export default {
             this.post.meta_2 = ~~lodash.get(xfmap[this.post.post_subtype], "id") || 0;
         },
         // 扩展内容
-        buildExtend: function (data){
+        buildExtend: function (data) {
             // 包含 “自用”，修改visible为1
-            if (!data.post_title || data.post_title?.indexOf("自用") > -1 || data.post_meta?.data?.every(item => !item.macro)) {
+            if (
+                !data.post_title ||
+                data.post_title?.indexOf("自用") > -1 ||
+                data.post_meta?.data?.every((item) => !item.macro)
+            ) {
                 data.visible = 1;
             }
             return data;
