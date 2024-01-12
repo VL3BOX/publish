@@ -15,23 +15,17 @@
         </el-input>
 
         <div class="m-dashboard-box">
-            <ul
-                class="m-dashboard-box-list"
-                v-if="
-                    achievement_comment.data &&
-                        achievement_comment.data.length
-                "
-            >
+            <ul class="m-dashboard-box-list" v-if="achievement_comment.data && achievement_comment.data.length">
                 <li class="u-wiki" v-for="(comment, key) in achievement_comment.data" :key="key">
                     <span class="u-tab" v-text="getTypeLabel(comment.type)"></span>
-                    <a
-                        class="u-title"
-                        target="_blank"
-                        :href="comment.type + comment.link"
-                    >{{ comment.title || "无标题" }}</a>
-                    <span v-if="comment.checked == 0" class="u-mark pending">⌛ 等待审核</span>
-                    <span v-if="comment.checked == 1" class="u-mark">✔ 审核通过</span>
-                    <span v-if="comment.checked == 2" class="u-mark reject">❌ 审核驳回</span>
+                    <div class="u-header">
+                        <a class="u-title" target="_blank" :href="comment.type + comment.link">{{
+                            comment.title || "无标题"
+                        }}</a>
+                        <span v-if="comment.checked == 0" class="u-mark pending">⌛ 等待审核</span>
+                        <span v-if="comment.checked == 1" class="u-mark">✔ 审核通过</span>
+                        <span v-if="comment.checked == 2" class="u-mark reject">❌ 审核驳回</span>
+                    </div>
                     <div class="u-desc">
                         <span class="u-content">
                             <i class="el-icon-s-comment"></i>
@@ -40,18 +34,12 @@
                         <time class="u-desc-subitem">
                             <i class="el-icon-finished"></i>
                             发布 :
-                            {{
-                            new Date(comment.created * 1000)
-                            | dateFormat
-                            }}
+                            {{ new Date(comment.created * 1000) | dateFormat }}
                         </time>
                         <time class="u-desc-subitem">
                             <i class="el-icon-refresh"></i>
                             更新 :
-                            {{
-                            new Date(comment.updated * 1000)
-                            | dateFormat
-                            }}
+                            {{ new Date(comment.updated * 1000) | dateFormat }}
                         </time>
                     </div>
 
@@ -101,9 +89,7 @@ export default {
         return {
             loading: false,
 
-            active_name: this.$route.query.type
-                ? this.$route.query.type
-                : "wiki_post",
+            active_name: this.$route.query.type ? this.$route.query.type : "wiki_post",
             achievement_comment: {
                 data: null,
                 total: 0,
@@ -128,10 +114,8 @@ export default {
                 .then(
                     (data) => {
                         data = data.data;
-                        this.achievement_comment.data =
-                            data.code === 200 ? data.data.data : false;
-                        this.achievement_comment.total =
-                            data.code === 200 ? data.data.total : 0;
+                        this.achievement_comment.data = data.code === 200 ? data.data.data : false;
+                        this.achievement_comment.total = data.code === 200 ? data.data.total : 0;
                     },
                     () => {
                         this.achievement_comment.data = false;
@@ -193,11 +177,8 @@ export default {
 
                     // 置空输入框ID
                     this.$nextTick(() => {
-                        let input_doms = document.querySelectorAll(
-                            ".u-source-search input"
-                        );
-                        for (let i = 0; i < input_doms.length; i++)
-                            input_doms[i].value = "";
+                        let input_doms = document.querySelectorAll(".u-source-search input");
+                        for (let i = 0; i < input_doms.length; i++) input_doms[i].value = "";
                     });
                 } else {
                     this.achievement_comment.keyword = "";

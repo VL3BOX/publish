@@ -2,19 +2,12 @@
     <div class="m-dashboard-work m-dashboard-cms" v-loading="loading">
         <div class="m-dashboard-work-header">
             <h2 class="u-title">剑三骚话</h2>
-            <a
-                :href="publishLink"
-                class="u-publish el-button el-button--primary el-button--small"
-            >
+            <a :href="publishLink" class="u-publish el-button el-button--primary el-button--small">
                 <i class="el-icon-document"></i> 说句骚话
             </a>
         </div>
 
-        <el-input
-            class="m-dashboard-work-search"
-            placeholder="请输入搜索内容"
-            v-model="search"
-        >
+        <el-input class="m-dashboard-work-search" placeholder="请输入搜索内容" v-model="search">
             <span slot="prepend">关键词</span>
             <el-button slot="append" icon="el-icon-search"></el-button>
         </el-input>
@@ -22,21 +15,13 @@
         <div class="m-dashboard-box">
             <ul class="m-dashboard-box-list" v-if="data && data.length">
                 <li v-for="(item, i) in data" :key="i">
-                    <i
-                        class="u-item-icon el-icon-chat-dot-round"
-                        v-if="item.status"
-                    ></i>
-                    <i
-                        class="u-item-icon el-icon-lock"
-                        v-else
-                        title="待审核"
-                    ></i>
-                    <a
-                        class="u-title"
-                        target="_blank"
-                        :href="postLink(type, item.id)"
-                        >{{ item.content || "未命名" }}</a
-                    >
+                    <div class="u-header">
+                        <i class="u-item-icon el-icon-chat-dot-round" v-if="item.status"></i>
+                        <i class="u-item-icon el-icon-lock" v-else title="待审核"></i>
+                        <a class="u-title" target="_blank" :href="postLink(type, item.id)">{{
+                            item.desc || "未命名"
+                        }}</a>
+                    </div>
                     <div class="u-desc">
                         <time class="u-desc-subitem">
                             <i class="el-icon-finished"></i>
@@ -57,12 +42,7 @@
                             @click="edit(type, item.id)"
                             title="编辑"
                         ></el-button>
-                        <el-button
-                            size="mini"
-                            icon="el-icon-delete"
-                            @click="del(item.id, i)"
-                            title="删除"
-                        ></el-button>
+                        <el-button size="mini" icon="el-icon-delete" @click="del(item.id, i)" title="删除"></el-button>
                     </el-button-group>
                 </li>
             </ul>

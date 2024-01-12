@@ -15,9 +15,15 @@
         <div class="m-dashboard-box">
             <ul class="m-dashboard-box-list" v-if="data && data.length">
                 <li v-for="(item, i) in data" :key="i">
-                    <i class="u-item-icon u-success-icon el-icon-success" v-if="item.status == 1" title="上架中"></i>
-                    <i class="u-item-icon u-remove-icon el-icon-remove" v-else title="已下架"></i>
-                    <a class="u-title" target="_blank" :href="postLink(item.id)">{{ item.title || "未命名" }}</a>
+                    <div class="u-header">
+                        <i
+                            class="u-item-icon u-success-icon el-icon-success"
+                            v-if="item.status == 1"
+                            title="上架中"
+                        ></i>
+                        <i class="u-item-icon u-remove-icon el-icon-remove" v-else title="已下架"></i>
+                        <a class="u-title" target="_blank" :href="postLink(item.id)">{{ item.title || "未命名" }}</a>
+                    </div>
                     <div class="u-desc">
                         <time class="u-desc-subitem">
                             <i class="el-icon-finished"></i>
