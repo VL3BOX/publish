@@ -79,7 +79,7 @@ export default {
     watch: {
         form: {
             handler: function (val) {
-                if (this.isInit) {
+                if ((val.prev_post || val.next_post) && this.isInit) {
                     const { prev_post, next_post } = this.data;
 
                     const list = [prev_post, next_post].filter((item) => item).join(",");
@@ -89,6 +89,7 @@ export default {
                 }
             },
             deep: true,
+
         },
     },
     methods: {

@@ -65,8 +65,8 @@ export const AutoSaveMixin = {
                     .then((res) => {
                         this.post = {
                             ...res.data.data,
-                            prev_post: res.data.prev_post || '',
-                            next_post: res.data.next_post || '',
+                            prev_post: res.data.data.prev_post || '',
+                            next_post: res.data.data.next_post || '',
                         };
                     })
                     .finally(() => {
@@ -81,8 +81,8 @@ export const AutoSaveMixin = {
                         .then((res) => {
                             this.post = {
                                 ...res.data.data,
-                                prev_post: res.data.prev_post || '',
-                                next_post: res.data.next_post || '',
+                                prev_post: res.data.data.prev_post || '',
+                                next_post: res.data.data.next_post || '',
                             };
                         })
                         .finally(() => {
