@@ -14,9 +14,9 @@
                 v-model="data.prev_post"
                 clearable
             >
-                <el-option v-for="item in prev" :key="item.ID" :value="item.ID" :label="item.post_title" :disabled="disabledItem(item)">
+                <el-option v-for="item in prev" :key="item.ID" :value="item.ID" :label="item.post_title">
                     <div class="u-post-select__item">
-                        <el-tag size="mini" v-if="item.post_type" :type=" item.visible != 0 ? 'warning' : ''">{{ showPostType(item.post_type) }}</el-tag>
+                        <el-tag size="mini" v-if="item.post_type" :type="item.visible != 0 ? 'warning' : ''">{{ showPostType(item.post_type) }}</el-tag>
                         {{ item.post_title }}
                     </div></el-option
                 >
@@ -33,10 +33,9 @@
                 v-model="data.next_post"
                 clearable
             >
-                <el-option v-for="item in next" :key="item.ID" :value="item.ID" :label="item.post_title" :disabled="disabledItem(item)">
+                <el-option v-for="item in next" :key="item.ID" :value="item.ID" :label="item.post_title">
                     <div class="u-post-select__item">
-                        <el-tag size="mini" v-if="item.post_type">{{ showPostType(item.post_type) }}</el-tag>
-                        <el-tag size="mini" class="u-visible" :type="item.visible != 0 && 'info'">{{ item.visible != 0 && '非公开'}}</el-tag>
+                        <el-tag size="mini" v-if="item.post_type" :type=" item.visible != 0 ? 'warning' : ''">{{ showPostType(item.post_type) }}</el-tag>
                         {{ item.post_title }}
                     </div></el-option
                 >
@@ -78,13 +77,18 @@ export default {
     },
     watch: {
         form: {
-            handler: function (val) {
+            handler: async function (val) {
                 if ((val.prev_post || val.next_post) && this.isInit) {
                     const { prev_post, next_post } = this.data;
 
                     const list = [prev_post, next_post].filter((item) => item).join(",");
 
-                    list && this.loadPosts({ list });
+                    if (list) {
+                        const res = await this.loadPosts({ list });
+
+                        this.prev = [...res,...this.prev]
+                        this.next = [...res,...this.next]
+                    }
                     this.isInit = false;
                 }
             },
@@ -92,29 +96,37 @@ export default {
 
         },
     },
+    async mounted() {
+        const res = await this.loadPosts({
+            page: 1,
+            per: 5,
+        });
+        this.prev = cloneDeep(res);
+        this.next = cloneDeep(res);
+    },
     methods: {
-        remoteMethodPrev(keyword) {
+        async remoteMethodPrev(keyword) {
             if (keyword) {
-                getMyPosts({
+                const params = {
                     title: keyword,
                     page: 1,
                     per: 10,
-                }).then((res) => {
-                    this.prev = cloneDeep(res.data.data.list || []);
-                });
+                }
+                const res = await this.loadPosts(params);
+                this.prev = cloneDeep(res);
             } else {
                 this.prev = [];
             }
         },
-        remoteMethodNext(keyword) {
+        async remoteMethodNext(keyword) {
             if (keyword) {
-                getMyPosts({
+                const params = {
                     title: keyword,
                     page: 1,
                     per: 10,
-                }).then((res) => {
-                    this.next = cloneDeep(res.data.data.list || []);
-                });
+                }
+                const res = await this.loadPosts(params);
+                this.next = cloneDeep(res);
             } else {
                 this.next = [];
             }
@@ -122,16 +134,11 @@ export default {
         showPostType: function (type) {
             return __postType[type];
         },
-        loadPosts(params) {
-            getMyPosts(params).then((res) => {
-                const list = res.data.data.list || [];
-                this.prev = cloneDeep(list);
-                this.next = cloneDeep(list);
+        async loadPosts(params) {
+            return await getMyPosts(params).then((res) => {
+                return res.data.data?.list;
             });
         },
-        disabledItem(item) {
-            return item.visible != 0 || item.ID == this.data.ID;
-        }
     },
 };
 </script>
