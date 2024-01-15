@@ -41,9 +41,9 @@
                 >
             </el-select>
         </div>
-        <el-tooltip content="只可选择公开的文章">
+        <!-- <el-tooltip content="只可选择公开的文章">
             <i class="el-icon-question" style="margin-left: 10px;"></i>
-        </el-tooltip>
+        </el-tooltip> -->
     </div>
 </template>
 
