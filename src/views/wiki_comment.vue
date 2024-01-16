@@ -106,16 +106,18 @@ export default {
         comment_page_change(i = 1) {
             this.comment_page = i;
             this.loading = true;
-            get_comments({
-                keyword: this.achievement_comment.keyword,
+            const params = {
                 page: i,
-                limit: this.length,
-            })
+                per: this.length,
+            };
+            if (this.achievement_comment.keyword) {
+                params.keyword = this.achievement_comment.keyword;
+            }
+            get_comments(params)
                 .then(
-                    (data) => {
-                        data = data.data;
-                        this.achievement_comment.data = data.code === 200 ? data.data.data : false;
-                        this.achievement_comment.total = data.code === 200 ? data.data.total : 0;
+                    (res) => {
+                        this.achievement_comment.data = res.data.data.list;
+                        this.achievement_comment.total = res.data.data.total;
                     },
                     () => {
                         this.achievement_comment.data = false;
@@ -139,26 +141,14 @@ export default {
             this.$alert("确定要删除吗？", "确认信息", {
                 confirmButtonText: "确定",
                 callback: (action) => {
-                    remove_comment(comment.type, comment.id).then(
-                        (data) => {
-                            data = data.data;
-                            if (data.code === 200) {
-                                this.$notify({
-                                    title: "删除成功",
-                                    type: "success",
-                                });
-                                this.comment_page_change(this.post_page);
-                            } else {
-                                this.$notify({
-                                    title: "删除失败",
-                                    type: "error",
-                                });
-                            }
-                        },
-                        () => {
-                            this.$notify({ title: "删除失败", type: "error" });
-                        }
-                    );
+                    remove_comment(comment.id).then((data) => {
+                        data = data.data;
+                        this.$notify({
+                            title: "删除成功",
+                            type: "success",
+                        });
+                        this.comment_page_change(this.post_page);
+                    });
                 },
             });
         },
