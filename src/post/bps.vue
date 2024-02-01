@@ -26,6 +26,8 @@
                 <publish-changelog v-if="isChangelog" :post="post" ref="changelog"></publish-changelog>
                 <!-- 心法 -->
                 <publish-xf v-model="post.post_subtype" :client="post.client"></publish-xf>
+                <!-- 跨心法 -->
+                <publish-mix-subtype v-if="post.post_subtype == '通用'" v-model="post.mix_subtype" :client="post.client"></publish-mix-subtype>
             </div>
 
             <!-- 正文 -->
@@ -132,6 +134,7 @@ import publish_revision from "@/components/publish_revision.vue";
 import publish_at_authors from "@/components/publish_at_authors.vue";
 import publish_changelog from "@/components/publish_changelog.vue";
 import publish_guide from "@/components/publish_guide.vue";
+import publish_mix_subtype from "@/components/publish_mix_subtype.vue";
 
 // 数据逻辑
 import { push, pull, setPostMeta } from "@/service/cms.js";
@@ -164,6 +167,7 @@ export default {
         "publish-at-authors": publish_at_authors,
         "publish-changelog": publish_changelog,
         "publish-guide": publish_guide,
+        "publish-mix-subtype": publish_mix_subtype,
     },
     data: function () {
         return {
@@ -222,6 +226,8 @@ export default {
 
                 // 阅读权限（0公开，1仅自己，2亲友，3密码，4付费，5粉丝）
                 visible: 0,
+
+                mix_subtype: []
             },
 
             // 选项

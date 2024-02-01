@@ -210,6 +210,8 @@ export default {
 
                 // 是否包含视频
                 include_video: 0,
+
+                mix_subtype: [],
             },
         };
     },
