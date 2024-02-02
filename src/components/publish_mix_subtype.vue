@@ -6,7 +6,7 @@
                     v-for="(item, i) in xfmap"
                     :label="item.name"
                     :key="i"
-                    :value="item.id"
+                    :value="item.name"
                     v-show="item.client.includes(exact_client)"
                 >
                     <div class="m-xf-item">
