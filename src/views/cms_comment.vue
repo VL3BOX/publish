@@ -28,12 +28,12 @@
                         class="u-title"
                         target="_blank"
                         :href="postLink(item.category, item.postID)"
-                    >{{item.content || '未知'}}</a>
+                    >{{item.content || $t('未知')}}</a>
                     <!-- <span class="u-desc">{{item.content || '未知'}}</span> -->
                     <div class="u-desc">
                         <time class="u-desc-subitem">
                             <i class="el-icon-finished"></i>
-                            {{ $t('发布 :') }}
+                            {{ $t('发布') }} :
                             {{ item.commentDate | dateFormat }}
                         </time>
                     </div>

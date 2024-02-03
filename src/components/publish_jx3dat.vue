@@ -18,7 +18,7 @@
                         href="/tool/13912"
                         target="_blank"
                     >
-                        <i class="el-icon-info"></i> 点击查看发布帮助
+                        <i class="el-icon-info"></i> {{ $t('点击查看发布帮助') }}
                     </a>
                 </div>
 
@@ -39,7 +39,7 @@
                                         show-word-limit
                                         @change="checkDataName(item)"
                                         :disabled="i == 0"
-                                        :placeholder="i == 0 ? '默认版': '版本名称'"
+                                        :placeholder="i == 0 ? $t('默认版'): $t('版本名称')"
                                     >
                                         <template slot="prepend">
                                             <b
@@ -57,10 +57,10 @@
 
                                     <el-tooltip
                                         effect="dark"
-                                        content="设置不公开后,仍然可以通过订阅名下载,仅不做展示"
+                                        :content="$t('设置不公开后,仍然可以通过订阅名下载,仅不做展示')"
                                         placement="top"
                                     >
-                                        <span class="u-status">{{item.status? "公开": "私有"}}</span>
+                                        <span class="u-status">{{item.status? $t('公开'): $t('私有')}}</span>
                                     </el-tooltip>
                                 </div>
                             </div>
@@ -78,8 +78,8 @@
                             <h5 class="u-title">{{ $t('数据文件') }}</h5>
                             <div class="u-warning">
                                 <i class="el-icon-warning-outline"></i>
-                                当前数据文件将作为
-                                <b>{{ item.name }}</b>的文件上传，上传完后如若重新修改版本名称则需要重新上传对应文件
+                                {{ $t('当前数据文件将作为') }}
+                                <b>{{ item.name }}</b>{{ $t('的文件上传，上传完后如若重新修改版本名称则需要重新上传对应文件') }}
                             </div>
                             <input
                                 class="u-data-input"
@@ -153,7 +153,7 @@
                     <el-row class="u-tr">
                         <el-col :span="24">
                             <el-input v-model="jx3dats.github" placeholder="(非必填)">
-                                <template slot="prepend">Github订阅号</template>
+                                <template slot="prepend">{{ $t('Github订阅号') }}</template>
                                 <template slot="append">@github</template>
                             </el-input>
                         </el-col>
@@ -161,7 +161,7 @@
                     <el-row class="u-tr">
                         <el-col :span="24">
                             <el-input v-model="jx3dats.gitee" placeholder="(非必填)">
-                                <template slot="prepend">Gitee订阅号</template>
+                                <template slot="prepend">{{ $t('Gitee订阅号') }}</template>
                                 <template slot="append">@gitee</template>
                             </el-input>
                         </el-col>
@@ -169,7 +169,7 @@
                     <el-row class="u-tr">
                         <el-col :span="24">
                             <el-input v-model="jx3dats.aliyun" placeholder="(非必填)">
-                                <template slot="prepend">Aliyun订阅号</template>
+                                <template slot="prepend">{{ $t('Aliyun订阅号') }}</template>
                                 <template slot="append">@aliyun</template>
                             </el-input>
                         </el-col>
@@ -359,7 +359,7 @@ export default {
             // 目前设置最多3个版本
             if (this.jx3dats.data.length >= 3 && !this.isVIP) {
                 this.$alert(
-                    '默认只能设置3个版本，<a href="/vip/premium?from=jx3dat_feed" target="_blank">{{ $t('开通高级版账号') }}</a>无限制',
+                    '默认只能设置3个版本，<a href="/vip/premium?from=jx3dat_feed" target="_blank">开通高级版账号</a>无限制',
                     "消息",
                     {
                         dangerouslyUseHTMLString: true,

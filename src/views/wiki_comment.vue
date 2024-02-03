@@ -20,11 +20,11 @@
                     <span class="u-tab" v-text="getTypeLabel(comment.type)"></span>
                     <div class="u-header">
                         <a class="u-title" target="_blank" :href="comment.type + comment.link">{{
-                            comment.title || "无标题"
+                            comment.title || $t('无标题')
                         }}</a>
-                        <span v-if="comment.checked == 0" class="u-mark pending">⌛ 等待审核</span>
-                        <span v-if="comment.checked == 1" class="u-mark">✔ 审核通过</span>
-                        <span v-if="comment.checked == 2" class="u-mark reject">❌ 审核驳回</span>
+                        <span v-if="comment.checked == 0" class="u-mark pending">⌛ {{ $t('等待审核') }}</span>
+                        <span v-if="comment.checked == 1" class="u-mark">✔ {{ $t('审核通过') }}</span>
+                        <span v-if="comment.checked == 2" class="u-mark reject">❌ {{ $t('审核驳回') }}</span>
                     </div>
                     <div class="u-desc">
                         <span class="u-content">

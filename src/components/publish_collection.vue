@@ -2,10 +2,10 @@
     <div class="m-publish-collection-relation">
         <h5 class="u-schema">
             <!-- <span class="u-label">{{ $t('关联小册') }}</span> -->
-            <a class="u-add el-button el-button--primary el-button--mini" href="/publish/#/collection" target="_blank">+ 创建小册</a>
+            <a class="u-add el-button el-button--primary el-button--mini" href="/publish/#/collection" target="_blank">+ {{ $t('创建小册') }}</a>
             <slot></slot>
             <a class="u-help u-icon-links" href="/tool/20891" target="_blank">
-                <i class="el-icon-question"></i> 小册帮助指南
+                <i class="el-icon-question"></i> {{ $t('小册帮助指南') }}
             </a>
         </h5>
         <el-select
@@ -16,7 +16,7 @@
             :loading="loading"
             filterable
             clearable
-            placeholder="请选择一个小册（可选，非必填，可搜索）"
+            :placeholder="$t('请选择一个小册（可选，非必填，可搜索）')"
             @visible-change="visibleChange"
         >
             <el-option
@@ -27,13 +27,13 @@
             ></el-option>
             <div slot="empty" class="u-collection-null">
                 <div>
-                    没有找到匹配结果，
+                    {{ $t('没有找到匹配结果，') }}
                     <a href="/publish/#/collection" target="_blank">{{ $t('创建小册') }}</a>
                 </div>
             </div>
         </el-select>
         <div class="u-tip" v-if="isEmpty">
-            <i class="el-icon-info"></i> 当前没有任何小册，
+            <i class="el-icon-info"></i> {{ $t('当前没有任何小册，') }}
             <router-link to="/collection">{{ $t('创建小册') }}</router-link>
         </div>
     </div>

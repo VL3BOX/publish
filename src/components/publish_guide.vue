@@ -1,7 +1,7 @@
 <template>
     <!-- 前后引导 -->
     <div class="m-publish-guide">
-        <label class="el-form-item__label">前后引导
+        <label class="el-form-item__label">{{ $t('前后引导') }}
         </label>
         <div class="u-condition u-prev" key="prev">
             <span class="u-prepend el-input-group__prepend">{{ $t('上一篇') }}</span>

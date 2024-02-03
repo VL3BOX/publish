@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish m-index">
         <h1 class="m-title">
-            <i class="el-icon-edit-outline"></i> 创作台<span class="u-desc">{{ $t('丹青著华年，墨香漫天下') }}</span>
+            <i class="el-icon-edit-outline"></i> {{ $t('创作台') }}<span class="u-desc">{{ $t('丹青著华年，墨香漫天下') }}</span>
             <el-tooltip :content="$t('成为签约作者，获取更多福利与权益')" placement="top">
                 <a
                     href="/dashboard/cooperation"

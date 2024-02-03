@@ -1,13 +1,13 @@
 <template>
     <div class="m-publish-facedat">
 
-        <el-divider content-position="left">① 数据</el-divider>
+        <el-divider content-position="left">① {{ $t('数据') }}</el-divider>
         <el-form-item :label="$t('数据')">
             <input class="u-data-input" type="file" id="face_file" @change="processFile" accept=".jx3dat, .dat, .ini"/>
             <el-button type="primary" @click="selectData" icon="el-icon-upload2">{{ $t('上传脸型数据') }}</el-button>
             <span class="u-data-ready" v-show="facedat.file">
                 <i class="el-icon-success"></i>
-                已上传
+                {{ $t('已上传') }}
             </span>
         </el-form-item>
 
@@ -15,12 +15,12 @@
             <el-input v-model="facedat.data" type="textarea" :rows="6" disabled></el-input>
         </el-form-item>
 
-        <el-divider content-position="left">② 美图</el-divider>
+        <el-divider content-position="left">② {{ $t('美图') }}</el-divider>
         <el-form-item :label="$t('图册')">
             <UploadAlbum v-model="facedat.pics"></UploadAlbum>
         </el-form-item>
 
-        <el-divider content-position="left">③ 其它</el-divider>
+        <el-divider content-position="left">③ {{ $t('其它') }}</el-divider>
         <el-form-item :label="$t('作者')">
             <el-input v-model="facedat.author" :placeholder="$t('请注明原作者')"></el-input>
         </el-form-item>

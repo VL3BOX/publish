@@ -5,7 +5,7 @@
 				<img v-if="plan.public" svg-inline src="../assets/img/works/repo.svg" />
 				<img v-else svg-inline src="../assets/img/works/draft.svg" />
 			</i>
-			<a class="u-title" target="_blank" :href="`/item/#/plan_view/${plan.id}`">{{ plan.title || "无标题" }}</a>
+			<a class="u-title" target="_blank" :href="`/item/#/plan_view/${plan.id}`">{{ plan.title || $t('无标题') }}</a>
 			<div class="u-desc">
 				<time class="u-desc-subitem">
 					<i class="el-icon-finished"></i>

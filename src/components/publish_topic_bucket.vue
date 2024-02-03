@@ -11,7 +11,7 @@
                             <el-checkbox v-for="item in list" :label="item" :key="item"></el-checkbox>
                         </el-checkbox-group>
                     </div>
-                    <el-alert v-else class="u-alert" type="info" show-icon :title="search ? '未找到相关条目' : '请输入关键词进行查询'" :closable="false" center></el-alert>
+                    <el-alert v-else class="u-alert" type="info" show-icon :title="search ? $t('未找到相关条目') : $t('请输入关键词进行查询')" :closable="false" center></el-alert>
                 </div>
             </el-popover>
             <div class="m-topic-bucket__selected">

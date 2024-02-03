@@ -42,7 +42,7 @@
                         class="u-title"
                         target="_blank"
                         :href="postLink(item.post_type, item.ID)"
-                        >{{ item.post_title || "无标题" }}</a
+                        >{{ item.post_title || $t('无标题') }}</a
                     >
                     <div class="u-desc">
                         <span class="u-desc-subitem">

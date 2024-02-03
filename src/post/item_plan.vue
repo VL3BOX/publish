@@ -31,7 +31,7 @@
 				<div class="m-plan-list">
 					<!-- 搜索物品 -->
 					<div class="u-list-search" v-if="searchList.length">
-						<el-input class="u-title" placeholder="请输入物品名称（可适配中括号）" prefix-icon="el-icon-search" v-model.lazy.trim="keyword"></el-input>
+						<el-input class="u-title" :placeholder="$t('请输入物品名称（可适配中括号）')" prefix-icon="el-icon-search" v-model.lazy.trim="keyword"></el-input>
 						<draggable v-model="searchList" draggable=".u-change" :move="moveHandle" :group="{ name: 'draggable-item', pull: 'clone', put: false }">
 							<jx3-item-simple class="u-change" v-for="(item, index) in searchList" :key="index" :item="item" />
 						</draggable>
@@ -43,13 +43,13 @@
 						<el-col v-for="(relation, index) in data.relation" :key="index" :span="6">
 							<div class="u-list">
 								<i class="u-list-close el-icon-circle-close" @click="data.relation.splice(index, 1)"></i>
-								<el-input class="u-title" type="text" placeholder="子清单标题（选填）" v-model="relation.title" maxlength="20" show-word-limit></el-input>
+								<el-input class="u-title" type="text" :placeholder="$t('子清单标题（选填）')" v-model="relation.title" maxlength="20" show-word-limit></el-input>
 								<draggable class="u-item-drag" :list="relation.data" group="draggable-item" ghost-class="ghost">
 									<template v-if="relation.data && relation.data.length">
 										<div v-for="(item, key) in relation.data" :key="key" class="u-selected u-selected-item u-selected-count">
 											<itemIcon class="u-icon" :item_id="item.id" />
 											<div class="u-count">
-												<span>数量：</span>
+												<span>{{ $t('数量：') }}</span>
 												<el-input-number size="mini" v-model.number="item.count" :min="1" :label="$t('数字')"></el-input-number>
 											</div>
 											<i class="u-close el-icon-circle-close" @click="relation.data.splice(key, 1)"></i>

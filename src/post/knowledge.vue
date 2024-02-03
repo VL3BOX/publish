@@ -7,7 +7,7 @@
 
         <el-form class="m-publish-post">
             <div class="m-publish-source">
-                <el-divider content-position="left">选择通识 *</el-divider>
+                <el-divider content-position="left">{{ $t('选择通识') }} *</el-divider>
                 <el-radio-group class="m-publish-action" v-model="action">
                     <el-radio-button label="new" :disabled="isEditMode">{{ $t('新建词条') }}</el-radio-button>
                     <el-radio-button label="update">{{ $t('维护已有词条') }}</el-radio-button>
@@ -69,7 +69,7 @@
             </div>
 
             <div class="m-publish-remark">
-                <el-divider content-position="left">修订说明 *</el-divider>
+                <el-divider content-position="left">{{ $t('修订说明') }} *</el-divider>
                 <el-input
                     v-model="post.remark"
                     :maxlength="200"
@@ -81,7 +81,7 @@
             </div>
 
             <div class="m-publish-content">
-                <el-divider content-position="left">通识正文 *</el-divider>
+                <el-divider content-position="left">{{ $t('通识正文') }} *</el-divider>
                 <Tinymce v-model="post.content" :attachmentEnable="true" :resourceEnable="true" :height="600" />
             </div>
 
@@ -106,7 +106,7 @@
                     @blur="handleInputConfirm"
                 >
                 </el-input>
-                <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加标签 </el-button>
+                <el-button v-else class="button-new-tag" size="small" @click="showInput">+ {{ $t('添加标签') }} </el-button>
             </div>
 
             <div class="m-publish-commit">
@@ -117,7 +117,7 @@
                     type="primary"
                     @click="handleSubmit"
                     :disabled="processing"
-                    >提交通识
+                    >{{ $t('提交通识') }}
                 </el-button>
             </div>
         </el-form>

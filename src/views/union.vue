@@ -2,7 +2,7 @@
     <div class="m-dashboard-work m-dashboard-cms m-dashboard-union" v-loading="loading">
         <div class="m-dashboard-work-header">
             <h2 class="u-title">
-                联合创作
+                {{ $t('联合创作') }}
                 <span class="u-subtype">
                     <i class="el-icon-arrow-right"></i>
                     <span>{{subtype}}</span>
@@ -26,7 +26,7 @@
                             class="u-title"
                             target="_blank"
                             :href="postLink(item.union_post_raw.post_type, item.union_post_raw.ID)"
-                        >{{ item.union_post_raw.post_title || "无标题" }}</a>
+                        >{{ item.union_post_raw.post_title || $t('无标题') }}</a>
                         <div class="u-desc">
                             <span class="u-desc-subitem">
                                 <i class="el-icon-view"></i>

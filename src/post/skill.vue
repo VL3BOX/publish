@@ -7,7 +7,7 @@
 
         <el-form class="m-publish-post">
             <div class="m-publish-source">
-                <el-divider content-position="left">选择技能 *</el-divider>
+                <el-divider content-position="left">{{ $t('选择技能') }} *</el-divider>
                 <el-select class="u-source-id" v-model="post.source_id" :disabled="!!post.id" filterable
                     remote :remote-method="search_handle" :loading="options.loading">
                     <el-option
@@ -25,7 +25,7 @@
             </div>
 
             <div class="m-publish-remark">
-                <el-divider content-position="left">修订说明 *</el-divider>
+                <el-divider content-position="left">{{ $t('修订说明') }} *</el-divider>
                 <el-input
                     v-model="post.remark"
                     :maxlength="200"
@@ -37,7 +37,7 @@
             </div>
 
             <div class="m-publish-content">
-                <el-divider content-position="left">百科正文 *</el-divider>
+                <el-divider content-position="left">{{ $t('百科正文') }} *</el-divider>
                 <Tinymce v-model="post.content" :attachmentEnable="true" :resourceEnable="true" :height="400" />
             </div>
 
@@ -49,7 +49,7 @@
                     type="primary"
                     @click="toPublish"
                     :disabled="processing"
-                    >提交百科
+                    >{{ $t('提交百科') }}
                 </el-button>
             </div>
         </el-form>

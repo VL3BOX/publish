@@ -30,7 +30,7 @@
                 <!-- 配装 -->
                 <publish-pz v-model="post.pz" :limit="8" :query="pz_query">
                     <span class="u-pz-tip" slot="prepend">
-                        <i class="el-icon-warning-outline"></i> 展示你推荐的配装（不超过8个，非必选）
+                        <i class="el-icon-warning-outline"></i> {{ $t('展示你推荐的配装（不超过8个，非必选）') }}
                     </span>
                 </publish-pz>
                 <template #pre-prepend v-if="pz_query && pz_query.mount">
@@ -93,7 +93,7 @@
 
             <div class="m-publish-doc">
                 <el-checkbox v-model="hasRead" :true-label="1" :false-label="0"
-                    >{{ $t('我已阅读并了解') }}<a href="/notice/119" @click.stop target="_blank">《创作发布规范》</a></el-checkbox
+                    >{{ $t('我已阅读并了解') }}<a href="/notice/119" @click.stop target="_blank">{{ $t('《创作发布规范》') }}</a></el-checkbox
                 >
             </div>
 
@@ -104,7 +104,7 @@
                 </template>
                 <template v-else>
                     <el-button type="primary" @click="publish('publish', true)" :disabled="processing || !hasRead"
-                        >发 &nbsp;&nbsp; 布</el-button
+                        >{{ $t('发') }} &nbsp;&nbsp; {{ $t('布') }}</el-button
                     >
                     <el-button type="plain" @click="publish('draft', false)" :disabled="processing || !hasRead"
                         >{{ $t('保存为草稿') }}</el-button

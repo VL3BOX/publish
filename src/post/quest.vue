@@ -7,14 +7,14 @@
 
         <el-form class="m-publish-post">
             <div class="m-publish-source">
-                <el-divider content-position="left">选择任务 *</el-divider>
+                <el-divider content-position="left">{{ $t('选择任务') }} *</el-divider>
                 <el-select
                     class="u-source-id"
                     v-model="post.source_id"
                     filterable
                     remote
                     :disabled="!!post.id"
-                    placeholder="输入任务名称（可适配中括号形式）「回车」进行搜索"
+                    :placeholder="$t('输入任务名称（可适配中括号形式）「回车」进行搜索')"
                     :remote-method="search_handle"
                     :loading="options.loading"
                 >
@@ -33,12 +33,12 @@
             </div>
 
             <div class="m-publish-level">
-                <el-divider content-position="left">综合难度 *</el-divider>
+                <el-divider content-position="left">{{ $t('综合难度') }} *</el-divider>
                 <el-rate v-model="post.level" class="u-level"></el-rate>
             </div>
 
             <div class="m-publish-remark">
-                <el-divider content-position="left">修订说明 *</el-divider>
+                <el-divider content-position="left">{{ $t('修订说明') }} *</el-divider>
                 <el-input
                     v-model="post.remark"
                     :maxlength="200"
@@ -50,7 +50,7 @@
             </div>
 
             <div class="m-publish-content">
-                <el-divider content-position="left">攻略正文 *</el-divider>
+                <el-divider content-position="left">{{ $t('攻略正文') }} *</el-divider>
                 <Tinymce v-model="post.content" :attachmentEnable="true" :resourceEnable="true" :height="400" />
             </div>
 

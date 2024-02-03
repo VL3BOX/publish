@@ -6,18 +6,18 @@
         <div class="m-publish-namespace-box">
             <header class="m-publish-namespace-header">
                 <div class="u-tip">
-                    铭牌是一个可以通过关键词快速访问的功能，例如定义铭牌 "某某气纯宏"，则可以在浏览器地址栏中通过快速输入
+                    {{ $t('铭牌是一个可以通过关键词快速访问的功能，例如定义铭牌 "某某气纯宏"，则可以在浏览器地址栏中通过快速输入') }}
                     <a
                         href="https://剑网3.com/某某气纯宏"
                         target="_blank"
                     >
-                        <b>剑网3.com/某某气纯宏</b>
+                        <b>{{ $t('剑网3.com/某某气纯宏') }}</b>
                     </a>
-                    访问你输入的链接
+                    {{ $t('访问你输入的链接') }}
                 </div>
                 <div class="u-count">
                     <span class="u-count-txt">
-                        当前可建铭牌数：
+                        {{ $t('当前可建铭牌数：') }}
                         <b>{{ count }}</b> 个
                     </span>
                     <a
@@ -25,7 +25,7 @@
                         target="_blank"
                         class="u-btn-buy el-button el-button--primary el-button--mini"
                     >
-                        <span class="el-icon-shopping-cart-2"></span>购买铭牌
+                        <span class="el-icon-shopping-cart-2"></span>{{ $t('购买铭牌') }}
                     </a>
                     <!-- <a
                         href="/vip/namespace/?from=dashboard_namespace_create"

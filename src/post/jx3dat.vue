@@ -78,7 +78,7 @@
             </div>
 
             <div class="m-publish-doc">
-                <el-checkbox v-model="hasRead" :true-label="1" :false-label="0">{{ $t('我已阅读并了解') }}<a href="/notice/119" @click.stop target="_blank">《创作发布规范》</a></el-checkbox>
+                <el-checkbox v-model="hasRead" :true-label="1" :false-label="0">{{ $t('我已阅读并了解') }}<a href="/notice/119" @click.stop target="_blank">{{ $t('《创作发布规范》') }}</a></el-checkbox>
             </div>
 
             <!-- 按钮 -->
@@ -87,7 +87,7 @@
                     <el-button type="primary" @click="useDraft" :disabled="processing">{{ $t('使用此版本') }}</el-button>
                 </template>
                 <template v-else>
-                    <el-button type="primary" @click="publish('publish', true)" :disabled="processing || !hasRead">发 &nbsp;&nbsp; 布</el-button>
+                    <el-button type="primary" @click="publish('publish', true)" :disabled="processing || !hasRead">{{ $t('发') }} &nbsp;&nbsp; {{ $t('布') }}</el-button>
                     <el-button type="plain" @click="publish('draft', false)" :disabled="processing || !hasRead">{{ $t('保存为草稿') }}</el-button>
                 </template>
             </div>

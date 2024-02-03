@@ -34,7 +34,7 @@
         <el-form-item :label="$t('首领名称')" v-if="boss_list">
             <div class="u-boss-list">
                 <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">
-                    全部
+                    {{ $t('全部') }}
                 </el-checkbox>
                 <el-checkbox-group v-model="fbdata.fb_boss" @change="handleCheckedBossesChange">
                     <el-checkbox v-for="(boss, i) in boss_list" :label="boss" :key="i">{{ boss }}</el-checkbox>

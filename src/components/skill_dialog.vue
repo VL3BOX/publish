@@ -34,16 +34,16 @@
                     </el-radio-group>
                     <el-input
                         class="u-input"
-                        placeholder="请输入 ID 或 名称"
+                        :placeholder="$t('请输入 ID 或 名称')"
                         v-model="query"
                         @keyup.enter.native="search"
                     >
-                        <template slot="prepend">ID ／名称</template>
+                        <template slot="prepend">ID ／{{ $t('名称') }}</template>
                     </el-input>
                 </div>
 
                 <div v-if="total && done" class="m-resource-count">
-                    <i class="el-icon-s-data"></i> 共找到 <b>{{ total }}</b> 条记录
+                    <i class="el-icon-s-data"></i> {{ $t('共找到') }} <b>{{ total }}</b> {{ $t('条记录') }}
                 </div>
                 <ul class="m-resource-list">
                     <li v-for="(o, i) in skill" class="u-item" :key="i" @click="selectSkill(o, i)" ref="skill">
@@ -85,7 +85,7 @@
                     ></el-pagination>
                 </template>
 
-                <div class="m-database-tip" v-show="isBlank">❤ 请输入搜索条件查询</div>
+                <div class="m-database-tip" v-show="isBlank">❤ {{ $t('请输入搜索条件查询') }}</div>
             </div>
             <pvp-martial v-show="activeName === 'special'" :subtype="subtype" @selectSkill="selectSkill"></pvp-martial>
         </div>

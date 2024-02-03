@@ -28,15 +28,15 @@
                     <template slot="prepend">
                         <a class="u-get" target="_blank" href="/macro/talent2">
                             <i class="el-icon-warning"></i>
-                            获取编码
+                            {{ $t('获取编码') }}
                         </a>
                     </template>
                 </el-input>
             </div>
 
             <div class="m-macro-talent m-macro-item">
-                <h5 class="u-title">{{ client === "std" ? "奇穴" : "镇派" }}讲解</h5>
-                <el-input v-model="pvpData.talent_desc" placeholder="输入内容（选填）" type="textarea" show-word-limit maxlength="400" :rows="4">
+                <h5 class="u-title">{{ client === "std" ? $t('奇穴') : $t('镇派') }}{{ $t('讲解') }}</h5>
+                <el-input v-model="pvpData.talent_desc" :placeholder="$t('输入内容（选填）')" type="textarea" show-word-limit maxlength="400" :rows="4">
                 </el-input>
             </div>
         </div>
@@ -56,7 +56,7 @@
                     :class="`tab-content${i + 1}`"
                 >
                     <span slot="label" class="u-tab-box">
-                        <span class="u-tab-name" :title="item.name">{{ "连招" + zhNum[i] + " - " + item.name }}</span>
+                        <span class="u-tab-name" :title="item.name">{{ $t('连招') + zhNum[i] + " - " + item.name }}</span>
                     </span>
                     <el-form-item :label="$t('连招名称')" class="m-macro-desc">
                         <el-input
@@ -98,7 +98,7 @@
                         >
                     </el-form-item>
                     <el-form-item :label="$t('连招说明')" class="m-macro-desc">
-                        <el-input v-model="item.desc" type="textarea" maxlength="200" :rows="3"  show-word-limit placeholder="连招简要说明（选填）"></el-input>
+                        <el-input v-model="item.desc" type="textarea" maxlength="200" :rows="3"  show-word-limit :placeholder="$t('连招简要说明（选填）')"></el-input>
                     </el-form-item>
                     <div class="m-macro-op">
                         <el-button

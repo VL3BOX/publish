@@ -72,7 +72,7 @@
                             ><el-input
                                 v-model="post.post_meta.line"
                                 :placeholder="$t('所在分线')"
-                                ><template slot="append">线</template></el-input
+                                ><template slot="append">{{ $t('线') }}</template></el-input
                             ></el-col
                         >
                     </el-row>
@@ -86,7 +86,7 @@
                                 v-model="post.post_meta.num"
                                 :placeholder="$t('所在房号')"
                                 @change="computeArea(post.post_meta.num)"
-                                ><template slot="append">号</template></el-input
+                                ><template slot="append">{{ $t('号') }}</template></el-input
                             ></el-col
                         >
                         <el-col :span="8"
@@ -181,7 +181,7 @@
                                         v-show="data.file"
                                     >
                                         <i class="el-icon-success"></i>
-                                        已上传
+                                        {{ $t('已上传') }}
                                     </span>
                                 </el-col>
 

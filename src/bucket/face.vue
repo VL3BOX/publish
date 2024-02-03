@@ -22,7 +22,7 @@
                             :title="$t('上架中')"
                         ></i>
                         <i class="u-item-icon u-remove-icon el-icon-remove" v-else :title="$t('已下架')"></i>
-                        <a class="u-title" target="_blank" :href="postLink(item.id)">{{ item.title || "未命名" }}</a>
+                        <a class="u-title" target="_blank" :href="postLink(item.id)">{{ item.title || $t('未命名') }}</a>
                     </div>
                     <div class="u-desc">
                         <time class="u-desc-subitem">

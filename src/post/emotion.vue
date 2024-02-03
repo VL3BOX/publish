@@ -50,7 +50,7 @@
                     <el-input v-model="data.desc" :maxlength="120" show-word-limit :placeholder="$t('图片说明')"></el-input>
                 </el-form-item>
                 <el-form-item :label="$t('类别')">
-                    <el-select v-model="data.type" placeholder="选择门派（非必选）">
+                    <el-select v-model="data.type" :placeholder="$t('选择门派（非必选）')">
                         <el-option v-for="(item,i) in schoolmap" :key="i" :value="i" :label="item">
                             <div style="display: flex;align-items: center;">
                                 <img class="u-icon" style="margin-right: 20px" width="24" height="24" :src="i | showSchoolIcon" :alt="item" />
@@ -63,7 +63,7 @@
                     <el-switch v-model.number="data.original" :active-value="1" :inactive-value="0"></el-switch>
                 </el-form-item>
                 <el-form-item :label="$t('原作者')">
-                    <el-input v-model="data.author" placeholder="（非必填）"></el-input>
+                    <el-input v-model="data.author" :placeholder="$t('（非必填）')"></el-input>
                 </el-form-item>
                 <!-- 按钮 -->
                 <div class="m-publish-buttons">
@@ -71,7 +71,7 @@
                         type="primary"
                         @click="update"
                         :disabled="processing"
-                    >更 &nbsp;&nbsp; 新</el-button>
+                    >{{ $t('更') }} &nbsp;&nbsp; {{ $t('新') }}</el-button>
                 </div>
             </div>
 
@@ -84,11 +84,11 @@
                         @insert="updateFileList"
                         :text="$t('批量上传图片')"
                         :onlyImage="true"
-                        desc="一次最多同时上传10个文件（不超过5M）"
+                        :desc="$t('一次最多同时上传10个文件（不超过5M）')"
                         :accept="supportTypes"
                     />
                     <div class="u-tip">
-                        <i class="el-icon-info"></i> 图片格式支持gif/png/jpg/bmp/webp
+                        <i class="el-icon-info"></i> {{ $t('图片格式支持') }} gif/png/jpg/bmp/webp
                     </div>
                 </div>
 
@@ -136,7 +136,7 @@
                                 >
                                     <span slot="prepend">{{ $t('原作者') }}</span>
                                 </el-input>
-                                <el-select v-model="item.type" size="mini" style="margin-left: 10px;" placeholder="请选择门派（非必选）">
+                                <el-select v-model="item.type" size="mini" style="margin-left: 10px;" :placeholder="$t('请选择门派（非必选）')">
                                     <el-option v-for="(school,i) in schoolmap" :key="i" :value="i" :label="school">
                                         <div style="display: flex;align-items: center;">
                                             <img class="u-icon" style="margin-right: 20px" width="24" height="24" :src="i | showSchoolIcon" :alt="item" />
@@ -153,7 +153,7 @@
                             type="primary"
                             @click="publish"
                             :disabled="processing"
-                        >发 &nbsp;&nbsp; 布</el-button>
+                        >{{ $t('发') }} &nbsp;&nbsp; {{ $t('布') }}</el-button>
                     </div>
                 </div>
             </div>

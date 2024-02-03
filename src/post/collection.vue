@@ -28,7 +28,7 @@
                 </div>
                 <div class="m-publish-primary-block m-publish-collection-posts">
                     <el-divider content-position="left"
-                        >内容
+                        >{{ $t('内容') }}
                         <el-checkbox v-model="onlyMine" style="margin-left: 12px"
                             >{{ $t('仅从自己作品中') }}</el-checkbox
                         ></el-divider
@@ -119,10 +119,10 @@
 
                 <div class="m-publish-primary-block m-publish-description">
                     <el-divider content-position="left" @click="show_description = !show_description"
-                        >描述（选填）</el-divider
+                        >{{ $t('描述（选填）') }}</el-divider
                     >
-                    <span v-if="!show_description" @click="show_description = true" class="u-show">▼ 展开</span>
-                    <span v-if="show_description" @click="show_description = false" class="u-hide">▲ 收起</span>
+                    <span v-if="!show_description" @click="show_description = true" class="u-show">▼ {{ $t('展开') }}</span>
+                    <span v-if="show_description" @click="show_description = false" class="u-hide">▲ {{ $t('收起') }}</span>
                     <Tinymce
                         v-show="show_description"
                         v-model="collection.description"
@@ -137,13 +137,13 @@
                     <publish-banner
                         v-model="collection.image"
                         :size="[128, 168]"
-                        info="小册的封面尺寸为 372 * 532 ，支持JPG,PNG上传"
+                        :info="$t('小册的封面尺寸为 372 * 532 ，支持JPG,PNG上传')"
                     ></publish-banner>
                 </div>
             </div>
             <div class="m-publish-collection-publish">
                 <el-button class="u-button" type="primary" @click="submit" :loading="processing" :disabled="processing"
-                    >发 &nbsp;&nbsp; 布</el-button
+                    >{{ $t('发') }} &nbsp;&nbsp; {{ $t('布') }}</el-button
                 >
             </div>
         </el-form>

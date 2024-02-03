@@ -2,9 +2,9 @@
     <div class="m-publish m-draft">
         <div class="m-draft-header">
             <h1 class="m-title">
-                <i class="el-icon-receiving"></i> 草稿箱
+                <i class="el-icon-receiving"></i> {{ $t('草稿箱') }}
                 <el-tooltip class="item" effect="dark" placement="top" popper-class="m-draft-help-tip">
-                    <div slot="content">以下草稿是编辑器在当前浏览器下产生的临时本地草稿HTML源码，<br />{{ $t('并不存在于服务器中，仅用于断网或窗口异常关闭时恢复。') }}</div>
+                    <div slot="content">{{ $t('以下草稿是编辑器在当前浏览器下产生的临时本地草稿HTML源码，') }}<br />{{ $t('并不存在于服务器中，仅用于断网或窗口异常关闭时恢复。') }}</div>
                     <span class="u-help"><i class="el-icon-question"></i> <span>{{ $t('使用帮助') }}</span></span>
                 </el-tooltip>
             </h1>
@@ -30,7 +30,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="m-draft-null" v-else><i class="el-icon-warning-outline"></i> 暂无任何内容</div>
+            <div class="m-draft-null" v-else><i class="el-icon-warning-outline"></i> {{ $t('暂无任何内容') }}</div>
         </template>
         <template v-else>
             <el-alert :title="$t('您的浏览器太旧了，不支持本功能。')" type="error" show-icon></el-alert>

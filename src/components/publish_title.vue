@@ -7,7 +7,7 @@
             :minlength="2"
             show-word-limit
             required
-            :placeholder="placeholder || '请填写标题'"
+            :placeholder="placeholder || $t('请填写标题')"
         ></el-input>
         <slot></slot>
     </div>

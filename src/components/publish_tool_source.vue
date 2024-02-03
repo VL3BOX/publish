@@ -17,7 +17,7 @@
                 <el-tab-pane v-for="(item, i) in data.data" :key="i" :name="i + 1 + ''">
                     <span slot="label" class="u-tab-box">
                         <i class="el-icon-tickets u-tab-icon"></i>
-                        <span class="u-tab-name" :title="item.name">{{ i + 1 + "号位-" + item.name }}</span>
+                        <span class="u-tab-name" :title="item.name">{{ i + 1 + $t('号位-') + item.name }}</span>
                     </span>
                     <div class="m-source-name m-macro-item">
                         <h5 class="u-title">{{ $t('名称') }}</h5>
@@ -49,9 +49,9 @@
                             >
                             <span class="u-data-remark">{{ files[i] && files[i].name }}</span>
                             <div class="u-file" v-if="item.file">
-                                <span class="u-file__label">当前文件下载：</span>
+                                <span class="u-file__label">{{ $t('当前文件下载：') }}</span>
                                 <span class="u-file__value"
-                                    ><i class="el-icon-document"></i>{{ item.name || i + 1 + "号位" }}</span
+                                    ><i class="el-icon-document"></i>{{ item.name || i + 1 + $t('号位') }}</span
                                 >
                                 <a :href="item.file" target="_blank"
                                     ><i class="el-icon-download u-file__download"></i
@@ -61,13 +61,13 @@
                     </div>
                     <div class="m-source-file m-macro-item" v-if="item.mode == 0">
                         <h5 class="u-title">{{ $t('文件') }}</h5>
-                        <el-input v-model="item.file" placeholder="输入文件地址（例如网盘地址）"></el-input>
+                        <el-input v-model="item.file" :placeholder="$t('输入文件地址（例如网盘地址）')"></el-input>
                     </div>
                     <div class="m-source-remark m-macro-item">
                         <h5 class="u-title">{{ $t('备注') }}</h5>
                         <el-input
                             v-model="item.remark"
-                            placeholder="输入备注（例如网盘密码）"
+                            :placeholder="$t('输入备注（例如网盘密码）')"
                             :rows="3"
                             type="textarea"
                         ></el-input>

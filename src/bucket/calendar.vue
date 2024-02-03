@@ -29,13 +29,13 @@
                     <i
                         class="u-item-icon el-icon-lock"
                         v-else
-                        :title="item.status == 0 ? '待审核' : '审核未通过'"
+                        :title="item.status == 0 ? $t('待审核') : $t('审核未通过')"
                     ></i>
                     <a
                         class="u-title"
                         target="_blank"
                         :href="postLink(item.id)"
-                        >{{ item.desc || "未命名" }}</a
+                        >{{ item.desc || $t('未命名') }}</a
                     >
                     <div class="u-desc">
                         <time class="u-desc-subitem">
@@ -63,7 +63,7 @@
             <el-alert
                 v-else
                 class="m-dashboard-box-null"
-                :title="$t('没有找到相关条目')"相关条目')"
+                :title="$t('没有找到相关条目')"
                 type="info"
                 center
                 show-icon

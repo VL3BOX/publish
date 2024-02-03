@@ -32,8 +32,8 @@
                 ></el-input>
             </el-form-item>
             <el-form-item :label="$t('题目')" class="m-publish-exam-common">
-                <div>请设置10道题（每道题10分，满分100分），用半角逗号隔开，例如1,2,3</div>
-                <el-input v-model="list" show-word-limit required placeholder="请填写题目ID序列"></el-input>
+                <div>{{ $t('请设置10道题（每道题10分，满分100分），用半角逗号隔开，例如1,2,3') }}</div>
+                <el-input v-model="list" show-word-limit required :placeholder="$t('请填写题目ID序列')"></el-input>
             </el-form-item>
             <el-form-item :label="$t('外链')" class="m-publish-exam-common">
                 <div>{{ $t('如果为外链地址，则设置的题目将不会生效') }}</div>

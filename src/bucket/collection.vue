@@ -40,7 +40,7 @@
                             target="_blank"
                             :href="item.id | getCollectionLink"
                         >
-                            {{ item.title || "无标题" }}
+                            {{ item.title || $t('无标题') }}
                         </a>
                         <div class="u-desc">
                             <time class="u-desc-subitem">
@@ -74,7 +74,7 @@
             <el-alert
                 v-else
                 class="m-dashboard-box-null"
-                :title="$t('没有找到相关条目')"相关条目')"
+                :title="$t('没有找到相关条目')"
                 type="info"
                 center
                 show-icon

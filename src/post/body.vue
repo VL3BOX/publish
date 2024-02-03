@@ -23,7 +23,7 @@
                             :title="$t('设为主数据')"
                         />
                         <span class="u-attachment-text"
-                            >文件名: <b>{{ item.name }}</b></span
+                            >{{ $t('文件名') }}: <b>{{ item.name }}</b></span
                         >
                         <span class="u-attachment-remark"
                             ><el-input v-model="item.describe" :placeholder="$t('备注')" size="mini"></el-input
@@ -76,7 +76,7 @@
                     <el-radio-group v-model="post.price_type" :disabled="!isSuperAuthor">
                         <el-radio label="0">{{ $t('免费') }}</el-radio>
                         <!-- <el-radio label="1">{{ $t('盒币') }}</el-radio> -->
-                        <el-radio label="2">收费(金箔)</el-radio>
+                        <el-radio label="2">{{ $t('收费(金箔)') }}</el-radio>
                     </el-radio-group>
                     <el-input-number
                         class="u-price"
@@ -89,7 +89,7 @@
                     <div class="u-tip-box" v-if="post.price_type != '0' && post.price_count > 0">
                         <div class="u-warning">
                             <el-checkbox v-model="promise" disabled>
-                                我承诺该上传属于自己的原创作品或已得到原作者授权，且相关信息中不带有非授权的元素（比如贴图、字体）等，若违反法律规定我将承担全部责任，魔盒有权下架作品。
+                                {{ $t('我承诺该上传属于自己的原创作品或已得到原作者授权，且相关信息中不带有非授权的元素（比如贴图、字体）等，若违反法律规定我将承担全部责任，魔盒有权下架作品。') }}
                             </el-checkbox>
                         </div>
                     </div>
@@ -115,7 +115,7 @@
 
             <!-- 按钮 -->
             <div class="m-publish-buttons">
-                <el-button type="primary" @click="publish" :disabled="processing">发 &nbsp;&nbsp; 布</el-button>
+                <el-button type="primary" @click="publish" :disabled="processing">{{ $t('发') }} &nbsp;&nbsp; {{ $t('布') }}</el-button>
             </div>
         </el-form>
     </div>

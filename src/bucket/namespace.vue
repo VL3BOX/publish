@@ -28,7 +28,7 @@
                                         class="u-name"
                                         target="_blank"
                                         :href="item.link"
-                                        >{{ item.key || "未知" }}</a
+                                        >{{ item.key || $t('未知') }}</a
                                     >
                                 </div>
                                 <div class="u-desc">

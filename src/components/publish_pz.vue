@@ -43,7 +43,7 @@
                                 <i
                                     class="u-client i-client"
                                     :class="option.client || 'std'"
-                                >{{option.client == 'origin' ? '缘起' : '重制'}}</i>
+                                >{{option.client == 'origin' ? $t('缘起') : $t('重制')}}</i>
                                 <i
                                     class="u-level i-client"
                                     :class="option.client || 'std'"
@@ -70,7 +70,7 @@
                             v-if="item.id"
                             target="_blank"
                         >
-                            <i class="el-icon-view"></i>预览
+                            <i class="el-icon-view"></i>{{ $t('预览') }}
                         </a>
                         <el-button
                             class="delete"

@@ -50,7 +50,7 @@
                     type="primary"
                     @click="publish('publish',true)"
                     :disabled="processing"
-                >发 &nbsp;&nbsp; 布</el-button>
+                >{{ $t('发') }} &nbsp;&nbsp; {{ $t('布') }}</el-button>
                 <el-button type="plain" @click="publish('draft',false)" :disabled="processing">{{ $t('保存为草稿') }}</el-button>
             </div>
         </el-form>

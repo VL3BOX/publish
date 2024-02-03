@@ -19,7 +19,7 @@
                         <i class="u-item-icon el-icon-chat-dot-round" v-if="item.status"></i>
                         <i class="u-item-icon el-icon-lock" v-else :title="$t('待审核')"></i>
                         <a class="u-title" target="_blank" :href="postLink(type, item.id)">{{
-                            item.desc || "未命名"
+                            item.desc || $t('未命名')
                         }}</a>
                     </div>
                     <div class="u-desc">

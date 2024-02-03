@@ -1,6 +1,6 @@
 <template>
     <div class="m-publish-macro">
-        <el-divider content-position="left">宏</el-divider>
+        <el-divider content-position="left">{{ $t('宏') }}</el-divider>
         <div class="m-macro-box">
             <div class="m-macro-header">
                 <el-button
@@ -15,14 +15,14 @@
                     href="/tool/265/"
                 >
                     <i class="el-icon-s-management"></i>
-                    宏命令完整参考手册
+                    {{ $t('宏命令完整参考手册') }}
                 </a>
                 <a
                     class="m-macro-help el-button el-button--success is-plain el-button--small"
                     href="/tool/14671/"
                     target="_blank"
                 >
-                    <i class="el-icon-info"></i> 点击查看发布帮助
+                    <i class="el-icon-info"></i> {{ $t('点击查看发布帮助') }}
                 </a>
             </div>
 
@@ -34,10 +34,10 @@
                     </span>
                     <div class="m-macro-cloud m-macro-item">
                         <h5 class="u-title">
-                            云端宏图标/名称
+                            {{ $t('云端宏图标/名称') }}
                             <a class="u-icon-links" href="/app/icons" target="_blank">
                                 <i class="el-icon-question"></i>
-                                图标大全
+                                {{ $t('图标大全') }}
                             </a>
                         </h5>
                         <div class="u-group">
@@ -84,7 +84,7 @@
                             <template slot="prepend">
                                 <a class="u-get" target="_blank" href="/app/talent">
                                     <i class="el-icon-warning"></i>
-                                    获取编码
+                                    {{ $t('获取编码') }}
                                 </a>
                             </template>
                         </el-input>
@@ -102,22 +102,22 @@
                             <template slot="prepend">
                                 <a class="u-get" target="_blank" href="/macro/talent2">
                                     <i class="el-icon-warning"></i>
-                                    获取编码
+                                    {{ $t('获取编码') }}
                                 </a>
                             </template>
                         </el-input>
                     </div>
                     <div class="m-macro-macro">
                         <h5 class="u-title">
-                            宏内容
+                            {{ $t('宏内容') }}
                             <a class="u-icon-links" href="/macro/macroeditor" target="_blank">
                                 <i class="el-icon-question"></i>
-                                智能中文宏编辑器
+                                {{ $t('智能中文宏编辑器') }}
                             </a>
                         </h5>
                         <el-input
                             v-model="item.macro"
-                            placeholder="注释请写在说明中,勿写在宏内部"
+                            :placeholder="$t('注释请写在说明中,勿写在宏内部')"
                             :minlength="1"
                             :maxlength="128"
                             show-word-limit
@@ -150,7 +150,7 @@
                         <el-row>
                             <el-col :span="8" class="u-speed">
                                 <el-input v-model="item.speed" :placeholder="$t('填写推荐的急速阈值')">
-                                    <template slot="prepend">急速阈值
+                                    <template slot="prepend">{{ $t('急速阈值') }}
                                         <slot name="pre-prepend"></slot>
                                     </template>
                                 </el-input>
@@ -159,7 +159,7 @@
                         </el-row>
                     </el-form-item>
                     <el-form-item :label="$t('说明')" class="m-macro-desc">
-                        <el-input v-model="item.desc" type="textarea" placeholder="重要说明（会出现在宏第一行）"></el-input>
+                        <el-input v-model="item.desc" type="textarea" :placeholder="$t('重要说明（会出现在宏第一行）')"></el-input>
                     </el-form-item>
                     <div class="m-macro-op">
                         <el-button

@@ -1,7 +1,7 @@
 <template>
     <div class="m-dashboard m-dashboard-work m-dashboard-wiki" v-loading="loading">
         <div class="m-dashboard-work-header">
-            <h2 class="u-title">{{ typeLabel }}百科</h2>
+            <h2 class="u-title">{{ typeLabel + $t('百科') }}</h2>
             <a :href="publishLink" class="u-publish el-button el-button--primary el-button--small"
                 ><i class="el-icon-document"></i> {{ $t('发布作品') }}</a
             >
@@ -23,12 +23,12 @@
                     <span class="u-tab" v-text="getTypeLabel(post.type)"></span>
                     <div class="u-header">
                         <a class="u-title" target="_blank" :href="getLink(post)">
-                            {{ post.title || "无标题" }}
+                            {{ post.title || $t('无标题') }}
                         </a>
-                        <span v-if="post.checked == 0" class="u-mark pending">⌛ 等待审核</span>
-                        <span v-if="post.checked == 1" class="u-mark">✔ 审核通过</span>
-                        <span v-if="post.checked == 2" class="u-mark reject">❌ 审核驳回</span>
-                        <span v-if="post.checked == 3" class="u-mark hold">🔐 等待验证</span>
+                        <span v-if="post.checked == 0" class="u-mark pending">⌛ {{ $t('等待审核') }}</span>
+                        <span v-if="post.checked == 1" class="u-mark">✔ {{ $t('审核通过') }}</span>
+                        <span v-if="post.checked == 2" class="u-mark reject">❌ {{ $t('审核驳回') }}</span>
+                        <span v-if="post.checked == 3" class="u-mark hold">🔐 {{ $t('等待验证') }}</span>
                     </div>
                     <div class="u-desc">
                         <span

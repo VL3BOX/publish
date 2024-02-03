@@ -26,7 +26,7 @@
                         <i class="u-delete el-icon-delete" @click="remove(item,i)"></i>
                     </el-tooltip>
                 </div>
-                <el-button plain size="small" @click="openPop" type="primary">+ 添加联合创作者</el-button>
+                <el-button plain size="small" @click="openPop" type="primary">+ {{ $t('添加联合创作者') }}</el-button>
             </div>
             <UserPop :title="$t('添加用户')" v-model="visible" @confirm="addAuthor" />
         </el-form-item>

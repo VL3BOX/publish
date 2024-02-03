@@ -38,8 +38,8 @@
                     <h5 class="u-title">{{ $t('数据文件') }}</h5>
                     <div class="u-warning">
                         <i class="el-icon-warning-outline"></i>
-                        当前数据文件将作为
-                        <b>{{ item.lanren_type }}</b> 的文件上传，上传完后如若重新修改版本名称则需要重新上传对应文件
+                        {{ $t('当前数据文件将作为') }}
+                        <b>{{ item.lanren_type }}</b> {{ $t('的文件上传，上传完后如若重新修改版本名称则需要重新上传对应文件') }}
                     </div>
                     <input
                         class="u-data-input"
@@ -67,7 +67,7 @@
                         class="u-fileurl"
                         :class="{ isUploaded: item.isUploaded }"
                         @change="aniLanren(item)"
-                        :placeholder="$t('数据地址')"数据地址')"数据地址')"
+                        :placeholder="$t('数据地址')"
                         :disabled="true"
                         :value="item.file"
                         v-if="item.file"

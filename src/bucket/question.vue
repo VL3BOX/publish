@@ -9,14 +9,14 @@
                 class="u-title"
                 target="_blank"
                 :href="postLink(item.id)"
-            >[{{ item.type | typeFormat }}] {{ item.title || "无标题" }}</a>
+            >[{{ item.type | typeFormat }}] {{ item.title || $t('无标题') }}</a>
             <div class="u-desc">
                 <span class="u-desc-subitem">
                     {{ $t('编号 :') }}
                     <b>{{ item.id }}</b>
                 </span>
                 <span class="u-status u-desc-subitem">
-                    状态:
+                    {{ $t('状态') }}:
                     <b
                         :class="{
                             pass: item.status > 0,
@@ -25,7 +25,7 @@
                         }"
                     >{{ statusmap[item.status] }}</b>
                 </span>
-                <time class="u-time u-desc-subitem">提交于: {{ item.createTime | dateFormat }}</time>
+                <time class="u-time u-desc-subitem">{{ $t('提交于') }}: {{ item.createTime | dateFormat }}</time>
             </div>
             <el-button-group class="u-action">
                 <el-button size="mini" icon="el-icon-edit" :title="$t('编辑')" @click="edit(item.id)"></el-button>

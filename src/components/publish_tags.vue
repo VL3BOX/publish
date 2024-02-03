@@ -1,12 +1,12 @@
 <template>
     <div class="m-publish-tags">
-        <el-form-item :label="label || '标签'">
+        <el-form-item :label="label || $t('标签')">
             <template v-if="tags && tags.length">
                 <el-checkbox-group v-model="tag">
                     <el-checkbox v-for="item in tags" :label="item" :key="item"></el-checkbox>
                 </el-checkbox-group>
             </template>
-            <span v-else>无</span>
+            <span v-else>{{ $t('无') }}</span>
         </el-form-item>
         <slot></slot>
     </div>
