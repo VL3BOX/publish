@@ -4,7 +4,7 @@
             <h2 class="u-title">{{ $t('反馈建议') }}</h2>
         </div>
 
-        <!-- <el-input class="m-dashboard-work-search" placeholder="请输入搜索内容" v-model="search">
+        <!-- <el-input class="m-dashboard-work-search" :placeholder="$t('请输入搜索内容')" v-model="search">
             <span slot="prepend">{{ $t('关键词') }}</span>
             <el-button slot="append" icon="el-icon-search"></el-button>
         </el-input>-->
@@ -37,12 +37,12 @@
                         </span>-->
                         <time class="u-desc-subitem">
                             <i class="el-icon-finished"></i>
-                            留言时间 :
+                            {{ $t('留言时间 :') }}
                             {{ item.post_date | dateFormat }}
                         </time>
                         <!-- <time class="u-desc-subitem">
                             <i class="el-icon-refresh"></i>
-                            更新 :
+                            {{ $t('更新 :') }}
                             {{ item.post_modified | dateFormat }}
                         </time>-->
                     </div>
@@ -51,7 +51,7 @@
                         <el-button
                             size="mini"
                             icon="el-icon-delete"
-                            title="删除"
+                            :title="$t('删除')"
                             @click="del(item.ID,i)"
                         ></el-button>
                     </el-button-group>
@@ -60,7 +60,7 @@
             <el-alert
                 v-else
                 class="m-dashboard-box-null"
-                title="没有找到相关条目"
+                :title="$t('没有找到相关条目')"
                 type="info"
                 center
                 show-icon

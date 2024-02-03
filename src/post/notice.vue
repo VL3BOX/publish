@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-box" v-loading="loading">
         <!-- 头部 -->
-        <publish-header name="公告资讯"></publish-header>
+        <publish-header :name="$t('公告资讯')"></publish-header>
 
         <el-form label-position="left" label-width="80px">
             <!-- 标题 -->

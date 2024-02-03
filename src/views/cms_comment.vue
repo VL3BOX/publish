@@ -6,7 +6,7 @@
 
         <el-input
             class="m-dashboard-work-search u-source-search"
-            placeholder="请输入搜索内容"
+            :placeholder="$t('请输入搜索内容')"
             v-model="search"
         >
             <template slot="prepend">{{ $t('关键词') }}</template>
@@ -33,13 +33,13 @@
                     <div class="u-desc">
                         <time class="u-desc-subitem">
                             <i class="el-icon-finished"></i>
-                            发布 :
+                            {{ $t('发布 :') }}
                             {{ item.commentDate | dateFormat }}
                         </time>
                     </div>
 
                     <el-button-group class="u-action">
-                        <el-tooltip class="item" effect="dark" content="删除" placement="top-start">
+                        <el-tooltip class="item" effect="dark" :content="$t('删除')" placement="top-start">
                             <el-button size="mini" icon="el-icon-delete" @click="del(item.id,i)"></el-button>
                         </el-tooltip>
                     </el-button-group>
@@ -48,7 +48,7 @@
             <el-alert
                 v-else
                 class="m-dashboard-box-null"
-                title="没有找到相关条目"
+                :title="$t('没有找到相关条目')"
                 type="info"
                 center
                 show-icon

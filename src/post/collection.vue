@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-box">
         <!-- 头部 -->
-        <publish-header name="剑三小册" :localDraft="false">
+        <publish-header :name="$t('剑三小册')" :localDraft="false">
             <slot name="header"></slot>
         </publish-header>
 
@@ -11,7 +11,7 @@
                 <el-divider content-position="left">{{ $t('标题') }}</el-divider>
                 <el-input
                     v-model="collection.title"
-                    placeholder="请输入小册标题"
+                    :placeholder="$t('请输入小册标题')"
                     maxlength="30"
                     show-word-limit
                 ></el-input>
@@ -22,7 +22,7 @@
                     <el-divider content-position="left">{{ $t('可见性') }}</el-divider>
                     <el-radio v-model.number="collection.public" :label="this.public.PUBLIC">{{ $t('公开') }}</el-radio>
                     <el-radio v-model.number="collection.public" :label="this.public.PRIVATE">{{ $t('私有') }}</el-radio>
-                    <el-tooltip content="私有仅使该小册不出现在公开小册大厅中" placement="top">
+                    <el-tooltip :content="$t('私有仅使该小册不出现在公开小册大厅中')" placement="top">
                         <i class="el-icon-info"></i>
                     </el-tooltip>
                 </div>
@@ -45,7 +45,7 @@
                             <i class="u-delete el-icon-close" @click="collection.posts.splice(key, 1)"></i>
                             <el-row class="m-posts-item" :gutter="10">
                                 <el-col :span="4" class="u-collection-type">
-                                    <el-select class="u-item-key" v-model="item.type" placeholder="请选择作品类型">
+                                    <el-select class="u-item-key" v-model="item.type" :placeholder="$t('请选择作品类型')">
                                         <el-option
                                             v-for="(type, k) in source_types"
                                             :label="type"
@@ -61,7 +61,7 @@
                                         v-model="item.id"
                                         filterable
                                         remote
-                                        placeholder="通过输入作品标题进行搜索"
+                                        :placeholder="$t('通过输入作品标题进行搜索')"
                                         :remote-method="
                                             (query) => {
                                                 search_handle(query, item);
@@ -105,7 +105,7 @@
                                     ></el-input>
                                 </el-col>
                                 <el-col :span="12" class="u-collection-url" v-if="item.url">
-                                    <el-input v-model="item.title" placeholder="请输入自定义标题"></el-input>
+                                    <el-input v-model="item.title" :placeholder="$t('请输入自定义标题')"></el-input>
                                 </el-col>
                             </el-row>
                         </li>

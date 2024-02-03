@@ -28,7 +28,7 @@
                     <h5 class="u-title">{{ $t('数据标题') }}</h5>
                     <el-input
                         v-model="item.desc"
-                        placeholder="数据描述"
+                        :placeholder="$t('数据描述')"
                         :maxlength="50"
                         show-word-limit
                     ></el-input>
@@ -67,7 +67,7 @@
                         class="u-fileurl"
                         :class="{ isUploaded: item.isUploaded }"
                         @change="aniLanren(item)"
-                        placeholder="数据地址"
+                        :placeholder="$t('数据地址')"数据地址')"数据地址')"
                         :disabled="true"
                         :value="item.file"
                         v-if="item.file"

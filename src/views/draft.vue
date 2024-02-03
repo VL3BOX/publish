@@ -33,7 +33,7 @@
             <div class="m-draft-null" v-else><i class="el-icon-warning-outline"></i> 暂无任何内容</div>
         </template>
         <template v-else>
-            <el-alert title="您的浏览器太旧了，不支持本功能。" type="error" show-icon></el-alert>
+            <el-alert :title="$t('您的浏览器太旧了，不支持本功能。')" type="error" show-icon></el-alert>
         </template>
     </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-box" v-loading="loading">
         <!-- 头部 -->
-        <publish-header name="剑三茶馆">
+        <publish-header :name="$t('剑三茶馆')">
             <publish-revision :enable="true" :post-id="id"></publish-revision>
         </publish-header>
 
@@ -20,7 +20,7 @@
                 <publish-subtype v-model="post.post_subtype" :options="bbs_types"></publish-subtype>
 
                 <!-- 主题 -->
-                <publish-tags v-model="post.topics" :options="topics" label="主题"></publish-tags>
+                <publish-tags v-model="post.topics" :options="topics" :label="$t('主题')"></publish-tags>
 
                 <!-- 标签 -->
                 <!-- <publish-topic-bucket v-model="buckets"></publish-topic-bucket> -->

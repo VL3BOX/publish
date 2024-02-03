@@ -6,13 +6,13 @@
                 :href="publishLink"
                 class="u-publish el-button el-button--primary el-button--small"
             >
-                <i class="el-icon-document"></i> 创建小册
+                <i class="el-icon-document"></i> {{ $t('创建小册') }}
             </a>
         </div>
 
         <el-input
             class="m-dashboard-work-search"
-            placeholder="请输入搜索内容"
+            :placeholder="$t('请输入搜索内容')"
             v-model="search"
         >
             <span slot="prepend">{{ $t('关键词') }}</span>
@@ -45,12 +45,12 @@
                         <div class="u-desc">
                             <time class="u-desc-subitem">
                                 <i class="el-icon-finished"></i>
-                                发布 :
+                                {{ $t('发布 :') }}
                                 {{ item.created | dateFormat }}
                             </time>
                             <time class="u-desc-subitem">
                                 <i class="el-icon-refresh"></i>
-                                更新 :
+                                {{ $t('更新 :') }}
                                 {{ item.updated | dateFormat }}
                             </time>
                         </div>
@@ -59,13 +59,13 @@
                                 size="mini"
                                 icon="el-icon-edit"
                                 @click="post_edit(item.id)"
-                                title="编辑"
+                                :title="$t('编辑')"
                             ></el-button>
                             <el-button
                                 size="mini"
                                 icon="el-icon-delete"
                                 @click="post_del(item.id)"
-                                title="删除"
+                                :title="$t('删除')"
                             ></el-button>
                         </el-button-group>
                     </li>
@@ -74,7 +74,7 @@
             <el-alert
                 v-else
                 class="m-dashboard-box-null"
-                title="没有找到相关条目"
+                :title="$t('没有找到相关条目')"相关条目')"
                 type="info"
                 center
                 show-icon

@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-box">
         <!-- 头部 -->
-        <publish-header name="成就百科">
+        <publish-header :name="$t('成就百科')">
             <slot name="header"></slot>
         </publish-header>
 
@@ -40,7 +40,7 @@
                     :minlength="1"
                     show-word-limit
                     required
-                    placeholder="请简单描述一下本次修订的说明"
+                    :placeholder="$t('请简单描述一下本次修订的说明')"
                 ></el-input>
             </div>
 

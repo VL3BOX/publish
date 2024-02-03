@@ -1,6 +1,6 @@
 <template>
     <div class="m-publish-comment">
-        <el-form-item label="评论开关">
+        <el-form-item :label="$t('评论开关')">
             <el-switch
                 v-model="comment"
                 active-color="#13ce66"

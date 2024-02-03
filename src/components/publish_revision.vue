@@ -2,7 +2,7 @@
     <div class="m-revision" v-if="ready">
         <el-button type="primary" @click="view" size="small" icon="el-icon-folder">{{ $t('历史版本') }}</el-button>
 
-        <el-drawer title="历史版本" :visible.sync="show" z-index="2100" class="m-revision-drawer" append-to-body>
+        <el-drawer :title="$t('历史版本')" :visible.sync="show" z-index="2100" class="m-revision-drawer" append-to-body>
             <h3 class="u-revision-title" slot="title">{{ $t('历史版本') }}</h3>
             <main class="m-revision-container" v-loading="loading">
                 <div class="u-actions">
@@ -21,13 +21,13 @@
                                     </span>
                                 </el-tooltip>
                                 <em class="u-time">{{ item.updated_at | formatDate }}</em>
-                                <span class="u-creator" v-if="item.user_info" title="创建人">{{ item.user_info.display_name }}</span>
-                                <i class="u-edit el-icon-edit" @click="remark(item)" title="添加备注"></i>
+                                <span class="u-creator" v-if="item.user_info" :title="$t('创建人')">{{ item.user_info.display_name }}</span>
+                                <i class="u-edit el-icon-edit" @click="remark(item)" :title="$t('添加备注')"></i>
                             </span>
 
                             <el-button-group>
-                                <el-button size="mini" icon="el-icon-view" @click="use(item)" title="预览"></el-button>
-                                <el-button size="mini" icon="el-icon-delete" @click="del(item)" title="删除"></el-button>
+                                <el-button size="mini" icon="el-icon-view" @click="use(item)" :title="$t('预览')"></el-button>
+                                <el-button size="mini" icon="el-icon-delete" @click="del(item)" :title="$t('删除')"></el-button>
                             </el-button-group>
                         </li>
 
@@ -42,7 +42,7 @@
                         ></el-pagination>
                     </ul>
 
-                    <el-alert class="u-null" v-else title="当前没有任何历史版本" type="info" show-icon></el-alert>
+                    <el-alert class="u-null" v-else :title="$t('当前没有任何历史版本')" type="info" show-icon></el-alert>
                 </div>
             </main>
         </el-drawer>

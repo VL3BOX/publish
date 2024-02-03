@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-box p-publish-macro" v-loading="loading">
         <!-- 头部 -->
-        <publish-header name="云端宏">
+        <publish-header :name="$t('云端宏')">
             <publish-revision :enable="true" :post-id="id"></publish-revision>
         </publish-header>
         <span v-html="macro_publish_ac" v-if="macro_publish_ac"></span>

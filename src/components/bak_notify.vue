@@ -4,7 +4,7 @@
             v-model="notify.feedEnable"
             active-color="#0366d6"
             inactive-color="#999"
-            active-text="通知作品订阅用户"
+            :active-text="$t('通知作品订阅用户')"
             disabled
         >
         </el-switch>
@@ -12,7 +12,7 @@
             v-model="notify.followEnable"
             active-color="#0366d6"
             inactive-color="#999"
-            active-text="通知粉丝"
+            :active-text="$t('通知粉丝')"
             disabled
         >
         </el-switch>
@@ -20,7 +20,7 @@
             v-model="notify.tencentEnable"
             active-color="#0366d6"
             inactive-color="#999"
-            active-text="同步至腾讯文档"
+            :active-text="$t('同步至腾讯文档')"
             disabled
         >
         </el-switch>
@@ -28,7 +28,7 @@
             v-model="notify.weiboEnable"
             active-color="#0366d6"
             inactive-color="#999"
-            active-text="同步至微博头条文章"
+            :active-text="$t('同步至微博头条文章')"
             disabled
         >
         </el-switch>
@@ -36,7 +36,7 @@
             v-model="notify.tuilanEnable"
             active-color="#0366d6"
             inactive-color="#999"
-            active-text="同步至推栏"
+            :active-text="$t('同步至推栏')"
             disabled
         >
         </el-switch>

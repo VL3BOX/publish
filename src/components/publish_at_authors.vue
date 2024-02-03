@@ -7,7 +7,7 @@
                     <span class="u-name">
                         {{item.display_name}}
                     </span>
-                    <el-tooltip class="item" effect="dark" content="移除" placement="top">
+                    <el-tooltip class="item" effect="dark" :content="$t('移除')" placement="top">
                         <i class="u-delete el-icon-delete" @click="remove(item,i)"></i>
                     </el-tooltip>
                 </div>

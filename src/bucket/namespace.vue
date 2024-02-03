@@ -6,7 +6,7 @@
                 :href="publishLink"
                 class="u-publish el-button el-button--primary el-button--small"
             >
-                <i class="el-icon-document"></i> 创建铭牌
+                <i class="el-icon-document"></i> {{ $t('创建铭牌') }}
             </a>
         </div>
 
@@ -39,7 +39,7 @@
                                         }}</b>
                                     </span>
                                     <time class="u-time u-desc-subitem"
-                                        >创建于 :
+                                        >{{ $t('创建于 :') }}
                                         {{ item.created | dateFormat }}</time
                                     >
                                 </div>
@@ -55,7 +55,7 @@
                                             item.source_id
                                         )
                                     "
-                                    title="编辑"
+                                    :title="$t('编辑')"
                                 ></el-button>
                             </el-button-group>
                         </div>
@@ -65,7 +65,7 @@
             <el-alert
                 v-else
                 class="m-dashboard-box-null"
-                title="没有找到相关条目"
+                :title="$t('没有找到相关条目')"
                 type="info"
                 center
                 show-icon

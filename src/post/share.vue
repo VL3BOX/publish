@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-box m-publish-box-facedata" v-loading="loading">
         <!-- 头部 -->
-        <publish-header name="捏脸分享"></publish-header>
+        <publish-header :name="$t('捏脸分享')"></publish-header>
 
         <el-form label-position="left" label-width="80px">
 
@@ -16,8 +16,8 @@
                 <!-- 数据 -->
                 <publish-facedat v-model="post.post_meta" @updateMeta="updateMeta"></publish-facedat>
 
-                <el-form-item label="备注">
-                    <publish-title v-model="post.post_title" :hideDiv="true" placeholder="请填写描述"></publish-title>
+                <el-form-item :label="$t('备注')">
+                    <publish-title v-model="post.post_title" :hideDiv="true" :placeholder="$t('请填写描述')"></publish-title>
                 </el-form-item>
             </div>
 

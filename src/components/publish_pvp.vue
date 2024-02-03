@@ -5,11 +5,11 @@
         <div class="m-macro-box">
             <div class="m-macro-talent m-macro-item">
                 <h5 class="u-title">{{ $t('技巧概述') }}</h5>
-                <el-input v-model="pvpData.content" placeholder="请在此处输入技巧概述，最多200个字。" type="textarea" show-word-limit maxlength="200" :rows="5"> </el-input>
+                <el-input v-model="pvpData.content" :placeholder="$t('请在此处输入技巧概述，最多200个字。')" type="textarea" show-word-limit maxlength="200" :rows="5"> </el-input>
             </div>
             <div class="m-macro-talent m-macro-item" v-if="client != 'origin'">
                 <h5 class="u-title">{{ $t('奇穴方案') }}</h5>
-                <!-- <el-input v-model="pvpData.talent" placeholder="奇穴方案编码" @change="checkTalent(pvpData.talent)">
+                <!-- <el-input v-model="pvpData.talent" :placeholder="$t('奇穴方案编码')" @change="checkTalent(pvpData.talent)">
                     <template slot="prepend">
                         <a class="u-get" target="_blank" href="/macro/talent">
                             <i class="el-icon-warning"></i>
@@ -24,7 +24,7 @@
                 <div class="m-macro-talent-simulator">
                     <div class="qx-container"></div>
                 </div>
-                <el-input v-model="pvpData.talent" placeholder="镇派方案编码" @change="checkTalent(pvpData.talent)">
+                <el-input v-model="pvpData.talent" :placeholder="$t('镇派方案编码')" @change="checkTalent(pvpData.talent)">
                     <template slot="prepend">
                         <a class="u-get" target="_blank" href="/macro/talent2">
                             <i class="el-icon-warning"></i>
@@ -58,10 +58,10 @@
                     <span slot="label" class="u-tab-box">
                         <span class="u-tab-name" :title="item.name">{{ "连招" + zhNum[i] + " - " + item.name }}</span>
                     </span>
-                    <el-form-item label="连招名称" class="m-macro-desc">
+                    <el-form-item :label="$t('连招名称')" class="m-macro-desc">
                         <el-input
                             v-model="item.name"
-                            placeholder="请输入连招名称"
+                            :placeholder="$t('请输入连招名称')"
                             :minlength="1"
                             :maxlength="maxlength"
                             show-word-limit
@@ -69,7 +69,7 @@
                         >
                         </el-input>
                     </el-form-item>
-                    <el-form-item label="技能连招">
+                    <el-form-item :label="$t('技能连招')">
                         <div class="u-skills">
                             <template v-if="item.sq">
                                 <span
@@ -87,7 +87,7 @@
                                     <i class="u-gcd-icon" v-show="skill.WithoutGcd">
                                         <i class="el-icon-time"></i>
                                     </i>
-                                    <i class="u-remove-icon" title="移除" @click="removeSkill(index)"
+                                    <i class="u-remove-icon" :title="$t('移除')" @click="removeSkill(index)"
                                         ><i class="el-icon-close"></i
                                     ></i>
                                 </span>
@@ -97,7 +97,7 @@
                             >{{ $t('新增技能') }}</el-button
                         >
                     </el-form-item>
-                    <el-form-item label="连招说明" class="m-macro-desc">
+                    <el-form-item :label="$t('连招说明')" class="m-macro-desc">
                         <el-input v-model="item.desc" type="textarea" maxlength="200" :rows="3"  show-word-limit placeholder="连招简要说明（选填）"></el-input>
                     </el-form-item>
                     <div class="m-macro-op">

@@ -37,22 +37,22 @@
                 </div>
             </header>
             <div class="m-namspace-tips" v-if="success">
-                <el-alert title="提交成功，请等待审核" type="success" show-icon></el-alert>
+                <el-alert :title="$t('提交成功，请等待审核')" type="success" show-icon></el-alert>
             </div>
             <el-form class="m-publish-namespace-form" :rules="rules" :model="form">
-                <el-form-item label="关键词" prop="key">
-                    <el-input v-model="form.key" placeholder="全局唯一关键词"></el-input>
-                    <el-alert style="margin-top: 5px;" v-if="!available" title="已有关键词，请重新输入" type="error" show-icon />
+                <el-form-item :label="$t('关键词')" prop="key">
+                    <el-input v-model="form.key" :placeholder="$t('全局唯一关键词')"></el-input>
+                    <el-alert style="margin-top: 5px;" v-if="!available" :title="$t('已有关键词，请重新输入')" type="error" show-icon />
                 </el-form-item>
-                <el-form-item label="链接" prop="link">
-                    <el-input v-model="form.link" placeholder="请输入跳转地址">
+                <el-form-item :label="$t('链接')" prop="link">
+                    <el-input v-model="form.link" :placeholder="$t('请输入跳转地址')">
                         <template slot="prepend">https://</template>
                     </el-input>
                 </el-form-item>
-                <el-form-item label="描述">
+                <el-form-item :label="$t('描述')">
                     <el-input
                         v-model="form.desc"
-                        placeholder="请输入关于铭牌的描述"
+                        :placeholder="$t('请输入关于铭牌的描述')"
                         maxlength="30"
                         show-word-limit
                     ></el-input>

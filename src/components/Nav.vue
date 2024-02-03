@@ -10,7 +10,7 @@
         </router-link>
 
         <el-collapse v-model="group" class="m-nav-group" @click.native.stop>
-            <el-collapse-item title="独立创作" name="cms">
+            <el-collapse-item :title="$t('独立创作')" name="cms">
                 <template slot="title">
                     <span class="u-title">{{ $t('独立创作') }}</span>
                 </template>
@@ -27,7 +27,7 @@
                     </router-link>
                 </template>
             </el-collapse-item>
-            <el-collapse-item title="联合创作" name="union">
+            <el-collapse-item :title="$t('联合创作')" name="union">
                 <template slot="title">
                     <span class="u-title">{{ $t('联合创作') }}</span>
                 </template>
@@ -42,7 +42,7 @@
                     <!-- <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span> -->
                 </router-link>
             </el-collapse-item>
-            <el-collapse-item title="多人创作" name="wiki">
+            <el-collapse-item :title="$t('多人创作')" name="wiki">
                 <template slot="title">
                     <span class="u-title">{{ $t('多人百科') }}</span>
                 </template>
@@ -52,7 +52,7 @@
                     <span class="u-count" :class="{ isNull: !item.count }">{{ item.count }}</span>
                 </router-link>
             </el-collapse-item>
-            <el-collapse-item title="其它创作" name="app">
+            <el-collapse-item :title="$t('其它创作')" name="app">
                 <template slot="title">
                     <span class="u-title">{{ $t('其它创作') }}</span>
                 </template>
@@ -62,7 +62,7 @@
                     <span class="u-count" :class="{ isNull: !item.count }">{{ item.count }}</span>
                 </router-link>
             </el-collapse-item>
-            <el-collapse-item title="评论留言" name="comment">
+            <el-collapse-item :title="$t('评论留言')" name="comment">
                 <template slot="title">
                     <span class="u-title">{{ $t('评论留言') }}</span>
                 </template>

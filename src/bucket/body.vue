@@ -3,11 +3,11 @@
         <div class="m-dashboard-work-header">
             <h2 class="u-title">{{ $t('体型数据') }}</h2>
             <a :href="publishLink" class="u-publish el-button el-button--primary el-button--small">
-                <i class="el-icon-document"></i> 发布数据
+                <i class="el-icon-document"></i> {{ $t('发布数据') }}
             </a>
         </div>
 
-        <el-input class="m-dashboard-work-search" placeholder="请输入搜索内容" v-model.lazy="search">
+        <el-input class="m-dashboard-work-search" :placeholder="$t('请输入搜索内容')" v-model.lazy="search">
             <span slot="prepend">{{ $t('关键词') }}</span>
             <el-button slot="append" icon="el-icon-search"></el-button>
         </el-input>
@@ -19,39 +19,39 @@
                         <i
                             class="u-item-icon u-success-icon el-icon-success"
                             v-if="item.status == 1"
-                            title="上架中"
+                            :title="$t('上架中')"
                         ></i>
-                        <i class="u-item-icon u-remove-icon el-icon-remove" v-else title="已下架"></i>
+                        <i class="u-item-icon u-remove-icon el-icon-remove" v-else :title="$t('已下架')"></i>
                         <a class="u-title" target="_blank" :href="postLink(item.id)">{{ item.title || "未命名" }}</a>
                     </div>
                     <div class="u-desc">
                         <time class="u-desc-subitem">
                             <i class="el-icon-finished"></i>
-                            发布 :
+                            {{ $t('发布 :') }}
                             {{ item.created_at }}
                         </time>
                         <time class="u-desc-subitem">
                             <i class="el-icon-refresh"></i>
-                            更新 :
+                            {{ $t('更新 :') }}
                             {{ item.updated_at }}
                         </time>
                     </div>
 
                     <el-button-group class="u-action">
-                        <el-button size="mini" icon="el-icon-edit" @click="edit(item.id)" title="编辑"></el-button>
+                        <el-button size="mini" icon="el-icon-edit" @click="edit(item.id)" :title="$t('编辑')"></el-button>
                         <el-button
                             v-if="item.status == 1"
                             size="mini"
                             icon="el-icon-download"
                             @click="handleOffline(item.id)"
-                            title="下架"
+                            :title="$t('下架')"
                         ></el-button>
                         <el-button
                             v-else
                             size="mini"
                             icon="el-icon-upload2"
                             @click="handleOnline(item.id)"
-                            title="上架"
+                            :title="$t('上架')"
                         ></el-button>
                     </el-button-group>
                 </li>
@@ -59,7 +59,7 @@
             <el-alert
                 v-else
                 class="m-dashboard-box-null"
-                title="没有找到相关条目"
+                :title="$t('没有找到相关条目')"
                 type="info"
                 center
                 show-icon

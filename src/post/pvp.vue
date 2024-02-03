@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-box p-publish-macro" v-loading="loading">
         <!-- 头部 -->
-        <publish-header name="竞技技巧">
+        <publish-header :name="$t('竞技技巧')">
             <publish-revision :enable="true" :post-id="id"></publish-revision>
         </publish-header>
 

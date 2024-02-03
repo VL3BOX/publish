@@ -6,13 +6,13 @@
                 :href="publishLink"
                 class="u-publish el-button el-button--primary el-button--small"
             >
-                <i class="el-icon-document"></i> 贡献纪事
+                <i class="el-icon-document"></i> {{ $t('贡献纪事') }}
             </a>
         </div>
 
         <el-input
             class="m-dashboard-work-search"
-            placeholder="请输入搜索内容"
+            :placeholder="$t('请输入搜索内容')"
             v-model.lazy="search"
         >
             <span slot="prepend">{{ $t('关键词') }}</span>
@@ -40,12 +40,12 @@
                     <div class="u-desc">
                         <time class="u-desc-subitem">
                             <i class="el-icon-finished"></i>
-                            发布 :
+                            {{ $t('发布 :') }}
                             {{ item.created_at | dateFormat }}
                         </time>
                         <time class="u-desc-subitem">
                             <i class="el-icon-refresh"></i>
-                            更新 :
+                            {{ $t('更新 :') }}
                             {{ item.updated_at | dateFormat }}
                         </time>
                     </div>
@@ -55,7 +55,7 @@
                             size="mini"
                             icon="el-icon-edit"
                             @click="edit(item.id)"
-                            title="编辑"
+                            :title="$t('编辑')"
                         ></el-button>
                     </el-button-group>
                 </li>
@@ -63,7 +63,7 @@
             <el-alert
                 v-else
                 class="m-dashboard-box-null"
-                title="没有找到相关条目"
+                :title="$t('没有找到相关条目')"相关条目')"
                 type="info"
                 center
                 show-icon

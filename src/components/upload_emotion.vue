@@ -4,7 +4,7 @@
         <el-button type="primary" @click="dialogVisible = true" icon="el-icon-upload" :disabled="!enable">{{ btn_txt }}</el-button>
 
         <!-- 弹出界面 -->
-        <el-dialog class="c-large-dialog" title="上传" :visible.sync="dialogVisible">
+        <el-dialog class="c-large-dialog" :title="$t('上传')" :visible.sync="dialogVisible">
             <!-- 清空按钮 -->
             <el-button class="u-upload-clear" plain icon="el-icon-delete" size="mini" @click="clear">{{ $t('清空') }}</el-button>
 

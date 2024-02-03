@@ -34,12 +34,12 @@
                             </span>
                             <time class="u-desc-subitem">
                                 <i class="el-icon-finished"></i>
-                                发布 :
+                                {{ $t('发布 :') }}
                                 {{ item.union_post_raw.post_date | dateFormat }}
                             </time>
                             <time class="u-desc-subitem">
                                 <i class="el-icon-refresh"></i>
-                                更新 :
+                                {{ $t('更新 :') }}
                                 {{ item.union_post_raw.post_modified | dateFormat }}
                             </time>
                         </div>
@@ -48,14 +48,14 @@
                             <el-button
                                 size="mini"
                                 icon="el-icon-edit"
-                                title="编辑"
+                                :title="$t('编辑')"
                                 @click="edit(item.union_post_raw.post_type, item.union_post_raw.ID)"
                             ></el-button>
                             <el-button
                                 v-if="isActive"
                                 size="mini"
                                 icon="el-icon-delete"
-                                title="删除"
+                                :title="$t('删除')"
                                 @click="del(item.union_post_raw.ID,i)"
                             ></el-button>
                             <el-popconfirm
@@ -68,7 +68,7 @@
                                     class="u-quit"
                                     size="mini"
                                     icon="el-icon-download"
-                                    title="退出联合身份"
+                                    :title="$t('退出联合身份')"
                                 ></el-button>
                             </el-popconfirm>
                         </el-button-group>
@@ -78,7 +78,7 @@
             <el-alert
                 v-else
                 class="m-dashboard-box-null"
-                title="没有找到相关条目"
+                :title="$t('没有找到相关条目')"
                 type="info"
                 center
                 show-icon

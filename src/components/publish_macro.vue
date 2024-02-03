@@ -58,7 +58,7 @@
                             <div class="u-subblock m-macro-name">
                                 <el-input
                                     v-model="item.name"
-                                    placeholder="每个宏名称请使用自己名下唯一命名"
+                                    :placeholder="$t('每个宏名称请使用自己名下唯一命名')"
                                     :minlength="1"
                                     :maxlength="maxlength"
                                     show-word-limit
@@ -78,7 +78,7 @@
                         </div>
                         <el-input
                             v-model="item.talent"
-                            placeholder="奇穴方案编码"
+                            :placeholder="$t('奇穴方案编码')"
                             @change="checkTalent(item)"
                         >
                             <template slot="prepend">
@@ -96,7 +96,7 @@
                         </div>
                         <el-input
                             v-model="item.talent"
-                            placeholder="镇派方案编码"
+                            :placeholder="$t('镇派方案编码')"
                             @change="checkTalent(item)"
                         >
                             <template slot="prepend">
@@ -133,9 +133,9 @@
                                 魔盒清单使用指南
                             </a>
                         </h5>
-                        <el-input v-model="item.equip" placeholder="配装方案编号">
+                        <el-input v-model="item.equip" :placeholder="$t('配装方案编号')">
                             <template slot="prepend">
-                                <el-select v-model="item.equip_type" placeholder="请选择">
+                                <el-select v-model="item.equip_type" :placeholder="$t('请选择')">
                                     <el-option
                                         v-for="(label,val) in equip_types"
                                         :key="val"
@@ -146,10 +146,10 @@
                             </template>
                         </el-input>
                     </div> -->
-                    <el-form-item label="其它" class="m-macro-misc">
+                    <el-form-item :label="$t('其它')" class="m-macro-misc">
                         <el-row>
                             <el-col :span="8" class="u-speed">
-                                <el-input v-model="item.speed" placeholder="填写推荐的急速阈值">
+                                <el-input v-model="item.speed" :placeholder="$t('填写推荐的急速阈值')">
                                     <template slot="prepend">急速阈值
                                         <slot name="pre-prepend"></slot>
                                     </template>
@@ -158,7 +158,7 @@
                             <el-col :span="8"></el-col>
                         </el-row>
                     </el-form-item>
-                    <el-form-item label="说明" class="m-macro-desc">
+                    <el-form-item :label="$t('说明')" class="m-macro-desc">
                         <el-input v-model="item.desc" type="textarea" placeholder="重要说明（会出现在宏第一行）"></el-input>
                     </el-form-item>
                     <div class="m-macro-op">

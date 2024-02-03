@@ -21,7 +21,7 @@
                     </span>
                     <div class="m-source-name m-macro-item">
                         <h5 class="u-title">{{ $t('名称') }}</h5>
-                        <el-input v-model="item.name" placeholder="输入资源名称"></el-input>
+                        <el-input v-model="item.name" :placeholder="$t('输入资源名称')"></el-input>
                     </div>
                     <div class="m-source-mode m-macro-item">
                         <h5 class="u-title">{{ $t('模式') }}</h5>

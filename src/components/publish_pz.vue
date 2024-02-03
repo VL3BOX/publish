@@ -24,7 +24,7 @@
                     <div class="u-item-select">
                         <el-select
                             v-model="item.id"
-                            placeholder="请选择配装方案"
+                            :placeholder="$t('请选择配装方案')"
                             clearable
                             filterable
                             remote
@@ -55,7 +55,7 @@
                     <div class="u-item-name">
                         <el-input
                             v-model="item.name"
-                            placeholder="请输入配装简称"
+                            :placeholder="$t('请输入配装简称')"
                             clearable
                             :maxlength="12"
                             :minlength="1"

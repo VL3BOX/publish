@@ -4,7 +4,7 @@
             <el-popover popper-class="m-topic-bucket__pop" placement="bottom-start">
                 <el-button icon="el-icon-plus" size="small" trigger="click" slot="reference"></el-button>
                 <div class="m-topic_bucket__content">
-                    <el-input v-model="search" placeholder="输入关键词" prefix-icon="el-icon-search" size="small" @keypress.enter.native="onSearch">
+                    <el-input v-model="search" :placeholder="$t('输入关键词')" prefix-icon="el-icon-search" size="small" @keypress.enter.native="onSearch">
                     </el-input>
                     <div class="m-topic-bucket__list" v-if="list && list.length">
                         <el-checkbox-group v-model="selected">

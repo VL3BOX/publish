@@ -3,12 +3,12 @@
         class="c-large-dialog"
         :visible="modelValue"
         @close="close"
-        title="技能库"
+        :title="$t('技能库')"
         append-to-body
         custom-class="m-skill-dialog"
     >
         <el-tabs v-model="activeName" type="card" class="m-skill-tabs">
-            <el-tab-pane label="门派武学" name="special">
+            <el-tab-pane :label="$t('门派武学')" name="special">
                 <template #label>
                     <div class="u-tab-label">
                         <i class="el-icon-s-order"></i>
@@ -16,7 +16,7 @@
                     </div>
                 </template>
             </el-tab-pane>
-            <el-tab-pane label="全部技能" name="all">
+            <el-tab-pane :label="$t('全部技能')" name="all">
                 <template #label>
                     <div class="u-tab-label">
                         <i class="el-icon-menu"></i>
@@ -60,7 +60,7 @@
                         </span>
                     </li>
                 </ul>
-                <el-alert v-if="!skill.length && done" title="没有找到相关条目" type="info" show-icon></el-alert>
+                <el-alert v-if="!skill.length && done" :title="$t('没有找到相关条目')" type="info" show-icon></el-alert>
 
                 <template v-if="multipage">
                     <!-- 下一页 -->

@@ -1,5 +1,5 @@
 <template>
-    <el-form-item label="标签">
+    <el-form-item :label="$t('标签')">
         <div class="m-publish-exam-tags-list">
             <el-checkbox-group v-model="list">
                 <div class="u-group">
@@ -43,7 +43,7 @@
             size="small"
             @keyup.enter.native="handleInputConfirm"
             @blur="handleInputConfirm"
-            placeholder="回车新增自定义标签"
+            :placeholder="$t('回车新增自定义标签')"
         >
         </el-input>
         <el-button v-else class="button-new-tag" size="small" @click="showInput"

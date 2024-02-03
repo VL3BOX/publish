@@ -29,19 +29,19 @@
         >
             <!-- 💛 栏目字段 -->
             <template>
-                <el-form-item label="原创">
+                <el-form-item :label="$t('原创')">
                     <el-switch v-model="post.original" active-color="#13ce66">
                     </el-switch>
                 </el-form-item>
 
                 <!-- 1.选择坐标 -->
-                <el-form-item label="府邸坐标" class="m-house-coord">
+                <el-form-item :label="$t('府邸坐标')" class="m-house-coord">
                     <el-row :gutter="20">
                         <el-col :span="8">
                             <el-select
                                 v-model="post.post_subtype"
                                 filterable
-                                placeholder="地图"
+                                :placeholder="$t('地图')"
                             >
                                 <el-option
                                     v-for="item in maps"
@@ -57,7 +57,7 @@
                                 class="m-flower-rec-select"
                                 v-model="post.post_meta.server"
                                 filterable
-                                placeholder="服务器名"
+                                :placeholder="$t('服务器名')"
                             >
                                 <el-option
                                     v-for="item in servers"
@@ -71,7 +71,7 @@
                         <el-col :span="8"
                             ><el-input
                                 v-model="post.post_meta.line"
-                                placeholder="所在分线"
+                                :placeholder="$t('所在分线')"
                                 ><template slot="append">线</template></el-input
                             ></el-col
                         >
@@ -79,12 +79,12 @@
                 </el-form-item>
 
                 <!-- 2.房屋类型 -->
-                <el-form-item label="房型属性" class="m-house-coord">
+                <el-form-item :label="$t('房型属性')" class="m-house-coord">
                     <el-row :gutter="20">
                         <el-col :span="8"
                             ><el-input
                                 v-model="post.post_meta.num"
-                                placeholder="所在房号"
+                                :placeholder="$t('所在房号')"
                                 @change="computeArea(post.post_meta.num)"
                                 ><template slot="append">号</template></el-input
                             ></el-col
@@ -92,7 +92,7 @@
                         <el-col :span="8"
                             ><el-input
                                 v-model="post.post_meta.area"
-                                placeholder="面积"
+                                :placeholder="$t('面积')"
                                 ><template slot="append"
                                     >{{ $t('平米') }}</template
                                 ></el-input
@@ -101,7 +101,7 @@
                         <el-col :span="8"
                             ><el-input
                                 v-model="post.post_meta.level"
-                                placeholder="房屋等级"
+                                :placeholder="$t('房屋等级')"
                                 :min="1"
                                 :max="99"
                                 ><template slot="prepend"
@@ -113,7 +113,7 @@
                 </el-form-item>
 
                 <!-- 3.家园图片 -->
-                <el-form-item label="家园图赏">
+                <el-form-item :label="$t('家园图赏')">
                     <album
                         :imgList="post.post_meta.pics"
                         @albumChange="updateAlbum"
@@ -121,7 +121,7 @@
                 </el-form-item>
 
                 <!-- 3.蓝图分享 -->
-                <el-form-item label="蓝图分享">
+                <el-form-item :label="$t('蓝图分享')">
                     <el-switch
                         v-model="post.post_meta.hasData"
                         active-color="#13ce66"
@@ -144,12 +144,12 @@
                                 <el-col class="u-type" :span="6">
                                     <el-radio
                                         v-model="data.type"
-                                        label="全局设计图"
+                                        :label="$t('全局设计图')"
                                         >{{ $t('全局设计图') }}</el-radio
                                     >
                                     <el-radio
                                         v-model="data.type"
-                                        label="局部设计图"
+                                        :label="$t('局部设计图')"
                                         >{{ $t('局部设计图') }}</el-radio
                                     >
                                 </el-col>
@@ -157,7 +157,7 @@
                                 <el-col :span="6"
                                     ><el-input
                                         v-model="data.desc"
-                                        placeholder="蓝图说明"
+                                        :placeholder="$t('蓝图说明')"
                                     ></el-input
                                 ></el-col>
 

@@ -1,6 +1,6 @@
 <template>
     <div class="m-publish-xf">
-        <el-form-item label="心法">
+        <el-form-item :label="$t('心法')">
             <el-radio
                 v-for="(item, i) in xfmap"
                 v-model="xf"

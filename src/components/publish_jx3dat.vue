@@ -69,7 +69,7 @@
                             <h5 class="u-title">{{ $t('数据标题') }}</h5>
                             <el-input
                                 v-model="item.desc"
-                                placeholder="数据描述"
+                                :placeholder="$t('数据描述')"
                                 :maxlength="50"
                                 show-word-limit
                             ></el-input>
@@ -107,7 +107,7 @@
                                 class="u-fileurl"
                                 :class="{ isUploaded: item.isUploaded }"
                                 @change="aniDBM(item)"
-                                placeholder="数据地址"
+                                :placeholder="$t('数据地址')"
                                 :disabled="true"
                                 :value="item.file"
                                 v-if="item.file"
@@ -183,7 +183,7 @@
         </template>
 
         <!-- 其它类型上传字段 -->
-        <el-form-item v-else label="数据" class="m-jx3dat-other">
+        <el-form-item v-else :label="$t('数据')" class="m-jx3dat-other">
             <input class="u-data-input" type="file" id="otherdata" @change="uploadDat" />
             <el-button
                 type="primary"
@@ -196,7 +196,7 @@
             <el-input
                 v-if="jx3dats.down"
                 class="u-fileurl"
-                placeholder="数据地址"
+                :placeholder="$t('数据地址')"
                 :disabled="true"
                 :value="jx3dats.down"
             >

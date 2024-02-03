@@ -1,12 +1,12 @@
 <template>
     <div class="m-publish-authors" v-if="id && isSuper">
-        <el-form-item label="联合创作">
+        <el-form-item :label="$t('联合创作')">
             <div class="u-list">
                 <div class="u-item" v-for="(item,i) in list" :key="i">
                     <el-tooltip
                         class="item"
                         effect="dark"
-                        content="等待被邀请者确认"
+                        :content="$t('等待被邀请者确认')"
                         placement="top"
                         v-if="!item.status"
                     >
@@ -19,16 +19,16 @@
                             class="u-label"
                         >({{item.label || '撰稿'}})</span>
                     </span>
-                    <el-tooltip class="item" effect="dark" content="修改备注" placement="top">
+                    <el-tooltip class="item" effect="dark" :content="$t('修改备注')" placement="top">
                         <i class="u-edit el-icon-edit" @click="update(item)"></i>
                     </el-tooltip>
-                    <el-tooltip class="item" effect="dark" content="移除" placement="top">
+                    <el-tooltip class="item" effect="dark" :content="$t('移除')" placement="top">
                         <i class="u-delete el-icon-delete" @click="remove(item,i)"></i>
                     </el-tooltip>
                 </div>
                 <el-button plain size="small" @click="openPop" type="primary">+ 添加联合创作者</el-button>
             </div>
-            <UserPop title="添加用户" v-model="visible" @confirm="addAuthor" />
+            <UserPop :title="$t('添加用户')" v-model="visible" @confirm="addAuthor" />
         </el-form-item>
     </div>
 </template>

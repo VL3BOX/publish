@@ -1,25 +1,25 @@
 <template>
 	<div class="m-publish-box">
 		<!-- 返回 -->
-		<publish-header name="物品清单" :localDraft="false">
+		<publish-header :name="$t('物品清单')" :localDraft="false">
 			<slot name="header"></slot>
 		</publish-header>
 		<!-- 表单 -->
 		<el-form class="u-form" label-position="left" label-width="80px">
 			<!-- 清单名称 -->
-			<el-form-item label="标题">
-				<el-input v-model="data.title" placeholder="请输入物品清单的标题" maxlength="20" show-word-limit></el-input>
+			<el-form-item :label="$t('标题')">
+				<el-input v-model="data.title" :placeholder="$t('请输入物品清单的标题')" maxlength="20" show-word-limit></el-input>
 			</el-form-item>
-			<el-form-item label="可见性">
+			<el-form-item :label="$t('可见性')">
 				<el-radio v-model="data.public" :label="1">{{ $t('公开') }}</el-radio>
 				<el-radio v-model="data.public" :label="0">{{ $t('私有') }}</el-radio>
 			</el-form-item>
 			<!-- 清单描述 -->
-			<el-form-item label="描述">
-				<el-input type="textarea" :rows="3" v-model="data.description" placeholder="简单说明一下你的物品清单" :maxlength="2000" show-word-limit></el-input>
+			<el-form-item :label="$t('描述')">
+				<el-input type="textarea" :rows="3" v-model="data.description" :placeholder="$t('简单说明一下你的物品清单')" :maxlength="2000" show-word-limit></el-input>
 			</el-form-item>
 			<!-- 清单类型 -->
-			<el-form-item label="类型">
+			<el-form-item :label="$t('类型')">
 				<el-radio-group v-model="data.type" size="medium" @change="resetPages">
 					<el-radio-button label="1">{{ $t('道具清单') }}</el-radio-button>
 					<el-radio-button label="2">{{ $t('装备清单') }}</el-radio-button>
@@ -27,7 +27,7 @@
 				<el-button class="u-add-plan" size="medium" icon="el-icon-plus" @click="addRelation">{{ $t('新增分组') }}</el-button>
 			</el-form-item>
 			<!-- 制作清单 -->
-			<el-form-item label="清单">
+			<el-form-item :label="$t('清单')">
 				<div class="m-plan-list">
 					<!-- 搜索物品 -->
 					<div class="u-list-search" v-if="searchList.length">
@@ -50,7 +50,7 @@
 											<itemIcon class="u-icon" :item_id="item.id" />
 											<div class="u-count">
 												<span>数量：</span>
-												<el-input-number size="mini" v-model.number="item.count" :min="1" label="数字"></el-input-number>
+												<el-input-number size="mini" v-model.number="item.count" :min="1" :label="$t('数字')"></el-input-number>
 											</div>
 											<i class="u-close el-icon-circle-close" @click="relation.data.splice(key, 1)"></i>
 										</div>

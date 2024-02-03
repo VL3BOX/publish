@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-box m-publish-box-face" v-loading="loading">
         <!-- 头部 -->
-        <publish-header name="捏脸分享"></publish-header>
+        <publish-header :name="$t('捏脸分享')"></publish-header>
 
         <el-form label-position="left" label-width="90px">
             <!-- 标题 -->
@@ -9,7 +9,7 @@
             <!-- 信息 -->
             <div class="m-publish-info">
                 <el-divider content-position="left">{{ $t('信息') }}</el-divider>
-                <el-form-item label="数据">
+                <el-form-item :label="$t('数据')">
                     <face-attachment :body="post.body_type" type="face" @update:data="handleFaceChange" />
                     <div class="u-attachment" v-for="item in faceAttachments" :key="item.id">
                         <el-button
@@ -20,14 +20,14 @@
                             :plain="item.file === faceData.file ? false : true"
                             @click="setMain(item)"
                             size="mini"
-                            title="设为主数据"
+                            :title="$t('设为主数据')"
                         />
                         <span class="u-attachment-text">
                             文件名: <b>{{ item.name }}</b>
                         </span>
                         <!-- <span class="u-attachment-key">唯一标识符：<b>{{ item.file }}</b></span> -->
                         <span class="u-attachment-remark">
-                            <el-input v-model="item.describe" placeholder="备注" size="mini"></el-input>
+                            <el-input v-model="item.describe" :placeholder="$t('备注')" size="mini"></el-input>
                         </span>
                         <el-button
                             class="u-btn"
@@ -37,7 +37,7 @@
                             plain
                             @click="removeFile(item.id)"
                             size="mini"
-                            title="移除"
+                            :title="$t('移除')"
                         />
                     </div>
                 </el-form-item>
@@ -51,7 +51,7 @@
 
                 <!-- 自动解析 -->
                 <!-- 体型 -->
-                <el-form-item label="体型" v-if="faceData">
+                <el-form-item :label="$t('体型')" v-if="faceData">
                     <el-radio-group v-model="post.body_type">
                         <el-radio
                             :label="~~body_type"
@@ -64,19 +64,19 @@
                 <!-- 客户端 -->
                 <publish-client v-if="faceData" v-model="post.client" :forbidAll="true"></publish-client>
                 <!-- 画风 -->
-                <el-form-item label="画风" v-if="faceData && post.client === 'std'">
+                <el-form-item :label="$t('画风')" v-if="faceData && post.client === 'std'">
                     <el-radio-group v-model="post.is_new_face">
                         <el-radio :label="1">{{ $t('写实') }}</el-radio>
                         <el-radio :label="0">{{ $t('写意') }}</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <!-- 可新建 -->
-                <el-form-item v-if="faceData" label="可新建">
+                <el-form-item v-if="faceData" :label="$t('可新建')">
                     <el-switch v-model="post.is_unlimited" :active-value="1" :inactive-value="0"> </el-switch>
                 </el-form-item>
 
                 <!-- 原创 -->
-                <el-form-item label="首发" prop="is_fr">
+                <el-form-item :label="$t('首发')" prop="is_fr">
                     <el-switch
                         v-model="post.is_fr"
                         active-color="#13ce66"
@@ -86,11 +86,11 @@
                 </el-form-item>
                 <publish-original v-model="post.original"></publish-original>
                 <template v-if="!post.original">
-                    <el-form-item label="原作者名称" prop="author_name">
-                        <el-input v-model="post.author_name" placeholder="输入原作者名称"></el-input>
+                    <el-form-item :label="$t('原作者名称')" prop="author_name">
+                        <el-input v-model="post.author_name" :placeholder="$t('输入原作者名称')"></el-input>
                     </el-form-item>
-                    <el-form-item label="原作者链接" prop="author_link">
-                        <el-input v-model="post.author_link" placeholder="输入原作者链接"></el-input>
+                    <el-form-item :label="$t('原作者链接')" prop="author_link">
+                        <el-input v-model="post.author_link" :placeholder="$t('输入原作者链接')"></el-input>
                     </el-form-item>
                 </template>
 
@@ -123,11 +123,11 @@
                     </div>
                 </el-form-item>
 
-                <el-form-item label="说明">
-                    <el-input v-model="post.remark" placeholder="请填写相关说明" type="textarea" :rows="3"></el-input>
+                <el-form-item :label="$t('说明')">
+                    <el-input v-model="post.remark" :placeholder="$t('请填写相关说明')" type="textarea" :rows="3"></el-input>
                 </el-form-item>
                 <el-divider content-position="left">{{ $t('扩展') }}</el-divider>
-                <el-form-item label="图片列表">
+                <el-form-item :label="$t('图片列表')">
                     <UploadAlbum v-model="post.images"></UploadAlbum>
                 </el-form-item>
                 <publish-banner v-model="post.banner" v-if="isSuperAuthor"></publish-banner>

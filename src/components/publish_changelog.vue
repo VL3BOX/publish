@@ -1,6 +1,6 @@
 <template>
     <div class="m-publish-extend">
-        <el-form-item label="关联">
+        <el-form-item :label="$t('关联')">
             <el-select v-model="selected" style="width: 400px" popper-class="m-changelog-pop" clearable>
                 <el-option
                     v-for="item in data"

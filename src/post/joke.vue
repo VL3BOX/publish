@@ -1,13 +1,13 @@
 <template>
     <div class="m-publish-box" v-loading="loading">
         <!-- 头部 -->
-        <publish-header name="剑三骚话"></publish-header>
+        <publish-header :name="$t('剑三骚话')"></publish-header>
 
         <Emotion class="m-publish-joke-emotion" @selected="handleEmotionSelect"></Emotion>
 
         <el-form label-position="left" label-width="80px">
-            <el-form-item label="门派">
-                <el-select v-model="data.type" placeholder="请选择门派">
+            <el-form-item :label="$t('门派')">
+                <el-select v-model="data.type" :placeholder="$t('请选择门派')">
                     <el-option v-for="s in schools" :key="s.value" :value="s.key" :label="s.value">
                         <span style="float: left;">{{ s.value }}</span>
                         <span style="float: right;">
@@ -17,12 +17,12 @@
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="内容">
+            <el-form-item :label="$t('内容')">
                 <el-input
                     v-model="data.content"
                     type="textarea"
                     :rows="6"
-                    placeholder="请输入内容"
+                    :placeholder="$t('请输入内容')"
                     id="textarea"
                     :maxlength="128"
                     :minlength="1"
@@ -30,7 +30,7 @@
                 ></el-input>
             </el-form-item>
 
-            <!-- <el-form-item label="标签">
+            <!-- <el-form-item :label="$t('标签')">
                 <div style="display: flex;margin-top:5px;">
                     <el-tag
                         v-for="tag in post.tags"

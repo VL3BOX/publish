@@ -1,12 +1,12 @@
 <template>
     <div class="m-publish-box m-publish-box-emotion" v-loading="loading">
         <!-- 头部 -->
-        <publish-header name="剑三表情"></publish-header>
+        <publish-header :name="$t('剑三表情')"></publish-header>
 
         <el-form label-position="left" label-width="80px">
             <!-- 编辑 -->
             <div class="m-publish-emotion m-publish-emotion-edit" v-if="id">
-                <el-form-item label="图片">
+                <el-form-item :label="$t('图片')">
                     <div class="u-pic" v-if="data && data.url">
                         <img class="u-img" :src="data.url | showThumbnail" />
                         <i class="u-mask"></i>
@@ -20,7 +20,7 @@
                             <i class="u-emotion-mask"></i>
                             <i
                                 class="u-emotion-delete el-icon-delete"
-                                title="移除"
+                                :title="$t('移除')"
                                 @click="handleRemove"
                             ></i>
                         </div>
@@ -46,10 +46,10 @@
                         size="mini"
                     >{{ $t('移除') }}</el-button>
                 </el-form-item>
-                <el-form-item label="描述">
-                    <el-input v-model="data.desc" :maxlength="120" show-word-limit placeholder="图片说明"></el-input>
+                <el-form-item :label="$t('描述')">
+                    <el-input v-model="data.desc" :maxlength="120" show-word-limit :placeholder="$t('图片说明')"></el-input>
                 </el-form-item>
-                <el-form-item label="类别">
+                <el-form-item :label="$t('类别')">
                     <el-select v-model="data.type" placeholder="选择门派（非必选）">
                         <el-option v-for="(item,i) in schoolmap" :key="i" :value="i" :label="item">
                             <div style="display: flex;align-items: center;">
@@ -59,10 +59,10 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="原创">
+                <el-form-item :label="$t('原创')">
                     <el-switch v-model.number="data.original" :active-value="1" :inactive-value="0"></el-switch>
                 </el-form-item>
-                <el-form-item label="原作者">
+                <el-form-item :label="$t('原作者')">
                     <el-input v-model="data.author" placeholder="（非必填）"></el-input>
                 </el-form-item>
                 <!-- 按钮 -->
@@ -82,7 +82,7 @@
                     <h1 class="u-title">{{ $t('上传表情') }}</h1>
                     <UploadEmotion
                         @insert="updateFileList"
-                        text="批量上传图片"
+                        :text="$t('批量上传图片')"
                         :onlyImage="true"
                         desc="一次最多同时上传10个文件（不超过5M）"
                         :accept="supportTypes"
@@ -116,14 +116,14 @@
                                 </i>
                             </div>
                             <div class="u-desc">
-                                <el-input v-model="item.desc" :maxlength="120" show-word-limit placeholder="图片说明">
+                                <el-input v-model="item.desc" :maxlength="120" show-word-limit :placeholder="$t('图片说明')">
                                     <span slot="prepend">{{ $t('描述') }}</span>
                                 </el-input>
                             </div>
                             <div class="u-extend">
                                 <el-switch
                                     v-model.number="item.original"
-                                    inactive-text="原创"
+                                    :inactive-text="$t('原创')"
                                     :active-value="1"
                                     :inactive-value="0"
                                 ></el-switch>
@@ -159,7 +159,7 @@
             </div>
         </el-form>
         <!-- 预览 -->
-        <el-dialog class="m-publish-emotion-preview" :visible.sync="dialogVisible" title="预览">
+        <el-dialog class="m-publish-emotion-preview" :visible.sync="dialogVisible" :title="$t('预览')">
             <img :src="dialogImageUrl" />
         </el-dialog>
     </div>

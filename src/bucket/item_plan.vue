@@ -9,18 +9,18 @@
 			<div class="u-desc">
 				<time class="u-desc-subitem">
 					<i class="el-icon-finished"></i>
-					发布 :
+					{{ $t('发布 :') }}
 					{{ dateFormat(plan.created) }}
 				</time>
 				<time class="u-desc-subitem">
 					<i class="el-icon-refresh"></i>
-					更新 :
+					{{ $t('更新 :') }}
 					{{ dateFormat(plan.updated) }}
 				</time>
 			</div>
 			<el-button-group class="u-action">
-				<el-button size="mini" icon="el-icon-edit" title="编辑" @click="plan_edit(plan.id)"></el-button>
-				<el-button size="mini" icon="el-icon-delete" title="删除" @click="plan_delete(plan.id)"></el-button>
+				<el-button size="mini" icon="el-icon-edit" :title="$t('编辑')" @click="plan_edit(plan.id)"></el-button>
+				<el-button size="mini" icon="el-icon-delete" :title="$t('删除')" @click="plan_delete(plan.id)"></el-button>
 			</el-button-group>
 		</li>
 	</ul>

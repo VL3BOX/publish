@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-box" v-loading="loading">
         <!-- 头部 -->
-        <publish-header name="职业攻略">
+        <publish-header :name="$t('职业攻略')">
             <publish-revision :enable="true" :post-id="id"></publish-revision>
         </publish-header>
 
@@ -19,9 +19,9 @@
                 <!-- 资料片 -->
                 <publish-zlp v-model="post.zlp" :client="post.client"></publish-zlp>
                 <!-- 类型 -->
-                <publish-tags v-model="post.tags" :options="prefer" label="类型"></publish-tags>
+                <publish-tags v-model="post.tags" :options="prefer" :label="$t('类型')"></publish-tags>
                 <!-- 主题 -->
-                <publish-tags v-model="post.topics" :options="topics" label="主题"></publish-tags>
+                <publish-tags v-model="post.topics" :options="topics" :label="$t('主题')"></publish-tags>
                 <!-- 技改历史 -->
                 <publish-changelog v-if="isChangelog" :post="post" ref="changelog"></publish-changelog>
                 <!-- 心法 -->

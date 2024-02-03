@@ -1,6 +1,6 @@
 <template>
     <div class="m-publish-visible">
-        <el-form-item label="阅读权限">
+        <el-form-item :label="$t('阅读权限')">
             <el-radio-group v-model="visible">
                 <el-radio label="0">{{ $t('公开') }}</el-radio>
                 <el-radio label="1">{{ $t('仅自己可见') }}</el-radio>

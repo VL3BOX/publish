@@ -5,7 +5,7 @@
             :maxlength="200"
             show-word-limit
             type="textarea"
-            placeholder="摘要信息"
+            :placeholder="$t('摘要信息')"
         ></el-input>
         <slot></slot>
     </div>

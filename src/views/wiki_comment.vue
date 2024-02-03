@@ -6,7 +6,7 @@
 
         <el-input
             class="m-dashboard-work-search u-source-search"
-            placeholder="请输入搜索内容"
+            :placeholder="$t('请输入搜索内容')"
             v-model="achievement_comment.keyword"
             @change="search_comment"
         >
@@ -33,22 +33,22 @@
                         </span>
                         <time class="u-desc-subitem">
                             <i class="el-icon-finished"></i>
-                            发布 :
+                            {{ $t('发布 :') }}
                             {{ new Date(comment.created * 1000) | dateFormat }}
                         </time>
                         <time class="u-desc-subitem">
                             <i class="el-icon-refresh"></i>
-                            更新 :
+                            {{ $t('更新 :') }}
                             {{ new Date(comment.updated * 1000) | dateFormat }}
                         </time>
                     </div>
 
                     <el-button-group class="u-action">
-                        <el-tooltip class="item" effect="dark" content="删除" placement="top-start">
+                        <el-tooltip class="item" effect="dark" :content="$t('删除')" placement="top-start">
                             <el-button
                                 size="mini"
                                 icon="el-icon-delete"
-                                title="删除"
+                                :title="$t('删除')"
                                 @click="comment_del(comment)"
                             ></el-button>
                         </el-tooltip>
@@ -58,7 +58,7 @@
             <el-alert
                 v-else
                 class="m-dashboard-box-null"
-                title="没有找到相关条目"
+                :title="$t('没有找到相关条目')"
                 type="info"
                 center
                 show-icon

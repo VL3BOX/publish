@@ -1,6 +1,6 @@
 <template>
     <div class="m-publish-extend">
-        <el-form-item label="其它">
+        <el-form-item :label="$t('其它')">
             <el-checkbox v-model="post.include_video" :true-label="1" :false-label="0">{{ $t('内含视频') }}</el-checkbox>
         </el-form-item>
     </div>

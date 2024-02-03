@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-box m-publish-box-face" v-loading="loading">
         <!-- 头部 -->
-        <publish-header name="体型分享"></publish-header>
+        <publish-header :name="$t('体型分享')"></publish-header>
 
         <el-form label-position="left" label-width="90px">
             <!-- 标题 -->
@@ -9,7 +9,7 @@
             <!-- 信息 -->
             <div class="m-publish-info">
                 <el-divider content-position="left">{{ $t('信息') }}</el-divider>
-                <el-form-item label="数据">
+                <el-form-item :label="$t('数据')">
                     <face-attachment :body="post.body_type" type="body" @update:data="handleBodyChange" />
                     <div class="u-attachment" v-for="item in bodyAttachments" :key="item.id">
                         <el-button
@@ -20,13 +20,13 @@
                             :plain="item.file === bodyData.file ? false : true"
                             @click="setMain(item)"
                             size="mini"
-                            title="设为主数据"
+                            :title="$t('设为主数据')"
                         />
                         <span class="u-attachment-text"
                             >文件名: <b>{{ item.name }}</b></span
                         >
                         <span class="u-attachment-remark"
-                            ><el-input v-model="item.describe" placeholder="备注" size="mini"></el-input
+                            ><el-input v-model="item.describe" :placeholder="$t('备注')" size="mini"></el-input
                         ></span>
                         <el-button
                             class="u-btn"
@@ -36,12 +36,12 @@
                             plain
                             @click="removeFile(item.id)"
                             size="mini"
-                            title="移除"
+                            :title="$t('移除')"
                         />
                     </div>
                 </el-form-item>
                 <!-- 客户端 -->
-                <el-form-item label="版本">
+                <el-form-item :label="$t('版本')">
                     <el-radio-group v-model="post.client">
                         <el-radio label="std">{{ $t('重制') }}</el-radio>
                     </el-radio-group>
@@ -49,7 +49,7 @@
                 <!-- <publish-client v-model="post.client" :forbidAll="true"></publish-client> -->
                 <!-- 原创 -->
                 <publish-original v-model="post.original"></publish-original>
-                <el-form-item label="首发" prop="is_fr">
+                <el-form-item :label="$t('首发')" prop="is_fr">
                     <el-switch
                         v-model="post.is_fr"
                         active-color="#13ce66"
@@ -58,18 +58,18 @@
                     ></el-switch>
                 </el-form-item>
                 <template v-if="!post.original">
-                    <el-form-item label="原作者名称" prop="author_name">
-                        <el-input v-model="post.author_name" placeholder="输入原作者名称"></el-input>
+                    <el-form-item :label="$t('原作者名称')" prop="author_name">
+                        <el-input v-model="post.author_name" :placeholder="$t('输入原作者名称')"></el-input>
                     </el-form-item>
-                    <el-form-item label="原作者链接" prop="author_link">
-                        <el-input v-model="post.author_link" placeholder="输入原作者链接"></el-input>
+                    <el-form-item :label="$t('原作者链接')" prop="author_link">
+                        <el-input v-model="post.author_link" :placeholder="$t('输入原作者链接')"></el-input>
                     </el-form-item>
                 </template>
 
-                <el-form-item label="是否收费">
+                <el-form-item :label="$t('是否收费')">
                     <template #label>
                         <span>{{ $t('是否收费') }}</span>
-                        <el-tooltip content="仅签约作者可以发布收费作品">
+                        <el-tooltip :content="$t('仅签约作者可以发布收费作品')">
                             <i class="el-icon-warning-outline" style="margin-left: 2px;color: #c00;"></i>
                         </el-tooltip>
                     </template>
@@ -95,7 +95,7 @@
                     </div>
                 </el-form-item>
 
-                <el-form-item label="体型">
+                <el-form-item :label="$t('体型')">
                     <el-radio-group v-model="post.body_type">
                         <el-radio :label="~~body_type" v-for="(body_label, body_type) in bodyMap" :key="body_type">
                             {{ body_label.label }}
@@ -103,11 +103,11 @@
                     </el-radio-group>
                 </el-form-item>
 
-                <el-form-item label="描述">
-                    <el-input v-model="post.remark" placeholder="请填写描述" type="textarea" :rows="3"></el-input>
+                <el-form-item :label="$t('描述')">
+                    <el-input v-model="post.remark" :placeholder="$t('请填写描述')" type="textarea" :rows="3"></el-input>
                 </el-form-item>
                 <el-divider content-position="left">{{ $t('扩展') }}</el-divider>
-                <el-form-item label="图片列表">
+                <el-form-item :label="$t('图片列表')">
                     <UploadAlbum v-model="post.images"></UploadAlbum>
                 </el-form-item>
                 <publish-banner v-model="post.banner" v-if="isSuperAuthor"></publish-banner>

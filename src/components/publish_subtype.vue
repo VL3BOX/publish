@@ -1,6 +1,6 @@
 <template>
     <div class="m-publish-subtype">
-        <el-form-item label="类型">
+        <el-form-item :label="$t('类型')">
             <el-radio-group v-model="subtype">
                 <el-radio
                     v-for="(name, key) in subtypes"

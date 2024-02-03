@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-fb">
         <!-- 1.选择资料片 -->
-        <el-form-item label="资料片" v-if="zlp_list">
+        <el-form-item :label="$t('资料片')" v-if="zlp_list">
             <el-radio
                 v-for="(zlp, i) in zlp_list"
                 :label="zlp"
@@ -16,7 +16,7 @@
         </el-form-item>
 
         <!-- 2.选择副本名称 -->
-        <el-form-item label="副本名称" v-if="fb_list">
+        <el-form-item :label="$t('副本名称')" v-if="fb_list">
             <el-radio
                 class="u-fb-thumbnail"
                 v-for="(fb, key) in fb_list"
@@ -31,7 +31,7 @@
         </el-form-item>
 
         <!-- 选择BOSS -->
-        <el-form-item label="首领名称" v-if="boss_list">
+        <el-form-item :label="$t('首领名称')" v-if="boss_list">
             <div class="u-boss-list">
                 <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">
                     全部
@@ -43,7 +43,7 @@
         </el-form-item>
 
         <!-- 选择难度模式 -->
-        <el-form-item label="难度模式" v-if="level_list">
+        <el-form-item :label="$t('难度模式')" v-if="level_list">
             <el-checkbox-group v-model="fbdata.fb_level">
                 <el-checkbox
                     v-for="level in level_list"

@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-box">
         <!-- 头部 -->
-        <publish-header name="通识百科">
+        <publish-header :name="$t('通识百科')">
             <slot name="header"></slot>
         </publish-header>
 
@@ -21,7 +21,7 @@
                     <template v-if="action == 'new'">
                         <!-- 创建词条 -->
                         <div class="u-create-source">
-                            <el-select class="u-source-type" placeholder="选择通识类型" v-model="knowledge.type">
+                            <el-select class="u-source-type" :placeholder="$t('选择通识类型')" v-model="knowledge.type">
                                 <el-option
                                     v-for="type in types"
                                     :key="type.name"
@@ -31,7 +31,7 @@
                             </el-select>
                             <el-input
                                 class="u-source-name"
-                                placeholder="请输入通识名称"
+                                :placeholder="$t('请输入通识名称')"
                                 v-model="knowledge.name"
                             ></el-input>
                         </div>
@@ -46,7 +46,7 @@
                             v-model.lazy="post.source_id"
                             filterable
                             remote
-                            placeholder="通过输入通识名称进行搜索"
+                            :placeholder="$t('通过输入通识名称进行搜索')"
                             :remote-method="loadSources"
                             :loading="options.loading"
                             clearable
@@ -76,7 +76,7 @@
                     :minlength="1"
                     show-word-limit
                     required
-                    placeholder="请简单描述一下本次修订说明"
+                    :placeholder="$t('请简单描述一下本次修订说明')"
                 ></el-input>
             </div>
 
@@ -101,7 +101,7 @@
                     v-model="inputValue"
                     ref="saveTagInput"
                     size="small"
-                    placeholder="回车以添加"
+                    :placeholder="$t('回车以添加')"
                     @keyup.enter.native="handleInputConfirm"
                     @blur="handleInputConfirm"
                 >

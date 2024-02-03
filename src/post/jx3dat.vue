@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-box" v-loading="loading">
         <!-- 头部 -->
-        <publish-header name="插件数据">
+        <publish-header :name="$t('插件数据')">
             <publish-revision :enable="true" :post-id="id"></publish-revision>
         </publish-header>
 

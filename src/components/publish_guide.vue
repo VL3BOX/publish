@@ -9,7 +9,7 @@
                 size="small"
                 filterable
                 remote
-                placeholder="输入关键词进行搜索"
+                :placeholder="$t('输入关键词进行搜索')"
                 :remote-method="remoteMethodPrev"
                 v-model="data.prev_post"
                 clearable
@@ -28,7 +28,7 @@
                 size="small"
                 filterable
                 remote
-                placeholder="输入关键词进行搜索"
+                :placeholder="$t('输入关键词进行搜索')"
                 :remote-method="remoteMethodNext"
                 v-model="data.next_post"
                 clearable
@@ -41,7 +41,7 @@
                 >
             </el-select>
         </div>
-        <!-- <el-tooltip content="只可选择公开的文章">
+        <!-- <el-tooltip :content="$t('只可选择公开的文章')">
             <i class="el-icon-question" style="margin-left: 10px;"></i>
         </el-tooltip> -->
     </div>

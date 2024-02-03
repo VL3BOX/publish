@@ -11,7 +11,7 @@
             </a>
             <div class="u-desc">
                 <span class="u-desc-subitem">
-                    编号 :
+                    {{ $t('编号 :') }}
                     <b>{{ item.id }}</b>
                 </span>
                 <span class="u-status u-desc-subitem">
@@ -27,8 +27,8 @@
                 <time class="u-time u-desc-subitem">提交于: {{ item.createTime | dateFormat }}</time>
             </div>
             <el-button-group class="u-action">
-                <el-button size="mini" icon="el-icon-edit" title="编辑" @click="edit(item.id)"></el-button>
-                <el-button size="mini" icon="el-icon-delete" title="删除" @click="del(item.id,i)"></el-button>
+                <el-button size="mini" icon="el-icon-edit" :title="$t('编辑')" @click="edit(item.id)"></el-button>
+                <el-button size="mini" icon="el-icon-delete" :title="$t('删除')" @click="del(item.id,i)"></el-button>
             </el-button-group>
         </li>
     </ul>

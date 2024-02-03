@@ -1,7 +1,7 @@
 <template>
     <div class="m-publish-box">
         <!-- 头部 -->
-        <publish-header name="物品百科">
+        <publish-header :name="$t('物品百科')">
             <slot name="header"></slot>
         </publish-header>
 
@@ -34,7 +34,7 @@
 
             <div class="m-publish-remark">
                 <el-divider content-position="left">修订说明 *</el-divider>
-                <el-input v-model="post.remark" placeholder="请简单描述一下本次修订的说明"></el-input>
+                <el-input v-model="post.remark" :placeholder="$t('请简单描述一下本次修订的说明')"></el-input>
             </div>
 
             <div class="m-publish-content">

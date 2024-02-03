@@ -1,14 +1,14 @@
 <template>
     <div class="m-publish-box">
         <!-- 头部 -->
-        <publish-header name="剑三题目" :localDraft="false">
+        <publish-header :name="$t('剑三题目')" :localDraft="false">
             <slot name="header"></slot>
         </publish-header>
 
         <!-- <h1 class="m-publish-exam-header">{{ $t('贡献题目') }}</h1> -->
         <el-form label-position="left" label-width="80px" class="m-publish-exam">
             <publish-client v-model="primary.client"></publish-client>
-            <el-form-item label="题目" class="m-publish-exam-title">
+            <el-form-item :label="$t('题目')" class="m-publish-exam-title">
                 <el-input
                     v-model="primary.title"
                     :maxlength="500"
@@ -20,13 +20,13 @@
                     placeholder="请填写题目内容 (支持html)"
                 ></el-input>
             </el-form-item>
-            <el-form-item label="题型" class="m-publish-exam-type">
+            <el-form-item :label="$t('题型')" class="m-publish-exam-type">
                 <el-radio-group v-model="primary.type">
                     <el-radio label="radio" border>{{ $t('单选题') }}</el-radio>
                     <el-radio label="checkbox" border>{{ $t('多选题') }}</el-radio>
                 </el-radio-group>
             </el-form-item>
-            <el-form-item label="选项" class="m-publish-exam-options">
+            <el-form-item :label="$t('选项')" class="m-publish-exam-options">
                 <el-input placeholder="选项1 (支持html)" v-model="primary.options[0]">
                     <template slot="prepend">A</template>
                 </el-input>
@@ -40,7 +40,7 @@
                     <template slot="prepend">D</template>
                 </el-input>
             </el-form-item>
-            <el-form-item label="答案" class="m-publish-exam-answer">
+            <el-form-item :label="$t('答案')" class="m-publish-exam-answer">
                 <el-radio-group v-model="answer_radio" v-if="primary.type == 'radio'">
                     <el-radio :label="0">A</el-radio>
                     <el-radio :label="1">B</el-radio>
@@ -54,7 +54,7 @@
                     <el-checkbox :label="3">D</el-checkbox>
                 </el-checkbox-group>
             </el-form-item>
-            <el-form-item label="难度" class="m-publish-exam-level">
+            <el-form-item :label="$t('难度')" class="m-publish-exam-level">
                 <el-rate
                     v-model="primary.hardStar"
                     show-score
@@ -65,7 +65,7 @@
 
             <exam_tags class="m-publish-exam-tags" v-model="primary.tags" />
 
-            <el-form-item label="答案解析" class="m-publish-exam-content">
+            <el-form-item :label="$t('答案解析')" class="m-publish-exam-content">
                 <Tinymce v-model="primary.whyami" :attachmentEnable="true" :resourceEnable="true" :height="400" />
                 <el-button
                     class="u-publish"
