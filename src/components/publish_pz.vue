@@ -1,6 +1,6 @@
 <template>
     <div class="m-publish-pz" v-loading="loading">
-        <el-divider content-position="left">配装</el-divider>
+        <el-divider content-position="left">{{ $t('配装') }}</el-divider>
         <div class="m-publish-pz-header">
             <el-button
                 class="u-add u-btn"
@@ -8,7 +8,7 @@
                 type="primary"
                 @click="addItem"
                 :disabled="list.length >= limit"
-            >添加配装</el-button>
+            >{{ $t('添加配装') }}</el-button>
             <slot name="prepend" class="m-publish-pz-prepend"></slot>
         </div>
         <div class="m-publish-pz-list">
@@ -77,7 +77,7 @@
                             type="text"
                             icon="el-icon-delete"
                             @click="removeItem(i)"
-                        >删除</el-button>
+                        >{{ $t('删除') }}</el-button>
                     </div>
                 </div>
             </draggable>

@@ -9,8 +9,8 @@
             <div class="m-publish-source">
                 <el-divider content-position="left">选择通识 *</el-divider>
                 <el-radio-group class="m-publish-action" v-model="action">
-                    <el-radio-button label="new" :disabled="isEditMode">新建词条</el-radio-button>
-                    <el-radio-button label="update">维护已有词条</el-radio-button>
+                    <el-radio-button label="new" :disabled="isEditMode">{{ $t('新建词条') }}</el-radio-button>
+                    <el-radio-button label="update">{{ $t('维护已有词条') }}</el-radio-button>
                 </el-radio-group>
 
                 <!-- 编辑模式 -->
@@ -86,7 +86,7 @@
             </div>
 
             <div class="m-publish-tags">
-                <el-divider content-position="left">通识标签</el-divider>
+                <el-divider content-position="left">{{ $t('通识标签') }}</el-divider>
                 <el-tag
                     :key="key"
                     v-for="(tag, key) in post.tags"

@@ -1,7 +1,7 @@
 <template>
     <div class="m-dashboard m-dashboard-work m-dashboard-wiki" v-loading="loading">
         <div class="m-dashboard-work-header">
-            <h2 class="u-title">百科评论</h2>
+            <h2 class="u-title">{{ $t('百科评论') }}</h2>
         </div>
 
         <el-input
@@ -10,7 +10,7 @@
             v-model="achievement_comment.keyword"
             @change="search_comment"
         >
-            <template slot="prepend">关键词</template>
+            <template slot="prepend">{{ $t('关键词') }}</template>
             <el-button slot="append" icon="el-icon-search" @click="search_comment"></el-button>
         </el-input>
 

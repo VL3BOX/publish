@@ -44,7 +44,7 @@
                         icon="el-icon-delete"
                         @click="removePic"
                         size="mini"
-                    >移除</el-button>
+                    >{{ $t('移除') }}</el-button>
                 </el-form-item>
                 <el-form-item label="描述">
                     <el-input v-model="data.desc" :maxlength="120" show-word-limit placeholder="图片说明"></el-input>
@@ -79,7 +79,7 @@
             <div class="m-publish-emotion m-publish-emotion-create" v-else>
                 <!-- 上传 -->
                 <div class="m-publish-emotion-bulk">
-                    <h1 class="u-title">上传表情</h1>
+                    <h1 class="u-title">{{ $t('上传表情') }}</h1>
                     <UploadEmotion
                         @insert="updateFileList"
                         text="批量上传图片"
@@ -105,7 +105,7 @@
                                         @click="deleteHandle(i)"
                                         type="info"
                                         size="mini"
-                                    >删除</el-button>
+                                    >{{ $t('删除') }}</el-button>
                                 </div>
                             </div>
                             <div class="u-pic">
@@ -117,7 +117,7 @@
                             </div>
                             <div class="u-desc">
                                 <el-input v-model="item.desc" :maxlength="120" show-word-limit placeholder="图片说明">
-                                    <span slot="prepend">描述</span>
+                                    <span slot="prepend">{{ $t('描述') }}</span>
                                 </el-input>
                             </div>
                             <div class="u-extend">
@@ -134,7 +134,7 @@
                                     v-if="!item.original"
                                     size="mini"
                                 >
-                                    <span slot="prepend">原作者</span>
+                                    <span slot="prepend">{{ $t('原作者') }}</span>
                                 </el-input>
                                 <el-select v-model="item.type" size="mini" style="margin-left: 10px;" placeholder="请选择门派（非必选）">
                                     <el-option v-for="(school,i) in schoolmap" :key="i" :value="i" :label="school">

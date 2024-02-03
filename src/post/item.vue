@@ -44,7 +44,7 @@
 
             <div class="m-publish-commit">
                 <el-divider content-position="left"></el-divider>
-                <el-button class="u-publish" icon="el-icon-s-promotion" type="primary" @click="toPublish" :disabled="processing">提交攻略</el-button>
+                <el-button class="u-publish" icon="el-icon-s-promotion" type="primary" @click="toPublish" :disabled="processing">{{ $t('提交攻略') }}</el-button>
             </div>
         </el-form>
     </div>

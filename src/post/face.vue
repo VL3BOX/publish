@@ -8,7 +8,7 @@
             <publish-title v-model="post.title"></publish-title>
             <!-- 信息 -->
             <div class="m-publish-info">
-                <el-divider content-position="left">信息</el-divider>
+                <el-divider content-position="left">{{ $t('信息') }}</el-divider>
                 <el-form-item label="数据">
                     <face-attachment :body="post.body_type" type="face" @update:data="handleFaceChange" />
                     <div class="u-attachment" v-for="item in faceAttachments" :key="item.id">
@@ -47,7 +47,7 @@
                         post.is_new_face === 1 ? "写实" : "写意"
                     }·${post.is_unlimited === 1 ? "可新建" : "不可新建"}`
                 }} -->
-                <!-- <el-button @click="editDetail = !editDetail">手动修改</el-button> -->
+                <!-- <el-button @click="editDetail = !editDetail">{{ $t('手动修改') }}</el-button> -->
 
                 <!-- 自动解析 -->
                 <!-- 体型 -->
@@ -66,8 +66,8 @@
                 <!-- 画风 -->
                 <el-form-item label="画风" v-if="faceData && post.client === 'std'">
                     <el-radio-group v-model="post.is_new_face">
-                        <el-radio :label="1">写实</el-radio>
-                        <el-radio :label="0">写意</el-radio>
+                        <el-radio :label="1">{{ $t('写实') }}</el-radio>
+                        <el-radio :label="0">{{ $t('写意') }}</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <!-- 可新建 -->
@@ -96,14 +96,14 @@
 
                 <el-form-item>
                     <template #label>
-                        <span>价格</span>
+                        <span>{{ $t('价格') }}</span>
                         <el-tooltip content="仅签约作者可以发布收费作品；1金箔=1分CNY">
                             <i class="el-icon-warning-outline" style="margin-left: 2px; color: #c00"></i>
                         </el-tooltip>
                     </template>
                     <el-radio-group v-model="post.price_type" :disabled="!isSuperAuthor" @change="changePriceType">
-                        <el-radio label="0">免费</el-radio>
-                        <!-- <el-radio label="1">盒币</el-radio> -->
+                        <el-radio label="0">{{ $t('免费') }}</el-radio>
+                        <!-- <el-radio label="1">{{ $t('盒币') }}</el-radio> -->
                         <el-radio v-if="isSuperAuthor" label="2">收费(金箔)</el-radio>
                     </el-radio-group>
                     <el-input-number
@@ -126,7 +126,7 @@
                 <el-form-item label="说明">
                     <el-input v-model="post.remark" placeholder="请填写相关说明" type="textarea" :rows="3"></el-input>
                 </el-form-item>
-                <el-divider content-position="left">扩展</el-divider>
+                <el-divider content-position="left">{{ $t('扩展') }}</el-divider>
                 <el-form-item label="图片列表">
                     <UploadAlbum v-model="post.images"></UploadAlbum>
                 </el-form-item>

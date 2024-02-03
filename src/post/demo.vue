@@ -10,7 +10,7 @@
             <publish-title v-model="form.title"></publish-title>
 
             <!-- 其它 -->
-            <el-divider content-position="left">块标题</el-divider>
+            <el-divider content-position="left">{{ $t('块标题') }}</el-divider>
             <div>
                 ...
             </div>

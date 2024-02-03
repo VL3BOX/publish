@@ -11,8 +11,8 @@
 				<el-input v-model="data.title" placeholder="请输入物品清单的标题" maxlength="20" show-word-limit></el-input>
 			</el-form-item>
 			<el-form-item label="可见性">
-				<el-radio v-model="data.public" :label="1">公开</el-radio>
-				<el-radio v-model="data.public" :label="0">私有</el-radio>
+				<el-radio v-model="data.public" :label="1">{{ $t('公开') }}</el-radio>
+				<el-radio v-model="data.public" :label="0">{{ $t('私有') }}</el-radio>
 			</el-form-item>
 			<!-- 清单描述 -->
 			<el-form-item label="描述">
@@ -21,10 +21,10 @@
 			<!-- 清单类型 -->
 			<el-form-item label="类型">
 				<el-radio-group v-model="data.type" size="medium" @change="resetPages">
-					<el-radio-button label="1">道具清单</el-radio-button>
-					<el-radio-button label="2">装备清单</el-radio-button>
+					<el-radio-button label="1">{{ $t('道具清单') }}</el-radio-button>
+					<el-radio-button label="2">{{ $t('装备清单') }}</el-radio-button>
 				</el-radio-group>
-				<el-button class="u-add-plan" size="medium" icon="el-icon-plus" @click="addRelation">新增分组</el-button>
+				<el-button class="u-add-plan" size="medium" icon="el-icon-plus" @click="addRelation">{{ $t('新增分组') }}</el-button>
 			</el-form-item>
 			<!-- 制作清单 -->
 			<el-form-item label="清单">
@@ -55,7 +55,7 @@
 											<i class="u-close el-icon-circle-close" @click="relation.data.splice(key, 1)"></i>
 										</div>
 									</template>
-									<div class="u-normal" v-else>拖拽所需道具到此处</div>
+									<div class="u-normal" v-else>{{ $t('拖拽所需道具到此处') }}</div>
 								</draggable>
 							</div>
 						</el-col>
@@ -73,7 +73,7 @@
 											<i class="u-close el-icon-circle-close" @click="eq.list.splice(key, 1)"></i>
 										</div>
 									</template>
-									<div class="u-normal" v-else>拖拽所需道具到此处</div>
+									<div class="u-normal" v-else>{{ $t('拖拽所需道具到此处') }}</div>
 								</draggable>
 							</div>
 						</el-col>
@@ -82,7 +82,7 @@
 			</el-form-item>
 			<!-- 提交表单 -->
 			<el-form-item>
-				<el-button class="u-publish" icon="el-icon-s-promotion" type="primary" @click="submit" :loading="loading">提交物品清单</el-button>
+				<el-button class="u-publish" icon="el-icon-s-promotion" type="primary" @click="submit" :loading="loading">{{ $t('提交物品清单') }}</el-button>
 			</el-form-item>
 		</el-form>
 	</div>

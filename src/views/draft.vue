@@ -4,12 +4,12 @@
             <h1 class="m-title">
                 <i class="el-icon-receiving"></i> 草稿箱
                 <el-tooltip class="item" effect="dark" placement="top" popper-class="m-draft-help-tip">
-                    <div slot="content">以下草稿是编辑器在当前浏览器下产生的临时本地草稿HTML源码，<br />并不存在于服务器中，仅用于断网或窗口异常关闭时恢复。</div>
-                    <span class="u-help"><i class="el-icon-question"></i> <span>使用帮助</span></span>
+                    <div slot="content">以下草稿是编辑器在当前浏览器下产生的临时本地草稿HTML源码，<br />{{ $t('并不存在于服务器中，仅用于断网或窗口异常关闭时恢复。') }}</div>
+                    <span class="u-help"><i class="el-icon-question"></i> <span>{{ $t('使用帮助') }}</span></span>
                 </el-tooltip>
             </h1>
             <div class="u-op">
-                <el-button plain icon="el-icon-delete" size="small" @click="clean" :disabled="!isNotNull">清空</el-button>
+                <el-button plain icon="el-icon-delete" size="small" @click="clean" :disabled="!isNotNull">{{ $t('清空') }}</el-button>
             </div>
         </div>
         <template v-if="isSupported">
@@ -21,9 +21,9 @@
                             <i class="u-item-icon el-icon-document"></i>
                             <span class="u-item-key">{{ item | itemName }} <em class="u-item-time" v-if="item.data.cache_time">( {{ item | formatDate }} )</em></span>
                             <div class="u-op">
-                                <el-button type="primary" plain icon="el-icon-view" size="mini" class="u-delete" @click.stop="preview(item)">预览</el-button>
+                                <el-button type="primary" plain icon="el-icon-view" size="mini" class="u-delete" @click.stop="preview(item)">{{ $t('预览') }}</el-button>
                                 <el-popconfirm title="确定删除吗？" @confirm="del(item, i)">
-                                    <el-button slot="reference" plain icon="el-icon-delete" size="mini" class="u-delete" @click.stop>删除</el-button>
+                                    <el-button slot="reference" plain icon="el-icon-delete" size="mini" class="u-delete" @click.stop>{{ $t('删除') }}</el-button>
                                 </el-popconfirm>
                             </div>
                         </div>

@@ -5,7 +5,7 @@
             <slot name="header"></slot>
         </publish-header>
 
-        <!-- <h1 class="m-publish-exam-header">贡献题目</h1> -->
+        <!-- <h1 class="m-publish-exam-header">{{ $t('贡献题目') }}</h1> -->
         <el-form label-position="left" label-width="80px" class="m-publish-exam">
             <publish-client v-model="primary.client"></publish-client>
             <el-form-item label="题目" class="m-publish-exam-title">
@@ -22,8 +22,8 @@
             </el-form-item>
             <el-form-item label="题型" class="m-publish-exam-type">
                 <el-radio-group v-model="primary.type">
-                    <el-radio label="radio" border>单选题</el-radio>
-                    <el-radio label="checkbox" border>多选题</el-radio>
+                    <el-radio label="radio" border>{{ $t('单选题') }}</el-radio>
+                    <el-radio label="checkbox" border>{{ $t('多选题') }}</el-radio>
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="选项" class="m-publish-exam-options">
@@ -73,7 +73,7 @@
                     type="primary"
                     @click="publish"
                     :disabled="processing"
-                    >提交题目</el-button
+                    >{{ $t('提交题目') }}</el-button
                 >
             </el-form-item>
         </el-form>

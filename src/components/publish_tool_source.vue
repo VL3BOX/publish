@@ -1,6 +1,6 @@
 <template>
     <div class="m-publish-macro m-publish-tool-source">
-        <el-divider content-position="left">资源</el-divider>
+        <el-divider content-position="left">{{ $t('资源') }}</el-divider>
 
         <div class="m-macro-box m-tool-source-box">
             <div class="m-tool-source-header">
@@ -9,7 +9,7 @@
                     icon="el-icon-circle-plus-outline"
                     type="primary"
                     @click="addSource"
-                    >添加资源</el-button
+                    >{{ $t('添加资源') }}</el-button
                 >
             </div>
 
@@ -20,18 +20,18 @@
                         <span class="u-tab-name" :title="item.name">{{ i + 1 + "号位-" + item.name }}</span>
                     </span>
                     <div class="m-source-name m-macro-item">
-                        <h5 class="u-title">名称</h5>
+                        <h5 class="u-title">{{ $t('名称') }}</h5>
                         <el-input v-model="item.name" placeholder="输入资源名称"></el-input>
                     </div>
                     <div class="m-source-mode m-macro-item">
-                        <h5 class="u-title">模式</h5>
+                        <h5 class="u-title">{{ $t('模式') }}</h5>
                         <el-radio-group v-model="item.mode" size="large">
-                            <el-radio label="0" border>远程</el-radio>
-                            <el-radio label="1" border>本地</el-radio>
+                            <el-radio label="0" border>{{ $t('远程') }}</el-radio>
+                            <el-radio label="1" border>{{ $t('本地') }}</el-radio>
                         </el-radio-group>
                     </div>
                     <div class="m-source-file m-macro-item" v-if="item.mode == 1">
-                        <h5 class="u-title">文件</h5>
+                        <h5 class="u-title">{{ $t('文件') }}</h5>
                         <div class="m-raw-file">
                             <!-- <div class="u-warning">
                                 <i class="el-icon-warning-outline"></i>
@@ -45,7 +45,7 @@
                                 @change="(e) => uploadSource(e, i)"
                             />
                             <el-button type="primary" icon="el-icon-s-promotion" @click="selectSource(i)"
-                                >上传文件</el-button
+                                >{{ $t('上传文件') }}</el-button
                             >
                             <span class="u-data-remark">{{ files[i] && files[i].name }}</span>
                             <div class="u-file" v-if="item.file">
@@ -60,11 +60,11 @@
                         </div>
                     </div>
                     <div class="m-source-file m-macro-item" v-if="item.mode == 0">
-                        <h5 class="u-title">文件</h5>
+                        <h5 class="u-title">{{ $t('文件') }}</h5>
                         <el-input v-model="item.file" placeholder="输入文件地址（例如网盘地址）"></el-input>
                     </div>
                     <div class="m-source-remark m-macro-item">
-                        <h5 class="u-title">备注</h5>
+                        <h5 class="u-title">{{ $t('备注') }}</h5>
                         <el-input
                             v-model="item.remark"
                             placeholder="输入备注（例如网盘密码）"

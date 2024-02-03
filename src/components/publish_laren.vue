@@ -5,7 +5,7 @@
             icon="el-icon-circle-plus-outline"
             type="primary"
             @click="addLanren"
-        >添加数据</el-button>
+        >{{ $t('添加数据') }}</el-button>
         <el-tabs v-model="activeTab" type="card" closable @tab-remove="delLanren">
             <el-tab-pane
                 v-for="(item, i) in lanrenDat.data"
@@ -18,14 +18,14 @@
                 </span>
                 <!-- 数据类型 -->
                 <div class="m-jx3dat-item">
-                    <h5 class="u-title">数据类型</h5>
+                    <h5 class="u-title">{{ $t('数据类型') }}</h5>
                     <el-select v-model="item.key" @change="(val) => handleTypeChange(val, item)" i>
                         <el-option v-for="(type, key) in lanren_types" :key="key" :value="key" :label="type" />
                     </el-select>
                 </div>
                 <!-- 数据标题 -->
                 <div class="m-jx3dat-item">
-                    <h5 class="u-title">数据标题</h5>
+                    <h5 class="u-title">{{ $t('数据标题') }}</h5>
                     <el-input
                         v-model="item.desc"
                         placeholder="数据描述"
@@ -35,7 +35,7 @@
                 </div>
 
                 <div class="m-jx3dat-item m-jx3data-jx3dat">
-                    <h5 class="u-title">数据文件</h5>
+                    <h5 class="u-title">{{ $t('数据文件') }}</h5>
                     <div class="u-warning">
                         <i class="el-icon-warning-outline"></i>
                         当前数据文件将作为
@@ -53,7 +53,7 @@
                         plain
                         size="small"
                         @click="selectLanren(i)"
-                    >上传数据文件</el-button>
+                    >{{ $t('上传数据文件') }}</el-button>
                     <span class="u-data-remark">{{item.origin_name}}</span>
                     <!-- <el-button
                         size="small"
@@ -61,7 +61,7 @@
                         plain
                         @click="uploadLaren(item, i)"
                         icon="el-icon-s-promotion"
-                        >开始上传</el-button
+                        >{{ $t('开始上传') }}</el-button
                     >-->
                     <el-input
                         class="u-fileurl"
@@ -73,7 +73,7 @@
                         v-if="item.file"
                     >
                         <template slot="prepend">
-                            <span class="u-status">当前文件地址</span>
+                            <span class="u-status">{{ $t('当前文件地址') }}</span>
                         </template>
                         <template slot="append">
                             <span
@@ -83,7 +83,7 @@
                                 v-clipboard:error="onError"
                             >
                                 <i class="el-icon-document-copy"></i>
-                                <span>点击复制</span>
+                                <span>{{ $t('点击复制') }}</span>
                             </span>
                         </template>
                     </el-input>

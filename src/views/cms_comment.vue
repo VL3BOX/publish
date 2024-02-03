@@ -1,7 +1,7 @@
 <template>
     <div class="m-dashboard m-dashboard-work m-dashboard-wiki" v-loading="loading">
         <div class="m-dashboard-work-header">
-            <h2 class="u-title">通用评论</h2>
+            <h2 class="u-title">{{ $t('通用评论') }}</h2>
         </div>
 
         <el-input
@@ -9,7 +9,7 @@
             placeholder="请输入搜索内容"
             v-model="search"
         >
-            <template slot="prepend">关键词</template>
+            <template slot="prepend">{{ $t('关键词') }}</template>
             <el-button slot="append" icon="el-icon-search"></el-button>
         </el-input>
 

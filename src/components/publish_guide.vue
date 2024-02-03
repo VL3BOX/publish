@@ -4,7 +4,7 @@
         <label class="el-form-item__label">前后引导
         </label>
         <div class="u-condition u-prev" key="prev">
-            <span class="u-prepend el-input-group__prepend">上一篇</span>
+            <span class="u-prepend el-input-group__prepend">{{ $t('上一篇') }}</span>
             <el-select
                 size="small"
                 filterable
@@ -23,7 +23,7 @@
             </el-select>
         </div>
         <div class="u-condition u-next" key="next">
-            <span class="u-prepend el-input-group__prepend">下一篇</span>
+            <span class="u-prepend el-input-group__prepend">{{ $t('下一篇') }}</span>
             <el-select
                 size="small"
                 filterable

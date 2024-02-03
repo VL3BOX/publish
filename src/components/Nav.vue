@@ -2,17 +2,17 @@
     <nav class="m-nav">
         <router-link class="m-nav-publish el-button el-button--primary" to="/">
             <i class="el-icon-edit-outline"></i>
-            <span>创作台</span>
+            <span>{{ $t('创作台') }}</span>
         </router-link>
         <router-link class="m-nav-bucket el-button el-button--primary is-plain" to="/draft">
             <i class="el-icon-receiving"></i>
-            <span>草稿箱</span>
+            <span>{{ $t('草稿箱') }}</span>
         </router-link>
 
         <el-collapse v-model="group" class="m-nav-group" @click.native.stop>
             <el-collapse-item title="独立创作" name="cms">
                 <template slot="title">
-                    <span class="u-title">独立创作</span>
+                    <span class="u-title">{{ $t('独立创作') }}</span>
                 </template>
                 <router-link :to="item.path" v-for="(item, key) in cms" :key="key" @click.native="closeSidebar">
                     <i class="el-icon-collection"></i>
@@ -29,22 +29,22 @@
             </el-collapse-item>
             <el-collapse-item title="联合创作" name="union">
                 <template slot="title">
-                    <span class="u-title">联合创作</span>
+                    <span class="u-title">{{ $t('联合创作') }}</span>
                 </template>
                 <router-link to="/union/active">
                     <i class="el-icon-collection"></i>
-                    <span>邀请创作</span>
+                    <span>{{ $t('邀请创作') }}</span>
                     <!-- <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span> -->
                 </router-link>
                 <router-link to="/union/passive">
                     <i class="el-icon-collection"></i>
-                    <span>受邀创作</span>
+                    <span>{{ $t('受邀创作') }}</span>
                     <!-- <span class="u-count" :class="{isNull:!item.count}">{{item.count}}</span> -->
                 </router-link>
             </el-collapse-item>
             <el-collapse-item title="多人创作" name="wiki">
                 <template slot="title">
-                    <span class="u-title">多人百科</span>
+                    <span class="u-title">{{ $t('多人百科') }}</span>
                 </template>
                 <router-link :to="item.path" v-for="(item, key) in wiki" :key="key" @click.native="closeSidebar">
                     <i class="el-icon-collection"></i>
@@ -54,7 +54,7 @@
             </el-collapse-item>
             <el-collapse-item title="其它创作" name="app">
                 <template slot="title">
-                    <span class="u-title">其它创作</span>
+                    <span class="u-title">{{ $t('其它创作') }}</span>
                 </template>
                 <router-link :to="item.path" v-for="(item, key) in app" :key="key" @click.native="closeSidebar">
                     <i class="el-icon-collection"></i>
@@ -64,7 +64,7 @@
             </el-collapse-item>
             <el-collapse-item title="评论留言" name="comment">
                 <template slot="title">
-                    <span class="u-title">评论留言</span>
+                    <span class="u-title">{{ $t('评论留言') }}</span>
                 </template>
                 <router-link :to="item.path" v-for="(item, key) in comment" :key="key" @click.native="closeSidebar">
                     <i class="el-icon-collection"></i>

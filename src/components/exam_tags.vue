@@ -3,23 +3,23 @@
         <div class="m-publish-exam-tags-list">
             <el-checkbox-group v-model="list">
                 <div class="u-group">
-                    <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">方向</span></label>
+                    <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">{{ $t('方向') }}</span></label>
                     <el-checkbox :label="game" v-for="game in options.game" :key="game">{{game}}</el-checkbox>
                 </div>
                 <div class="u-group">
-                    <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">门派</span></label>
+                    <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">{{ $t('门派') }}</span></label>
                     <el-checkbox :label="item" v-for="item in school" :key="item">{{item}}</el-checkbox>
                 </div>
                 <div class="u-group">
-                    <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">玩法</span></label>
+                    <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">{{ $t('玩法') }}</span></label>
                     <el-checkbox :label="play" v-for="play in options.play" :key="play">{{play}}</el-checkbox>
                 </div>
                 <div class="u-group">
-                    <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">学科</span></label>
+                    <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">{{ $t('学科') }}</span></label>
                     <el-checkbox :label="subject" v-for="subject in options.subject" :key="subject">{{subject}}</el-checkbox>
                 </div>
                 <div class="u-group">
-                    <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">领域</span></label>
+                    <label class="el-checkbox"><span class="el-checkbox__label u-group-label ">{{ $t('领域') }}</span></label>
                     <el-checkbox :label="domain" v-for="domain in options.domain" :key="domain">{{domain}}</el-checkbox>
                 </div>
             </el-checkbox-group>

@@ -15,7 +15,7 @@
             placeholder="请输入搜索内容"
             v-model="search"
         >
-            <span slot="prepend">关键词</span>
+            <span slot="prepend">{{ $t('关键词') }}</span>
             <el-button slot="append" icon="el-icon-search"></el-button>
         </el-input>
 

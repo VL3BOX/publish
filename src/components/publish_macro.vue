@@ -8,7 +8,7 @@
                     icon="el-icon-circle-plus-outline"
                     type="primary"
                     @click="addMacro"
-                >添加宏</el-button>
+                >{{ $t('添加宏') }}</el-button>
                 <a
                     class="m-macro-docs el-button el-button--primary is-plain el-button--small"
                     target="_blank"
@@ -72,7 +72,7 @@
                         </div>
                     </div>
                     <div class="m-macro-talent m-macro-item" v-if="client != 'origin'">
-                        <h5 class="u-title">奇穴方案</h5>
+                        <h5 class="u-title">{{ $t('奇穴方案') }}</h5>
                         <div class="m-macro-talent-simulator">
                             <div class="qx-container"></div>
                         </div>
@@ -90,7 +90,7 @@
                         </el-input>
                     </div>
                     <div class="m-macro-talent m-macro-item" v-if="client === 'origin'">
-                        <h5 class="u-title">镇派方案</h5>
+                        <h5 class="u-title">{{ $t('镇派方案') }}</h5>
                         <div class="m-macro-talent-simulator">
                             <div class="qx-container"></div>
                         </div>
@@ -169,7 +169,7 @@
                             plain
                             icon="el-icon-delete"
                             size="small"
-                        >移除本宏</el-button>
+                        >{{ $t('移除本宏') }}</el-button>
                     </div>
                 </el-tab-pane>
             </el-tabs>

@@ -63,7 +63,7 @@
                         type="primary"
                         :disabled="!ready || processing"
                         @click="onSubmit"
-                    >提交</el-button>
+                    >{{ $t('提交') }}</el-button>
                 </el-form-item>
             </el-form>
         </div>

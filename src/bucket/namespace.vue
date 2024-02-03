@@ -1,7 +1,7 @@
 <template>
     <div class="m-dashboard m-dashboard-work m-dashboard-other">
         <div class="m-dashboard-work-header">
-            <h2 class="u-title">剑三铭牌</h2>
+            <h2 class="u-title">{{ $t('剑三铭牌') }}</h2>
             <a
                 :href="publishLink"
                 class="u-publish el-button el-button--primary el-button--small"

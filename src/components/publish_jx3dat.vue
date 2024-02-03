@@ -1,6 +1,6 @@
 <template>
     <div class="m-publish-jx3dat">
-        <el-divider content-position="left">数据</el-divider>
+        <el-divider content-position="left">{{ $t('数据') }}</el-divider>
         <slot></slot>
 
         <!-- 团控数据类型字段 -->
@@ -12,7 +12,7 @@
                         icon="el-icon-circle-plus-outline"
                         type="primary"
                         @click="addDBM"
-                    >添加数据</el-button>
+                    >{{ $t('添加数据') }}</el-button>
                     <a
                         class="m-jx3dat-help el-button el-button--success is-plain el-button--small"
                         href="/tool/13912"
@@ -29,7 +29,7 @@
                             {{ item.name }}
                         </span>
                         <div class="m-jx3dat-item">
-                            <h5 class="u-title">订阅名</h5>
+                            <h5 class="u-title">{{ $t('订阅名') }}</h5>
                             <div class="u-group">
                                 <div class="u-subblock">
                                     <el-input
@@ -66,7 +66,7 @@
                             </div>
                         </div>
                         <div class="m-jx3dat-item">
-                            <h5 class="u-title">数据标题</h5>
+                            <h5 class="u-title">{{ $t('数据标题') }}</h5>
                             <el-input
                                 v-model="item.desc"
                                 placeholder="数据描述"
@@ -75,7 +75,7 @@
                             ></el-input>
                         </div>
                         <div class="m-jx3dat-item m-jx3data-jx3dat">
-                            <h5 class="u-title">数据文件</h5>
+                            <h5 class="u-title">{{ $t('数据文件') }}</h5>
                             <div class="u-warning">
                                 <i class="el-icon-warning-outline"></i>
                                 当前数据文件将作为
@@ -93,7 +93,7 @@
                                 plain
                                 size="small"
                                 @click="selectDBM(i)"
-                            >上传数据文件</el-button>
+                            >{{ $t('上传数据文件') }}</el-button>
                             <span class="u-data-remark">{{item.origin_name}}</span>
                             <!-- <el-button
                                 size="small"
@@ -101,7 +101,7 @@
                                 plain
                                 @click="uploadDBM(item, i)"
                                 icon="el-icon-s-promotion"
-                                >开始上传</el-button
+                                >{{ $t('开始上传') }}</el-button
                             >-->
                             <el-input
                                 class="u-fileurl"
@@ -113,7 +113,7 @@
                                 v-if="item.file"
                             >
                                 <template slot="prepend">
-                                    <span class="u-status">当前文件地址</span>
+                                    <span class="u-status">{{ $t('当前文件地址') }}</span>
                                 </template>
                                 <template slot="append">
                                     <span
@@ -123,13 +123,13 @@
                                         v-clipboard:error="onError"
                                     >
                                         <i class="el-icon-document-copy"></i>
-                                        <span>点击复制</span>
+                                        <span>{{ $t('点击复制') }}</span>
                                     </span>
                                 </template>
                             </el-input>
                         </div>
                         <!-- <div class="m-jx3dat-item">
-                            <h5 class="u-title">弹窗提醒</h5>
+                            <h5 class="u-title">{{ $t('弹窗提醒') }}</h5>
                             <el-switch v-model="item.pop" active-color="#49C10F"></el-switch>
                             <span class="u-poptip">（默认不弹窗，小版本可由用户在下载面板自行选择是否更新）</span>
                         </div> -->
@@ -147,7 +147,7 @@
             <div class="m-jx3data-more">
                 <div class="u-more" @click="toggleMoreFeed">
                     <i :class="moreFeedsVisible ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
-                    <span>其它订阅号</span>
+                    <span>{{ $t('其它订阅号') }}</span>
                 </div>
                 <template v-if="moreFeedsVisible">
                     <el-row class="u-tr">
@@ -191,7 +191,7 @@
                 plain
                 size="medium"
                 @click="selectDat"
-            >上传数据文件</el-button>
+            >{{ $t('上传数据文件') }}</el-button>
             <span class="u-data-remark">{{jx3dats.origin_name}}</span>
             <el-input
                 v-if="jx3dats.down"
@@ -201,7 +201,7 @@
                 :value="jx3dats.down"
             >
                 <template slot="prepend">
-                    <span class="u-status">当前文件地址</span>
+                    <span class="u-status">{{ $t('当前文件地址') }}</span>
                 </template>
                 <template slot="append">
                     <span
@@ -211,7 +211,7 @@
                         v-clipboard:error="onError"
                     >
                         <i class="el-icon-document-copy"></i>
-                        <span>点击复制</span>
+                        <span>{{ $t('点击复制') }}</span>
                     </span>
                 </template>
             </el-input>
@@ -359,7 +359,7 @@ export default {
             // 目前设置最多3个版本
             if (this.jx3dats.data.length >= 3 && !this.isVIP) {
                 this.$alert(
-                    '默认只能设置3个版本，<a href="/vip/premium?from=jx3dat_feed" target="_blank">开通高级版账号</a>无限制',
+                    '默认只能设置3个版本，<a href="/vip/premium?from=jx3dat_feed" target="_blank">{{ $t('开通高级版账号') }}</a>无限制',
                     "消息",
                     {
                         dangerouslyUseHTMLString: true,

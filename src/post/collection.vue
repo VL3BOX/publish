@@ -8,7 +8,7 @@
         <el-form label-position="left" class="m-publish-collection">
             <!-- 💛 栏目字段 -->
             <div class="m-publish-title">
-                <el-divider content-position="left">标题</el-divider>
+                <el-divider content-position="left">{{ $t('标题') }}</el-divider>
                 <el-input
                     v-model="collection.title"
                     placeholder="请输入小册标题"
@@ -19,9 +19,9 @@
 
             <div class="m-publish-primary">
                 <div class="m-publish-primary-block">
-                    <el-divider content-position="left">可见性</el-divider>
-                    <el-radio v-model.number="collection.public" :label="this.public.PUBLIC">公开</el-radio>
-                    <el-radio v-model.number="collection.public" :label="this.public.PRIVATE">私有</el-radio>
+                    <el-divider content-position="left">{{ $t('可见性') }}</el-divider>
+                    <el-radio v-model.number="collection.public" :label="this.public.PUBLIC">{{ $t('公开') }}</el-radio>
+                    <el-radio v-model.number="collection.public" :label="this.public.PRIVATE">{{ $t('私有') }}</el-radio>
                     <el-tooltip content="私有仅使该小册不出现在公开小册大厅中" placement="top">
                         <i class="el-icon-info"></i>
                     </el-tooltip>
@@ -30,7 +30,7 @@
                     <el-divider content-position="left"
                         >内容
                         <el-checkbox v-model="onlyMine" style="margin-left: 12px"
-                            >仅从自己作品中</el-checkbox
+                            >{{ $t('仅从自己作品中') }}</el-checkbox
                         ></el-divider
                     >
                     <draggable
@@ -110,10 +110,10 @@
                             </el-row>
                         </li>
                     </draggable>
-                    <div v-else class="u-posts-items-empty">暂无作品信息，请进行作品添加</div>
+                    <div v-else class="u-posts-items-empty">{{ $t('暂无作品信息，请进行作品添加') }}</div>
                     <div class="u-posts-add" @click="add_posts_item">
                         <i class="el-icon-plus"></i>
-                        <span>添加作品</span>
+                        <span>{{ $t('添加作品') }}</span>
                     </div>
                 </div>
 

@@ -1,6 +1,6 @@
 <template>
     <div class="m-publish-title">
-        <el-divider content-position="left" v-if="!hideDiv">标题</el-divider>
+        <el-divider content-position="left" v-if="!hideDiv">{{ $t('标题') }}</el-divider>
         <el-input
             v-model="title"
             :maxlength="50"

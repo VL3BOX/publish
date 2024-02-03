@@ -1,6 +1,6 @@
 <template>
     <div class="m-publish-banner">
-        <el-divider content-position="left">海报</el-divider>
+        <el-divider content-position="left">{{ $t('海报') }}</el-divider>
         <uploadImage v-model="banner" :info="info" :max-size="30" :size="size"></uploadImage>
     </div>
 </template>

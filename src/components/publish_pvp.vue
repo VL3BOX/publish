@@ -1,14 +1,14 @@
 <template>
     <div class="m-publish-pvp m-publish-macro">
-        <el-divider content-position="left">技巧分享</el-divider>
+        <el-divider content-position="left">{{ $t('技巧分享') }}</el-divider>
 
         <div class="m-macro-box">
             <div class="m-macro-talent m-macro-item">
-                <h5 class="u-title">技巧概述</h5>
+                <h5 class="u-title">{{ $t('技巧概述') }}</h5>
                 <el-input v-model="pvpData.content" placeholder="请在此处输入技巧概述，最多200个字。" type="textarea" show-word-limit maxlength="200" :rows="5"> </el-input>
             </div>
             <div class="m-macro-talent m-macro-item" v-if="client != 'origin'">
-                <h5 class="u-title">奇穴方案</h5>
+                <h5 class="u-title">{{ $t('奇穴方案') }}</h5>
                 <!-- <el-input v-model="pvpData.talent" placeholder="奇穴方案编码" @change="checkTalent(pvpData.talent)">
                     <template slot="prepend">
                         <a class="u-get" target="_blank" href="/macro/talent">
@@ -20,7 +20,7 @@
                 <publish-qixue v-model="pvpData.talent" :subtype="subtype"></publish-qixue>
             </div>
             <div class="m-macro-talent m-macro-item" v-if="client === 'origin'">
-                <h5 class="u-title">镇派方案</h5>
+                <h5 class="u-title">{{ $t('镇派方案') }}</h5>
                 <div class="m-macro-talent-simulator">
                     <div class="qx-container"></div>
                 </div>
@@ -44,7 +44,7 @@
         <div class="m-macro-box">
             <div class="m-macro-header">
                 <el-button class="m-macro-addbutton" icon="el-icon-circle-plus-outline" type="primary" @click="addCombo"
-                    >添加连招</el-button
+                    >{{ $t('添加连招') }}</el-button
                 >
             </div>
 
@@ -94,7 +94,7 @@
                             </template>
                         </div>
                         <el-button type="primary" size="medium" @click="addSkill" icon="el-icon-plus"
-                            >新增技能</el-button
+                            >{{ $t('新增技能') }}</el-button
                         >
                     </el-form-item>
                     <el-form-item label="连招说明" class="m-macro-desc">
@@ -108,7 +108,7 @@
                             plain
                             icon="el-icon-delete"
                             size="small"
-                            >移除本连招</el-button
+                            >{{ $t('移除本连招') }}</el-button
                         >
                     </div>
                 </el-tab-pane>

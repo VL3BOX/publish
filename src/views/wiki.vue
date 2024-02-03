@@ -13,7 +13,7 @@
             v-model="achievement_post.keyword"
             @change="search_post"
         >
-            <template slot="prepend">关键词</template>
+            <template slot="prepend">{{ $t('关键词') }}</template>
             <el-button slot="append" icon="el-icon-search" @click="search_post"></el-button>
         </el-input>
 

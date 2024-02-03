@@ -5,7 +5,7 @@
             <slot name="header"></slot>
         </publish-header>
 
-        <!-- <h1 class="m-publish-exam-header">制作试卷</h1> -->
+        <!-- <h1 class="m-publish-exam-header">{{ $t('制作试卷') }}</h1> -->
         <el-form label-position="left" label-width="80px" class="m-publish-exam">
             <!-- 客户端 -->
             <publish-client v-model="primary.client"></publish-client>
@@ -36,7 +36,7 @@
                 <el-input v-model="list" show-word-limit required placeholder="请填写题目ID序列"></el-input>
             </el-form-item>
             <el-form-item label="外链" class="m-publish-exam-common">
-                <div>如果为外链地址，则设置的题目将不会生效</div>
+                <div>{{ $t('如果为外链地址，则设置的题目将不会生效') }}</div>
                 <el-input v-model="primary.iframe" show-word-limit required placeholder="请填写外链问卷地址">
                 </el-input>
             </el-form-item>
@@ -80,7 +80,7 @@
                     type="primary"
                     @click="publish"
                     :disabled="processing"
-                    >发布试卷</el-button
+                    >{{ $t('发布试卷') }}</el-button
                 >
             </el-form-item>
         </el-form>

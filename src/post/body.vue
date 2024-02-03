@@ -8,7 +8,7 @@
             <publish-title v-model="post.title"></publish-title>
             <!-- 信息 -->
             <div class="m-publish-info">
-                <el-divider content-position="left">信息</el-divider>
+                <el-divider content-position="left">{{ $t('信息') }}</el-divider>
                 <el-form-item label="数据">
                     <face-attachment :body="post.body_type" type="body" @update:data="handleBodyChange" />
                     <div class="u-attachment" v-for="item in bodyAttachments" :key="item.id">
@@ -43,7 +43,7 @@
                 <!-- 客户端 -->
                 <el-form-item label="版本">
                     <el-radio-group v-model="post.client">
-                        <el-radio label="std">重制</el-radio>
+                        <el-radio label="std">{{ $t('重制') }}</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <!-- <publish-client v-model="post.client" :forbidAll="true"></publish-client> -->
@@ -68,14 +68,14 @@
 
                 <el-form-item label="是否收费">
                     <template #label>
-                        <span>是否收费</span>
+                        <span>{{ $t('是否收费') }}</span>
                         <el-tooltip content="仅签约作者可以发布收费作品">
                             <i class="el-icon-warning-outline" style="margin-left: 2px;color: #c00;"></i>
                         </el-tooltip>
                     </template>
                     <el-radio-group v-model="post.price_type" :disabled="!isSuperAuthor">
-                        <el-radio label="0">免费</el-radio>
-                        <!-- <el-radio label="1">盒币</el-radio> -->
+                        <el-radio label="0">{{ $t('免费') }}</el-radio>
+                        <!-- <el-radio label="1">{{ $t('盒币') }}</el-radio> -->
                         <el-radio label="2">收费(金箔)</el-radio>
                     </el-radio-group>
                     <el-input-number
@@ -106,7 +106,7 @@
                 <el-form-item label="描述">
                     <el-input v-model="post.remark" placeholder="请填写描述" type="textarea" :rows="3"></el-input>
                 </el-form-item>
-                <el-divider content-position="left">扩展</el-divider>
+                <el-divider content-position="left">{{ $t('扩展') }}</el-divider>
                 <el-form-item label="图片列表">
                     <UploadAlbum v-model="post.images"></UploadAlbum>
                 </el-form-item>

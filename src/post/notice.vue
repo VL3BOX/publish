@@ -9,7 +9,7 @@
 
             <!-- 信息 -->
             <div class="m-publish-info">
-                <el-divider content-position="left">信息</el-divider>
+                <el-divider content-position="left">{{ $t('信息') }}</el-divider>
                 <!-- 客户端 -->
                 <publish-client v-model="post.client"></publish-client>
                 <publish-subtype v-model="post.post_subtype" :options="notice_types"></publish-subtype>
@@ -17,7 +17,7 @@
 
             <!-- 正文 -->
             <div class="m-publish-content">
-                <el-divider content-position="left">正文</el-divider>
+                <el-divider content-position="left">{{ $t('正文') }}</el-divider>
                 <Tinymce
                     v-model="post.post_content"
                     :attachmentEnable="true"
@@ -28,14 +28,14 @@
 
             <!-- 附加 -->
             <div class="m-publish-append">
-                <el-divider content-position="left">附加</el-divider>
+                <el-divider content-position="left">{{ $t('附加') }}</el-divider>
                 <publish-excerpt v-model="post.post_excerpt"></publish-excerpt>
                 <!-- <publish-collection v-model="post.post_collection"></publish-collection> -->
             </div>
 
             <!-- 扩展 -->
             <div class="m-publish-extend">
-                <el-divider content-position="left">设置</el-divider>
+                <el-divider content-position="left">{{ $t('设置') }}</el-divider>
                 <publish-comment v-model="post.comment"></publish-comment>
                 <publish-gift v-model="post.allow_gift"></publish-gift>
                 <publish-visible v-model="post.visible"></publish-visible>
@@ -44,7 +44,7 @@
 
             <!-- 临时 -->
             <div class="m-publish-extend">
-                <el-divider content-position="left">临时</el-divider>
+                <el-divider content-position="left">{{ $t('临时') }}</el-divider>
                 <publish-at-authors></publish-at-authors>
             </div>
 
@@ -60,7 +60,7 @@
                     @click="publish('publish',true)"
                     :disabled="processing"
                 >发 &nbsp;&nbsp; 布</el-button>
-                <el-button type="plain" @click="publish('draft',false)" :disabled="processing">保存为草稿</el-button>
+                <el-button type="plain" @click="publish('draft',false)" :disabled="processing">{{ $t('保存为草稿') }}</el-button>
             </div>
         </el-form>
     </div>

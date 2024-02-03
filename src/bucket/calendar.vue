@@ -1,7 +1,7 @@
 <template>
     <div class="m-dashboard-work m-dashboard-cms" v-loading="loading">
         <div class="m-dashboard-work-header">
-            <h2 class="u-title">日历记录</h2>
+            <h2 class="u-title">{{ $t('日历记录') }}</h2>
             <a
                 :href="publishLink"
                 class="u-publish el-button el-button--primary el-button--small"
@@ -15,7 +15,7 @@
             placeholder="请输入搜索内容"
             v-model.lazy="search"
         >
-            <span slot="prepend">关键词</span>
+            <span slot="prepend">{{ $t('关键词') }}</span>
             <el-button slot="append" icon="el-icon-search"></el-button>
         </el-input>
 

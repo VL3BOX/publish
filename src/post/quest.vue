@@ -62,7 +62,7 @@
                     type="primary"
                     @click="toPublish"
                     :disabled="processing"
-                    >提交攻略</el-button
+                    >{{ $t('提交攻略') }}</el-button
                 >
             </div>
         </el-form>

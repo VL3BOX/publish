@@ -4,7 +4,7 @@
         <el-divider content-position="left">① 数据</el-divider>
         <el-form-item label="数据">
             <input class="u-data-input" type="file" id="face_file" @change="processFile" accept=".jx3dat, .dat, .ini"/>
-            <el-button type="primary" @click="selectData" icon="el-icon-upload2">上传脸型数据</el-button>
+            <el-button type="primary" @click="selectData" icon="el-icon-upload2">{{ $t('上传脸型数据') }}</el-button>
             <span class="u-data-ready" v-show="facedat.file">
                 <i class="el-icon-success"></i>
                 已上传

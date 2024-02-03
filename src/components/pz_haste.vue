@@ -8,7 +8,7 @@
         :open-delay="50"
     >
         <div class="m-pop-content" v-if="data && data.html">
-            <div class="u-attr-name">推荐加速</div>
+            <div class="u-attr-name">{{ $t('推荐加速') }}</div>
             <div class="u-haste-content" v-html="data.html"></div>
         </div>
         <i

@@ -94,7 +94,7 @@
                                 v-model="post.post_meta.area"
                                 placeholder="面积"
                                 ><template slot="append"
-                                    >平米</template
+                                    >{{ $t('平米') }}</template
                                 ></el-input
                             ></el-col
                         >
@@ -105,7 +105,7 @@
                                 :min="1"
                                 :max="99"
                                 ><template slot="prepend"
-                                    >等级</template
+                                    >{{ $t('等级') }}</template
                                 ></el-input
                             ></el-col
                         >
@@ -130,10 +130,10 @@
                 <div class="m-publish-datalist" v-if="post.post_meta.hasData">
                     <div class="u-wrapper">
                         <el-row class="u-thead">
-                            <el-col :span="6">类型</el-col>
-                            <el-col :span="6">说明</el-col>
-                            <el-col :span="6">数据</el-col>
-                            <el-col :span="6">操作</el-col>
+                            <el-col :span="6">{{ $t('类型') }}</el-col>
+                            <el-col :span="6">{{ $t('说明') }}</el-col>
+                            <el-col :span="6">{{ $t('数据') }}</el-col>
+                            <el-col :span="6">{{ $t('操作') }}</el-col>
                         </el-row>
                         <div class="u-tbody">
                             <el-row
@@ -145,12 +145,12 @@
                                     <el-radio
                                         v-model="data.type"
                                         label="全局设计图"
-                                        >全局设计图</el-radio
+                                        >{{ $t('全局设计图') }}</el-radio
                                     >
                                     <el-radio
                                         v-model="data.type"
                                         label="局部设计图"
-                                        >局部设计图</el-radio
+                                        >{{ $t('局部设计图') }}</el-radio
                                     >
                                 </el-col>
 
@@ -174,7 +174,7 @@
                                         size="medium"
                                         @click="selectData(i)"
                                         icon="el-icon-upload2"
-                                        >上传蓝图</el-button
+                                        >{{ $t('上传蓝图') }}</el-button
                                     >
                                     <span
                                         class="u-data-ready"
@@ -192,7 +192,7 @@
                                         @click="addData(i)"
                                         icon="el-icon-circle-plus-outline"
                                         size="medium"
-                                        >增加</el-button
+                                        >{{ $t('增加') }}</el-button
                                     >
 
                                     <!-- 删除 -->
@@ -201,7 +201,7 @@
                                         v-if="i !== 0"
                                         @click="delData(i)"
                                         icon="el-icon-remove-outline"
-                                        >删除</el-button
+                                        >{{ $t('删除') }}</el-button
                                     >
                                 </el-col>
                             </el-row>

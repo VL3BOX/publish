@@ -1,13 +1,13 @@
 <template>
     <div class="m-revision" v-if="ready">
-        <el-button type="primary" @click="view" size="small" icon="el-icon-folder">历史版本</el-button>
+        <el-button type="primary" @click="view" size="small" icon="el-icon-folder">{{ $t('历史版本') }}</el-button>
 
         <el-drawer title="历史版本" :visible.sync="show" z-index="2100" class="m-revision-drawer" append-to-body>
-            <h3 class="u-revision-title" slot="title">历史版本</h3>
+            <h3 class="u-revision-title" slot="title">{{ $t('历史版本') }}</h3>
             <main class="m-revision-container" v-loading="loading">
                 <div class="u-actions">
-                    <el-checkbox :indeterminate="isIndeterminate" v-model="checkedAll" @change="checkAll">全选</el-checkbox>
-                    <el-button class="u-empty" size="mini" plain icon="el-icon-delete" @click="delRevisions" :disabled="!checked || !checked.length">批量删除</el-button>
+                    <el-checkbox :indeterminate="isIndeterminate" v-model="checkedAll" @change="checkAll">{{ $t('全选') }}</el-checkbox>
+                    <el-button class="u-empty" size="mini" plain icon="el-icon-delete" @click="delRevisions" :disabled="!checked || !checked.length">{{ $t('批量删除') }}</el-button>
                 </div>
                 <div class="m-revision-list">
                     <ul class="u-list" v-if="data && data.length">

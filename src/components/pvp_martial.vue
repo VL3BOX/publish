@@ -21,7 +21,7 @@
         <!-- 奇穴技能 -->
         <div class="m-martial-skill" v-if="talentSkills && talentSkills.length">
             <div class="u-title">
-                <span class="u-title-name">奇穴技能</span>
+                <span class="u-title-name">{{ $t('奇穴技能') }}</span>
                 <img src="../assets/img/skillset.png" class="u-title-img" alt="" />
             </div>
             <div class="m-skills">
@@ -41,7 +41,7 @@
         <!-- 江湖轻功 -->
         <div class="m-martial-skill">
             <div class="u-title">
-                <span class="u-title-name">江湖轻功</span>
+                <span class="u-title-name">{{ $t('江湖轻功') }}</span>
                 <img src="../assets/img/skillset.png" class="u-title-img" alt="" />
             </div>
             <div class="m-skills">

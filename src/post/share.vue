@@ -23,7 +23,7 @@
 
             <!-- 附加 -->
             <!-- <div class="m-publish-append">
-                <el-divider content-position="left">附加</el-divider>
+                <el-divider content-position="left">{{ $t('附加') }}</el-divider>
                 <publish-excerpt v-model="post.post_excerpt"></publish-excerpt>
                 <publish-collection v-model="post.post_collection"></publish-collection>
             </div>-->
@@ -51,7 +51,7 @@
                     @click="publish('publish',true)"
                     :disabled="processing"
                 >发 &nbsp;&nbsp; 布</el-button>
-                <el-button type="plain" @click="publish('draft',false)" :disabled="processing">保存为草稿</el-button>
+                <el-button type="plain" @click="publish('draft',false)" :disabled="processing">{{ $t('保存为草稿') }}</el-button>
             </div>
         </el-form>
     </div>

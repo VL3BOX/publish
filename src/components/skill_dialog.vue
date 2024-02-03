@@ -12,7 +12,7 @@
                 <template #label>
                     <div class="u-tab-label">
                         <i class="el-icon-s-order"></i>
-                        <b>门派武学</b>
+                        <b>{{ $t('门派武学') }}</b>
                     </div>
                 </template>
             </el-tab-pane>
@@ -20,7 +20,7 @@
                 <template #label>
                     <div class="u-tab-label">
                         <i class="el-icon-menu"></i>
-                        <b>全部技能</b>
+                        <b>{{ $t('全部技能') }}</b>
                     </div>
                 </template>
             </el-tab-pane>
@@ -29,8 +29,8 @@
             <div v-show="activeName === 'all'">
                 <div class="m-database-search">
                     <el-radio-group class="u-client" v-model="client" @change="search">
-                        <el-radio-button label="std">重制</el-radio-button>
-                        <el-radio-button label="origin">缘起</el-radio-button>
+                        <el-radio-button label="std">{{ $t('重制') }}</el-radio-button>
+                        <el-radio-button label="origin">{{ $t('缘起') }}</el-radio-button>
                     </el-radio-group>
                     <el-input
                         class="u-input"
@@ -70,7 +70,7 @@
                         type="primary"
                         icon="el-icon-arrow-down"
                         @click="appendPage"
-                        >加载更多</el-button
+                        >{{ $t('加载更多') }}</el-button
                     >
                     <!-- 分页 -->
                     <el-pagination
@@ -91,7 +91,7 @@
         </div>
 
         <!-- 已选技能 -->
-        <el-divider>已选技能</el-divider>
+        <el-divider>{{ $t('已选技能') }}</el-divider>
         <div class="m-selected-skills">
             <ul class="m-skills-list">
                 <li v-for="(skill, index) in selected" :key="index" class="m-skill">
@@ -107,7 +107,7 @@
         </div>
         <!-- 插入按钮 -->
         <span slot="footer" class="dialog-footer">
-            <el-button @click="close">取 消</el-button>
+            <el-button @click="close">{{ $t('取 消') }}</el-button>
             <el-button type="primary" @click="submit">
                 {{ buttonTXT }}
             </el-button>
