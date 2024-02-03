@@ -1,5 +1,5 @@
 <template>
-    <div class="m-publish-xf">
+    <div class="m-publish-xf m-publish-mix-subtype">
         <el-form-item label="跨心法">
             <el-select v-model="mix_subtype" multiple popper-class="m-mix-subtype__pop" style="width: 100%;">
                 <el-option
@@ -66,6 +66,11 @@ export default {
 </script>
 
 <style lang="less">
+.m-publish-mix-subtype {
+    .el-form-item {
+        margin-bottom: 22px;
+    }
+}
 .m-mix-subtype__pop {
 
     .m-xf-item {
