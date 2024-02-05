@@ -144,14 +144,14 @@ export default {
             location.href = "./#/" + type + "/" + id;
         },
         del: function (id,i) {
-            this.$alert("确定要删除吗？", "确认信息", {
-                confirmButtonText: "确定",
+            this.$alert(this.$t("确定要删除吗？"), this.$t("确认信息"), {
+                confirmButtonText: this.$t("确定"),
                 callback: (action) => {
                     if (action == "confirm") {
                         del(id).then((res) => {
                             this.$notify({
-                                title: "成功",
-                                message: "删除成功",
+                                title: this.$t("成功"),
+                                message: this.$t("删除成功"),
                                 type: "success",
                             });
                             this.data.splice(i,1)
@@ -167,7 +167,7 @@ export default {
             }).then((res) => {
                 this.$message({
                     type: "success",
-                    message: `操作成功`,
+                    message: this.$t("操作成功"),
                 });
                 this.data[i].post_status = "draft";
             });
@@ -178,7 +178,7 @@ export default {
             }).then((res) => {
                 this.$message({
                     type: "success",
-                    message: `操作成功`,
+                    message: this.$t("操作成功"),
                 });
                 this.data[i].post_status = "publish";
             });

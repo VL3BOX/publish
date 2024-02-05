@@ -141,16 +141,16 @@ export default {
                 });
         },
         remark(item) {
-            this.$prompt("请输入备注", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
+            this.$prompt(this.$t("请输入备注"), this.$t("提示"), {
+                confirmButtonText: this.$t("确定"),
+                cancelButtonText: this.$t("取消"),
                 closeOnClickModal: false,
                 inputValue: item.remark || "",
             }).then(({ value }) => {
                 // item.remark = value
                 putRevision(this.postId, item.id, { remark: value })
                     .then(() => {
-                        this.$message.success("备注添加成功");
+                        this.$message.success(this.$t("备注添加成功"));
                         item.remark = value;
                         return true;
                     })
@@ -190,9 +190,9 @@ export default {
             this.$router.push(`/${routeName}/${item.post_id}/?mode=revision&id=${item.id}`);
         },
         del(item) {
-            this.$confirm(`确认删除【版本-${item.version}】吗？`, "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
+            this.$confirm(`确认删除【版本-${item.version}】吗？`, this.$t("提示"), {
+                confirmButtonText: this.$t("确定"),
+                cancelButtonText: this.$t("取消"),
                 type: "warning",
             }).then(() => {
                 removeRevision(this.postId, item.id).then(() => {
@@ -207,17 +207,17 @@ export default {
             });
         },
         delRevisions() {
-            this.$confirm(`确认删除选中的历史版本？`, "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
+            this.$confirm(this.$t("确认删除选中的历史版本？"), this.$t("提示"), {
+                confirmButtonText: this.$t("确定"),
+                cancelButtonText: this.$t("取消"),
                 type: "warning",
             }).then(() => {
                 const ids = this.checked.join(",");
                 removeRevisions(this.postId, ids).then(() => {
                     this.$notify({
                         type: "success",
-                        title: "成功",
-                        message: "历史版本删除成功",
+                        title: this.$t("成功"),
+                        message: this.$t("历史版本删除成功"),
                     });
 
                     this.checkedAll = false;

@@ -97,7 +97,7 @@ export default {
             uploadFacedata(formdata).then((res) => {
                 this.facedat.file = res.data.data[0];
                 this.$message({
-                    message: "上传成功",
+                    message: this.$t("上传成功"),
                     type: "success",
                 });
             });
@@ -106,7 +106,7 @@ export default {
             let file = e.target.files[0];
             if(file && file.size > 16384) {
                 this.$message({
-                    message: "文件过大，限 16KB 以内",
+                    message: this.$t("文件过大，限 16KB 以内"),
                     type: "error",
                 });
                 return;
@@ -131,8 +131,8 @@ export default {
                 catch(ex) {
                     console.log(ex);
                     vm.$notify.error({
-                        title: "错误",
-                        message: "无法读取数据",
+                        title: this.$t("错误"),
+                        message: this.$t("无法读取数据"),
                     });
                     vm.$emit("fail", {
                         file: vm.file,
@@ -143,8 +143,8 @@ export default {
                 // 解析成功开始上传
                 if (vm.object && vm.json) {
                     setTimeout(() => vm.$notify({
-                            title: "成功",
-                            message: "数据读取成功，开始上传",
+                            title: this.$t("成功"),
+                            message: this.$t("数据读取成功，开始上传"),
                             type: "success",
                         }), 0);
                     vm.uploadData(file);
@@ -158,8 +158,8 @@ export default {
             };
             fr.onerror = function (e) {
                 vm.$notify.error({
-                    title: "错误",
-                    message: "文件读取异常",
+                    title: this.$t("错误"),
+                    message: this.$t("文件读取异常"),
                 });
             };
             fr.readAsArrayBuffer(file);

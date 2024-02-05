@@ -126,7 +126,7 @@ export default {
             };
         },
         subtype: function () {
-            return this.$route.name == "union_active" ? "邀请创作" : "受邀创作";
+            return this.$route.name == "union_active" ? this.$t("邀请创作") : this.$t("受邀创作");
         },
         isActive: function () {
             return this.$route.name == "union_active";
@@ -162,22 +162,22 @@ export default {
         quit: function (id, i) {
             quitUnionPost(id).then((res) => {
                 this.$notify({
-                    title: "退出成功",
-                    message: "成功退出该作品联合创作",
+                    title: this.$t("退出成功"),
+                    message: this.$t("成功退出该作品联合创作"),
                     type: "success",
                 });
                 this.data.splice(i, 1);
             });
         },
         del: function (id, i) {
-            this.$alert("确定要删除吗？", "确认信息", {
-                confirmButtonText: "确定",
+            this.$alert(this.$t("确定要删除吗？"), this.$t("确认信息"), {
+                confirmButtonText: this.$t("确定"),
                 callback: (action) => {
                     if (action == "confirm") {
                         del(id).then((res) => {
                             this.$notify({
-                                title: "删除成功",
-                                message: "成功删除作品",
+                                title: this.$t("删除成功"),
+                                message: this.$t("成功删除作品"),
                                 type: "success",
                             });
                             this.data.splice(i, 1);

@@ -133,18 +133,18 @@ export default {
         post_edit(type, post) {
             switch (type) {
                 case "achievement":
-                    this.$message("即将开放");
+                    this.$message(this.$t("即将开放"));
                     break;
             }
         },
         comment_del(comment) {
-            this.$alert("确定要删除吗？", "确认信息", {
-                confirmButtonText: "确定",
+            this.$alert(this.$t("确定要删除吗？"), this.$t("确认信息"), {
+                confirmButtonText: this.$t("确定"),
                 callback: (action) => {
                     remove_comment(comment.id).then((data) => {
                         data = data.data;
                         this.$notify({
-                            title: "删除成功",
+                            title: this.$t("删除成功"),
                             type: "success",
                         });
                         this.comment_page_change(this.post_page);

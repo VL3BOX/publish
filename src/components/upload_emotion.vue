@@ -85,7 +85,7 @@ export default {
         return {
             dialogVisible: false,
             tip: this.desc || `一次最多同时上传${this.max}个文件（单个文件不超过${this.sizeLimit}M），格式限常见的图片、文档、数据表及压缩包`,
-            btn_txt: this.text || "上传附件",
+            btn_txt: this.text || this.$t("上传附件"),
 
             fileList: [],
             selectedCount: 0,
@@ -105,7 +105,7 @@ export default {
     },
     computed: {
         buttonTXT: function () {
-            return this.selectedCount ? "插 入" : "确 定";
+            return this.selectedCount ? this.$t("插 入") : this.$t("确 定");
         },
     },
     methods: {
@@ -140,7 +140,7 @@ export default {
                         }
                         // 提醒
                         this.$message({
-                            message: "上传成功",
+                            message: this.$t("上传成功"),
                             type: "success",
                         });
 
@@ -160,7 +160,7 @@ export default {
                         if (err.response.data.code) {
                             this.$message.error(`[${err.response.data.code}] ${err.response.data.message}`);
                         } else {
-                            this.$message.error("请求异常");
+                            this.$message.error(this.$t("请求异常"));
                         }
                     });
             }

@@ -197,8 +197,8 @@ export default {
         // 添加连招
         addCombo: function () {
             if (this.pvpData.data.length > 7) {
-                this.$alert("已经达到添加上限", "消息", {
-                    confirmButtonText: "确定",
+                this.$alert(this.$t("已经达到添加上限"), this.$t("消息"), {
+                    confirmButtonText: this.$t("确定"),
                 });
                 return;
             }
@@ -214,14 +214,14 @@ export default {
         // 删除宏
         removeCombo: function (name) {
             if (this.pvpData.data.length < 2) {
-                this.$alert("必须保留1个宏", "消息", {
-                    confirmButtonText: "确定",
+                this.$alert(this.$t("必须保留1个宏"), this.$t("消息"), {
+                    confirmButtonText: this.$t("确定"),
                 });
                 return;
             }
 
-            this.$alert("确定删除这个连招吗，删除后无法找回", "消息", {
-                confirmButtonText: "确定",
+            this.$alert("确定删除这个连招吗，删除后无法找回", this.$t("消息"), {
+                confirmButtonText: this.$t("确定"),
                 callback: (action) => {
                     if (action == "confirm") {
                         // 删除
@@ -245,8 +245,8 @@ export default {
             let name = sterilizer(data.name).removeSpace().kill().toString();
             if (!name) {
                 this.$notify.error({
-                    title: "错误",
-                    message: "宏名称不允许包含特殊字符,不能为空",
+                    title: this.$t("错误"),
+                    message: this.$t("宏名称不允许包含特殊字符,不能为空"),
                 });
                 return;
             }
@@ -257,8 +257,8 @@ export default {
                 JSON.parse(data);
             } catch (e) {
                 this.$notify.error({
-                    title: "错误",
-                    message: "奇穴编码格式错误",
+                    title: this.$t("错误"),
+                    message: this.$t("奇穴编码格式错误"),
                 });
             }
         },

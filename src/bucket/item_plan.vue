@@ -37,15 +37,15 @@ export default {
 			location.href = "./#/item_plan/" + id;
 		},
 		plan_delete: function (id) {
-			this.$confirm("确认是否删除该物品清单？", "提示", {
-				confirmButtonText: "确定",
-				cancelButtonText: "取消",
+			this.$confirm(this.$t("确认是否删除该物品清单？"), this.$t("提示"), {
+				confirmButtonText: this.$t("确定"),
+				cancelButtonText: this.$t("取消"),
 				type: "warning",
 			}).then(() => {
 				delMyPlans(id).then((res) => {
 					this.$emit("refresh");
 					this.$message({
-						message: "删除成功",
+						message: this.$t("删除成功"),
 						type: "success",
 					});
 				});

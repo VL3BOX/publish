@@ -75,13 +75,13 @@ export default {
         addAuthor: function (userdata) {
             addUnionAuthor(this.id, userdata.ID).then((res) => {
                 this.$notify({
-                    title: "添加成功",
-                    message: "联合创作者添加成功",
+                    title: this.$t("添加成功"),
+                    message: this.$t("联合创作者添加成功"),
                     type: "success",
                 });
                 this.list.push({
                     post_author_info: userdata,
-                    label: "撰稿",
+                    label: this.$t("撰稿"),
                     status: 0,
                 });
             });
@@ -92,9 +92,9 @@ export default {
             });
         },
         update: function (item) {
-            this.$prompt("修改展示项，例如：撰稿/修订/主创/校稿..", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
+            this.$prompt(this.$t("修改展示项，例如：撰稿/修订/主创/校稿.."), this.$t("提示"), {
+                confirmButtonText: this.$t("确定"),
+                cancelButtonText: this.$t("取消"),
             }).then(({ value }) => {
                 updateUnionAuthor(this.id, item.post_author_info.ID, {
                     label: value,
@@ -102,8 +102,8 @@ export default {
                 }).then(() => {
                     item.label = value;
                     this.$notify({
-                        title: "修改成功",
-                        message: "备注更新成功",
+                        title: this.$t("修改成功"),
+                        message: this.$t("备注更新成功"),
                         type: "success",
                     });
                 });
@@ -112,8 +112,8 @@ export default {
         remove: function (item, i) {
             removeUnionAuthor(this.id, item.post_author_info.ID).then((res) => {
                 this.$notify({
-                    title: "删除成功",
-                    message: "成功移除联合创作者",
+                    title: this.$t("删除成功"),
+                    message: this.$t("成功移除联合创作者"),
                     type: "success",
                 });
                 this.list.splice(i, 1);

@@ -81,8 +81,8 @@ export default {
         },
         // 清空
         clean: function() {
-            this.$alert("此操作不可逆！请谨慎操作！", "警告", {
-                confirmButtonText: "确定清空",
+            this.$alert(this.$t("此操作不可逆！请谨慎操作！"), this.$t("警告"), {
+                confirmButtonText: this.$t("确定清空"),
                 callback: (action) => {
                     // 清空localstorage
                     this.db.clear();
@@ -90,9 +90,9 @@ export default {
                     this.data = [];
                     // 通知
                     this.$notify({
-                        title: "清空成功",
+                        title: this.$t("清空成功"),
                         type: "success",
-                        message: `本地草稿清空成功`,
+                        message: this.$t("本地草稿清空成功"),
                     });
                 },
             });
@@ -110,15 +110,15 @@ export default {
         // 复制
         onCopy: function(val) {
             this.$notify({
-                title: "复制成功",
-                message: "草稿源码复制成功",
+                title: this.$t("复制成功"),
+                message: this.$t("草稿源码复制成功"),
                 type: "success",
             });
         },
         onError: function() {
             this.$notify.error({
-                title: "复制失败",
-                message: "请手动复制",
+                title: this.$t("复制失败"),
+                message: this.$t("请手动复制"),
             });
         },
     },

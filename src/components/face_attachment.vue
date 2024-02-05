@@ -73,7 +73,7 @@ export default {
                 this.data.id = res.data.data.id;
                 this.data.name = res.data.data.name;
                 this.$message({
-                    message: "数据上传成功",
+                    message: this.$t("数据上传成功"),
                     type: "success",
                 });
                 this.$emit("update:data", this.data);
@@ -84,7 +84,7 @@ export default {
             // 大于64kb
             if (file && file.size > 65536) {
                 this.$message({
-                    message: "文件过大，限 64KB 以内",
+                    message: this.$t("文件过大，限 64KB 以内"),
                     type: "error",
                 });
                 return;
@@ -109,19 +109,19 @@ export default {
                     const result = load(e.target.result);
                     if (!result)
                         return vm.$notify.error({
-                            title: "错误",
-                            message: "数据类型解析失败",
+                            title: this.$t("错误"),
+                            message: this.$t("数据类型解析失败"),
                         });
                     if (vm.type === "body" && result.type.startsWith("face")) {
                         return vm.$notify.error({
-                            title: "错误",
-                            message: "请导入体型数据",
+                            title: this.$t("错误"),
+                            message: this.$t("请导入体型数据"),
                         });
                     }
                     if (vm.type === "face" && result.type === "body") {
                         return vm.$notify.error({
-                            title: "错误",
-                            message: "请导入脸型数据",
+                            title: this.$t("错误"),
+                            message: this.$t("请导入脸型数据"),
                         });
                     }
                     object = result.data;
@@ -132,8 +132,8 @@ export default {
                 } catch (ex) {
                     console.log(ex);
                     vm.$notify.error({
-                        title: "错误",
-                        message: "无法读取数据",
+                        title: this.$t("错误"),
+                        message: this.$t("无法读取数据"),
                     });
                     return;
                 }
@@ -143,8 +143,8 @@ export default {
                     setTimeout(
                         () =>
                             vm.$notify({
-                                title: "成功",
-                                message: "数据读取成功，开始上传",
+                                title: this.$t("成功"),
+                                message: this.$t("数据读取成功，开始上传"),
                                 type: "success",
                             }),
                         0
@@ -156,8 +156,8 @@ export default {
             };
             fr.onerror = function (e) {
                 vm.$notify.error({
-                    title: "错误",
-                    message: "文件读取异常",
+                    title: this.$t("错误"),
+                    message: this.$t("文件读取异常"),
                 });
             };
             fr.readAsArrayBuffer(file);

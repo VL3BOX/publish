@@ -142,25 +142,25 @@ export default {
             });
         },
         handleOffline: function (id) {
-            this.$confirm("此操作将下架该条数据, 是否继续?", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
+            this.$confirm(this.$t("此操作将下架该条数据, 是否继续?"), this.$t("提示"), {
+                confirmButtonText: this.$t("确定"),
+                cancelButtonText: this.$t("取消"),
                 type: "warning",
             }).then(() => {
                 faceOffline(id).then((res) => {
-                    this.$message.success("下架成功");
+                    this.$message.success(this.$t("下架成功"));
                     this.loadPosts();
                 });
             });
         },
         del(id) {
-            this.$confirm("此操作将彻底删除该数据, 是否继续?", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
+            this.$confirm(this.$t("此操作将彻底删除该数据, 是否继续?"), this.$t("提示"), {
+                confirmButtonText: this.$t("确定"),
+                cancelButtonText: this.$t("取消"),
                 type: "warning",
             }).then(() => {
                 delFace(id).then((res) => {
-                    this.$message.success("删除成功");
+                    this.$message.success(this.$t("删除成功"));
                     this.loadPosts();
                 });
             });

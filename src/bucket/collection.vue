@@ -146,16 +146,16 @@ export default {
             location.href = "./#/collection/" + id;
         },
         post_del(id) {
-            this.$confirm("确定要删除这篇小册吗？", "确认信息", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
+            this.$confirm(this.$t("确定要删除这篇小册吗？"), this.$t("确认信息"), {
+                confirmButtonText: this.$t("确定"),
+                cancelButtonText: this.$t("取消"),
                 type: "warning",
                 beforeClose: (action, instance, done) => {
                     if (action === "confirm") {
                         remove_collection(id).then((res) => {
                             this.$message({
                                 type: "success",
-                                message: `删除成功`,
+                                message: this.$t("删除成功"),
                             });
                             this.loadPosts();
                         });

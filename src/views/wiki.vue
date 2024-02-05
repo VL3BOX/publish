@@ -149,14 +149,14 @@ export default {
             });
         },
         post_del(post) {
-            this.$confirm(`确认删除吗？`, "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
+            this.$confirm(this.$("确认删除吗？"), this.$t("提示"), {
+                confirmButtonText: this.$t("确定"),
+                cancelButtonText: this.$t("取消"),
                 type: "warning",
                 beforeClose: (action, instance, done) => {
                     if (action === "confirm") {
                         wiki.remove(post.id).then(() => {
-                            this.$message.success("删除成功");
+                            this.$message.success(this.$t("删除成功"));
                             this.post_page_change();
                             done();
                         });

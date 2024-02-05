@@ -181,14 +181,14 @@ export default {
             location.href = "./#/" + type + "/" + id;
         },
         del: function (id) {
-            this.$alert("确定要删除吗？", "确认信息", {
-                confirmButtonText: "确定",
+            this.$alert(this.$t("确定要删除吗？"), this.$t("确认信息"), {
+                confirmButtonText: this.$t("确定"),
                 callback: (action) => {
                     if (action == "confirm") {
                         del(id).then((res) => {
                             this.$message({
                                 type: "success",
-                                message: `删除成功`,
+                                message: this.$t("删除成功"),
                             });
                             location.reload();
                         });
@@ -202,7 +202,7 @@ export default {
             }).then((res) => {
                 this.$message({
                     type: "success",
-                    message: `操作成功`,
+                    message: this.$t("操作成功"),
                 });
                 this.data[i].post_status = "draft";
             });
@@ -213,7 +213,7 @@ export default {
             }).then((res) => {
                 this.$message({
                     type: "success",
-                    message: `操作成功`,
+                    message: this.$t("操作成功"),
                 });
                 this.data[i].post_status = "publish";
             });

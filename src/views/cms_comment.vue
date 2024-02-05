@@ -108,13 +108,13 @@ export default {
             return getLink(type, id);
         },
         del: function (id, i) {
-            this.$alert("确定删除吗？", "消息", {
-                confirmButtonText: "确定",
+            this.$alert(this.$t("确定删除吗？"), this.$t("消息"), {
+                confirmButtonText: this.$t("确定"),
                 callback: (action) => {
                     if (action == "confirm") {
                         deleteComment(id).then((res) => {
                             this.$message({
-                                message: "删除成功",
+                                message: this.$t("删除成功"),
                                 type: "success",
                             });
                             this.data.splice(i, 1);

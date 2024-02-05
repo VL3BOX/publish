@@ -122,14 +122,14 @@ export default {
             location.href = "./#/" + type + "/" + id;
         },
         del: function (id, i) {
-            this.$alert("确定要删除吗？", "确认信息", {
-                confirmButtonText: "确定",
+            this.$alert(this.$t("确定要删除吗？"), this.$t("确认信息"), {
+                confirmButtonText: this.$t("确定"),
                 callback: (action) => {
                     if (action == "confirm") {
                         deleteEmotion(id).then((res) => {
                             this.$notify({
-                                title: "删除成功",
-                                message: "表情删除成功",
+                                title: this.$t("删除成功"),
+                                message: this.$t("表情删除成功"),
                                 type: "success",
                             });
                             this.data.splice(i, 1);

@@ -142,8 +142,8 @@ export default {
     methods: {
         addSource() {
             if (this.data.data.length > 7) {
-                this.$alert("已经达到添加上限", "消息", {
-                    confirmButtonText: "确定",
+                this.$alert(this.$t("已经达到添加上限"), this.$t("消息"), {
+                    confirmButtonText: this.$t("确定"),
                 });
                 return;
             }
@@ -158,14 +158,14 @@ export default {
         },
         removeSource(name) {
             if (this.data.data.length < 2) {
-                this.$alert("必须保留1个资源", "消息", {
-                    confirmButtonText: "确定",
+                this.$alert(this.$t("必须保留1个资源"), this.$t("消息"), {
+                    confirmButtonText: this.$t("确定"),
                 });
                 return;
             }
 
-            this.$alert("确定删除这个资源吗，删除后无法找回", "消息", {
-                confirmButtonText: "确定",
+            this.$alert(this.$t("确定删除这个资源吗，删除后无法找回"), this.$t("消息"), {
+                confirmButtonText: this.$t("确定"),
                 callback: (action) => {
                     if (action == "confirm") {
                         // 删除
@@ -186,7 +186,7 @@ export default {
             upload(formData).then((res) => {
                 this.data.data[i].file = res.data.data[0];
                 this.$message({
-                    message: "上传成功",
+                    message: this.$t("上传成功"),
                     type: "success",
                 });
             });
