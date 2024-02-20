@@ -20,6 +20,8 @@
                 <publish-zlp v-model="post.zlp" :client="post.client"></publish-zlp>
                 <!-- 心法 -->
                 <publish-xf v-model="post.post_subtype" :client="post.client"></publish-xf>
+                <!-- 跨心法 -->
+                <publish-mix-subtype v-model="post.mix_subtype" :client="post.client" v-if="post.post_subtype == '通用'"></publish-mix-subtype>
                 <!-- 其他 -->
                 <publish-extend v-model="post"></publish-extend>
             </div>
@@ -112,6 +114,7 @@ import publish_authors from "@/components/publish_authors";
 import publish_revision from "@/components/publish_revision.vue";
 import publish_extend from "@/components/publish_extend.vue";
 import publish_guide from "@/components/publish_guide.vue";
+import publish_mix_subtype from "@/components/publish_mix_subtype.vue";
 
 // 数据逻辑
 import { push } from "@/service/cms.js";
@@ -140,6 +143,7 @@ export default {
         "publish-client": publish_client,
         "publish-extend": publish_extend,
         "publish-guide": publish_guide,
+        "publish-mix-subtype": publish_mix_subtype,
     },
     data: function () {
         return {
@@ -210,6 +214,8 @@ export default {
 
                 // 是否包含视频
                 include_video: 0,
+
+                mix_subtype: [],
             },
         };
     },

@@ -39,7 +39,15 @@
 
             <div class="m-publish-content">
                 <el-divider content-position="left">{{ $t('攻略正文') }} *</el-divider>
-                <Tinymce v-model="post.content" :attachmentEnable="true" :resourceEnable="true" :height="400" />
+                <Tinymce v-model="post.content" :attachmentEnable="true" :resourceEnable="true" :height="400">
+                    <el-alert type="warning" class="m-latest-check" show-icon v-if="!isLatest && latest.post && current.post">
+                        <template #title>
+                            <span class="u-alert-title">{{ $t('当前百科已经有更新的版本，你的攻略可能已经失效，请先进行比对。') }}</span>
+                            <el-link type="primary" icon="el-icon-link" :href="getLink(post.source_id)" target="_blank" class="u-view-latest">{{ $t('查看最新攻略') }}</el-link>
+                            <el-link @click="getLatest" icon="el-icon-download" class="u-get-latest" type="primary" v-if="latest.post">{{ $t('获取最新攻略') }}</el-link>
+                        </template>
+                    </el-alert>
+                </Tinymce>
             </div>
 
             <div class="m-publish-commit">
@@ -59,7 +67,7 @@ import { wiki } from "@jx3box/jx3box-common/js/wiki_v2";
 
 import User from "@jx3box/jx3box-common/js/user";
 import { search_items } from "../service/item";
-import { iconLink } from "@jx3box/jx3box-common/js/utils";
+import { iconLink, getLink } from "@jx3box/jx3box-common/js/utils";
 
 import {uniqBy,pick} from 'lodash';
 export default {
@@ -85,6 +93,9 @@ export default {
             processing: false,
 
             compatible: false, // 是否兼容模式
+
+            latest: {},
+            current: {}
         };
     },
     computed : {
@@ -93,6 +104,11 @@ export default {
         },
         id : function (){
             return this.$route.query?.post_id
+        },
+        // 当前比最新的攻略是否更新
+        isLatest : function (){
+            if(!this.current?.post?.id || !this.latest?.post?.id) return false
+            return this.current.post.id == this.latest.post.id
         }
     },
     methods: {
@@ -222,6 +238,7 @@ export default {
             this.loading = true;
             return wiki.getById(this.id)
                 .then((res) => {
+                    this.current = res.data.data
                     let data = res.data;
                     // 数据填充
                     let post = data.data.post;
@@ -255,6 +272,19 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
+        },
+        // 获取最新的攻略
+        loadLatest() {
+            if (!this.post.source_id) return;
+            wiki.get({ type: "item", id: this.post.source_id }).then(res => {
+                this.latest = res.data.data
+            })
+        },
+        getLink(id) {
+            return getLink("item", id);
+        },
+        getLatest() {
+            this.post.content = this.latest.post?.content || ''
         }
     },
     created() {
@@ -264,6 +294,9 @@ export default {
         // 获取物品ID并通过watch获取攻略
         let id = this.$route.params.source_id;
         this.post.source_id = id ? id : null;
+
+        // 获取最新的攻略
+        this.loadLatest()
     },
     watch: {
         "post.source_id": {
@@ -295,4 +328,5 @@ export default {
 
 <style scoped lang="less">
 @import "../assets/css/item.less";
+@import "../assets/css/wiki.less";
 </style>

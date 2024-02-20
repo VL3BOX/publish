@@ -82,7 +82,15 @@
 
             <div class="m-publish-content">
                 <el-divider content-position="left">{{ $t('通识正文') }} *</el-divider>
-                <Tinymce v-model="post.content" :attachmentEnable="true" :resourceEnable="true" :height="600" />
+                <Tinymce v-model="post.content" :attachmentEnable="true" :resourceEnable="true" :height="600">
+                    <el-alert type="warning" class="m-latest-check" show-icon v-if="!isLatest && latest.post && current.post">
+                        <template #title>
+                            <span class="u-alert-title">{{ $t('当前百科已经有更新的版本，你的攻略可能已经失效，请先进行比对。') }}</span>
+                            <el-link type="primary" icon="el-icon-link" :href="getLink(post.source_id)" target="_blank" class="u-view-latest">{{ $t('查看最新攻略') }}</el-link>
+                            <el-link @click="getLatest" icon="el-icon-download" class="u-get-latest" type="primary" v-if="latest.post">{{ $t('获取最新攻略') }}</el-link>
+                        </template>
+                    </el-alert>
+                </Tinymce>
             </div>
 
             <div class="m-publish-tags">
@@ -133,6 +141,7 @@ import Tinymce from "@jx3box/jx3box-editor/src/Tinymce";
 import { wiki } from "@jx3box/jx3box-common/js/wiki_v2";
 import User from "@jx3box/jx3box-common/js/user";
 import { get_menus, get_list, create_knowledge } from "../service/knowledge";
+import { iconLink, getLink } from "@jx3box/jx3box-common/js/utils";
 
 export default {
     name: "knowledge",
@@ -176,11 +185,22 @@ export default {
             // 标签
             inputVisible: false,
             inputValue: "",
+
+            latest: {},
+            current: {}
         };
     },
     computed: {
         client: function () {
             return this.$store.state.client;
+        },
+        id : function (){
+            return this.$route.query?.post_id
+        },
+        // 当前比最新的攻略是否更新
+        isLatest : function (){
+            if(!this.current?.post?.id || !this.latest?.post?.id) return false
+            return this.current.post.id == this.latest.post.id
         },
     },
     methods: {
@@ -193,12 +213,26 @@ export default {
                 this.currentSource = source?.name;
                 this.post.source_id = source?.id;
 
+                this.latest = res.data.data
+
                 // 设置初始文章内容（基于最新审核版本）
                 let post = res.data?.data?.post;
                 this.post.remark = post?.remark;
                 this.post.content = post?.content || "";
                 this.post.tags = post?.tags?.split(",") || [];
             });
+        },
+        loadDataByPostId() {
+            return wiki.getById(this.id).then(res => {
+                let source = res.data?.data?.source;
+                this.currentSource = source?.name;
+                this.post.source_id = source?.id;
+
+                this.current = res.data.data
+                this.post.content = this.current.post.content
+                this.post.remark = this.current.post.remark
+                this.post.tags = this.current.post.tags.split(',') || []
+            })
         },
         // 加载可选类型
         loadTypes: function () {
@@ -324,6 +358,12 @@ export default {
                 return item.name == val;
             }).label;
         },
+        getLink(id) {
+            return getLink('knowledge', id)
+        },
+        getLatest() {
+            this.post.content = this.latest.post?.content || ''
+        }
     },
     watch: {
         // 根据路由判定进入的模式
@@ -337,6 +377,9 @@ export default {
                     this.post.source_id = ~~val;
                     this.loadData(val);
 
+                    if (this.id) {
+                        this.loadDataByPostId()
+                    }
                     // 创建模式
                 } else {
                     this.action = "new";
@@ -365,4 +408,5 @@ export default {
 
 <style scoped lang="less">
 @import "../assets/css/knowledge.less";
+@import "../assets/css/wiki.less";
 </style>
