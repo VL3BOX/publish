@@ -1,7 +1,7 @@
 const path = require('path');
 const pkg = require("./package.json");
 const { JX3BOX, SEO } = require("@jx3box/jx3box-common");
-const Setting = require("./setting.json");
+const Setting = require("./setting.vi.json");
 
 module.exports = {
 
@@ -138,7 +138,7 @@ module.exports = {
                 Keywords: Setting.keys,
                 Description: Setting.desc
             };
-            args[0].title = Setting.title + SEO.title;  //------自动添加标题后缀
+            args[0].title = Setting.title + Setting.suffix;  //------自动添加标题后缀
             return args;
         });
 
