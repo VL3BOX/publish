@@ -104,7 +104,7 @@
                     <el-radio-group v-model="post.price_type" :disabled="!isSuperAuthor" @change="changePriceType">
                         <el-radio label="0">免费</el-radio>
                         <!-- <el-radio label="1">盒币</el-radio> -->
-                        <el-radio v-if="isSuperAuthor" label="2">收费(金箔)</el-radio>
+                        <el-radio v-if="isSuperAuthor && cny_enable" label="2">收费(金箔)</el-radio>
                     </el-radio-group>
                     <el-input-number
                         class="u-price"
@@ -156,6 +156,7 @@ import User from "@jx3box/jx3box-common/js/user.js";
 import cloneDeep from "lodash/cloneDeep";
 import { __clients } from "@jx3box/jx3box-common/data/jx3box.json";
 import { bodyMap, majorMap, faceSubtype } from "@jx3box/jx3box-facedat/assets/data/index.json";
+import { getConfig } from "@/service/cms";
 export default {
     name: "face",
     components: {
@@ -212,6 +213,8 @@ export default {
             faceData: "",
 
             decalDb: null,
+
+            cny_enable: 0
         };
     },
     computed: {
@@ -235,6 +238,10 @@ export default {
             this.decalDb = new DecalDatabase(this.client);
             User.isSuperAuthor().then((res) => {
                 this.isSuperAuthor = res;
+            });
+
+            getConfig("cny_enable").then((res) => {
+                this.cny_enable = Number(res.data.data.val);
             });
         },
         getData() {

@@ -76,7 +76,7 @@
                     <el-radio-group v-model="post.price_type" :disabled="!isSuperAuthor">
                         <el-radio label="0">免费</el-radio>
                         <!-- <el-radio label="1">盒币</el-radio> -->
-                        <el-radio label="2">收费(金箔)</el-radio>
+                        <el-radio label="2" v-if="cny_enable">收费(金箔)</el-radio>
                     </el-radio-group>
                     <el-input-number
                         class="u-price"
@@ -133,6 +133,7 @@ import publishBanner from "@/components/publish_banner.vue";
 import { bodyMap } from "@jx3box/jx3box-facedat/assets/data/index.json";
 import User from "@jx3box/jx3box-common/js/user.js";
 import cloneDeep from "lodash/cloneDeep";
+import { getConfig } from "@/service/cms";
 export default {
     name: "pvxbody",
     components: {
@@ -179,6 +180,8 @@ export default {
             bodyData: "",
 
             isSuperAuthor: false,
+
+            cny_enable: 0,
         };
     },
     computed: {
@@ -201,6 +204,10 @@ export default {
             } else {
                 this.post.client = this.client;
             }
+
+            getConfig("cny_enable").then((res) => {
+                this.cny_enable = Number(res.data.data.val);
+            });
         },
         getData() {
             this.loading = true;
