@@ -76,4 +76,13 @@ function getTopicBucket(params) {
     return $cms().get(`/api/cms/topic/bucket`, { params });
 }
 
-export { pull, push, del, getMyPostsCount, getMyPosts, getAllPosts, upload, getBreadCrumb, getPostMeta, setPostMeta, getChangelog, getHasteRecommend, getTopicBucket };
+// 获取config
+function getConfig(key){
+    return $cms().get(`/api/cms/config`, {
+        params: {
+            key
+        }
+    });
+}
+
+export { pull, push, del, getMyPostsCount, getMyPosts, getAllPosts, upload, getBreadCrumb, getPostMeta, setPostMeta, getChangelog, getHasteRecommend, getTopicBucket, getConfig };
