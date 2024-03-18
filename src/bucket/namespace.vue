@@ -94,7 +94,7 @@ const statusmap = {
     2: "未通过审核",
 };
 export default {
-    name: "namespace",
+    name: "bucket_namespace",
     props: ["data"],
     data: function () {
         return {

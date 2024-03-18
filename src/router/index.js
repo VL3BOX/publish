@@ -229,11 +229,12 @@ const routes = [
     // 铭牌
     {
         path: "/namespace/:id?",
-        component: namespace,
+        component: namespace, 
     },
     {
         path: "/bucket/namespace",
         component: bucket_namespace,
+        name:'bucket_namespace'
     },
     // 小册
     {
