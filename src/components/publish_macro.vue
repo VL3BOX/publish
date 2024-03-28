@@ -119,7 +119,7 @@
                             v-model="item.macro"
                             :placeholder="$t('注释请写在说明中,勿写在宏内部')"
                             :minlength="1"
-                            :maxlength="128"
+                            :maxlength="macroMaxLength"
                             show-word-limit
                             type="textarea"
                             :rows="12"
@@ -244,6 +244,9 @@ export default {
     computed: {
         maxlength : function (){
             return 20 - this.nickname?.length - 1
+        },
+        macroMaxLength : function (){
+            return this.client === 'origin' ? 255 : 128
         }
     },
     methods: {
